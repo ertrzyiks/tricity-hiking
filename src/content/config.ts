@@ -8,7 +8,7 @@ const routesCollection = defineCollection({
 });
 
 const geodataCollection = defineCollection({
-  type: "content",
+  type: "data",
   schema: z.object({
     type: z.string(),
     features: z.array(
