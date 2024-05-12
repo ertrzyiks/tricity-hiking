@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<trk>
+		<name>Trasa z Sanatorium Leśnik do Wielka Gwiazda</name>
+		<trkseg>
+			<trkpt lat="54.448591" lon="18.526369">
+				<ele>103.000000</ele>
+			</trkpt>
+			<trkpt lat="54.448706" lon="18.526405">
+				<ele>103.000000</ele>
+			</trkpt>
+			<trkpt lat="54.448784" lon="18.526378">
+				<ele>103.000000</ele>
+			</trkpt>
+			<trkpt lat="54.448868" lon="18.526361">
+				<ele>103.000000</ele>
+			</trkpt>
+			<trkpt lat="54.448920" lon="18.526369">
+				<ele>103.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449009" lon="18.526432">
+				<ele>103.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449129" lon="18.526522">
+				<ele>102.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449113" lon="18.526684">
+				<ele>102.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449129" lon="18.526782">
+				<ele>102.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449171" lon="18.526782">
+				<ele>102.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449233" lon="18.526828">
+				<ele>102.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449385" lon="18.527025">
+				<ele>101.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449499" lon="18.527160">
+				<ele>100.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449542" lon="18.527268">
+				<ele>100.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449552" lon="18.527384">
+				<ele>99.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449546" lon="18.527501">
+				<ele>99.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449521" lon="18.527690">
+				<ele>98.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449589" lon="18.527581">
+				<ele>99.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449656" lon="18.527474">
+				<ele>100.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449693" lon="18.527394">
+				<ele>100.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449745" lon="18.527258">
+				<ele>100.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449829" lon="18.527007">
+				<ele>101.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449896" lon="18.526828">
+				<ele>103.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449996" lon="18.526568">
+				<ele>103.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450053" lon="18.526459">
+				<ele>104.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450147" lon="18.526315">
+				<ele>105.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450246" lon="18.526172">
+				<ele>107.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450314" lon="18.526046">
+				<ele>108.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450356" lon="18.525929">
+				<ele>108.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450366" lon="18.525866">
+				<ele>108.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450372" lon="18.525830">
+				<ele>108.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450372" lon="18.525732">
+				<ele>108.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450366" lon="18.525686">
+				<ele>108.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450362" lon="18.525633">
+				<ele>108.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450283" lon="18.525436">
+				<ele>109.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450205" lon="18.525130">
+				<ele>111.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450168" lon="18.524968">
+				<ele>111.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450137" lon="18.524797">
+				<ele>112.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450116" lon="18.524348">
+				<ele>116.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450106" lon="18.524258">
+				<ele>117.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450100" lon="18.524178">
+				<ele>117.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450069" lon="18.524025">
+				<ele>118.000000</ele>
+			</trkpt>
+			<trkpt lat="54.450006" lon="18.523845">
+				<ele>119.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449917" lon="18.523702">
+				<ele>120.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449735" lon="18.523512">
+				<ele>120.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449646" lon="18.523468">
+				<ele>120.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449552" lon="18.523413">
+				<ele>121.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449447" lon="18.523441">
+				<ele>121.000000</ele>
+			</trkpt>
+			<trkpt lat="54.449249" lon="18.523468">
+				<ele>122.000000</ele>
+			</trkpt>
+			<trkpt lat="54.448956" lon="18.523585">
+				<ele>123.000000</ele>
+			</trkpt>
+			<trkpt lat="54.448664" lon="18.523702">
+				<ele>123.000000</ele>
+			</trkpt>
+			<trkpt lat="54.448529" lon="18.523738">
+				<ele>123.000000</ele>
+			</trkpt>
+			<trkpt lat="54.448262" lon="18.523799">
+				<ele>122.000000</ele>
+			</trkpt>
+			<trkpt lat="54.448241" lon="18.523809">
+				<ele>122.000000</ele>
+			</trkpt>
+			<trkpt lat="54.447792" lon="18.524007">
+				<ele>123.000000</ele>
+			</trkpt>
+			<trkpt lat="54.447405" lon="18.524151">
+				<ele>123.000000</ele>
+			</trkpt>
+			<trkpt lat="54.447118" lon="18.524214">
+				<ele>123.000000</ele>
+			</trkpt>
+			<trkpt lat="54.446998" lon="18.524231">
+				<ele>124.000000</ele>
+			</trkpt>
+			<trkpt lat="54.446883" lon="18.524249">
+				<ele>124.000000</ele>
+			</trkpt>
+			<trkpt lat="54.446763" lon="18.524231">
+				<ele>124.000000</ele>
+			</trkpt>
+			<trkpt lat="54.446653" lon="18.524214">
+				<ele>124.000000</ele>
+			</trkpt>
+			<trkpt lat="54.446554" lon="18.524178">
+				<ele>124.000000</ele>
+			</trkpt>
+			<trkpt lat="54.446496" lon="18.524124">
+				<ele>124.000000</ele>
+			</trkpt>
+			<trkpt lat="54.446439" lon="18.524034">
+				<ele>124.000000</ele>
+			</trkpt>
+			<trkpt lat="54.446376" lon="18.523944">
+				<ele>124.000000</ele>
+			</trkpt>
+			<trkpt lat="54.446277" lon="18.523711">
+				<ele>124.000000</ele>
+			</trkpt>
+			<trkpt lat="54.446261" lon="18.523576">
+				<ele>124.000000</ele>
+			</trkpt>
+			<trkpt lat="54.446241" lon="18.523423">
+				<ele>124.000000</ele>
+			</trkpt>
+			<trkpt lat="54.446125" lon="18.523746">
+				<ele>124.000000</ele>
+			</trkpt>
+		</trkseg>
+	</trk>
+</gpx>
+
