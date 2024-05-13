@@ -26,9 +26,9 @@ const map = new maplibregl.Map({
   container: "map",
   style,
   center: [18.5850785, 54.4288153],
-  zoom: 11,
-  minZoom: 10,
-  maxZoom: 12,
+  zoom: 10,
+  minZoom: 9,
+  maxZoom: 15,
 });
 
 map.dragRotate.disable();
@@ -37,9 +37,22 @@ map.touchZoomRotate.disableRotation();
 map.on("load", () => {
   const el = document.querySelector("#map");
 
+  const routes = JSON.parse(el.dataset.routes);
+  const coordinates = routes.features.reduce((acc, feature) => {
+    if (feature.geometry.type === "LineString") {
+      return acc.concat(feature.geometry.coordinates);
+    }
+
+    return acc;
+  }, []);
+
+  const bounds = coordinates.reduce((bounds, coord) => {
+    return bounds.extend(coord);
+  }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
+
   map.addSource("lines", {
     type: "geojson",
-    data: JSON.parse(el.dataset.routes),
+    data: routes,
   });
 
   map.addLayer({
@@ -53,5 +66,10 @@ map.on("load", () => {
       // "line-color": ["get", "color"],
       "line-color": "#ff0000",
     },
+  });
+
+  map.fitBounds(bounds, {
+    animate: false,
+    padding: 50,
   });
 });

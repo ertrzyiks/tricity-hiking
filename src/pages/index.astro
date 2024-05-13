@@ -1,18 +1,23 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
+import { merge } from '../geodata/merge'
 import { getCollection, getEntry } from 'astro:content';
 
 const routes = await getCollection('routes');
 
-const route = routes[0]
+const geojsonList = []
 
-const geojson = await getEntry(route.data.geojson)
+for (const route of routes) {
+  const geojson = await getEntry(route.data.geojson)
+  geojsonList.push(geojson.data)
+}
+
+const geojson = merge(geojsonList)
 ---
 
 <Layout title="Tricity hiking">
 	<main>
-    <div id="map" data-routes={JSON.stringify(geojson.data)} />
+    <div id="map" data-routes={JSON.stringify(geojson)} />
 	</main>
 </Layout>
 

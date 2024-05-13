@@ -19,7 +19,10 @@ const geodataCollection = defineCollection({
         }),
         geometry: z.object({
           type: z.string(),
-          coordinates: z.array(z.array(z.number())),
+          coordinates: z.union([
+            z.array(z.array(z.number())),
+            z.array(z.number()),
+          ]),
         }),
       })
     ),
