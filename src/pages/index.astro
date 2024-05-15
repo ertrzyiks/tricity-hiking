@@ -17,13 +17,18 @@ const geojson = merge(geojsonList)
 
 <Layout title="Tricity hiking">
 	<main>
-    <div id="map" data-routes={JSON.stringify(geojson)} />
+    <h1 class="py-4 px-2">Tricity hiking</h1>
+
+    <div class="max-w-screen-xl mx-auto">
+      <div id="map" data-routes={JSON.stringify(geojson)} />
+    </div>
+
 	</main>
 </Layout>
 
 <style>
   #map {
-    height: 100vh;
+    height: 70vh;
     width: 100%;
   }
 </style>

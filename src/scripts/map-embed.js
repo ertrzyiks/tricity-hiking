@@ -1,6 +1,8 @@
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
+import pointImage from "../assets/places/point.png";
+
 // Define the map syle (OpenStreetMap raster tiles)
 const style = {
   version: 8,
@@ -34,7 +36,7 @@ const map = new maplibregl.Map({
 map.dragRotate.disable();
 map.touchZoomRotate.disableRotation();
 
-map.on("load", () => {
+map.on("load", async () => {
   const el = document.querySelector("#map");
 
   const routes = JSON.parse(el.dataset.routes);
@@ -65,6 +67,19 @@ map.on("load", () => {
       // to set the line-color to a feature property value.
       // "line-color": ["get", "color"],
       "line-color": "#ff0000",
+    },
+  });
+
+  const image = await map.loadImage(pointImage.src);
+  if (!map.hasImage("poi_15")) map.addImage("poi_15", image.data);
+
+  map.addLayer({
+    id: "places",
+    type: "symbol",
+    source: "lines",
+    layout: {
+      "icon-image": `poi_15`,
+      "icon-overlap": "always",
     },
   });
 
