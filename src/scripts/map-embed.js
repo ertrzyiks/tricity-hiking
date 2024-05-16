@@ -58,11 +58,26 @@ map.on("load", async () => {
   });
 
   map.addLayer({
+    id: "interaction",
+    type: "line",
+    source: "lines",
+    paint: {
+      "line-width": 25,
+      "line-color": "transparent",
+    },
+  });
+
+  map.addLayer({
     id: "lines",
     type: "line",
     source: "lines",
     paint: {
-      "line-width": 3,
+      "line-width": [
+        "case",
+        ["boolean", ["feature-state", "hover"], false],
+        5,
+        3,
+      ],
       // Use a get expression (https://maplibre.org/maplibre-style-spec/expressions/#get)
       // to set the line-color to a feature property value.
       // "line-color": ["get", "color"],
@@ -86,5 +101,36 @@ map.on("load", async () => {
   map.fitBounds(bounds, {
     animate: false,
     padding: 50,
+  });
+
+  let hoveredStateId = null;
+
+  map.on("mouseenter", "interaction", (e) => {
+    map.getCanvas().style.cursor = "pointer";
+
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    // const description = e.features[0].properties.description;
+
+    if (hoveredStateId) {
+      map.setFeatureState(
+        { source: "lines", id: hoveredStateId },
+        { hover: false }
+      );
+    }
+    hoveredStateId = e.features[0].id;
+
+    map.setFeatureState(
+      { source: "lines", id: hoveredStateId },
+      { hover: true }
+    );
+  });
+
+  map.on("mouseleave", "interaction", () => {
+    map.getCanvas().style.cursor = "";
+
+    map.setFeatureState(
+      { source: "lines", id: hoveredStateId },
+      { hover: false }
+    );
   });
 });

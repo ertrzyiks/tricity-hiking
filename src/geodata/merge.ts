@@ -5,10 +5,15 @@ export const merge = <
   data: GeoData[]
 ): GeoData => {
   return data.reduce((acc, geodata) => {
-    console.log
     acc.type = geodata.type;
     acc.features = acc.features || [];
-    acc.features = [...acc.features, ...geodata.features];
+
+    const newFeatures = geodata.features.map((feature) => ({
+      ...feature,
+      id: acc.features.length,
+    }));
+
+    acc.features = [...acc.features, ...newFeatures];
     return acc;
   }, {} as GeoData);
 };
