@@ -3,6 +3,7 @@ import maplibregl, { type LngLatLike } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "./mapStyle";
+import { getBounds } from "../../geodata/getBounds";
 import pointImage from "../../assets/places/point.png";
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
@@ -13,12 +14,6 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
   useEffect(() => {
     if (mapRef.current === null) return;
-
-    const getBounds = (coordinates: LngLatLike[]) => {
-      return coordinates.reduce((bounds, coord) => {
-        return bounds.extend(coord);
-      }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
-    };
 
     const map = new maplibregl.Map({
       container: mapRef.current,
@@ -155,9 +150,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           id="sidebar"
           class="flex-center left-0 w-52 h-full z-10 bg-slate-100"
         >
-          <div class="sidebar-content rounded-rect flex-center">
-            {selectedFeature}
-          </div>
+          <div class="flex-center">{selectedFeature}</div>
         </div>
       )}
     </div>
