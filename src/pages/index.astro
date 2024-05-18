@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import { merge } from '../geodata/merge'
 import { getCollection, getEntry } from 'astro:content';
 
+import { HomeMap } from '../components/HomeMap/HomeMap';
+
 const routes = await getCollection('routes');
 
 const geojsonList = []
@@ -20,20 +22,13 @@ const geojson = merge(geojsonList)
     <h1 class="py-4 px-2">Tricity hiking</h1>
 
     <div class="max-w-screen-xl mx-auto">
-      <div id="map" data-routes={JSON.stringify(geojson)}>
-        <div id="sidebar" class="invisible flex-center left-0 w-52 h-full z-10 bg-slate-100">
-          <div class="sidebar-content rounded-rect flex-center">
-              
-          </div>
-      </div>
-      </div>
+      <HomeMap client:only="preact" routes={geojson} />
     </div>
-
 	</main>
 </Layout>
 
-<style>
-  #map {
+<style is:global>
+  .maplibregl-map {
     height: 70vh;
     width: 100%;
   }
@@ -45,5 +40,3 @@ const geojson = merge(geojsonList)
     align-items: center;
   }
 </style>
-
-<script src="../scripts/map-embed.js"></script>

@@ -10,20 +10,29 @@ const routesCollection = defineCollection({
 const geodataCollection = defineCollection({
   type: "data",
   schema: z.object({
-    type: z.string(),
+    type: z.literal("FeatureCollection"),
     features: z.array(
       z.object({
-        type: z.string(),
+        type: z.literal("Feature"),
         properties: z.object({
           name: z.string(),
         }),
-        geometry: z.object({
-          type: z.string(),
-          coordinates: z.union([
-            z.array(z.array(z.number())),
-            z.array(z.number()),
-          ]),
-        }),
+        geometry: z.union([
+          z.object({
+            type: z.literal("LineString"),
+            coordinates: z.union([
+              z.array(z.tuple([z.number(), z.number()])),
+              z.array(z.tuple([z.number(), z.number(), z.number()])),
+            ]),
+          }),
+          z.object({
+            type: z.literal("Point"),
+            coordinates: z.union([
+              z.tuple([z.number(), z.number()]),
+              z.tuple([z.number(), z.number(), z.number()]),
+            ]),
+          }),
+        ]),
       })
     ),
   }),
