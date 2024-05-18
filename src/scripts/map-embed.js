@@ -3,6 +3,14 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import pointImage from "../assets/places/point.png";
 
+const sidebar = document.querySelector("#sidebar");
+
+const getBounds = (coordinates) => {
+  return coordinates.reduce((bounds, coord) => {
+    return bounds.extend(coord);
+  }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
+};
+
 // Define the map syle (OpenStreetMap raster tiles)
 const style = {
   version: 8,
@@ -48,9 +56,7 @@ map.on("load", async () => {
     return acc;
   }, []);
 
-  const bounds = coordinates.reduce((bounds, coord) => {
-    return bounds.extend(coord);
-  }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
+  const bounds = getBounds(coordinates);
 
   map.addSource("lines", {
     type: "geojson",
@@ -78,9 +84,6 @@ map.on("load", async () => {
         5,
         3,
       ],
-      // Use a get expression (https://maplibre.org/maplibre-style-spec/expressions/#get)
-      // to set the line-color to a feature property value.
-      // "line-color": ["get", "color"],
       "line-color": "#ff0000",
     },
   });
@@ -108,9 +111,6 @@ map.on("load", async () => {
   map.on("mouseenter", "interaction", (e) => {
     map.getCanvas().style.cursor = "pointer";
 
-    const coordinates = e.features[0].geometry.coordinates.slice();
-    // const description = e.features[0].properties.description;
-
     if (hoveredStateId) {
       map.setFeatureState(
         { source: "lines", id: hoveredStateId },
@@ -125,6 +125,30 @@ map.on("load", async () => {
     );
   });
 
+  // const popup = new maplibregl.Popup({
+  //   anchor: "right",
+  //   closeButton: false,
+  //   closeOnClick: true,
+  // });
+
+  map.on("click", "interaction", (e) => {
+    const feature = e.features[0];
+
+    if (feature.geometry.type === "LineString") {
+      const featureBounds = getBounds(feature.geometry.coordinates);
+
+      map.fitBounds(featureBounds, {
+        animate: true,
+        padding: { top: 20, bottom: 20, left: 220, right: 20 },
+      });
+
+      sidebar.innerHTML = `
+        <h2>${feature.properties.name}</h2>
+      `;
+      sidebar.classList.remove("invisible");
+    }
+  });
+
   map.on("mouseleave", "interaction", () => {
     map.getCanvas().style.cursor = "";
 
@@ -132,5 +156,9 @@ map.on("load", async () => {
       { source: "lines", id: hoveredStateId },
       { hover: false }
     );
+  });
+
+  map.on("dragstart", () => {
+    sidebar.classList.add("invisible");
   });
 });

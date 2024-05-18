@@ -20,7 +20,13 @@ const geojson = merge(geojsonList)
     <h1 class="py-4 px-2">Tricity hiking</h1>
 
     <div class="max-w-screen-xl mx-auto">
-      <div id="map" data-routes={JSON.stringify(geojson)} />
+      <div id="map" data-routes={JSON.stringify(geojson)}>
+        <div id="sidebar" class="invisible flex-center left-0 w-52 h-full z-10 bg-slate-100">
+          <div class="sidebar-content rounded-rect flex-center">
+              
+          </div>
+      </div>
+      </div>
     </div>
 
 	</main>
@@ -30,6 +36,13 @@ const geojson = merge(geojsonList)
   #map {
     height: 70vh;
     width: 100%;
+  }
+
+  .flex-center {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
 
