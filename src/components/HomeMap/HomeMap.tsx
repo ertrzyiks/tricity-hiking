@@ -8,7 +8,7 @@ import pointImage from "../../assets/places/point.png";
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
-    string | number | undefined
+    Record<string, any> | undefined
   >();
   const mapRef = useRef<HTMLDivElement>(null);
 
@@ -124,7 +124,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
             padding: { top: 20, bottom: 20, left: 220, right: 20 },
           });
 
-          setSelectedFeature(feature.properties.name);
+          setSelectedFeature(feature.properties);
         }
       });
 
@@ -150,7 +150,13 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           id="sidebar"
           class="flex-center left-0 w-52 h-full z-10 bg-slate-100"
         >
-          <div class="flex-center">{selectedFeature}</div>
+          <div class="flex flex-col">
+            <h3 class="font-bold">{selectedFeature.name}</h3>
+
+            <div>Distance: {selectedFeature.distance.toFixed(0)}m</div>
+            <div>Total Gain: {selectedFeature.totalGain.toFixed(0)}m</div>
+            <div>Total Loss: {selectedFeature.totalLoss.toFixed(0)}m</div>
+          </div>
         </div>
       )}
     </div>
