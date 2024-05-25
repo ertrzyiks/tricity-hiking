@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { merge } from '../geodata/merge'
 import { getCollection, getEntry } from 'astro:content';
 
+import mapImage from '../assets/home-map.png'
 import { HomeMap } from '../components/HomeMap/HomeMap';
 
 const routes = await getCollection('routes');
@@ -21,7 +22,9 @@ const geojson = merge(geojsonList)
 	<main>
     <h1 class="py-4 px-2">Tricity hiking</h1>
 
-    <div class="max-w-screen-xl mx-auto">
+    <div class="max-w-screen-xl mx-auto relative">
+      <img src={mapImage.src} class="absolute blur-2xl inset-0" />
+
       <HomeMap client:only="preact" routes={geojson} />
     </div>
 	</main>

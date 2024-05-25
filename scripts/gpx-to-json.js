@@ -102,7 +102,7 @@ const convert = (name) => {
   const gpxFilePath = `${BASE_PATH}/routes/${name}/${name}.gpx`;
 
   if (!fs.existsSync(gpxFilePath)) {
-    return;
+    return { result: "Not found" };
   }
 
   const gpxFile = new DOMParser().parseFromString(
@@ -116,10 +116,13 @@ const convert = (name) => {
     `${BASE_PATH}/geodata/${name}.json`,
     JSON.stringify(processed, null, 2)
   );
+
+  return { result: "OK" };
 };
 
 const list = fs.readdirSync(`${BASE_PATH}/routes`);
 
 list.forEach((name) => {
-  convert(name);
+  const { result } = convert(name);
+  console.log(name, result);
 });
