@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "capture": "concurrently \"astro dev\" \"sleep 1 && node scripts/capture.js\" --kill-others"
   },
   "dependencies": {
     "@astrojs/check": "^0.6.0",
@@ -21,6 +22,8 @@
   },
   "devDependencies": {
     "@tmcw/togeojson": "5.8.1",
-    "@xmldom/xmldom": "0.8.10"
+    "@xmldom/xmldom": "0.8.10",
+    "concurrently": "^8.2.2",
+    "puppeteer": "^22.10.0"
   }
 }
