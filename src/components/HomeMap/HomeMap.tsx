@@ -6,6 +6,14 @@ import { style } from "./mapStyle";
 import { getBounds } from "../../geodata/getBounds";
 import pointImage from "../../assets/places/point.png";
 
+const TrailAttributeName = ({ value }: { value: string }) => {
+  return <span>{value}</span>;
+};
+
+const TrailAttributeValue = ({ value }: { value: string }) => {
+  return <span className="text-xl">{value}</span>;
+};
+
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
     Record<string, any> | undefined
@@ -121,7 +129,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
           map.fitBounds(featureBounds, {
             animate: true,
-            padding: { top: 20, bottom: 20, left: 220, right: 20 },
+            padding: { top: 20, bottom: 20, left: 280, right: 20 },
           });
 
           setSelectedFeature(feature.properties);
@@ -146,16 +154,29 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   return (
     <div ref={mapRef}>
       {selectedFeature && (
-        <div
-          id="sidebar"
-          class="flex-center left-0 w-52 h-full z-10 bg-slate-100"
-        >
-          <div class="flex flex-col">
-            <h3 class="font-bold">{selectedFeature.name}</h3>
+        <div id="sidebar" class="absolute left-5 bottom-10 z-10 bg-slate-100">
+          <div class="flex flex-col px-6 py-8">
+            <h3 class="text-2xl">{selectedFeature.name}</h3>
 
-            <div>Distance: {selectedFeature.distance.toFixed(0)}m</div>
-            <div>Total Gain: {selectedFeature.totalGain.toFixed(0)}m</div>
-            <div>Total Loss: {selectedFeature.totalLoss.toFixed(0)}m</div>
+            <p className="text-md">This is some description</p>
+          </div>
+
+          <div class="flex flex-col px-6 py-8">
+            <div className="grid grid-cols-3 gap-2">
+              <TrailAttributeValue
+                value={`${selectedFeature.distance.toFixed(0)}m`}
+              />
+              <TrailAttributeValue
+                value={`${selectedFeature.totalGain.toFixed(0)}m`}
+              />
+              <TrailAttributeValue
+                value={`${selectedFeature.totalLoss.toFixed(0)}m`}
+              />
+
+              <TrailAttributeName value="Distance" />
+              <TrailAttributeName value="Total Gain" />
+              <TrailAttributeName value="Total Loss" />
+            </div>
           </div>
         </div>
       )}

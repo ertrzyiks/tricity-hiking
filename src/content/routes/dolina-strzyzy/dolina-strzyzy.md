@@ -1,4 +1,4 @@
 ---
-title: Dolina Strzyzy
+title: Dolina Strzyży
 geojson: dolina-strzyzy
 ---
