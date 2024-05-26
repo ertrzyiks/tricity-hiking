@@ -4,7 +4,10 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "./mapStyle";
 import { getBounds } from "../../geodata/getBounds";
+import { ElevationChart } from "../ElevationChart/ElevationChart";
 import pointImage from "../../assets/places/point.png";
+
+const mToKm = (m: number) => m / 1000;
 
 const TrailAttributeName = ({ value }: { value: string }) => {
   return <span>{value}</span>;
@@ -16,7 +19,7 @@ const TrailAttributeValue = ({ value }: { value: string }) => {
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
-    Record<string, any> | undefined
+    GeoJSON.Feature | undefined
   >();
   const mapRef = useRef<HTMLDivElement>(null);
 
@@ -132,7 +135,9 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
             padding: { top: 20, bottom: 20, left: 280, right: 20 },
           });
 
-          setSelectedFeature(feature.properties);
+          const rawFeature = routes.features.find((f) => f.id === feature.id);
+
+          setSelectedFeature(rawFeature);
         }
       });
 
@@ -144,33 +149,41 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           { hover: false }
         );
       });
-
-      map.on("dragstart", () => {
-        setSelectedFeature(undefined);
-      });
     });
   }, []);
 
   return (
     <div ref={mapRef}>
-      {selectedFeature && (
-        <div id="sidebar" class="absolute left-5 bottom-10 z-10 bg-slate-100">
+      {selectedFeature && selectedFeature.properties && (
+        <div
+          id="sidebar"
+          class="absolute left-5 w-72 bottom-10 z-10 bg-slate-100 border-t-4 border-green-500"
+        >
           <div class="flex flex-col px-6 py-8">
-            <h3 class="text-2xl">{selectedFeature.name}</h3>
+            <h3 class="text-2xl">{selectedFeature.properties.name}</h3>
 
             <p className="text-md">This is some description</p>
+          </div>
+
+          <div>
+            <img
+              className="w-72 h-36 object-cover"
+              src="https://picsum.photos/700/500"
+            />
           </div>
 
           <div class="flex flex-col px-6 py-8">
             <div className="grid grid-cols-3 gap-2">
               <TrailAttributeValue
-                value={`${selectedFeature.distance.toFixed(0)}m`}
+                value={`${mToKm(selectedFeature.properties.distance).toFixed(
+                  2
+                )}km`}
               />
               <TrailAttributeValue
-                value={`${selectedFeature.totalGain.toFixed(0)}m`}
+                value={`${selectedFeature.properties.totalGain.toFixed(0)}m`}
               />
               <TrailAttributeValue
-                value={`${selectedFeature.totalLoss.toFixed(0)}m`}
+                value={`${selectedFeature.properties.totalLoss.toFixed(0)}m`}
               />
 
               <TrailAttributeName value="Distance" />
@@ -178,6 +191,17 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
               <TrailAttributeName value="Total Loss" />
             </div>
           </div>
+
+          {selectedFeature &&
+            selectedFeature.geometry.type === "LineString" && (
+              <div>
+                <ElevationChart
+                  points={selectedFeature.geometry.coordinates.map(
+                    (point: number[]) => point[2]
+                  )}
+                />
+              </div>
+            )}
         </div>
       )}
     </div>
