@@ -152,13 +152,23 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
     });
   }, []);
 
+  const handleCloseSelection = () => {
+    setSelectedFeature(undefined);
+  };
+
   return (
     <div ref={mapRef}>
       {selectedFeature && selectedFeature.properties && (
         <div
           id="sidebar"
-          class="absolute left-5 w-72 bottom-10 z-10 bg-slate-100 border-t-4 border-green-500"
+          className="absolute left-5 w-72 bottom-10 z-10 bg-slate-100 border-t-4 border-green-500"
         >
+          <button
+            className="absolute right-4 top-4"
+            onClick={handleCloseSelection}
+          >
+            X
+          </button>
           <div class="flex flex-col px-6 py-8">
             <h3 class="text-2xl">{selectedFeature.properties.name}</h3>
 
