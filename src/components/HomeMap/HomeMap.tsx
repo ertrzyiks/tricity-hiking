@@ -5,6 +5,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { style } from "./mapStyle";
 import { getBounds } from "../../geodata/getBounds";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
+import { CloseIcon } from "../CloseIcon/CloseIcon";
 import pointImage from "../../assets/places/point.png";
 
 const mToKm = (m: number) => m / 1000;
@@ -167,7 +168,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
             className="absolute right-4 top-4"
             onClick={handleCloseSelection}
           >
-            X
+            <CloseIcon />
           </button>
           <div class="flex flex-col px-6 py-8">
             <h3 class="text-2xl">{selectedFeature.properties.name}</h3>

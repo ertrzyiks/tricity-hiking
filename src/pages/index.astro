@@ -22,8 +22,10 @@ const geojson = merge(geojsonList)
 	<main>
     <h1 class="py-4 px-2">Tricity hiking</h1>
 
-    <div class="max-w-screen-xl mx-auto relative">
-      <img src={mapImage.src} class="absolute blur-2xl inset-0" />
+    <div class="max-w-screen-xl mx-auto relative h-[70vh]">
+      <div class="absolute inset-0 h-full overflow-hidden">
+        <img src={mapImage.src} class="absolute blur-2xl inset-0 h-full" />
+      </div>
 
       <HomeMap client:only="preact" routes={geojson} />
     </div>
@@ -32,7 +34,7 @@ const geojson = merge(geojsonList)
 
 <style is:global>
   .maplibregl-map {
-    height: 70vh;
+    height: 100%;
     width: 100%;
   }
 </style>
