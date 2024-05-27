@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "preact/hooks";
-import maplibregl, { type LngLatLike } from "maplibre-gl";
+import maplibregl, { type Feature, type LngLatLike } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "./mapStyle";
@@ -124,22 +124,31 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
       map.on("click", "interaction", (e) => {
         if (!e.features) return;
 
-        const feature = e.features[0];
+        const clickedFeature = e.features[0];
+        let feature = routes.features.find((f) => f.id === clickedFeature.id);
 
-        if (feature.geometry.type === "LineString") {
-          const featureBounds = getBounds(
-            feature.geometry.coordinates as LngLatLike[]
+        if (
+          map.getZoom() < 13 &&
+          clickedFeature.geometry.type !== "LineString" &&
+          clickedFeature.properties.parentFeatureId
+        ) {
+          feature = routes.features.find(
+            (f) => f.id === clickedFeature.properties.parentFeatureId
           );
-
-          map.fitBounds(featureBounds, {
-            animate: true,
-            padding: { top: 20, bottom: 20, left: 280, right: 20 },
-          });
-
-          const rawFeature = routes.features.find((f) => f.id === feature.id);
-
-          setSelectedFeature(rawFeature);
         }
+
+        if (!feature || feature.geometry.type !== "LineString") return;
+
+        const featureBounds = getBounds(
+          feature.geometry.coordinates as LngLatLike[]
+        );
+
+        map.fitBounds(featureBounds, {
+          animate: true,
+          padding: { top: 20, bottom: 20, left: 280, right: 20 },
+        });
+
+        setSelectedFeature(feature);
       });
 
       map.on("mouseleave", "interaction", () => {
@@ -170,7 +179,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           >
             <CloseIcon />
           </button>
-          <div class="flex flex-col px-6 py-8">
+          <div class="flex flex-col px-6 py-3 pr-8">
             <h3 class="text-2xl">{selectedFeature.properties.name}</h3>
 
             <p className="text-md">This is some description</p>
