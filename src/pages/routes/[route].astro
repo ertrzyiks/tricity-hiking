@@ -1,0 +1,31 @@
+---
+import type { InferGetStaticParamsType } from "astro";
+import { getCollection, getEntry } from 'astro:content';
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const allRoutes = await getCollection('routes');
+
+  return allRoutes.map((route) => {
+    return {
+      params: {
+        route: route.slug
+      }
+    }
+  });
+}
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+
+const { route } = Astro.params as Params;
+
+const routeData = await getEntry('routes', route);
+---
+
+<Layout title="Tricity hiking - Hike">
+  <main>
+    <h1 class="py-4 px-2">Tricity hiking</h1>
+
+    <h2 class="py-4 px-2">{ routeData.data.title }</h2>
+  </main>
+</Layout>

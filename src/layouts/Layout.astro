@@ -1,4 +1,7 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
+
+import NavLink from '../components/NavLink.astro';
 interface Props {
 	title: string;
 }
@@ -15,9 +18,35 @@ const { title } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/tricity-hiking/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+    <ViewTransitions />
 	</head>
 	<body>
-		<slot />
+    <main>
+      <nav class="flex">
+        <h1 class="py-2 px-4">TH</h1>
+
+        <ul class="flex gap-1">
+          <li>
+            <NavLink href="/tricity-hiking" >
+              Map
+            </NavLink>
+          </li>
+          <li>
+            <NavLink href="/tricity-hiking/activities" >
+              Activities
+            </NavLink>
+          </li>
+          <li>
+            <NavLink href="/tricity-hiking/transportation" >
+              Transportation
+            </NavLink>
+          </li>
+        </ul>
+
+      </nav>
+
+	  	<slot />
+    </main>
 	</body>
 </html>
 <style is:global>

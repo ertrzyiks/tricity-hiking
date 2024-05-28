@@ -69,7 +69,7 @@ const getTotalGainAndLoss = (coords) => {
   return { totalGain, totalLoss };
 };
 
-const process = (json) => {
+const process = (name, json) => {
   json.features.forEach((feature) => {
     if (feature.geometry.type !== "LineString") {
       return;
@@ -84,6 +84,7 @@ const process = (json) => {
     feature.properties.distance = distance;
     feature.properties.totalGain = totalGain;
     feature.properties.totalLoss = totalLoss;
+    feature.properties.routeSlug = name;
     delete feature.properties.coordinateProperties.times;
 
     const surfaces = feature.properties.coordinateProperties.Extensionss.map(
@@ -98,8 +99,13 @@ const process = (json) => {
   return json;
 };
 
-const convert = (name) => {
-  const gpxFilePath = `${BASE_PATH}/routes/${name}/${name}.gpx`;
+const convert = (fileName) => {
+  if (!fileName.endsWith(".md")) {
+    return { result: "IGNORE" };
+  }
+
+  const name = fileName.replace(".md", "");
+  const gpxFilePath = `${BASE_PATH}/routes/${name}.gpx`;
 
   if (!fs.existsSync(gpxFilePath)) {
     return { result: "Not found" };
@@ -110,7 +116,7 @@ const convert = (name) => {
   );
 
   const converted = gpx(gpxFile);
-  const processed = process(converted);
+  const processed = process(name, converted);
 
   fs.writeFileSync(
     `${BASE_PATH}/geodata/${name}.json`,
@@ -124,5 +130,8 @@ const list = fs.readdirSync(`${BASE_PATH}/routes`);
 
 list.forEach((name) => {
   const { result } = convert(name);
-  console.log(name, result);
+
+  if (result !== "IGNORE") {
+    console.log(name, result);
+  }
 });

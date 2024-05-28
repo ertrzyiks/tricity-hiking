@@ -182,7 +182,19 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           <div class="flex flex-col px-6 py-3 pr-8">
             <h3 class="text-2xl">{selectedFeature.properties.name}</h3>
 
-            <p className="text-md">This is some description</p>
+            <p className="text-md">
+              This is some description
+              {selectedFeature.properties.routeSlug != null && (
+                <span>
+                  {" "}
+                  <a
+                    href={`/tricity-hiking/routes/${selectedFeature.properties.routeSlug}`}
+                  >
+                    Read more
+                  </a>
+                </span>
+              )}
+            </p>
           </div>
 
           <div>
