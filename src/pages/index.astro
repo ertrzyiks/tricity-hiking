@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { merge } from '../geodata/merge'
+import { enhance } from '../geodata/enhance'
 import { getCollection, getEntry } from 'astro:content';
 
 import mapImage from '../assets/home-map.jpg'
@@ -12,7 +13,8 @@ const geojsonList = []
 
 for (const route of routes) {
   const geojson = await getEntry(route.data.geojson)
-  geojsonList.push(geojson.data)
+  const enhancedGeojson = enhance({ collection: geojson.data, route: route.data })
+  geojsonList.push(enhancedGeojson)
 }
 
 const geojson = merge(geojsonList)

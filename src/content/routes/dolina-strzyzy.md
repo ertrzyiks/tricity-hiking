@@ -1,4 +1,5 @@
 ---
 title: Dolina Strzyży
 geojson: dolina-strzyzy
+description: A circuit trail within the Strzyża Stream Valley, featuring two steep inclines and a charming stream crossing.
 ---

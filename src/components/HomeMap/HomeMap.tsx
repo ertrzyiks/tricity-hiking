@@ -177,14 +177,9 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
             <h3 class="text-2xl">{selectedFeature.properties.name}</h3>
           </div>
 
-          {/* <div>
-            <img
-              className="w-72 h-36 object-cover"
-              src="https://picsum.photos/700/500"
-            />
-          </div> */}
-
-          <p className="px-4 py-4 text-md">This is some description</p>
+          <p className="px-4 py-4 pt-0 text-base">
+            {selectedFeature.properties.description}
+          </p>
 
           {selectedFeature &&
             selectedFeature.geometry.type === "LineString" && (

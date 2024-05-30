@@ -4,6 +4,7 @@ const routesCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     geojson: reference("geodata"),
+    description: z.string(),
   }),
 });
 
