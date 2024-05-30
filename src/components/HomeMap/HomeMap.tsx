@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from "preact/hooks";
-import maplibregl, { type Feature, type LngLatLike } from "maplibre-gl";
+import maplibregl, { type LngLatLike } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "./mapStyle";
 import { getBounds } from "../../geodata/getBounds";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
-import { CloseIcon } from "../CloseIcon/CloseIcon";
+import { Button } from "../Button/Button";
 import pointImage from "../../assets/places/point.png";
 
 const mToKm = (m: number) => m / 1000;
@@ -173,38 +173,31 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           id="sidebar"
           className="absolute left-5 w-72 bottom-10 z-10 bg-slate-100 border-t-4 border-green-500"
         >
-          <button
-            className="absolute right-4 top-4"
-            onClick={handleCloseSelection}
-          >
-            <CloseIcon />
-          </button>
-          <div class="flex flex-col px-6 py-3 pr-8">
+          <div class="flex flex-col px-4 py-3 pr-8">
             <h3 class="text-2xl">{selectedFeature.properties.name}</h3>
-
-            <p className="text-md">
-              This is some description
-              {selectedFeature.properties.routeSlug != null && (
-                <span>
-                  {" "}
-                  <a
-                    href={`/tricity-hiking/routes/${selectedFeature.properties.routeSlug}`}
-                  >
-                    Read more
-                  </a>
-                </span>
-              )}
-            </p>
           </div>
 
-          <div>
+          {/* <div>
             <img
               className="w-72 h-36 object-cover"
               src="https://picsum.photos/700/500"
             />
-          </div>
+          </div> */}
 
-          <div class="flex flex-col px-6 py-8">
+          <p className="px-4 py-4 text-md">This is some description</p>
+
+          {selectedFeature &&
+            selectedFeature.geometry.type === "LineString" && (
+              <div>
+                <ElevationChart
+                  points={selectedFeature.geometry.coordinates.map(
+                    (point: number[]) => point[2]
+                  )}
+                />
+              </div>
+            )}
+
+          <div class="flex flex-col px-4 py-4">
             <div className="grid grid-cols-3 gap-2">
               <TrailAttributeValue
                 value={`${mToKm(selectedFeature.properties.distance).toFixed(
@@ -224,16 +217,16 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
             </div>
           </div>
 
-          {selectedFeature &&
-            selectedFeature.geometry.type === "LineString" && (
-              <div>
-                <ElevationChart
-                  points={selectedFeature.geometry.coordinates.map(
-                    (point: number[]) => point[2]
-                  )}
-                />
-              </div>
-            )}
+          <div className="flex items-center justify-center px-4 py-6 gap-2">
+            <Button
+              href={`/tricity-hiking/routes/${selectedFeature.properties.routeSlug}`}
+            >
+              Learn more
+            </Button>
+            <Button onClick={handleCloseSelection} variant="neutral">
+              Close
+            </Button>
+          </div>
         </div>
       )}
     </div>
