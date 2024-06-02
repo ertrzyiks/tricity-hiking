@@ -1,6 +1,6 @@
 export const style =
   import.meta.env.MODE === "production"
-    ? "https://api.maptiler.com/maps/81336bdc-08e3-4a3f-981c-55f06f6e3e42/style.json?key=bHa0L2mKhjZqOJctPuVf#1.0/0.00000/0.00000"
+    ? "https://api.maptiler.com/maps/81336bdc-08e3-4a3f-981c-55f06f6e3e42/style.json?key=bHa0L2mKhjZqOJctPuVf"
     : {
         version: 8 as const,
         sources: {
