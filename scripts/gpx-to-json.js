@@ -100,11 +100,11 @@ const process = (name, json) => {
 };
 
 const convert = (fileName) => {
-  if (!fileName.endsWith(".md")) {
+  if (!fileName.endsWith(".mdx")) {
     return { result: "IGNORE" };
   }
 
-  const name = fileName.replace(".md", "");
+  const name = fileName.replace(".mdx", "");
   const gpxFilePath = `${BASE_PATH}/routes/${name}.gpx`;
 
   if (!fs.existsSync(gpxFilePath)) {
