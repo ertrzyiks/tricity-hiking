@@ -75,10 +75,10 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           "line-width": [
             "case",
             ["boolean", ["feature-state", "hover"], false],
-            5,
-            3,
+            6,
+            4,
           ],
-          "line-color": "#ff0000",
+          "line-color": "#e11d48",
         },
       });
 

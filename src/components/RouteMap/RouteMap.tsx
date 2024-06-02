@@ -47,13 +47,8 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
         type: "line",
         source: "lines",
         paint: {
-          "line-width": [
-            "case",
-            ["boolean", ["feature-state", "hover"], false],
-            5,
-            3,
-          ],
-          "line-color": "#ff0000",
+          "line-width": 5,
+          "line-color": "#e11d48",
         },
       });
 
