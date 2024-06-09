@@ -31,7 +31,7 @@ const { title } = Astro.props;
 
         <ul class="flex gap-1 py-2 justify-center">
           <li>
-            <NavLink href="/tricity-hiking">
+            <NavLink href="/tricity-hiking" matches={(path: string) => ['/tricity-hiking/list', '/tricity-hiking/', '/tricity-hiking'].includes(path) || path.startsWith('/tricity-hiking/routes/')}>
               Routes
             </NavLink>
           </li>

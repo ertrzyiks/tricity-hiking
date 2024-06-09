@@ -1,8 +1,9 @@
 ---
-const { href } = Astro.props;
+const { href, matches } = Astro.props;
 
 const pathname = new URL(Astro.request.url).pathname;
-const isActive = pathname === href || pathname === `${href}/`;
+const directMatch = pathname === href || pathname === `${href}/`;
+const isActive = matches ? matches(pathname) : directMatch;
 ---
 
 <a href={href} class:list={[
