@@ -1,9 +1,9 @@
 ---
-import { fade } from 'astro:transitions';
 import type { InferGetStaticParamsType } from "astro";
 import { getCollection, getEntry } from 'astro:content';
 import Layout from "../../layouts/Layout.astro";
 import { RouteMap } from "../../components/RouteMap/RouteMap";
+import { ElevationChart } from '../../components/ElevationChart/ElevationChart';
 import { config } from "../../components/Markdown";
 
 export async function getStaticPaths() {
@@ -25,15 +25,26 @@ const { route } = Astro.params as Params;
 const entry = await getEntry('routes', route);
 const geojson = await getEntry(entry.data.geojson)
 const { Content } = await entry.render();
+
+const attitudes = geojson.data.features[0].geometry.coordinates.map((coord) => {
+  if (!Array.isArray(coord)) {
+    return null
+  }
+  return  coord[2]
+}).filter((coords): coords is number  => Boolean(coords));
 ---
 
-<Layout title="Tricity hiking - Hike">
+<Layout title={`Tricity hiking - ${entry.data.title}`}>
   <div class="max-w-screen-xl mx-auto">
     <h2 class="py-4 px-2">{ entry.data.title }</h2>
   </div>
 
   <div class="max-w-screen-xl mx-auto relative h-[50vh] px-2 lg:px-0" transition:name="map">
     <RouteMap client:only="preact" route={geojson.data} />
+  </div>
+
+  <div class="max-w-screen-xl mx-auto relative px-2 lg:px-0">
+    <ElevationChart client:load points={attitudes} />
   </div>
 
   <div class="max-w-screen-xl mx-auto">
