@@ -5,6 +5,7 @@ const routesCollection = defineCollection({
     title: z.string(),
     geojson: reference("geodata"),
     description: z.string(),
+    tricity: z.boolean().optional(),
   }),
 });
 

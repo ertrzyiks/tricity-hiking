@@ -9,11 +9,10 @@ import mapImage from '../assets/home-map.jpg'
 import { HomeMap } from '../components/HomeMap/HomeMap';
 
 const routes = await getCollection('routes');
-const tricityRoutes = routes.filter(route => route.data.tricity)
 
 const geojsonList = []
 
-for (const route of tricityRoutes) {
+for (const route of routes) {
   const geojson = await getEntry(route.data.geojson)
   const enhancedGeojson = enhance({ collection: geojson.data, route: route.data })
   geojsonList.push(enhancedGeojson)
