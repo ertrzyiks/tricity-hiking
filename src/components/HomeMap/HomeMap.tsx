@@ -3,20 +3,13 @@ import maplibregl, { type LngLatLike } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "./mapStyle";
-import { getBounds } from "../../geodata/getBounds";
+import { getBounds } from "../../services/getBounds";
+import { mToKm } from "../../services/mToKm";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
 import { Button } from "../Button/Button";
+import { TrailAttributeName } from "../TrailAttributeName/TrailAttributeName";
+import { TrailAttributeValue } from "../TrailAttributeValue/TrailAttributeValue";
 import pointImage from "../../assets/places/point.png";
-
-const mToKm = (m: number) => m / 1000;
-
-const TrailAttributeName = ({ value }: { value: string }) => {
-  return <span>{value}</span>;
-};
-
-const TrailAttributeValue = ({ value }: { value: string }) => {
-  return <span className="text-xl">{value}</span>;
-};
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<

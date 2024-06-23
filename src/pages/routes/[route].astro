@@ -5,6 +5,9 @@ import Layout from "../../layouts/Layout.astro";
 import { RouteMap } from "../../components/RouteMap/RouteMap";
 import { FullElevationChart } from '../../components/FullElevationChart/FullElevationChart';
 import { config } from "../../components/Markdown";
+import { TrailAttributeValue } from "../../components/TrailAttributeValue/TrailAttributeValue";
+import { TrailAttributeName } from "../../components/TrailAttributeName/TrailAttributeName";
+import { mToKm } from "../../services/mToKm"
 
 export async function getStaticPaths() {
   const allRoutes = await getCollection('routes');
@@ -32,6 +35,14 @@ const attitudes = geojson.data.features[0].geometry.coordinates.map((coord) => {
   }
   return  coord[2]
 }).filter((coords): coords is number  => Boolean(coords));
+
+const feature = geojson.data.features.find((feature) => feature.geometry.type === 'LineString');
+
+if (!feature) {
+  Astro.response.status = 404;
+  Astro.response.statusText = 'Not found';
+  return;
+}
 ---
 
 <Layout title={`Tricity hiking - ${entry.data.title}`}>
@@ -50,7 +61,27 @@ const attitudes = geojson.data.features[0].geometry.coordinates.map((coord) => {
   <div class="max-w-screen-xl mx-auto">
     <div class="grid grid-cols-[300px_1fr]">
       <div>
+        <div class="py-4 grid grid-cols-2 gap-2">
+          <TrailAttributeName value="Distance" />
 
+          <TrailAttributeValue
+            value={`${mToKm(feature.properties.distance).toFixed(
+              2
+            )}km`}
+          />
+
+          <TrailAttributeName value="Total Gain" />
+
+          <TrailAttributeValue
+            value={`${feature.properties.totalGain.toFixed(0)}m`}
+          />
+
+          <TrailAttributeName value="Total Loss" />
+
+          <TrailAttributeValue
+            value={`${feature.properties.totalLoss.toFixed(0)}m`}
+          />
+        </div>
       </div>
       <div>
         <Content components={config} />

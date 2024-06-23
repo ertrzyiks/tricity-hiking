@@ -2,8 +2,8 @@
 import { getCollection, getEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Homepage from '../components/Homepage.astro';
-import { merge } from '../geodata/merge'
-import { enhance } from '../geodata/enhance'
+import { merge } from '../services/merge'
+import { enhance } from '../services/enhance'
 
 const routes = await getCollection('routes');
 

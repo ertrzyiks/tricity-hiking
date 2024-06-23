@@ -31,7 +31,7 @@ export const ElevationChart = ({
 
   const max = Math.max(...points);
   const min = 0;
-  const chartWidth = width ?? points.length;
+  const chartWidth = width ?? 1200;
 
   const toChartY = (y: number) => (y * height) / (max - min);
   const toChartX = (x: number) => (x * chartWidth) / points.length;
