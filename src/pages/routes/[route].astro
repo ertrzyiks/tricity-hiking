@@ -3,7 +3,7 @@ import type { InferGetStaticParamsType } from "astro";
 import { getCollection, getEntry } from 'astro:content';
 import Layout from "../../layouts/Layout.astro";
 import { RouteMap } from "../../components/RouteMap/RouteMap";
-import { ElevationChart } from '../../components/ElevationChart/ElevationChart';
+import { FullElevationChart } from '../../components/FullElevationChart/FullElevationChart';
 import { config } from "../../components/Markdown";
 
 export async function getStaticPaths() {
@@ -44,7 +44,7 @@ const attitudes = geojson.data.features[0].geometry.coordinates.map((coord) => {
   </div>
 
   <div class="max-w-screen-xl mx-auto relative px-2 lg:px-0">
-    <ElevationChart client:load points={attitudes} />
+    <FullElevationChart client:load points={attitudes} />
   </div>
 
   <div class="max-w-screen-xl mx-auto">

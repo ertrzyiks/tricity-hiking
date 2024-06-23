@@ -10,7 +10,7 @@ export const ElevationChart = ({
   height?: number;
 }) => {
   const ref = useRef<SVGSVGElement>(null);
-  const [width, setWidth] = useState(points.length);
+  const [width, setWidth] = useState<number | null>(null);
   const debouncedSetWidth = useDebounce(setWidth);
 
   useLayoutEffect(() => {
@@ -30,10 +30,11 @@ export const ElevationChart = ({
   }, [debouncedSetWidth]);
 
   const max = Math.max(...points);
-  const min = Math.min(...points);
+  const min = 0;
+  const chartWidth = width ?? points.length;
 
   const toChartY = (y: number) => (y * height) / (max - min);
-  const toChartX = (x: number) => (x * width) / points.length;
+  const toChartX = (x: number) => (x * chartWidth) / points.length;
 
   const chartPoints = [
     `${toChartX(0)},${toChartY(max - min)}`,
@@ -44,8 +45,9 @@ export const ElevationChart = ({
   return (
     <svg
       ref={ref}
-      className="w-full h-[50px]"
-      viewBox={`0 0 ${width} ${height}`}
+      className="w-full"
+      height={height}
+      viewBox={`0 0 ${chartWidth} ${height}`}
       preserveAspectRatio="none"
     >
       <polyline
