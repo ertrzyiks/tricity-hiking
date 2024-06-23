@@ -48,7 +48,14 @@ const attitudes = geojson.data.features[0].geometry.coordinates.map((coord) => {
   </div>
 
   <div class="max-w-screen-xl mx-auto">
-    <Content components={config} />
+    <div class="grid grid-cols-[300px_1fr]">
+      <div>
+
+      </div>
+      <div>
+        <Content components={config} />
+      </div>
+    </div>
   </div>
 </Layout>
 
