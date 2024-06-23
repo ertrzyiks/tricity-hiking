@@ -2,18 +2,18 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 
-const activities = await getCollection('activities');
+const foodList = await getCollection('food');
 ---
 
-<Layout title="Tricity hiking - Activities">
+<Layout title="Tricity hiking - Food">
     <div class="max-w-screen-xl mx-auto relative h-[80vh] px-2 lg:px-0" transition:name="map">
       <ul>
-        {activities.map(async (activity) => {
-          const { Content } = await activity.render()
+        {foodList.map(async (place) => {
+          const { Content } = await place.render()
 
           return (
             <li>
-                <h2>{activity.data.title}</h2>
+                <h2>{place.data.title}</h2>
                 <div><Content/></div>
             </li>
           )

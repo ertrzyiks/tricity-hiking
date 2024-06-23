@@ -38,7 +38,23 @@ const geodataCollection = defineCollection({
   }),
 });
 
+const activitiesCollection = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+  }),
+});
+
+const foodCollection = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+  }),
+});
+
 export const collections = {
   routes: routesCollection,
   geodata: geodataCollection,
+  activities: activitiesCollection,
+  food: foodCollection,
 };
