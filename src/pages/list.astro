@@ -23,8 +23,8 @@ const geojson = merge(geojsonList)
     <div class="max-w-screen-xl mx-auto relative h-[80vh] px-2 lg:px-0" transition:name="map">
       <ul>
         {routes.map(route => (
-          <li>
-            <a href={`/tricity-hiking/routes/${route.data.geojson.id}`}>{route.data.title}</a>
+          <li class="my-4 border border-solid border-gray-300">
+            <a class="block py-4 px-2" href={`/tricity-hiking/routes/${route.data.geojson.id}`}>{route.data.title}</a>
           </li>
 
         ))}
@@ -33,4 +33,9 @@ const geojson = merge(geojsonList)
   </Homepage>
 </Layout>
 
+<style>
+  a {
+    padding:
+  }
+</style>
 

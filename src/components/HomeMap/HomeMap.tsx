@@ -78,15 +78,15 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
       const image = await map.loadImage(pointImage.src);
       if (!map.hasImage("poi_15")) map.addImage("poi_15", image.data);
 
-      map.addLayer({
-        id: "places",
-        type: "symbol",
-        source: "lines",
-        layout: {
-          "icon-image": `poi_15`,
-          "icon-overlap": "always",
-        },
-      });
+      // map.addLayer({
+      //   id: "places",
+      //   type: "symbol",
+      //   source: "lines",
+      //   layout: {
+      //     "icon-image": `poi_15`,
+      //     "icon-overlap": "always",
+      //   },
+      // });
 
       map.fitBounds(bounds, {
         animate: false,
