@@ -8,7 +8,7 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "capture": "concurrently \"astro dev\" \"sleep 1 && node scripts/capture.js\" --kill-others"
+    "capture": "concurrently \"PUBLIC_ASTRO_USE_MAPTILER_MAP_STYLE=true astro dev\" \"sleep 1 && node scripts/capture.js\" --kill-others"
   },
   "dependencies": {
     "@astrojs/check": "^0.7.0",
