@@ -1,6 +1,5 @@
 export const style =
-  import.meta.env.MODE === "production" ||
-  import.meta.env.PUBLIC_ASTRO_USE_MAPTILER_MAP_STYLE
+  import.meta.env.PUBLIC_ASTRO_USE_MAPTILER_MAP_STYLE === "true"
     ? "https://api.maptiler.com/maps/81336bdc-08e3-4a3f-981c-55f06f6e3e42/style.json?key=bHa0L2mKhjZqOJctPuVf"
     : {
         version: 8 as const,
