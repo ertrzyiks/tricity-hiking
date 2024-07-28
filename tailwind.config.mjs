@@ -5,6 +5,7 @@ export default {
     extend: {
       gridTemplateColumns: {
         header: "50px 1fr 50px",
+        layout: "300px 1fr",
       },
     },
   },

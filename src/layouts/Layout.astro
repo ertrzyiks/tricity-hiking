@@ -2,6 +2,7 @@
 import { ViewTransitions } from 'astro:transitions';
 
 import NavLink from '../components/NavLink.astro';
+import SidebarLink from '../components/SidebarLink.astro';
 interface Props {
 	title: string;
 }
@@ -26,35 +27,41 @@ const { title } = Astro.props;
 	</head>
 	<body>
     <main>
-      <nav class="grid grid-cols-header">
+      <nav>
         <h1 class="py-2 px-4">Tricity<br>Hiking</h1>
-
-        <ul class="flex flex-wrap md:flex-nowrap gap-1 py-2 justify-center">
-          <li>
-            <NavLink href="/tricity-hiking" matches={(path: string) => ['/tricity-hiking/list', '/tricity-hiking/surrounding', '/tricity-hiking/', '/tricity-hiking'].includes(path) || path.startsWith('/tricity-hiking/routes/')}>
-              Routes
-            </NavLink>
-          </li>
-          <li>
-            <NavLink href="/tricity-hiking/activities">
-              Activities
-            </NavLink>
-          </li>
-          <li>
-            <NavLink href="/tricity-hiking/food">
-              Food
-            </NavLink>
-          </li>
-          <li>
-            <NavLink href="/tricity-hiking/transportation">
-              Transportation
-            </NavLink>
-          </li>
-        </ul>
-
       </nav>
 
-	  	<slot />
+      <div class="grid grid-cols-1 lg:grid-cols-layout">
+        <div id="sidebar" class="lg:block hidden rounded-none border-none">
+          <div class="p-4 space-y-4">
+            <SidebarLink href="/tricity-hiking" matches={(pathname: string) => ['/tricity-hiking', '/tricity-hiking/', '/tricity-hiking/surrounding', '/tricity-hiking/list'].includes(pathname) || pathname.startsWith('/tricity-hiking/routes/')}>
+              Routes
+            </SidebarLink>
+            <SidebarLink nested href="/tricity-hiking/list" >
+              Route list
+            </SidebarLink>
+            <SidebarLink nested href="/tricity-hiking">
+              Route map
+            </SidebarLink>
+            <SidebarLink nested href="/tricity-hiking/surrounding">
+              Route map (surrounding)
+            </SidebarLink>
+
+            <SidebarLink href="/tricity-hiking/activities">
+              Activities
+              </SidebarLink>
+            <SidebarLink href="/tricity-hiking/food">
+              Food
+            </SidebarLink>
+            <SidebarLink href="/tricity-hiking/transportation">
+              Transportation
+            </SidebarLink>
+          </div>
+        </div>
+        <div class="p-4">
+	  	    <slot />
+        </div>
+      </div>
     </main>
 	</body>
 </html>
