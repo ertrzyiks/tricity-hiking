@@ -29,7 +29,7 @@ const { title } = Astro.props;
       <nav class="grid grid-cols-header">
         <h1 class="py-2 px-4">Tricity<br>Hiking</h1>
 
-        <ul class="flex gap-1 py-2 justify-center">
+        <ul class="flex flex-wrap md:flex-nowrap gap-1 py-2 justify-center">
           <li>
             <NavLink href="/tricity-hiking" matches={(path: string) => ['/tricity-hiking/list', '/tricity-hiking/surrounding', '/tricity-hiking/', '/tricity-hiking'].includes(path) || path.startsWith('/tricity-hiking/routes/')}>
               Routes
