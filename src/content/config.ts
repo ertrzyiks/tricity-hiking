@@ -1,12 +1,15 @@
+import { preview } from "astro";
 import { z, reference, defineCollection } from "astro:content";
 const routesCollection = defineCollection({
   type: "content",
-  schema: z.object({
-    title: z.string(),
-    geojson: reference("geodata"),
-    description: z.string(),
-    tricity: z.boolean().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      geojson: reference("geodata"),
+      description: z.string(),
+      tricity: z.boolean().optional(),
+      preview: image().optional(),
+    }),
 });
 
 const geodataCollection = defineCollection({
