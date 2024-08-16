@@ -7,13 +7,13 @@ const isActive = matches ? matches(pathname) : directMatch;
 ---
 
 <a href={href} class:list={[
-  "px-4 py-3 flex items-center space-x-4 text-gray-500 group",
+  "px-4 py-3 flex items-center space-x-4 text-gray-800 group",
   {
     "bg-slate-200": isActive,
     "pl-10": nested
   },
   ]}>
-  <div class="">
-    <slot />
+  <div class="flex gap-2 items-center">
+    <slot name="icon" /> <slot />
   </div>
 </a>

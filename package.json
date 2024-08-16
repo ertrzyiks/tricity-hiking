@@ -16,7 +16,9 @@
     "@astrojs/mdx": "^3.0.1",
     "@astrojs/preact": "^3.3.0",
     "@astrojs/tailwind": "^5.1.0",
+    "@iconify-json/mdi": "^1.1.68",
     "astro": "^4.9.3",
+    "astro-icon": "^1.1.0",
     "debounce": "^2.1.0",
     "maplibre-gl": "^4.2.0",
     "preact": "^10.22.0",
@@ -28,5 +30,10 @@
     "@xmldom/xmldom": "0.8.10",
     "concurrently": "^8.2.2",
     "puppeteer": "^22.10.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@iconify/tools": "^4.0.4"
+    }
   }
 }
