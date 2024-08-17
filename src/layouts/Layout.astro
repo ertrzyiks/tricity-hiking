@@ -34,19 +34,15 @@ const { title } = Astro.props;
       <div class="grid grid-cols-1 lg:grid-cols-layout">
         <div id="sidebar" class="lg:block hidden rounded-none border-none">
           <div class="p-4 space-y-4">
-            <SidebarLink href="/tricity-hiking" matches={(pathname: string) => ['/tricity-hiking', '/tricity-hiking/', '/tricity-hiking/extended', '/tricity-hiking/list'].includes(pathname) || pathname.startsWith('/tricity-hiking/routes/')}>
-              <Icon name="mdi:arrow-compass" slot="icon"/> Routes
-            </SidebarLink>
-            <SidebarLink nested href="/tricity-hiking/list" >
-              <Icon name="mdi:format-list-bulleted-square" slot="icon"/> Route list
-            </SidebarLink>
-            <SidebarLink nested href="/tricity-hiking">
+            <SidebarLink href="/tricity-hiking">
               <Icon name="mdi:map-outline" slot="icon"/> Route map
             </SidebarLink>
-            <SidebarLink nested href="/tricity-hiking/extended">
+            <SidebarLink href="/tricity-hiking/list" >
+              <Icon name="mdi:format-list-bulleted-square" slot="icon"/> Route list
+            </SidebarLink>
+            <SidebarLink href="/tricity-hiking/extended">
               <Icon name="mdi:map-plus" slot="icon"/> Route map (extended)
             </SidebarLink>
-
             <SidebarLink href="/tricity-hiking/activities">
               <Icon name="mdi:umbrella-beach" slot="icon"/>Activities
             </SidebarLink>

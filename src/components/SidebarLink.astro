@@ -1,5 +1,5 @@
 ---
-const { href, matches, nested } = Astro.props;
+const { href, matches } = Astro.props;
 
 const pathname = new URL(Astro.request.url).pathname;
 const directMatch = pathname === href || pathname === `${href}/`;
@@ -7,10 +7,10 @@ const isActive = matches ? matches(pathname) : directMatch;
 ---
 
 <a href={href} class:list={[
-  "px-4 py-3 flex items-center space-x-4 text-gray-800 group",
+  "px-4 py-3 flex items-center space-x-4 text-gray-800 group border border-solid border-l-4",
   {
-    "bg-slate-200": isActive,
-    "pl-10": nested
+    "border-transparent": !isActive,
+    "border-green-300": isActive,
   },
   ]}>
   <div class="flex gap-2 items-center">
