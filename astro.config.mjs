@@ -9,5 +9,12 @@ import icon from "astro-icon";
 export default defineConfig({
   site: "https://ertrzyiks.github.io",
   base: "tricity-hiking",
-  integrations: [tailwind(), mdx(), preact(), icon()],
+  integrations: [
+    tailwind({
+      applyBaseStyles: false,
+    }),
+    mdx(),
+    preact(),
+    icon(),
+  ],
 });

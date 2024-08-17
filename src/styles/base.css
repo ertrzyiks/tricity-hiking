@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .sidebar {
+    @apply hidden rounded-none border-none;
+  }
+
+  .sidebar--open {
+    @apply block fixed left-0 right-0 rounded-none border-none z-10;
+    top: 40px;
+    height: calc(100dvh - 40px);
+  }
+
+  @screen lg {
+    .sidebar,
+    .sidebar--open {
+      @apply block static;
+    }
+  }
+}
