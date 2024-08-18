@@ -1,24 +1,106 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import ListItem from '../components/ListItem.astro';
 
-const activities = await getCollection('activities');
 ---
 
 <Layout title="Tricity hiking - Activities">
     <div class="max-w-screen-xl mx-auto relative h-[80vh] px-2 lg:px-0" transition:name="map">
-      <ul>
-        {activities.map(async (activity) => {
-          const { Content } = await activity.render()
+      <div class="my-4">
+        <h2 class="text-2xl mb-3">Orienteering</h2>
 
-          return (
-            <li>
-                <h2>{activity.data.title}</h2>
-                <div><Content/></div>
-            </li>
-          )
-        })}
-      </ul>
+        <p class="my-2">
+          Orienterring is a sport that connects physical exertion and navigation.
+          You get a map with checkpoints and you have to find them in the forest or urban terrain.
+          You need to bring your own compass, in some of them you can use compass from your phone but
+          it may be considered as cheating.
+          If you are competitive you can run to get the best time, but you can also just walk and enjoy
+          the nature and the challenge of finding the point.
+        </p>
+
+        <p class="my-2">
+         All 3 organization prepare routes in four difficulty levels.
+        </p>
+
+        <ul>
+          <ListItem
+            name="Harpuś"
+            description="Checkpoints are validated by a punch card in any order. Stationary only, beginner friendly."
+            link="https://www.harpagan.pl/harpus/"
+          />
+          <ListItem
+            name="Parkowe BNO"
+            description="Checkpoints are validated by an electronic system SportIdent in order provided on the map. Stationary only, beginner friendly."
+            link="https://www.parkowebno.pl/"
+          />
+          <ListItem
+            name="Azymut 45 - Z Mapą do Lasu"
+            description="Stationary and by yourself, terrain and map is more challenging but begginers can still go for the easiest route."
+            link="https://www.azymut45gdynia.org/nasze-imprezy/Z-Mapa-do-Lasu/O%20ZMdL"
+          />
+        </ul>
+      </div>
+
+      <div class="my-4">
+        <h2 class="text-2xl mb-3">Ship-museums</h2>
+        <p class="my-2">
+
+        </p>
+
+        <ul>
+          <ListItem
+            name="Sołdek"
+            description=""
+            link="https://nmm.pl/soldek/"
+          />
+          <ListItem
+            name="Dar Pomorza"
+            description=""
+            link="https://nmm.pl/dar-pomorza/"
+          />
+          <ListItem
+            name="Błyskawica"
+            description=""
+            link="https://muzeummw.pl/orp-blyskawica/"
+          />
+
+          <!-- <ListItem
+            name="Harpuś"
+            description="Checkpoints are validated by a punch card in any order. Stationary only, beginner friendly."
+            link="https://www.harpagan.pl/harpus/"
+          /> -->
+        </ul>
+      </div>
+
+      <div class="my-4">
+        <h2 class="text-2xl mb-3">Playgrounds - outdoor</h2>
+        <p class="my-2">
+
+        </p>
+
+        <ul>
+          <!-- <ListItem
+            name="Harpuś"
+            description="Checkpoints are validated by a punch card in any order. Stationary only, beginner friendly."
+            link="https://www.harpagan.pl/harpus/"
+          /> -->
+        </ul>
+      </div>
+
+      <div class="my-4">
+        <h2 class="text-2xl mb-3">Playgrounds - indoor</h2>
+        <p class="my-2">
+
+        </p>
+
+        <ul>
+          <!-- <ListItem
+            name="Harpuś"
+            description="Checkpoints are validated by a punch card in any order. Stationary only, beginner friendly."
+            link="https://www.harpagan.pl/harpus/"
+          /> -->
+        </ul>
+      </div>
     </div>
 </Layout>
 

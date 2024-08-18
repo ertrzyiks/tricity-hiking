@@ -1,5 +1,5 @@
-import { preview } from "astro";
 import { z, reference, defineCollection } from "astro:content";
+
 const routesCollection = defineCollection({
   type: "content",
   schema: ({ image }) =>
@@ -41,13 +41,6 @@ const geodataCollection = defineCollection({
   }),
 });
 
-const activitiesCollection = defineCollection({
-  type: "content",
-  schema: z.object({
-    title: z.string(),
-  }),
-});
-
 const foodCollection = defineCollection({
   type: "content",
   schema: z.object({
@@ -58,6 +51,5 @@ const foodCollection = defineCollection({
 export const collections = {
   routes: routesCollection,
   geodata: geodataCollection,
-  activities: activitiesCollection,
   food: foodCollection,
 };
