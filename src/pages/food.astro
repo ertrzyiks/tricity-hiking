@@ -1,24 +1,52 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-
-const foodList = await getCollection('food');
+import ListItem from '../components/ListItem.astro';
 ---
 
 <Layout title="Tricity hiking - Food">
     <div class="max-w-screen-xl mx-auto relative h-[80vh] px-2 lg:px-0" transition:name="map">
-      <ul>
-        {foodList.map(async (place) => {
-          const { Content } = await place.render()
+      <div class="my-4">
+        <h2 class="text-2xl mb-3">Breakfast</h2>
+        <p class="my-2">
 
-          return (
-            <li>
-                <h2>{place.data.title}</h2>
-                <div><Content/></div>
-            </li>
-          )
-        })}
-      </ul>
+        </p>
+
+        <ul>
+          <ListItem
+            name="Avocado"
+            description=""
+            link=""
+          />
+        </ul>
+      </div>
+      <div class="my-4">
+        <h2 class="text-2xl mb-3">Lunch/Dinner</h2>
+        <p class="my-2">
+
+        </p>
+
+        <ul>
+          <ListItem
+            name="Pasta miasta"
+            description=""
+            link=""
+          />
+        </ul>
+      </div>
+      <div class="my-4">
+        <h2 class="text-2xl mb-3">Caffe</h2>
+        <p class="my-2">
+
+        </p>
+
+        <ul>
+          <!-- <ListItem
+            name="Pasta miasta"
+            description=""
+            link=""
+          /> -->
+        </ul>
+      </div>
     </div>
 </Layout>
 
