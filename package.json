@@ -17,6 +17,7 @@
     "@astrojs/preact": "^3.3.0",
     "@astrojs/tailwind": "^5.1.0",
     "@iconify-json/mdi": "^1.1.68",
+    "@piwikpro/tracking-base-library": "^1.2.0",
     "astro": "^4.9.3",
     "astro-icon": "^1.1.0",
     "debounce": "^2.1.0",
