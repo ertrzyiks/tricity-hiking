@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import Homepage from '../components/Homepage.astro';
 import { TrailAttributeValue } from '../components/TrailAttributeValue/TrailAttributeValue'
 import { TrailAttributeName } from '../components/TrailAttributeName/TrailAttributeName'
+import ListCardItem from '../components/ListCardItem.astro'
 import { enhance } from '../services/enhance'
 import { mToKm } from '../services/mToKm'
 import { getLineStringFeature } from '../services/getLineStringFeature'
@@ -27,35 +28,24 @@ for (const route of routes) {
     <div class="max-w-screen-xl mx-auto relative h-[80vh] px-2 lg:px-0" transition:name="map">
       <ul>
         {geojsonList.map(({ route, properties }) => (
-          <li class="my-4 border border-solid border-slate-300">
-            <a class="flex py-4 px-2" href={`/tricity-hiking/routes/${route.data.geojson.id}`}>
-              {route.data.preview && (<img src={route.data.preview.src} class="w-20 h-20" />)}
-              <div class="flex flex-col">
-                <div class="text-xl ml-4">{route.data.title}</div>
+          <ListCardItem link={`/tricity-hiking/routes/${route.data.geojson.id}`} imageSrc={route.data.preview?.src} name={route.data.title}>
+            <TrailAttributeValue
+              value={`${mToKm(properties.distance).toFixed(
+                2
+              )}km`}
+            />
+            <TrailAttributeName value="Distance" />
 
-                <div class="flex flex-col px-4 py-4">
-                  <div class="grid grid-cols-3 gap-2">
-                    <TrailAttributeValue
-                      value={`${mToKm(properties.distance).toFixed(
-                        2
-                      )}km`}
-                    />
-                    <TrailAttributeValue
-                      value={`${properties.totalGain.toFixed(0)}m`}
-                    />
-                    <TrailAttributeValue
-                      value={`${properties.totalLoss.toFixed(0)}m`}
-                    />
+            <TrailAttributeValue
+              value={`${properties.totalGain.toFixed(0)}m`}
+            />
+            <TrailAttributeName value="Total Gain" />
 
-                    <TrailAttributeName value="Distance" />
-                    <TrailAttributeName value="Total Gain" />
-                    <TrailAttributeName value="Total Loss" />
-                  </div>
-                </div>
-              </div>
-
-            </a>
-          </li>
+            <TrailAttributeValue
+              value={`${properties.totalLoss.toFixed(0)}m`}
+            />
+            <TrailAttributeName value="Total Loss" />
+          </ListCardItem>
         ))}
       </ul>
     </div>
