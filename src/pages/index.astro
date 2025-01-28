@@ -1,30 +1,36 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
-import Layout from '../layouts/Layout.astro';
-import Homepage from '../components/Homepage.astro';
-import { merge } from '../services/merge'
-import { enhance } from '../services/enhance'
+import { getCollection, getEntry } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import Homepage from "../components/Homepage.astro";
+import { merge } from "../services/merge";
+import { enhance } from "../services/enhance";
 
-import mapImage from '../assets/home-map.jpg'
-import { HomeMap } from '../components/HomeMap/HomeMap';
+import mapImage from "../assets/home-map.jpg";
+import { HomeMap } from "../components/HomeMap/HomeMap";
 
-const routes = await getCollection('routes');
-const tricityRoutes = routes.filter(route => route.data.tricity)
+const routes = await getCollection("routes");
+const tricityRoutes = routes.filter((route) => route.data.tricity);
 
-const geojsonList = []
+const geojsonList = [];
 
 for (const route of tricityRoutes) {
-  const geojson = await getEntry(route.data.geojson)
-  const enhancedGeojson = enhance({ collection: geojson.data, route: route.data })
-  geojsonList.push(enhancedGeojson)
+  const geojson = await getEntry(route.data.geojson);
+  const enhancedGeojson = enhance({
+    collection: geojson.data,
+    route: route.data,
+  });
+  geojsonList.push(enhancedGeojson);
 }
 
-const geojson = merge(geojsonList)
+const geojson = merge(geojsonList);
 ---
 
 <Layout title="Tricity hiking">
   <Homepage>
-    <div class="max-w-screen-xl mx-auto relative h-[60vh] px-2 lg:px-0" transition:name="map">
+    <div
+      class="max-w-screen-xl mx-auto relative h-[60vh] px-2 lg:px-0"
+      transition:name="map"
+    >
       <div class="absolute inset-0 h-full overflow-hidden">
         <img src={mapImage.src} class="absolute blur-2xl inset-0 h-full" />
       </div>

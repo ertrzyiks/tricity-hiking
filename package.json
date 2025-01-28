@@ -30,6 +30,8 @@
     "@tmcw/togeojson": "5.8.1",
     "@xmldom/xmldom": "0.8.10",
     "concurrently": "^8.2.2",
+    "prettier": "^3.4.2",
+    "prettier-plugin-astro": "^0.14.1",
     "puppeteer": "^22.10.0"
   },
   "pnpm": {

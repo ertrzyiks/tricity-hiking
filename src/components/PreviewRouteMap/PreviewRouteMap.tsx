@@ -40,7 +40,7 @@ export const PreviewRouteMap = ({
 
           return acc;
         },
-        []
+        [],
       );
 
       const bounds = getBounds(coordinates);

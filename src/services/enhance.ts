@@ -3,7 +3,7 @@ export const enhance = <
     geometry: { type: string };
     properties: Record<string, any>;
   },
-  FeatureCollection extends { features: Feature[] }
+  FeatureCollection extends { features: Feature[] },
 >({
   collection,
   route,

@@ -1,14 +1,14 @@
 ---
-import '../styles/base.css';
-import { ViewTransitions } from 'astro:transitions';
-import { Icon } from 'astro-icon/components'
+import "../styles/base.css";
+import { ViewTransitions } from "astro:transitions";
+import { Icon } from "astro-icon/components";
 
-import SidebarSwitch from '../components/SidebarSwitch/SidebarSwitch.tsx';
-import SidebarLink from '../components/SidebarLink.astro';
-import Analytics from '../components/Analytics.astro';
+import SidebarSwitch from "../components/SidebarSwitch/SidebarSwitch.tsx";
+import SidebarLink from "../components/SidebarLink.astro";
+import Analytics from "../components/Analytics.astro";
 
 interface Props {
-	title: string;
+  title: string;
 }
 
 const { title } = Astro.props;
@@ -16,29 +16,30 @@ const { title } = Astro.props;
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/tricity-hiking/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/tricity-hiking/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
 
-		<title>{title}</title>
+    <title>{title}</title>
 
-    {import.meta.env.PIWIK_TRACKING_ENABLED !== 'false' && (
-      <Analytics />
-    )}
+    {import.meta.env.PIWIK_TRACKING_ENABLED !== "false" && <Analytics />}
 
     <ViewTransitions />
-	</head>
-	<body>
+  </head>
+  <body>
     <main>
       <nav class="flex relative justify-center lg:justify-start">
-        <SidebarSwitch className='lg:hidden absolute left-4 top-1' client:load>
-          <Icon name="mdi:menu" class="text-3xl"/>
+        <SidebarSwitch className="lg:hidden absolute left-4 top-1" client:load>
+          <Icon name="mdi:menu" class="text-3xl" />
         </SidebarSwitch>
 
         <h1 class="py-2 px-4">Tricity Hiking</h1>
@@ -48,57 +49,57 @@ const { title } = Astro.props;
         <div id="sidebar" class="sidebar bg-slate-50">
           <div class="p-4 space-y-4">
             <SidebarLink href="/tricity-hiking">
-              <Icon name="mdi:map-outline" slot="icon"/> Route map
+              <Icon name="mdi:map-outline" slot="icon" /> Route map
             </SidebarLink>
-            <SidebarLink href="/tricity-hiking/list" >
-              <Icon name="mdi:format-list-bulleted-square" slot="icon"/> Route list
+            <SidebarLink href="/tricity-hiking/list">
+              <Icon name="mdi:format-list-bulleted-square" slot="icon" /> Route list
             </SidebarLink>
             <SidebarLink href="/tricity-hiking/extended">
-              <Icon name="mdi:map-plus" slot="icon"/> Route map (extended)
+              <Icon name="mdi:map-plus" slot="icon" /> Route map (extended)
             </SidebarLink>
             <SidebarLink href="/tricity-hiking/activities">
-              <Icon name="mdi:umbrella-beach" slot="icon"/>Activities
+              <Icon name="mdi:umbrella-beach" slot="icon" />Activities
             </SidebarLink>
             <SidebarLink href="/tricity-hiking/food">
-              <Icon name="mdi:silverware" slot="icon"/> Food
+              <Icon name="mdi:silverware" slot="icon" /> Food
             </SidebarLink>
             <SidebarLink href="/tricity-hiking/transportation">
-              <Icon name="mdi:train" slot="icon"/> Transportation
+              <Icon name="mdi:train" slot="icon" /> Transportation
             </SidebarLink>
           </div>
         </div>
         <div class="p-4">
-	  	    <slot />
+          <slot />
         </div>
       </div>
     </main>
-	</body>
+  </body>
 </html>
 <style is:global>
-	:root {
-		--accent: 136, 58, 234;
-		--accent-light: 224, 204, 250;
-		--accent-dark: 49, 10, 101;
-		--accent-gradient: linear-gradient(
-			45deg,
-			rgb(var(--accent)),
-			rgb(var(--accent-light)) 30%,
-			white 60%
-		);
-	}
-	html {
-		font-family: "Fira Sans", sans-serif;
-		background: #f8fafc;
-	}
-	code {
-		font-family:
-			Menlo,
-			Monaco,
-			Lucida Console,
-			Liberation Mono,
-			DejaVu Sans Mono,
-			Bitstream Vera Sans Mono,
-			Courier New,
-			monospace;
-	}
+  :root {
+    --accent: 136, 58, 234;
+    --accent-light: 224, 204, 250;
+    --accent-dark: 49, 10, 101;
+    --accent-gradient: linear-gradient(
+      45deg,
+      rgb(var(--accent)),
+      rgb(var(--accent-light)) 30%,
+      white 60%
+    );
+  }
+  html {
+    font-family: "Fira Sans", sans-serif;
+    background: #f8fafc;
+  }
+  code {
+    font-family:
+      Menlo,
+      Monaco,
+      Lucida Console,
+      Liberation Mono,
+      DejaVu Sans Mono,
+      Bitstream Vera Sans Mono,
+      Courier New,
+      monospace;
+  }
 </style>

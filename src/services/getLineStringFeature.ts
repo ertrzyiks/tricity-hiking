@@ -3,13 +3,13 @@ export const getLineStringFeature = <
     geometry: { type: string };
     properties: Record<string, any>;
   },
-  FeatureCollection extends { features: Feature[] }
+  FeatureCollection extends { features: Feature[] },
 >({
   collection,
 }: {
   collection: FeatureCollection;
 }) => {
   return collection.features.find(
-    (feature) => feature.geometry.type === "LineString"
+    (feature) => feature.geometry.type === "LineString",
   );
 };

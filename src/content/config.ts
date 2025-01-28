@@ -36,7 +36,7 @@ const geodataCollection = defineCollection({
             ]),
           }),
         ]),
-      })
+      }),
     ),
   }),
 });

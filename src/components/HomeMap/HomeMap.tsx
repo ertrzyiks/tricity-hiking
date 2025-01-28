@@ -40,7 +40,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
           return acc;
         },
-        []
+        [],
       );
 
       const bounds = getBounds(coordinates);
@@ -103,14 +103,14 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
         if (hoveredStateId) {
           map.setFeatureState(
             { source: "lines", id: hoveredStateId },
-            { hover: false }
+            { hover: false },
           );
         }
         hoveredStateId = e.features[0].id;
 
         map.setFeatureState(
           { source: "lines", id: hoveredStateId },
-          { hover: true }
+          { hover: true },
         );
       });
 
@@ -126,14 +126,14 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           clickedFeature.properties.parentFeatureId
         ) {
           feature = routes.features.find(
-            (f) => f.id === clickedFeature.properties.parentFeatureId
+            (f) => f.id === clickedFeature.properties.parentFeatureId,
           );
         }
 
         if (!feature || feature.geometry.type !== "LineString") return;
 
         const featureBounds = getBounds(
-          feature.geometry.coordinates as LngLatLike[]
+          feature.geometry.coordinates as LngLatLike[],
         );
 
         map.fitBounds(featureBounds, {
@@ -149,7 +149,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
         map.setFeatureState(
           { source: "lines", id: hoveredStateId },
-          { hover: false }
+          { hover: false },
         );
       });
     });
@@ -179,7 +179,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
               <div>
                 <ElevationChart
                   points={selectedFeature.geometry.coordinates.map(
-                    (point: number[]) => point[2]
+                    (point: number[]) => point[2],
                   )}
                 />
               </div>
@@ -189,7 +189,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
             <div className="grid grid-cols-3 gap-2">
               <TrailAttributeValue
                 value={`${mToKm(selectedFeature.properties.distance).toFixed(
-                  2
+                  2,
                 )}km`}
               />
               <TrailAttributeValue

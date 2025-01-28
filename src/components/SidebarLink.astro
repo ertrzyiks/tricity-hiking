@@ -6,14 +6,18 @@ const directMatch = pathname === href || pathname === `${href}/`;
 const isActive = matches ? matches(pathname) : directMatch;
 ---
 
-<a href={href} class:list={[
-  "px-4 py-3 flex items-center space-x-4 text-gray-800 group border border-solid border-l-4 hover:bg-green-100",
-  {
-    "border-transparent": !isActive,
-    "border-green-300 bg-green-100": isActive,
-  },
-  ]}>
+<a
+  href={href}
+  class:list={[
+    "px-4 py-3 flex items-center space-x-4 text-gray-800 group border border-solid border-l-4 hover:bg-green-100",
+    {
+      "border-transparent": !isActive,
+      "border-green-300 bg-green-100": isActive,
+    },
+  ]}
+>
   <div class="flex gap-2 items-center">
-    <slot name="icon" /> <slot />
+    <slot name="icon" />
+    <slot />
   </div>
 </a>

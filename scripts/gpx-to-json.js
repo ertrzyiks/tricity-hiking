@@ -35,14 +35,14 @@ const getTotalDistance = (coords) => {
           acc.last[1],
           acc.last[0],
           current[1],
-          current[0]
+          current[0],
         );
       }
 
       acc.last = current;
       return acc;
     },
-    { last: null, total: 0 }
+    { last: null, total: 0 },
   );
 
   return distance;
@@ -63,7 +63,7 @@ const getTotalGainAndLoss = (coords) => {
       acc.last = current;
       return acc;
     },
-    { last: null, totalGain: 0, totalLoss: 0 }
+    { last: null, totalGain: 0, totalLoss: 0 },
   );
 
   return { totalGain, totalLoss };
@@ -78,7 +78,7 @@ const process = (name, json) => {
     const distance = getTotalDistance(feature.geometry.coordinates);
 
     const { totalGain, totalLoss } = getTotalGainAndLoss(
-      feature.geometry.coordinates
+      feature.geometry.coordinates,
     );
 
     feature.properties.distance = distance;
@@ -90,7 +90,7 @@ const process = (name, json) => {
     const surfaces = feature.properties.coordinateProperties.Extensionss.map(
       (surface) => {
         return surface ? surface.trim() : null;
-      }
+      },
     );
 
     delete feature.properties.coordinateProperties.Extensionss;
@@ -112,7 +112,7 @@ const convert = (fileName) => {
   }
 
   const gpxFile = new DOMParser().parseFromString(
-    fs.readFileSync(gpxFilePath, "utf8")
+    fs.readFileSync(gpxFilePath, "utf8"),
   );
 
   const converted = gpx(gpxFile);
@@ -120,7 +120,7 @@ const convert = (fileName) => {
 
   fs.writeFileSync(
     `${BASE_PATH}/geodata/${name}.json`,
-    JSON.stringify(processed, null, 2)
+    JSON.stringify(processed, null, 2),
   );
 
   return { result: "OK" };

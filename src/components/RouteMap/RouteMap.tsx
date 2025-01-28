@@ -32,7 +32,7 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
 
           return acc;
         },
-        []
+        [],
       );
 
       const bounds = getBounds(coordinates);

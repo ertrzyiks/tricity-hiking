@@ -1,31 +1,30 @@
 ---
 import type { InferGetStaticParamsType } from "astro";
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection, getEntry } from "astro:content";
 import { PreviewRouteMap } from "../../components/PreviewRouteMap/PreviewRouteMap";
 
-if (import.meta.env.MODE !== 'development') {
+if (import.meta.env.MODE !== "development") {
   return new Response(null, { status: 404 });
 }
 
 export async function getStaticPaths() {
-  const allRoutes = await getCollection('routes');
+  const allRoutes = await getCollection("routes");
 
   return allRoutes.map((route) => {
     return {
       params: {
-        route: route.slug
-      }
-    }
+        route: route.slug,
+      },
+    };
   });
 }
 
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 
-
 const { route } = Astro.params as Params;
 
-const entry = await getEntry('routes', route);
-const geojson = await getEntry(entry.data.geojson)
+const entry = await getEntry("routes", route);
+const geojson = await getEntry(entry.data.geojson);
 ---
 
 <div id="preview">

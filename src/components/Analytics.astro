@@ -1,7 +1,10 @@
 <script>
-import PiwikPro from '@piwikpro/tracking-base-library';
+  import PiwikPro from "@piwikpro/tracking-base-library";
 
-if (import.meta.env.PUBLIC_ASTRO_PIWIK_TRACKING_ENABLED === "true") {
-  PiwikPro.initialize('9382e2e1-6d85-4abb-b055-b8804ded0293', 'https://ertrzyiks.piwik.pro');
-}
+  if (import.meta.env.PUBLIC_ASTRO_PIWIK_TRACKING_ENABLED === "true") {
+    PiwikPro.initialize(
+      "9382e2e1-6d85-4abb-b055-b8804ded0293",
+      "https://ertrzyiks.piwik.pro",
+    );
+  }
 </script>

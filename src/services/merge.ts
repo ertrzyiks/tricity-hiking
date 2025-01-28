@@ -3,9 +3,9 @@ export const merge = <
     geometry: { type: string };
     properties: Record<string, any>;
   },
-  GeoData extends { type: string; features: Feature[] }
+  GeoData extends { type: string; features: Feature[] },
 >(
-  data: GeoData[]
+  data: GeoData[],
 ): GeoData => {
   let newId = 1;
 
@@ -19,7 +19,7 @@ export const merge = <
     }));
 
     const lineString = newFeatures.find(
-      (f) => f.geometry.type === "LineString"
+      (f) => f.geometry.type === "LineString",
     );
 
     if (lineString) {

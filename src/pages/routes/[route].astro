@@ -1,23 +1,23 @@
 ---
 import type { InferGetStaticParamsType } from "astro";
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection, getEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import { RouteMap } from "../../components/RouteMap/RouteMap";
-import { FullElevationChart } from '../../components/FullElevationChart/FullElevationChart';
+import { FullElevationChart } from "../../components/FullElevationChart/FullElevationChart";
 import { config } from "../../components/Markdown";
 import { TrailAttributeValue } from "../../components/TrailAttributeValue/TrailAttributeValue";
 import { TrailAttributeName } from "../../components/TrailAttributeName/TrailAttributeName";
-import { mToKm } from "../../services/mToKm"
+import { mToKm } from "../../services/mToKm";
 
 export async function getStaticPaths() {
-  const allRoutes = await getCollection('routes');
+  const allRoutes = await getCollection("routes");
 
   return allRoutes.map((route) => {
     return {
       params: {
-        route: route.slug
-      }
-    }
+        route: route.slug,
+      },
+    };
   });
 }
 
@@ -25,32 +25,39 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 
 const { route } = Astro.params as Params;
 
-const entry = await getEntry('routes', route);
-const geojson = await getEntry(entry.data.geojson)
+const entry = await getEntry("routes", route);
+const geojson = await getEntry(entry.data.geojson);
 const { Content } = await entry.render();
 
-const attitudes = geojson.data.features[0].geometry.coordinates.map((coord) => {
-  if (!Array.isArray(coord)) {
-    return null
-  }
-  return  coord[2]
-}).filter((coords): coords is number  => Boolean(coords));
+const attitudes = geojson.data.features[0].geometry.coordinates
+  .map((coord) => {
+    if (!Array.isArray(coord)) {
+      return null;
+    }
+    return coord[2];
+  })
+  .filter((coords): coords is number => Boolean(coords));
 
-const feature = geojson.data.features.find((feature) => feature.geometry.type === 'LineString');
+const feature = geojson.data.features.find(
+  (feature) => feature.geometry.type === "LineString",
+);
 
 if (!feature) {
   Astro.response.status = 404;
-  Astro.response.statusText = 'Not found';
+  Astro.response.statusText = "Not found";
   return;
 }
 ---
 
 <Layout title={`Tricity hiking - ${entry.data.title}`}>
   <div class="max-w-screen-xl mx-auto">
-    <h2 class="py-4 px-2">{ entry.data.title }</h2>
+    <h2 class="py-4 px-2">{entry.data.title}</h2>
   </div>
 
-  <div class="max-w-screen-xl mx-auto relative h-[50vh] px-2 lg:px-0" transition:name="map">
+  <div
+    class="max-w-screen-xl mx-auto relative h-[50vh] px-2 lg:px-0"
+    transition:name="map"
+  >
     <RouteMap client:only="preact" route={geojson.data} />
   </div>
 
@@ -65,9 +72,7 @@ if (!feature) {
           <TrailAttributeName value="Distance" />
 
           <TrailAttributeValue
-            value={`${mToKm(feature.properties.distance).toFixed(
-              2
-            )}km`}
+            value={`${mToKm(feature.properties.distance).toFixed(2)}km`}
           />
 
           <TrailAttributeName value="Total Gain" />

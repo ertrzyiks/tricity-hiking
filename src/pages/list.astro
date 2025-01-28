@@ -1,54 +1,84 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
-import Layout from '../layouts/Layout.astro';
-import Homepage from '../components/Homepage.astro';
-import { TrailAttributeValue } from '../components/TrailAttributeValue/TrailAttributeValue'
-import { TrailAttributeName } from '../components/TrailAttributeName/TrailAttributeName'
-import ListCardItem from '../components/ListCardItem.astro'
-import { enhance } from '../services/enhance'
-import { mToKm } from '../services/mToKm'
-import { getLineStringFeature } from '../services/getLineStringFeature'
+import { getCollection, getEntry } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import Homepage from "../components/Homepage.astro";
+import { TrailAttributeValue } from "../components/TrailAttributeValue/TrailAttributeValue";
+import { TrailAttributeName } from "../components/TrailAttributeName/TrailAttributeName";
+import TrailAttribute from "../components/TrailAttribute.astro";
+import ListCardItem from "../components/ListCardItem.astro";
+import { enhance } from "../services/enhance";
+import { mToKm } from "../services/mToKm";
+import { getLineStringFeature } from "../services/getLineStringFeature";
+import { Icon } from "astro-icon/components";
 
-const routes = await getCollection('routes');
+const routes = await getCollection("routes");
 
-const geojsonList = []
+const geojsonList = [];
 
 for (const route of routes) {
-  const geojson = await getEntry(route.data.geojson)
-  const enhancedGeojson = enhance({ collection: geojson.data, route: route.data })
+  const geojson = await getEntry(route.data.geojson);
+  const enhancedGeojson = enhance({
+    collection: geojson.data,
+    route: route.data,
+  });
   geojsonList.push({
     route,
-    properties: getLineStringFeature({ collection: enhancedGeojson })?.properties ?? {}
-  })
+    properties:
+      getLineStringFeature({ collection: enhancedGeojson })?.properties ?? {},
+  });
 }
 ---
 
 <Layout title="Tricity hiking - list of routes">
   <Homepage>
-    <div class="max-w-screen-xl mx-auto relative h-[80vh] px-2 lg:px-0" transition:name="map">
+    <div
+      class="max-w-screen-xl mx-auto relative h-[80vh] px-2 lg:px-0"
+      transition:name="map"
+    >
       <ul>
-        {geojsonList.map(({ route, properties }) => (
-          <ListCardItem link={`/tricity-hiking/routes/${route.data.geojson.id}`} imageSrc={route.data.preview?.src} name={route.data.title}>
-            <TrailAttributeValue
-              value={`${mToKm(properties.distance).toFixed(
-                2
-              )}km`}
-            />
-            <TrailAttributeName value="Distance" />
+        {
+          geojsonList.map(({ route, properties }) => (
+            <ListCardItem
+              link={`/tricity-hiking/routes/${route.data.geojson.id}`}
+              imageSrc={route.data.preview?.src}
+            >
+              <span class="flex gap-1" slot="title">
+                <Icon name="mdi:location-on" class="text-green-500" />
+                {route.data.title}
+              </span>
 
-            <TrailAttributeValue
-              value={`${properties.totalGain.toFixed(0)}m`}
-            />
-            <TrailAttributeName value="Total Gain" />
+              <div class="flex justify-between max-w-96" slot="attributes">
+                <TrailAttribute>
+                  <Icon name="mdi:hiking" slot="icon" />
 
-            <TrailAttributeValue
-              value={`${properties.totalLoss.toFixed(0)}m`}
-            />
-            <TrailAttributeName value="Total Loss" />
-          </ListCardItem>
-        ))}
+                  <TrailAttributeValue
+                    value={`${mToKm(properties.distance).toFixed(2)}km`}
+                  />
+                  <TrailAttributeName value="Distance" />
+                </TrailAttribute>
+
+                <TrailAttribute>
+                  <Icon name="mdi:call-made" slot="icon" />
+
+                  <TrailAttributeValue
+                    value={`${properties.totalGain.toFixed(0)}m`}
+                  />
+                  <TrailAttributeName value="Total Gain" />
+                </TrailAttribute>
+
+                <TrailAttribute>
+                  <Icon name="mdi:call-received" slot="icon" />
+
+                  <TrailAttributeValue
+                    value={`${properties.totalLoss.toFixed(0)}m`}
+                  />
+                  <TrailAttributeName value="Total Loss" />
+                </TrailAttribute>
+              </div>
+            </ListCardItem>
+          ))
+        }
       </ul>
     </div>
   </Homepage>
 </Layout>
-
