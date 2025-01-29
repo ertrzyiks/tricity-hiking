@@ -1,3 +1,3 @@
 export const TrailAttributeName = ({ value }: { value: string }) => {
-  return <span>{value}</span>;
+  return <span className="text-sm">{value}</span>;
 };
