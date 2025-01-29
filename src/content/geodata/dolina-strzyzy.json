@@ -241,6 +241,7 @@
         "distance": 4595.910972060294,
         "totalGain": 118.20000000000002,
         "totalLoss": 118.20000000000002,
+        "estimatedTime": 62.24293166472352,
         "routeSlug": "dolina-strzyzy"
       },
       "geometry": {

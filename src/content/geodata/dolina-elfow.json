@@ -361,6 +361,7 @@
         "distance": 5559.3279848752745,
         "totalGain": 147.4000000000001,
         "totalLoss": 145.60000000000002,
+        "estimatedTime": 75.55593581850329,
         "routeSlug": "dolina-elfow"
       },
       "geometry": {

@@ -495,6 +495,7 @@
         "distance": 7319.544072869567,
         "totalGain": 218.49999999999994,
         "totalLoss": 219.7,
+        "estimatedTime": 100.9445288744348,
         "routeSlug": "elblag-bazantarnia-parasol"
       },
       "geometry": {

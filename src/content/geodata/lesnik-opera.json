@@ -190,6 +190,7 @@
         "distance": 3138.503330251532,
         "totalGain": 38.800000000000026,
         "totalLoss": 84.30000000000003,
+        "estimatedTime": 39.99003996301839,
         "routeSlug": "lesnik-opera"
       },
       "geometry": {

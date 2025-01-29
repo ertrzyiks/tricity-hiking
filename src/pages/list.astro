@@ -8,6 +8,7 @@ import TrailAttribute from "../components/TrailAttribute.astro";
 import ListCardItem from "../components/ListCardItem.astro";
 import { enhance } from "../services/enhance";
 import { mToKm } from "../services/mToKm";
+import { formatTime } from "../services/formatTime";
 import { getLineStringFeature } from "../services/getLineStringFeature";
 import { Icon } from "astro-icon/components";
 
@@ -32,7 +33,7 @@ for (const route of routes) {
 <Layout title="Tricity hiking - list of routes">
   <Homepage>
     <div
-      class="max-w-screen-xl mx-auto relative h-[80vh] px-2 lg:px-0"
+      class="max-w-screen-xl mx-auto relative px-2 lg:px-0"
       transition:name="map"
     >
       <ul>
@@ -47,9 +48,9 @@ for (const route of routes) {
                 {route.data.title}
               </span>
 
-              <div class="flex justify-between max-w-96" slot="attributes">
+              <div class="flex justify-between max-w-lg" slot="attributes">
                 <TrailAttribute>
-                  <Icon name="mdi:hiking" slot="icon" />
+                  <Icon name="mdi:hiking" class="w-5 h-5" slot="icon" />
 
                   <TrailAttributeValue
                     value={`${mToKm(properties.distance).toFixed(2)}km`}
@@ -58,7 +59,24 @@ for (const route of routes) {
                 </TrailAttribute>
 
                 <TrailAttribute>
-                  <Icon name="mdi:call-made" slot="icon" />
+                  <Icon
+                    name="mdi:clock-time-three-outline"
+                    class="w-5 h-5"
+                    slot="icon"
+                  />
+
+                  <TrailAttributeValue
+                    value={formatTime(properties.estimatedTime)}
+                  />
+                  <TrailAttributeName value="Time" />
+                </TrailAttribute>
+
+                <TrailAttribute>
+                  <Icon
+                    name="mdi:arrow-top-right-thin"
+                    class="w-5 h-5"
+                    slot="icon"
+                  />
 
                   <TrailAttributeValue
                     value={`${properties.totalGain.toFixed(0)}m`}
@@ -67,7 +85,11 @@ for (const route of routes) {
                 </TrailAttribute>
 
                 <TrailAttribute>
-                  <Icon name="mdi:call-received" slot="icon" />
+                  <Icon
+                    name="mdi:arrow-bottom-right-thin"
+                    class="w-5 h-5"
+                    slot="icon"
+                  />
 
                   <TrailAttributeValue
                     value={`${properties.totalLoss.toFixed(0)}m`}

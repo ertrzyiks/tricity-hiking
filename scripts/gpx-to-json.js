@@ -27,31 +27,17 @@ function getDistanceBetweenPoints(lat1, lng1, lat2, lng2) {
   return distance;
 }
 
-const getTotalDistance = (coords) => {
-  const { total: distance } = coords.reduce(
+const getRouteStats = (coords) => {
+  const { distance, totalGain, totalLoss } = coords.reduce(
     (acc, current) => {
       if (acc.last) {
-        acc.total += getDistanceBetweenPoints(
+        acc.distance += getDistanceBetweenPoints(
           acc.last[1],
           acc.last[0],
           current[1],
           current[0],
         );
-      }
 
-      acc.last = current;
-      return acc;
-    },
-    { last: null, total: 0 },
-  );
-
-  return distance;
-};
-
-const getTotalGainAndLoss = (coords) => {
-  const { totalGain, totalLoss } = coords.reduce(
-    (acc, current) => {
-      if (acc.last) {
         const diff = current[2] - acc.last[2];
         if (diff > 0) {
           acc.totalGain += diff;
@@ -63,10 +49,15 @@ const getTotalGainAndLoss = (coords) => {
       acc.last = current;
       return acc;
     },
-    { last: null, totalGain: 0, totalLoss: 0 },
+    { last: null, distance: 0, time: 0, totalGain: 0, totalLoss: 0 },
   );
 
-  return { totalGain, totalLoss };
+  return { distance, totalGain, totalLoss };
+};
+
+const estimateTime = (distance, totalGain) => {
+  const speed = 5000;
+  return distance / speed + (totalGain / 500) * 0.5;
 };
 
 const process = (name, json) => {
@@ -75,15 +66,16 @@ const process = (name, json) => {
       return;
     }
 
-    const distance = getTotalDistance(feature.geometry.coordinates);
-
-    const { totalGain, totalLoss } = getTotalGainAndLoss(
+    const { distance, totalGain, totalLoss } = getRouteStats(
       feature.geometry.coordinates,
     );
+
+    const estimatedTime = estimateTime(distance, totalGain) * 60;
 
     feature.properties.distance = distance;
     feature.properties.totalGain = totalGain;
     feature.properties.totalLoss = totalLoss;
+    feature.properties.estimatedTime = estimatedTime;
     feature.properties.routeSlug = name;
     delete feature.properties.coordinateProperties.times;
 

@@ -299,6 +299,7 @@
         "distance": 4959.810437278775,
         "totalGain": 160.7,
         "totalLoss": 162.7,
+        "estimatedTime": 69.15972524734529,
         "routeSlug": "orlowo-bulwar"
       },
       "geometry": {

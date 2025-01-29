@@ -284,6 +284,7 @@
         "distance": 4906.607810754769,
         "totalGain": 135.90000000000003,
         "totalLoss": 135.90000000000003,
+        "estimatedTime": 67.03329372905723,
         "routeSlug": "samborowo-glowica"
       },
       "geometry": {

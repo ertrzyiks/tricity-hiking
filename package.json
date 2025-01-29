@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "capture": "concurrently \"PUBLIC_ASTRO_USE_MAPTILER_MAP_STYLE=true astro dev\" \"sleep 1 && node scripts/capture.js\" --kill-others",
-    "capture:preview": "concurrently \"PUBLIC_ASTRO_USE_MAPTILER_MAP_STYLE=true astro dev\" \"sleep 1 && node scripts/capture-route-preview.js\" --kill-others"
+    "capture:preview": "concurrently \"PUBLIC_ASTRO_USE_MAPTILER_MAP_STYLE=true astro dev\" \"sleep 1 && node scripts/capture-route-preview.js\" --kill-others",
+    "gpx2json": "node scripts/gpx-to-json.js && prettier --write src/content/geodata"
   },
   "dependencies": {
     "@astrojs/check": "^0.7.0",
@@ -17,7 +18,7 @@
     "@astrojs/preact": "^3.3.0",
     "@astrojs/tailwind": "^5.1.0",
     "@iconify-json/mdi": "^1.1.68",
-    "@piwikpro/tracking-base-library": "^1.2.0",
+    "@piwikpro/tracking-base-library": "^1.2.3",
     "astro": "^4.9.3",
     "astro-icon": "^1.1.0",
     "debounce": "^2.1.0",
