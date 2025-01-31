@@ -33,7 +33,7 @@ for (const route of routes) {
 <Layout title="Tricity hiking - list of routes">
   <Homepage>
     <div
-      class="max-w-screen-xl mx-auto relative px-2 lg:px-0"
+      class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0"
       transition:name="map"
     >
       <ul>
@@ -45,7 +45,7 @@ for (const route of routes) {
               {route.data.preview?.src && (
                 <img
                   src={route.data.preview.src}
-                  class="w-20 h-20 filter-grayscale group-hover:filter-none"
+                  class="w-20 h-20 grayscale-75 group-hover:grayscale-0"
                   slot="image"
                 />
               )}
