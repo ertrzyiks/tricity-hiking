@@ -1,8 +1,4 @@
----
-const { icon } = Astro.props;
----
-
-<div class="flex gap-x-2">
+<div class="flex gap-x-2" {...Astro.props}>
   <div class="flex items-center gap-x-1">
     <slot name="icon" />
   </div>

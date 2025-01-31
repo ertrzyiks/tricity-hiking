@@ -49,7 +49,7 @@ for (const route of routes) {
               </span>
 
               <div class="flex justify-between max-w-lg" slot="attributes">
-                <TrailAttribute>
+                <TrailAttribute transition:name={`hiking.${route.id}`}>
                   <Icon name="mdi:hiking" class="w-5 h-5" slot="icon" />
 
                   <TrailAttributeValue
@@ -58,7 +58,7 @@ for (const route of routes) {
                   <TrailAttributeName value="Distance" />
                 </TrailAttribute>
 
-                <TrailAttribute>
+                <TrailAttribute transition:name="clock">
                   <Icon
                     name="mdi:clock-time-three-outline"
                     class="w-5 h-5"

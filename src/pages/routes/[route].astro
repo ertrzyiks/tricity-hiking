@@ -8,6 +8,9 @@ import { config } from "../../components/Markdown";
 import { TrailAttributeValue } from "../../components/TrailAttributeValue/TrailAttributeValue";
 import { TrailAttributeName } from "../../components/TrailAttributeName/TrailAttributeName";
 import { mToKm } from "../../services/mToKm";
+import { formatTime } from "../../services/formatTime";
+import { Icon } from "astro-icon/components";
+import TrailAttribute from "../../components/TrailAttribute.astro";
 
 export async function getStaticPaths() {
   const allRoutes = await getCollection("routes");
@@ -68,24 +71,50 @@ if (!feature) {
   <div class="max-w-screen-xl mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] px-4 xl:px-0">
       <div>
-        <div class="py-4 grid grid-cols-2 gap-2">
-          <TrailAttributeName value="Distance" />
+        <div class="py-4 grid grid-cols-2 gap-x-2 gap-y-4 items-center">
+          <TrailAttribute>
+            <Icon name="mdi:hiking" class="w-5 h-5" slot="icon" />
 
-          <TrailAttributeValue
-            value={`${mToKm(feature.properties.distance).toFixed(2)}km`}
-          />
+            <TrailAttributeValue
+              value={`${mToKm(feature.properties.distance).toFixed(2)}km`}
+            />
+            <TrailAttributeName value="Distance" />
+          </TrailAttribute>
 
-          <TrailAttributeName value="Total Gain" />
+          <TrailAttribute>
+            <Icon
+              name="mdi:clock-time-three-outline"
+              class="w-5 h-5"
+              slot="icon"
+            />
 
-          <TrailAttributeValue
-            value={`${feature.properties.totalGain.toFixed(0)}m`}
-          />
+            <TrailAttributeValue
+              value={formatTime(feature.properties.estimatedTime)}
+            />
+            <TrailAttributeName value="Time" />
+          </TrailAttribute>
 
-          <TrailAttributeName value="Total Loss" />
+          <TrailAttribute>
+            <Icon name="mdi:arrow-top-right-thin" class="w-5 h-5" slot="icon" />
 
-          <TrailAttributeValue
-            value={`${feature.properties.totalLoss.toFixed(0)}m`}
-          />
+            <TrailAttributeValue
+              value={`${feature.properties.totalGain.toFixed(0)}m`}
+            />
+            <TrailAttributeName value="Total Gain" />
+          </TrailAttribute>
+
+          <TrailAttribute>
+            <Icon
+              name="mdi:arrow-bottom-right-thin"
+              class="w-5 h-5"
+              slot="icon"
+            />
+
+            <TrailAttributeValue
+              value={`${feature.properties.totalLoss.toFixed(0)}m`}
+            />
+            <TrailAttributeName value="Total Loss" />
+          </TrailAttribute>
         </div>
       </div>
       <div>
@@ -93,11 +122,11 @@ if (!feature) {
       </div>
     </div>
   </div>
-</Layout>
 
-<style is:global>
-  .maplibregl-map {
-    height: 100%;
-    width: 100%;
-  }
-</style>
+  <style is:global>
+    .maplibregl-map {
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</Layout>
