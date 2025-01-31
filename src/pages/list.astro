@@ -41,15 +41,21 @@ for (const route of routes) {
           geojsonList.map(({ route, properties }) => (
             <ListCardItem
               link={`/tricity-hiking/routes/${route.data.geojson.id}`}
-              imageSrc={route.data.preview?.src}
             >
-              <span class="flex gap-1" slot="title">
+              {route.data.preview?.src && (
+                <img
+                  src={route.data.preview.src}
+                  class="w-20 h-20 filter-grayscale group-hover:filter-none"
+                  slot="image"
+                />
+              )}
+              <span class="flex gap-1 group-hover:text-green-600" slot="title">
                 <Icon name="mdi:location-on" class="text-green-500" />
                 {route.data.title}
               </span>
 
               <div class="flex justify-between max-w-lg" slot="attributes">
-                <TrailAttribute transition:name={`hiking.${route.id}`}>
+                <TrailAttribute>
                   <Icon name="mdi:hiking" class="w-5 h-5" slot="icon" />
 
                   <TrailAttributeValue
@@ -58,7 +64,7 @@ for (const route of routes) {
                   <TrailAttributeName value="Distance" />
                 </TrailAttribute>
 
-                <TrailAttribute transition:name="clock">
+                <TrailAttribute>
                   <Icon
                     name="mdi:clock-time-three-outline"
                     class="w-5 h-5"

@@ -1,6 +1,103 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ListItem from "../components/ListItem.astro";
+import ListCardItem from "../components/ListCardItem.astro";
+import TrailAttribute from "../components/TrailAttribute.astro";
+import { TrailAttributeValue } from "../components/TrailAttributeValue/TrailAttributeValue";
+import { TrailAttributeName } from "../components/TrailAttributeName/TrailAttributeName";
+import { Icon } from "astro-icon/components";
+
+const icons: Record<string, string> = {
+  Breakfast: "mdi:silverware",
+  "Lunch/Dinner": "mdi:silverware-fork-knife",
+  Caffe: "mdi:coffee",
+};
+
+const places = [
+  {
+    name: "Avocado",
+    link: "https://avocadovegan.pl/",
+    kind: "Breakfast",
+    location: "Gdańsk",
+  },
+  {
+    name: "Marmolada Chleb i Kawa",
+    link: "https://marmoladachlebikawa.pl/",
+    kind: "Breakfast",
+    location: "Gdańsk",
+  },
+  {
+    name: "Pomelo",
+    link: "https://www.pomelogdansk.pl/",
+    kind: "Breakfast",
+    location: "Gdańsk",
+  },
+  {
+    name: "Pasta miasta",
+    link: "https://www.pastamiasta.pl/",
+    kind: "Lunch/Dinner",
+    location: "Gdynia",
+  },
+  {
+    name: "Hellas Gyradiko",
+    link: "https://hellasgyradiko.eatbu.com/?lang=pl",
+    kind: "Lunch/Dinner",
+    location: "Gdynia",
+  },
+  {
+    name: "Sumo Ramen",
+    link: "https://www.facebook.com/p/SUMO-RAMEN-100027868855912/?locale=pl_PL",
+    kind: "Lunch/Dinner",
+    location: "Gdynia",
+  },
+  {
+    name: "A Modo Mio",
+    link: "https://www.facebook.com/p/A-Modo-Mio-da-Ciro-100069903701638/",
+    kind: "Lunch/Dinner",
+    location: "Sopot",
+  },
+  {
+    name: "Pak Choi",
+    link: "http://www.restauracjapakchoi.pl/",
+    kind: "Lunch/Dinner",
+    location: "Sopot",
+  },
+  {
+    name: "Phuket - Thai Food & Bar",
+    link: "https://www.facebook.com/phuketsopot/",
+    kind: "Lunch/Dinner",
+    location: "Sopot",
+  },
+  {
+    name: "la nostra pizzeria",
+    link: "https://www.facebook.com/Sopotlanostrapizzeria/",
+    kind: "Lunch/Dinner",
+    location: "Sopot",
+  },
+  {
+    name: "Flaming & Co",
+    link: "https://flaming-co.com/",
+    kind: "Caffe",
+    location: "Sopot",
+  },
+  {
+    name: "Santa Cafe",
+    link: "https://www.facebook.com/santacafe2020/",
+    kind: "Caffe",
+    location: "Sopot",
+  },
+  {
+    name: "KAISER Patisserie",
+    link: "https://kaiserpatisserie.pl/sopot/",
+    kind: "Caffe",
+    location: "Sopot",
+  },
+  {
+    name: "Ancymon",
+    link: "https://www.ancymoncafe.com/",
+    kind: "Caffe",
+    location: "Gdańsk",
+  },
+];
 ---
 
 <Layout title="Tricity hiking - Food">
@@ -9,94 +106,37 @@ import ListItem from "../components/ListItem.astro";
     transition:name="map"
   >
     <div class="my-4">
-      <h2 class="text-2xl mb-3">Breakfast</h2>
-      <p class="my-2"></p>
-
       <ul>
-        <ListItem
-          name="Avocado"
-          description=""
-          link="https://avocadovegan.pl/"
-        />
-        <ListItem
-          name="Marmolada Chleb i Kawa"
-          description=""
-          link="https://marmoladachlebikawa.pl/"
-        />
-        <ListItem
-          name="Pomelo"
-          description=""
-          link="https://www.pomelogdansk.pl/"
-        />
-      </ul>
-    </div>
-    <div class="my-4">
-      <h2 class="text-2xl mb-3">Lunch/Dinner</h2>
-      <p class="my-2"></p>
+        {
+          places.map((place) => (
+            <ListCardItem link={place.link}>
+              <div
+                slot="image"
+                class="bg-green-200 w-16 h-16 flex items-center justify-center group-hover:bg-black group-hover:text-green-200"
+              >
+                <Icon name={icons[place.kind]} class="w-12 h-12" />
+              </div>
+              <span class="group-hover:text-green-600" slot="title">
+                {place.name}
+              </span>
+              <div slot="attributes" class="flex gap-8">
+                <TrailAttribute>
+                  <Icon name="mdi:location" class="w-5 h-5" slot="icon" />
 
-      <ul>
-        <ListItem
-          name="Pasta miasta"
-          description=""
-          link="https://www.pastamiasta.pl/"
-        />
-        <ListItem
-          name="Hellas Gyradiko"
-          description=""
-          link="https://hellasgyradiko.eatbu.com/?lang=pl"
-        />
-        <ListItem
-          name="Sumo Ramen"
-          description=""
-          link="https://www.facebook.com/p/SUMO-RAMEN-100027868855912/?locale=pl_PL"
-        />
-        <ListItem
-          name="A Modo Mio"
-          description=""
-          link="https://www.facebook.com/p/A-Modo-Mio-da-Ciro-100069903701638/"
-        />
-        <ListItem
-          name="Pak Choi"
-          description=""
-          link="http://www.restauracjapakchoi.pl/"
-        />
-        <ListItem
-          name="Phuket - Thai Food & Bar"
-          description=""
-          link="https://www.facebook.com/phuketsopot/"
-        />
-        <ListItem
-          name="la nostra pizzeria"
-          description=""
-          link="https://www.facebook.com/Sopotlanostrapizzeria/"
-        />
-      </ul>
-    </div>
-    <div class="my-4">
-      <h2 class="text-2xl mb-3">Caffe</h2>
-      <p class="my-2"></p>
+                  <TrailAttributeValue value={place.location} />
+                  <TrailAttributeName value="Location" />
+                </TrailAttribute>
 
-      <ul>
-        <ListItem
-          name="Flaming & Co"
-          description=""
-          link="https://flaming-co.com/"
-        />
-        <ListItem
-          name="Santa Cafe"
-          description=""
-          link="https://www.facebook.com/santacafe2020/"
-        />
-        <ListItem
-          name="KAISER Patisserie"
-          description="Sopot"
-          link="https://kaiserpatisserie.pl/sopot/"
-        />
-        <ListItem
-          name="Ancymon"
-          description=""
-          link="https://www.ancymoncafe.com/"
-        />
+                <TrailAttribute>
+                  <Icon name="mdi:chef-hat" class="w-5 h-5" slot="icon" />
+
+                  <TrailAttributeValue value={place.kind} />
+                  <TrailAttributeName value="Kind" />
+                </TrailAttribute>
+              </div>
+            </ListCardItem>
+          ))
+        }
       </ul>
     </div>
   </div>
