@@ -54,7 +54,10 @@ for (const route of routes) {
                 {route.data.title}
               </span>
 
-              <div class="flex justify-between max-w-lg" slot="attributes">
+              <div
+                class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-lg"
+                slot="attributes"
+              >
                 <TrailAttribute>
                   <Icon name="mdi:hiking" class="w-5 h-5" slot="icon" />
 
