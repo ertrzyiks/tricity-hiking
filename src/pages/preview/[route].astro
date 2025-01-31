@@ -24,6 +24,11 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 const { route } = Astro.params as Params;
 
 const entry = await getEntry("routes", route);
+if (!entry) {
+  Astro.response.status = 404;
+  Astro.response.statusText = "Not found";
+  return;
+}
 const geojson = await getEntry(entry.data.geojson);
 ---
 
