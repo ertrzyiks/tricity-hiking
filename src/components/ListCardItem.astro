@@ -1,9 +1,13 @@
 ---
 const { description, link } = Astro.props;
+
+const securityProps = link.startsWith("http")
+  ? { target: "_blank", rel: "noopener" }
+  : {};
 ---
 
 <li class="my-4 border-b border-solid border-slate-200 w-full group">
-  <a class="flex py-4 px-2" href={link}>
+  <a class="flex py-4 px-2" href={link} {...securityProps}>
     <slot name="image" />
     <div class="flex flex-col w-full">
       <div class="text-2xl ml-4">
