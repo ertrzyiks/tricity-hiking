@@ -1,10 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ListCardItem from "../components/ListCardItem.astro";
-import TrailAttribute from "../components/TrailAttribute.astro";
-import { TrailAttributeValue } from "../components/TrailAttributeValue/TrailAttributeValue";
-import { TrailAttributeName } from "../components/TrailAttributeName/TrailAttributeName";
-import { Icon } from "astro-icon/components";
+import FoodListCardItem from "../components/ListCardItem/Food.astro";
 
 const icons: Record<string, string> = {
   Breakfast: "mdi:silverware",
@@ -109,35 +105,13 @@ const places = [
       <ul>
         {
           places.map((place) => (
-            <ListCardItem link={place.link}>
-              <div
-                slot="image"
-                class="bg-green-200 w-16 h-16 flex items-center justify-center group-hover:bg-black group-hover:text-green-200"
-              >
-                <Icon name={icons[place.kind]} class="w-12 h-12" />
-              </div>
-              <span class="group-hover:text-green-600" slot="title">
-                {place.name}
-              </span>
-              <div
-                slot="attributes"
-                class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-lg"
-              >
-                <TrailAttribute>
-                  <Icon name="mdi:location" class="w-5 h-5" slot="icon" />
-
-                  <TrailAttributeValue value={place.location} />
-                  <TrailAttributeName value="Location" />
-                </TrailAttribute>
-
-                <TrailAttribute>
-                  <Icon name="mdi:chef-hat" class="w-5 h-5" slot="icon" />
-
-                  <TrailAttributeValue value={place.kind} />
-                  <TrailAttributeName value="Kind" />
-                </TrailAttribute>
-              </div>
-            </ListCardItem>
+            <FoodListCardItem
+              link={place.link}
+              name={place.name}
+              location={place.location}
+              kind={place.kind}
+              icon={icons[place.kind]}
+            />
           ))
         }
       </ul>

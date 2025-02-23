@@ -1,6 +1,90 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ListItem from "../components/ListItem.astro";
+import ActivityListCardItem from "../components/ListCardItem/Activity.astro";
+
+const ships = [
+  {
+    name: "Sołdek",
+    description: "Steam-powered cargo ship from 1949.",
+    link: "https://nmm.pl/soldek/",
+    location: "Gdańsk",
+  },
+  {
+    name: "Dar Pomorza",
+    description: "Three-masted sailing ship that was used for training.",
+    link: "https://nmm.pl/dar-pomorza/",
+    location: "Gdynia",
+  },
+  {
+    name: "Błyskawica",
+    description: "Destroyer, a veteran of the Second World War.",
+    link: "https://muzeummw.pl/orp-blyskawica/",
+    location: "Gdynia",
+  },
+];
+
+const orienteering = [
+  {
+    name: "Harpuś",
+    description:
+      "Checkpoints are validated by a punch card in any order. Stationary only, beginner friendly.",
+    link: "https://www.harpagan.pl/harpus/",
+  },
+  {
+    name: "Parkowe BNO",
+    description:
+      "Checkpoints are validated by an electronic system SportIdent in order provided on the map. Stationary only, beginner friendly.",
+    link: "https://www.parkowebno.pl/",
+  },
+  {
+    name: "Azymut 45 - Z Mapą do Lasu",
+    description:
+      "Stationary and by yourself, terrain and map is more challenging but beginners can still go for the easiest route.",
+    link: "https://www.azymut45gdynia.org/nasze-imprezy/Z-Mapa-do-Lasu/O%20ZMdL",
+  },
+];
+
+const outdoorPlaygrounds = [
+  {
+    name: "Reagan's Park Playground",
+    description: "",
+    link: "",
+  },
+];
+
+const indoorPlaygrounds = [
+  {
+    name: "Loopy's World",
+    description: "",
+    link: "",
+  },
+  {
+    name: "Lider",
+    description: "",
+    link: "",
+  },
+  {
+    name: "Budumi",
+    description: "",
+    link: "",
+  },
+  {
+    name: "Klockownia",
+    description: "",
+    link: "",
+  },
+  {
+    name: "Honolulu",
+    description: "",
+    link: "",
+  },
+  {
+    name: "Amazonia",
+    description: "",
+    link: "",
+  },
+];
 ---
 
 <Layout title="Tricity hiking - Activities">
@@ -17,21 +101,16 @@ import ListItem from "../components/ListItem.astro";
       </p>
 
       <ul>
-        <ListItem
-          name="Sołdek"
-          description="Steam-powered cargo ship from 1949."
-          link="https://nmm.pl/soldek/"
-        />
-        <ListItem
-          name="Dar Pomorza"
-          description="Three-masted sailing ship that was used for training."
-          link="https://nmm.pl/dar-pomorza/"
-        />
-        <ListItem
-          name="Błyskawica"
-          description="Destroyer, a veteran of the Second World War."
-          link="https://muzeummw.pl/orp-blyskawica/"
-        />
+        {
+          ships.map((item) => (
+            <ActivityListCardItem
+              link={item.link}
+              name={item.name}
+              icon="mdi:ship"
+              description={item.description}
+            />
+          ))
+        }
       </ul>
     </div>
 
@@ -39,7 +118,7 @@ import ListItem from "../components/ListItem.astro";
       <h2 class="text-2xl mb-3">Orienteering</h2>
 
       <p class="my-2">
-        Orienterring is a sport that connects physical exertion and navigation.
+        Orienteering is a sport that connects physical exertion and navigation.
         You get a map with checkpoints and you have to find them in the forest
         or urban terrain. You need to bring your own compass, in some of them
         you can use compass from your phone but it may be considered as
@@ -53,21 +132,16 @@ import ListItem from "../components/ListItem.astro";
       </p>
 
       <ul>
-        <ListItem
-          name="Harpuś"
-          description="Checkpoints are validated by a punch card in any order. Stationary only, beginner friendly."
-          link="https://www.harpagan.pl/harpus/"
-        />
-        <ListItem
-          name="Parkowe BNO"
-          description="Checkpoints are validated by an electronic system SportIdent in order provided on the map. Stationary only, beginner friendly."
-          link="https://www.parkowebno.pl/"
-        />
-        <ListItem
-          name="Azymut 45 - Z Mapą do Lasu"
-          description="Stationary and by yourself, terrain and map is more challenging but begginers can still go for the easiest route."
-          link="https://www.azymut45gdynia.org/nasze-imprezy/Z-Mapa-do-Lasu/O%20ZMdL"
-        />
+        {
+          orienteering.map((item) => (
+            <ActivityListCardItem
+              link={item.link}
+              icon="mdi:map-outline"
+              name={item.name}
+              description={item.description}
+            />
+          ))
+        }
       </ul>
     </div>
 
@@ -79,12 +153,16 @@ import ListItem from "../components/ListItem.astro";
       </p>
 
       <ul>
-        <ListItem name="Reagan's Park Playground" description="" link="" />
-        <!-- <ListItem
-            name="Harpuś"
-            description="Checkpoints are validated by a punch card in any order. Stationary only, beginner friendly."
-            link="https://www.harpagan.pl/harpus/"
-          /> -->
+        {
+          outdoorPlaygrounds.map((item) => (
+            <ActivityListCardItem
+              link={item.link}
+              icon="mdi:playground-seesaw"
+              name={item.name}
+              description={item.description}
+            />
+          ))
+        }
       </ul>
     </div>
 
@@ -93,17 +171,16 @@ import ListItem from "../components/ListItem.astro";
       <p class="my-2"></p>
 
       <ul>
-        <ListItem name="Loopy's World" description="" link="" />
-        <ListItem name="Lider" description="" link="" />
-        <ListItem name="Budumi" description="" link="" />
-        <ListItem name="Klockownia" description="" link="" />
-        <ListItem name="Honolulu" description="" link="" />
-        <ListItem name="Amazonia" description="" link="" />
-        <!-- <ListItem
-            name="Harpuś"
-            description="Checkpoints are validated by a punch card in any order. Stationary only, beginner friendly."
-            link="https://www.harpagan.pl/harpus/"
-          /> -->
+        {
+          indoorPlaygrounds.map((item) => (
+            <ActivityListCardItem
+              link={item.link}
+              icon="mdi:playground-slide"
+              name={item.name}
+              description={item.description}
+            />
+          ))
+        }
       </ul>
     </div>
   </div>

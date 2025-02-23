@@ -1,0 +1,15 @@
+---
+import { Icon } from "astro-icon/components";
+import TrailAttribute from "./TrailAttribute.astro";
+import { TrailAttributeName } from "./TrailAttributeName/TrailAttributeName";
+import { TrailAttributeValue } from "./TrailAttributeValue/TrailAttributeValue";
+
+const { icon, name, value } = Astro.props;
+---
+
+<TrailAttribute>
+  <Icon name={icon} class="w-5 h-5" slot="icon" />
+
+  <TrailAttributeValue value={value} />
+  <TrailAttributeName value={name} />
+</TrailAttribute>
