@@ -1,7 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ListItem from "../components/ListItem.astro";
 import ActivityListCardItem from "../components/ListCardItem/Activity.astro";
+import ListCardItem from "../components/ListCardItem.astro";
+
+import soldek from "../assets/activities/soldek.png";
+import dar from "../assets/activities/dar-pomorza.png";
+import blyskawica from "../assets/activities/blyskawica.png";
 
 const ships = [
   {
@@ -9,17 +13,20 @@ const ships = [
     description: "Steam-powered cargo ship from 1949.",
     link: "https://nmm.pl/soldek/",
     location: "Gdańsk",
+    image: soldek,
   },
   {
     name: "Dar Pomorza",
     description: "Three-masted sailing ship that was used for training.",
     link: "https://nmm.pl/dar-pomorza/",
+    image: dar,
     location: "Gdynia",
   },
   {
     name: "Błyskawica",
     description: "Destroyer, a veteran of the Second World War.",
     link: "https://muzeummw.pl/orp-blyskawica/",
+    image: blyskawica,
     location: "Gdynia",
   },
 ];
@@ -103,12 +110,21 @@ const indoorPlaygrounds = [
       <ul>
         {
           ships.map((item) => (
-            <ActivityListCardItem
-              link={item.link}
-              name={item.name}
-              icon="mdi:ship"
-              description={item.description}
-            />
+            <ListCardItem link={item.link}>
+              <img
+                src={item.image.src}
+                class="w-20 h-20 grayscale-50 group-hover:grayscale-0"
+                slot="image"
+              />
+
+              <span class="group-hover:text-green-600" slot="title">
+                {item.name}
+              </span>
+
+              <span class="group-hover:text-green-600" slot="description">
+                {item.description}
+              </span>
+            </ListCardItem>
           ))
         }
       </ul>
