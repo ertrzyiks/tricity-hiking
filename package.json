@@ -16,6 +16,7 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.0.8",
     "@astrojs/preact": "^4.0.4",
+    "@astrojs/sitemap": "^3.2.1",
     "@iconify-json/mdi": "^1.1.68",
     "@piwikpro/tracking-base-library": "^1.2.3",
     "@tailwindcss/vite": "^4.0.8",
