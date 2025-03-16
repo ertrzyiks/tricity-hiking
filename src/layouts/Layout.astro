@@ -31,6 +31,8 @@ const { title } = Astro.props;
 
     <title>{title}</title>
 
+    <link rel="sitemap" href="/tricity-hiking/sitemap-index.xml" />
+
     {import.meta.env.PIWIK_TRACKING_ENABLED !== "false" && <Analytics />}
 
     <ViewTransitions />
