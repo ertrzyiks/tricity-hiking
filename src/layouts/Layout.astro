@@ -20,7 +20,7 @@ const { title } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="description" content="Astro description" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/tricity-hiking/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,7 +31,7 @@ const { title } = Astro.props;
 
     <title>{title}</title>
 
-    <link rel="sitemap" href="/tricity-hiking/sitemap-index.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
 
     {import.meta.env.PIWIK_TRACKING_ENABLED !== "false" && <Analytics />}
 
@@ -50,22 +50,22 @@ const { title } = Astro.props;
       <div class="grid grid-cols-1 lg:grid-cols-layout">
         <div id="sidebar" class="sidebar bg-slate-50">
           <div class="p-4 space-y-4 sticky top-8">
-            <SidebarLink href="/tricity-hiking">
+            <SidebarLink href="/">
               <Icon name="mdi:map-outline" slot="icon" /> Route map
             </SidebarLink>
-            <SidebarLink href="/tricity-hiking/list">
+            <SidebarLink href="/list">
               <Icon name="mdi:format-list-bulleted-square" slot="icon" /> Route list
             </SidebarLink>
-            <SidebarLink href="/tricity-hiking/extended">
+            <SidebarLink href="/extended">
               <Icon name="mdi:map-plus" slot="icon" /> Route map (extended)
             </SidebarLink>
-            <SidebarLink href="/tricity-hiking/activities">
+            <SidebarLink href="/activities">
               <Icon name="mdi:umbrella-beach" slot="icon" />Activities
             </SidebarLink>
-            <SidebarLink href="/tricity-hiking/food">
+            <SidebarLink href="/food">
               <Icon name="mdi:silverware" slot="icon" /> Food
             </SidebarLink>
-            <SidebarLink href="/tricity-hiking/transportation">
+            <SidebarLink href="/transportation">
               <Icon name="mdi:train" slot="icon" /> Transportation
             </SidebarLink>
           </div>

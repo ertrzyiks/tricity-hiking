@@ -10,8 +10,7 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://ertrzyiks.github.io",
-  base: "tricity-hiking",
+  site: "https://tricity-hiking.ertrzyiks.me",
   integrations: [mdx(), preact(), icon(), sitemap()],
 
   vite: {

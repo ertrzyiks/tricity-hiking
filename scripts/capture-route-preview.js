@@ -12,7 +12,7 @@ const routes = [
 ];
 
 async function captureRoutePreview({ page, route }) {
-  await page.goto(`http://localhost:4321/tricity-hiking/preview/${route}`);
+  await page.goto(`http://localhost:4321/preview/${route}`);
 
   await page.waitForSelector(".maplibregl-map", { timeout: 30_000 });
 

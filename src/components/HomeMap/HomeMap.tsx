@@ -206,9 +206,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           </div>
 
           <div className="flex items-center justify-center px-4 py-6 gap-2">
-            <Button
-              href={`/tricity-hiking/routes/${selectedFeature.properties.routeSlug}`}
-            >
+            <Button href={`/routes/${selectedFeature.properties.routeSlug}`}>
               Learn more
             </Button>
             <Button onClick={handleCloseSelection} variant="neutral">
