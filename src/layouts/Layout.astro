@@ -39,12 +39,14 @@ const { title } = Astro.props;
   </head>
   <body>
     <main>
-      <nav class="flex relative justify-center lg:justify-start">
+      <nav
+        class="flex relative justify-center lg:justify-start bg-white py-2 sm:py-4"
+      >
         <SidebarSwitch className="lg:hidden absolute left-4 top-1" client:load>
           <Icon name="mdi:menu" class="text-3xl" />
         </SidebarSwitch>
 
-        <h1 class="py-2 px-4">Tricity Hiking</h1>
+        <h1 class="py-2 px-4 text-xl text-slate-500">Tricity Hiking</h1>
       </nav>
 
       <div class="grid grid-cols-1 lg:grid-cols-layout">
