@@ -2,96 +2,12 @@
 import Layout from "../layouts/Layout.astro";
 import ActivityListCardItem from "../components/ListCardItem/Activity.astro";
 import ListCardItem from "../components/ListCardItem.astro";
-
-import soldek from "../assets/activities/soldek.png";
-import dar from "../assets/activities/dar-pomorza.png";
-import blyskawica from "../assets/activities/blyskawica.png";
-
-const ships = [
-  {
-    name: "Sołdek",
-    description: "Steam-powered cargo ship from 1949.",
-    link: "https://nmm.pl/soldek/",
-    location: "Gdańsk",
-    image: soldek,
-  },
-  {
-    name: "Dar Pomorza",
-    description: "Three-masted sailing ship that was used for training.",
-    link: "https://nmm.pl/dar-pomorza/",
-    image: dar,
-    location: "Gdynia",
-  },
-  {
-    name: "Błyskawica",
-    description: "Destroyer, a veteran of the Second World War.",
-    link: "https://muzeummw.pl/orp-blyskawica/",
-    image: blyskawica,
-    location: "Gdynia",
-  },
-];
-
-const orienteering = [
-  {
-    name: "Harpuś",
-    description:
-      "Checkpoints are validated by a punch card in any order. Stationary only, beginner friendly.",
-    link: "https://www.harpagan.pl/harpus/",
-  },
-  {
-    name: "Parkowe BNO",
-    description:
-      "Checkpoints are validated by an electronic system SportIdent in order provided on the map. Stationary only, beginner friendly.",
-    link: "https://www.parkowebno.pl/",
-  },
-  {
-    name: "Azymut 45 - Z Mapą do Lasu",
-    description:
-      "Stationary and by yourself, terrain and map is more challenging but beginners can still go for the easiest route.",
-    link: "https://www.azymut45gdynia.org/nasze-imprezy/Z-Mapa-do-Lasu/O%20ZMdL",
-  },
-];
-
-const outdoorPlaygrounds = [
-  {
-    name: "Reagan's Park Playground",
-    description: "",
-    link: "",
-  },
-];
-
-const indoorPlaygrounds = [
-  {
-    name: "Loopy's World",
-    description: "",
-    link: "",
-  },
-  {
-    name: "Lider",
-    description: "",
-    link: "",
-  },
-  {
-    name: "Budumi",
-    description: "",
-    link: "",
-  },
-  {
-    name: "Klockownia",
-    description: "",
-    link: "",
-  },
-  {
-    name: "Honolulu",
-    description: "",
-    link: "",
-  },
-  {
-    name: "Amazonia",
-    description: "",
-    link: "",
-  },
-];
+import {
+  ships,
+  orienteering,
+  outdoorPlaygrounds,
+  indoorPlaygrounds,
+} from "../content/activities";
 ---
 
 <Layout title="Tricity hiking - Activities">
@@ -144,7 +60,7 @@ const indoorPlaygrounds = [
       </p>
 
       <p class="my-2">
-        All 3 organization prepare routes in four difficulty levels.
+        All 3 organizations prepare routes in four difficulty levels.
       </p>
 
       <ul>
@@ -164,7 +80,7 @@ const indoorPlaygrounds = [
     <div class="my-4">
       <h2 class="text-2xl mb-3">Playgrounds - outdoor</h2>
       <p class="my-2">
-        Tricity has a lot of playgrounds for kids. The list below highlight the
+        Tricity has a lot of playgrounds for kids. The list below highlights the
         biggest or the most interesting ones.
       </p>
 
