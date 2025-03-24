@@ -38,5 +38,6 @@
 
   @media (width >= theme(--breakpoint-lg)) {
     @apply block static;
+    height: auto;
   }
 }
