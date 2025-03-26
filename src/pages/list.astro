@@ -39,7 +39,7 @@ for (const route of routes) {
       <ul>
         {
           geojsonList.map(({ route, properties }) => (
-            <ListCardItem link={`/routes/${route.data.geojson.id}`}>
+            <ListCardItem link={`/routes/${route.data.geojson.id}/`}>
               {route.data.preview?.src && (
                 <img
                   src={route.data.preview.src}
