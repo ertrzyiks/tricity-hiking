@@ -2,17 +2,17 @@
 const { href, matches } = Astro.props;
 
 const pathname = new URL(Astro.request.url).pathname;
-const directMatch = pathname === href || pathname === `${href}/`;
-const isActive = matches ? matches(pathname) : directMatch;
+const defaultMatch = pathname.startsWith(href);
+const isActive = matches ? matches(pathname) : defaultMatch;
 ---
 
 <a
   href={href}
   class:list={[
-    "inline-block px-4 py-2 text-lg font-normal text-gray-800 no-underline border-b-2 border-solid",
+    "px-4 py-2 w-full lg:w-auto relative lg:rounded-xl",
     {
-      "border-green-300": isActive,
-      "border-transparent": !isActive,
+      "underline decoration-green-400 hover:decoration-green-600": isActive,
+      "text-slate-500 hover:underline": !isActive,
     },
   ]}
 >

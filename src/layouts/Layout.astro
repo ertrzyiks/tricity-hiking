@@ -4,6 +4,7 @@ import { ClientRouter } from "astro:transitions";
 import { Icon } from "astro-icon/components";
 
 import SidebarSwitch from "../components/SidebarSwitch/SidebarSwitch.tsx";
+import NavLink from "../components/NavLink.astro";
 import Analytics from "../components/Analytics.astro";
 
 let canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
@@ -57,22 +58,16 @@ const { title } = Astro.props;
           <div
             class="flex gap-2 items-center flex-col lg:flex-row h-full pt-4 lg:pt-0"
           >
-            <a href="/routes/" class="px-4 py-2 text-slate-500 w-full lg:w-auto"
-              >Routes</a
+            <NavLink
+              href="/routes/"
+              matches={(pathname: string) =>
+                pathname.startsWith("/routes/") ||
+                pathname.startsWith("/list/") ||
+                pathname.startsWith("/extended/")}>Routes</NavLink
             >
-            <a
-              href="/activities/"
-              class="px-4 py-2 text-slate-500 w-full lg:w-auto">Activities</a
-            >
-            <a href="/food/" class="px-4 py-2 text-slate-500 w-full lg:w-auto"
-              >Food</a
-            >
-            <a
-              href="/transportation/"
-              class="px-4 py-2 text-slate-500 w-full lg:w-auto"
-            >
-              Transportation
-            </a>
+            <NavLink href="/activities/">Activities</NavLink>
+            <NavLink href="/food/">Food</NavLink>
+            <NavLink href="/transportation/">Transportation</NavLink>
           </div>
         </div>
       </nav>
