@@ -1,6 +1,6 @@
 ---
 import "../styles/base.css";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import { Icon } from "astro-icon/components";
 
 import SidebarSwitch from "../components/SidebarSwitch/SidebarSwitch.tsx";
@@ -38,7 +38,7 @@ const { title } = Astro.props;
 
     {import.meta.env.PIWIK_TRACKING_ENABLED !== "false" && <Analytics />}
 
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body>
     <main>
