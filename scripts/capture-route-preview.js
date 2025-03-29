@@ -1,15 +1,14 @@
 import puppeteer from "puppeteer";
+import fs from "fs";
 
-const routes = [
-  "dolina-elfow",
-  "dolina-strzyzy",
-  "elblag-bazantarnia-parasol",
-  "lesnik-opera",
-  "orlowo-bulwar",
-  "samborowo-glowica",
-  "sopot-wyscigi-to-kamienny-potok",
-  "wejherowo-kalwaria",
-];
+const BASE_PATH = "src/content";
+
+const list = fs.readdirSync(`${BASE_PATH}/routes`);
+const routes = list
+  .filter((name) => name.endsWith(".mdx"))
+  .map((name) => {
+    return name.slice(0, -4);
+  });
 
 async function captureRoutePreview({ page, route }) {
   await page.goto(`http://localhost:4321/preview/${route}`);
@@ -30,6 +29,11 @@ async function run() {
   const page = await browser.newPage();
 
   for (const route of routes) {
+    if (fs.existsSync(`./src/assets/routes/${route}.jpg`)) {
+      console.log(`Skipping ${route}`);
+      continue;
+    }
+
     await captureRoutePreview({ page, route });
   }
 

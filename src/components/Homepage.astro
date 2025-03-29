@@ -27,7 +27,7 @@ const pathname = new URL(Astro.request.url).pathname;
       <a
         class:list={[
           "px-2 py-1 inline-flex items-center gap-2 rounded-r-md",
-          "border border-solid",
+          "border border-solid border-l-0",
           {
             "bg-green-500 border-green-500 hover:bg-green-600 text-white":
               pathname.startsWith("/list/"),
