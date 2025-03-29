@@ -32,10 +32,7 @@ for (const route of routes) {
 
 <Layout title="Tricity hiking - list of routes">
   <Homepage>
-    <div
-      class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0"
-      transition:name="map"
-    >
+    <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0">
       <ul>
         {
           geojsonList.map(({ route, properties }) => (

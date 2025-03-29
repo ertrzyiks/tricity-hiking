@@ -9,11 +9,11 @@ const pathname = new URL(Astro.request.url).pathname;
       <a
         class:list={[
           "px-2 py-1 inline-flex items-center gap-2 rounded-l-md",
-          "border border-solid border-green-500",
+          "border border-solid",
           {
             "bg-green-500 hover:bg-green-600 text-white":
               pathname.startsWith("/routes/"),
-            "bg-green-50 hover:bg-green-200  text-slate-900":
+            "bg-green-50 border-green-300 hover:bg-green-200 text-slate-900":
               !pathname.startsWith("/routes/"),
           },
         ]}
@@ -31,7 +31,7 @@ const pathname = new URL(Astro.request.url).pathname;
           {
             "bg-green-500 border-green-500 hover:bg-green-600 text-white":
               pathname.startsWith("/list/"),
-            "bg-green-50 border-green-400 hover:bg-green-200  text-slate-900":
+            "bg-green-50 border-green-300 hover:bg-green-200  text-slate-900":
               !pathname.startsWith("/list/"),
           },
         ]}
@@ -49,7 +49,7 @@ const pathname = new URL(Astro.request.url).pathname;
         {
           "bg-green-500 hover:bg-green-600 border-green-500 text-white":
             pathname.startsWith("/extended/"),
-          "bg-green-50 hover:bg-green-200  text-slate-900 border-green-400":
+          "bg-green-50 hover:bg-green-200  text-slate-900 border-green-300":
             !pathname.startsWith("/extended/"),
         },
       ]}
@@ -61,9 +61,3 @@ const pathname = new URL(Astro.request.url).pathname;
 </div>
 
 <slot />
-
-<script define:vars={{ pathname }}>
-  try {
-    sessionStorage.setItem("routes-entry-point", pathname);
-  } catch (e) {}
-</script>

@@ -7,6 +7,8 @@ import SidebarSwitch from "../components/SidebarSwitch/SidebarSwitch.tsx";
 import NavLink from "../components/NavLink.astro";
 import Analytics from "../components/Analytics.astro";
 
+const pathname = new URL(Astro.request.url).pathname;
+
 let canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 canonicalURL += canonicalURL.endsWith("/") ? "" : "/";
 
@@ -140,4 +142,14 @@ const { title } = Astro.props;
       });
     }
   });
+</script>
+
+<script define:vars={{ pathname }}>
+  const routesEntryPoints = ["/routes/", "/list/", "/extended/"];
+
+  if (routesEntryPoints.includes(pathname)) {
+    try {
+      sessionStorage.setItem("routes-entry-point", pathname);
+    } catch (e) {}
+  }
 </script>
