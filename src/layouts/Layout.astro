@@ -59,6 +59,7 @@ const { title } = Astro.props;
             class="flex gap-2 items-center flex-col lg:flex-row h-full pt-4 lg:pt-0"
           >
             <NavLink
+              id="navbar-routes"
               href="/routes/"
               matches={(pathname: string) =>
                 pathname.startsWith("/routes/") ||
@@ -109,3 +110,34 @@ const { title } = Astro.props;
       monospace;
   }
 </style>
+
+<script>
+  import { navigate } from "astro:transitions/client";
+
+  document.addEventListener("astro:page-load", () => {
+    const link = document.getElementById("navbar-routes");
+
+    if (link) {
+      link.addEventListener("click", (event) => {
+        let routePathName = null;
+
+        try {
+          const sessionRoute = sessionStorage.getItem("routes-entry-point");
+
+          if (
+            sessionRoute &&
+            ["/routes/", "/list/", "/extended/"].includes(sessionRoute)
+          ) {
+            routePathName = sessionRoute;
+          }
+        } catch {}
+
+        if (routePathName) {
+          event.preventDefault();
+
+          navigate(routePathName);
+        }
+      });
+    }
+  });
+</script>
