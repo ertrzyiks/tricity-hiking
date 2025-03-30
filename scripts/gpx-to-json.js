@@ -6,6 +6,15 @@ import { getRouteStats } from "./get-route-stats.js";
 
 const BASE_PATH = "src/content";
 
+const getRouteTitle = (name) => {
+  const content = fs
+    .readFileSync(`${BASE_PATH}/routes/${name}.mdx`, "utf8")
+    .toString();
+
+  const title = content.match(/title: (.*)/)[1];
+  return title.trim();
+};
+
 const estimateTime = (distance, totalGain) => {
   const speed = 5000;
   return distance / speed + (totalGain / 500) * 0.5;
@@ -60,6 +69,11 @@ const convert = (fileName) => {
 
   const converted = gpx(gpxFile);
   const processed = process(name, converted);
+
+  const feature = processed.features[0];
+  if (feature.type === "Feature") {
+    feature.properties.name = getRouteTitle(name);
+  }
 
   fs.writeFileSync(
     `${BASE_PATH}/geodata/${name}.json`,
