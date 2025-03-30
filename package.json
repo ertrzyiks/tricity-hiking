@@ -11,7 +11,8 @@
     "astro": "astro",
     "capture": "concurrently \"PUBLIC_ASTRO_USE_MAPTILER_MAP_STYLE=true astro dev\" \"sleep 1 && node scripts/capture.js\" --kill-others",
     "capture:preview": "concurrently \"PUBLIC_ASTRO_USE_MAPTILER_MAP_STYLE=true astro dev\" \"sleep 1 && node scripts/capture-route-preview.js\" --kill-others",
-    "gpx2json": "node scripts/gpx-to-json.js && prettier --write src/content/geodata"
+    "gpx2json": "node scripts/gpx-to-json.js && prettier --write src/content/geodata",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -33,6 +34,8 @@
     "@tmcw/togeojson": "5.8.1",
     "@xmldom/xmldom": "0.8.10",
     "concurrently": "^8.2.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "prettier": "^3.4.2",
     "prettier-plugin-astro": "^0.14.1",
     "puppeteer": "^22.10.0",
