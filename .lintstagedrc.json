@@ -1,3 +1,4 @@
 {
-  "*/**/*.{js,jsx,ts,tsx,json}": "prettier --write"
+  "*/**/*.{js,jsx,ts,tsx,json}": "prettier --write",
+  "*.{js,jsx,ts,tsx}": "vitest related --run"
 }
