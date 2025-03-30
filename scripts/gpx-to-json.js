@@ -2,7 +2,7 @@ import { gpx } from "@tmcw/togeojson";
 import fs from "fs";
 // node doesn't have xml parsing or a dom. use xmldom
 import { DOMParser } from "@xmldom/xmldom";
-import { getRouteStats } from "./get-route-stats";
+import { getRouteStats } from "./get-route-stats.js";
 
 const BASE_PATH = "src/content";
 
