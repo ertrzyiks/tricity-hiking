@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "test": "vitest",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -34,7 +35,8 @@
     "concurrently": "^8.2.2",
     "prettier": "^3.4.2",
     "prettier-plugin-astro": "^0.14.1",
-    "puppeteer": "^22.10.0"
+    "puppeteer": "^22.10.0",
+    "vitest": "^3.0.9"
   },
   "pnpm": {
     "overrides": {
