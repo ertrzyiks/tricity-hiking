@@ -27,6 +27,7 @@
     "debounce": "^2.1.0",
     "maplibre-gl": "^4.2.0",
     "preact": "^10.22.0",
+    "sharp": "0.33.5",
     "tailwindcss": "^4.0.1",
     "typescript": "^5.4.5"
   },
