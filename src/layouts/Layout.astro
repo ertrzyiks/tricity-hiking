@@ -2,10 +2,12 @@
 import "../styles/base.css";
 import { ClientRouter } from "astro:transitions";
 import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
 
 import SidebarSwitch from "../components/SidebarSwitch/SidebarSwitch.tsx";
 import NavLink from "../components/NavLink.astro";
 import Analytics from "../components/Analytics.astro";
+import logo from "../assets/logo.png";
 
 const pathname = new URL(Astro.request.url).pathname;
 
@@ -46,19 +48,27 @@ const { title } = Astro.props;
   <body>
     <main>
       <nav
-        class="flex relative justify-center lg:justify-start bg-slate-50 py-2 sm:py-4"
+        class="flex relative justify-center lg:justify-start bg-slate-50 py-2 sm:py-4 px-2"
       >
-        <SidebarSwitch className="lg:hidden absolute left-4 top-4" client:load>
+        <SidebarSwitch
+          className="lg:hidden absolute left-3 top-2 cursor-pointer"
+          client:load
+        >
           <Icon name="mdi:menu" class="text-3xl" />
         </SidebarSwitch>
 
-        <a href="/">
-          <h1 class="py-2 px-4 text-xl text-slate-500">Tricity Hiking</h1>
+        <a href="/" class="flex items-center -my-2 sm:-my-4">
+          <Image
+            src={logo}
+            alt="Tricity Hiking"
+            height={128}
+            style="width: auto; height: 48px;"
+          />
         </a>
 
         <div id="sidebar" class="sidebar bg-slate-50">
           <div
-            class="flex gap-2 items-center flex-col lg:flex-row h-full pt-4 lg:pt-0"
+            class="flex gap-2 items-center flex-col lg:flex-row lg:ml-4 h-full pt-4 lg:pt-0"
           >
             <NavLink
               id="navbar-routes"
