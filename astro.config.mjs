@@ -8,10 +8,21 @@ import tailwindcss from "@tailwindcss/vite";
 
 import sitemap from "@astrojs/sitemap";
 
+import favicons from "astro-favicons";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://tricity-hiking.ertrzyiks.me",
-  integrations: [mdx(), preact(), icon(), sitemap()],
+  integrations: [
+    mdx(),
+    preact(),
+    icon(),
+    sitemap(),
+    favicons({
+      name: "Tricity Hiking",
+      short_name: "Tricity Hiking",
+    }),
+  ],
 
   vite: {
     plugins: [tailwindcss()],
