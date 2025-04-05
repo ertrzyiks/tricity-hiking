@@ -101,20 +101,24 @@ const places = [
     class="max-w-(--breakpoint-xl) mx-auto relative h-[80vh] px-2 lg:px-0"
     transition:name="map"
   >
-    <div class="my-4">
-      <ul>
-        {
-          places.map((place) => (
-            <FoodListCardItem
-              link={place.link}
-              name={place.name}
-              location={place.location}
-              kind={place.kind}
-              icon={icons[place.kind]}
-            />
-          ))
-        }
-      </ul>
-    </div>
+    {
+      ["Breakfast", "Lunch/Dinner", "Caffe"].map((category) => (
+        <div class="my-4">
+          <h2 class="text-2xl mb-3">{category}</h2>
+          <ul>
+            {places
+              .filter((p) => p.kind === category)
+              .map((place) => (
+                <FoodListCardItem
+                  link={place.link}
+                  name={place.name}
+                  location={place.location}
+                  icon={icons[place.kind]}
+                />
+              ))}
+          </ul>
+        </div>
+      ))
+    }
   </div>
 </Layout>
