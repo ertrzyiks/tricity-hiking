@@ -55,7 +55,17 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
         type: "line",
         source: "lines",
         paint: {
-          "line-width": 25,
+          "line-width": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            9,
+            5, // at zoom 9, line width is 5
+            10,
+            10, // at zoom 10, line width is 10
+            15,
+            30, // at zoom 15, line width is 30
+          ],
           "line-color": "transparent",
         },
       });
@@ -78,19 +88,15 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
       const image = await map.loadImage(pointImage.src);
       if (!map.hasImage("poi_15")) map.addImage("poi_15", image.data);
 
-      // map.addLayer({
-      //   id: "places",
-      //   type: "symbol",
-      //   source: "lines",
-      //   layout: {
-      //     "icon-image": `poi_15`,
-      //     "icon-overlap": "always",
-      //   },
-      // });
-
       map.fitBounds(bounds, {
         animate: false,
         padding: 50,
+      });
+
+      const tooltip = new maplibregl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        className: "route_tooltip",
       });
 
       let hoveredStateId: number | undefined | string;
@@ -112,6 +118,17 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           { source: "lines", id: hoveredStateId },
           { hover: true },
         );
+
+        const hoveredFeature = e.features[0];
+        const geometry = hoveredFeature.geometry;
+
+        if (geometry.type === "LineString" && hoveredFeature.properties.name) {
+          tooltip
+            .setLngLat([e.lngLat.lng, e.lngLat.lat])
+            .setText(hoveredFeature.properties.name)
+            .addTo(map)
+            .trackPointer();
+        }
       });
 
       map.on("click", "interaction", (e) => {
@@ -142,6 +159,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
         });
 
         setSelectedFeature(feature);
+        tooltip.remove();
       });
 
       map.on("mouseleave", "interaction", () => {
@@ -151,6 +169,8 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           { source: "lines", id: hoveredStateId },
           { hover: false },
         );
+
+        tooltip.remove();
       });
     });
   }, []);

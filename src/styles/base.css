@@ -41,3 +41,8 @@
     height: auto;
   }
 }
+
+.route_tooltip .maplibregl-popup-content {
+  @apply text-xs text-gray-700;
+  @apply p-2;
+}
