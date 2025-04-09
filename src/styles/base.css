@@ -43,6 +43,13 @@
 }
 
 .route_tooltip .maplibregl-popup-content {
-  @apply text-xs text-gray-700;
+  @apply text-xs text-gray-100;
   @apply p-2;
+  @apply bg-slate-800;
+}
+
+.route_tooltip .maplibregl-popup-tip {
+  @apply invisible;
+  @apply h-1;
+  @apply border-none;
 }
