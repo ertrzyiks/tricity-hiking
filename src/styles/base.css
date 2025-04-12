@@ -53,3 +53,8 @@
   @apply h-1;
   @apply border-none;
 }
+
+.simple-link {
+  @apply text-green-600;
+  @apply hover:text-green-700 hover:underline;
+}

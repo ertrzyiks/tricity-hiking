@@ -11,6 +11,7 @@ import TrailAttribute from "../components/TrailAttribute.astro";
 import ListCardItem from "../components/ListCardItem.astro";
 import { Icon } from "astro-icon/components";
 import { getLineStringFeature } from "../services/getLineStringFeature";
+import RouteListItem from "../components/ListCardItem/Route.astro";
 
 const routes = await getCollection("routes");
 const tricityRoutes = routes.filter((route) => route.data.tricity).slice(0, 3);
@@ -52,73 +53,12 @@ for (const route of tricityRoutes) {
     <ul>
       {
         geojsonList.map(({ route, properties }) => (
-          <ListCardItem link={`/routes/${route.data.geojson.id}`}>
-            {route.data.preview?.src && (
-              <img
-                src={route.data.preview.src}
-                class="w-20 h-20 grayscale-75 group-hover:grayscale-0"
-                slot="image"
-              />
-            )}
-            <span class="flex gap-1 group-hover:text-green-600" slot="title">
-              <Icon name="mdi:location-on" class="text-green-500" />
-              {route.data.title}
-            </span>
-
-            <div
-              class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-lg"
-              slot="attributes"
-            >
-              <TrailAttribute>
-                <Icon name="mdi:hiking" class="w-5 h-5" slot="icon" />
-
-                <TrailAttributeValue
-                  value={`${mToKm(properties.distance).toFixed(2)}km`}
-                />
-                <TrailAttributeName value="Distance" />
-              </TrailAttribute>
-
-              <TrailAttribute>
-                <Icon name="mdi:clock-fast" class="w-5 h-5" slot="icon" />
-
-                <TrailAttributeValue
-                  value={formatTime(properties.estimatedTime)}
-                />
-                <TrailAttributeName value="Time" />
-              </TrailAttribute>
-
-              <TrailAttribute>
-                <Icon
-                  name="mdi:arrow-top-right-thin"
-                  class="w-5 h-5"
-                  slot="icon"
-                />
-
-                <TrailAttributeValue
-                  value={`${properties.totalGain.toFixed(0)}m`}
-                />
-                <TrailAttributeName value="Total Gain" />
-              </TrailAttribute>
-
-              <TrailAttribute>
-                <Icon
-                  name="mdi:arrow-bottom-right-thin"
-                  class="w-5 h-5"
-                  slot="icon"
-                />
-
-                <TrailAttributeValue
-                  value={`${properties.totalLoss.toFixed(0)}m`}
-                />
-                <TrailAttributeName value="Total Loss" />
-              </TrailAttribute>
-            </div>
-          </ListCardItem>
+          <RouteListItem route={route} properties={properties} />
         ))
       }
     </ul>
 
-    <a href="/routes">See All Routes</a>
+    <a class="simple-link" href="/routes">See All Routes</a>
   </div>
 </Layout>
 

@@ -1,0 +1,67 @@
+---
+import ListCardItem from "../ListCardItem.astro";
+import { Icon } from "astro-icon/components";
+import { TrailAttributeValue } from "../TrailAttributeValue/TrailAttributeValue";
+import { TrailAttributeName } from "../TrailAttributeName/TrailAttributeName";
+import TrailAttribute from "../TrailAttribute.astro";
+import { mToKm } from "../../services/mToKm";
+import { formatTime } from "../../services/formatTime";
+
+const { route, properties } = Astro.props;
+---
+
+<ListCardItem link={`/routes/${route.data.geojson.id}/`}>
+  {
+    route.data.preview?.src && (
+      <img
+        src={route.data.preview.src}
+        class="w-20 h-20 grayscale-75 group-hover:grayscale-0"
+        slot="image"
+      />
+    )
+  }
+  <span class="flex gap-1 group-hover:text-green-600" slot="title">
+    <Icon name="mdi:location-on" class="text-green-500" />
+    {route.data.title}
+  </span>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-lg" slot="attributes">
+    <TrailAttribute>
+      <Icon name="mdi:hiking" class="w-5 h-5 text-slate-500" slot="icon" />
+
+      <TrailAttributeValue
+        value={`${mToKm(properties.distance).toFixed(2)}km`}
+      />
+      <TrailAttributeName value="Distance" />
+    </TrailAttribute>
+
+    <TrailAttribute>
+      <Icon name="mdi:clock-fast" class="w-5 h-5 text-slate-500" slot="icon" />
+
+      <TrailAttributeValue value={formatTime(properties.estimatedTime)} />
+      <TrailAttributeName value="Time" />
+    </TrailAttribute>
+
+    <TrailAttribute>
+      <Icon
+        name="mdi:arrow-top-right-thin"
+        class="w-5 h-5 text-slate-500"
+        slot="icon"
+      />
+
+      <TrailAttributeValue value={`${properties.totalGain.toFixed(0)}m`} />
+      <TrailAttributeName value="Total Gain" />
+    </TrailAttribute>
+
+    <TrailAttribute>
+      <Icon
+        name="mdi:arrow-bottom-right-thin"
+        class="w-5 h-5 text-slate-500"
+        slot="icon"
+      />
+
+      <TrailAttributeValue value={`${properties.totalLoss.toFixed(0)}m`} />
+      <TrailAttributeName value="Total Loss" />
+    </TrailAttribute>
+  </div>
+</ListCardItem>
