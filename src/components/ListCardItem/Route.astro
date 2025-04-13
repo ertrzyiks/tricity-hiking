@@ -17,6 +17,9 @@ const { route, properties } = Astro.props;
         src={route.data.preview.src}
         class="w-20 h-20 grayscale-75 group-hover:grayscale-0"
         slot="image"
+        alt="Preview of the route on the map"
+        loading="lazy"
+        decoding="async"
       />
     )
   }

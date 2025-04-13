@@ -10,20 +10,22 @@ const routes = list
     return name.slice(0, -4);
   });
 
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 async function captureMapAssets({ page, route }) {
   await page.goto(`http://localhost:4321${route}`);
 
   await page.waitForSelector(".maplibregl-map", { timeout: 30_000 });
 
-  await page.waitForNetworkIdle();
+  // await page.waitForNetworkIdle(); doesn't work with interception
+  await wait(3_000);
 }
 
 function saveMapAssets(route, assetUrls) {
-  const fileSignature = route.replace("/", "");
+  const fileSignature = route.replaceAll("/", "");
   const mapAssetsFile = `${BASE_PATH}/map-tiles/${fileSignature}.json`;
-  if (fs.existsSync(mapAssetsFile)) {
-    return;
-  }
+  // if (fs.existsSync(mapAssetsFile)) {
+  //   return;
+  // }
 
   fs.writeFileSync(
     mapAssetsFile,
@@ -32,8 +34,17 @@ function saveMapAssets(route, assetUrls) {
 }
 
 async function run() {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: [`--window-size=1920,1080`],
+    defaultViewport: {
+      width: 1920,
+      height: 1080,
+    },
+    headless: true,
+  });
+
   const page = await browser.newPage();
+  await page.setRequestInterception(true);
 
   const routeAssets = new Map();
   let currentUrl = null;
@@ -52,14 +63,12 @@ async function run() {
     return res;
   };
 
-  page.on("requestfinished", async (request) => {
+  page.on("request", async (request) => {
     const url = request.url();
-
-    if (!url.startsWith("https://api.maptiler.com")) {
-      return;
+    if (url.startsWith("https://api.maptiler.com") && assetUrls) {
+      assetUrls.add(url);
     }
-
-    assetUrls.add(url);
+    request.continue().catch(console.error);
   });
 
   const capture = async (url) => {
@@ -69,7 +78,7 @@ async function run() {
     saveMapAssets(url, capturedAssetUrls);
   };
 
-  await capture("/routes");
+  await capture("/routes/");
 
   // for (const route of routes) {
   //   if (fs.existsSync(`./src/assets/routes/${route}.jpg`)) {
