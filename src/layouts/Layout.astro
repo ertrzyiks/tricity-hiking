@@ -56,13 +56,12 @@ const { title } = Astro.props;
     <title>{title}</title>
 
     <link rel="sitemap" href="/sitemap-index.xml" />
-
-    {import.meta.env.PIWIK_TRACKING_ENABLED !== "false" && <Analytics />}
-
     <ClientRouter />
     <Fragment set:html={favicons(Astro.currentLocale)} />
   </head>
   <body>
+    {import.meta.env.PIWIK_TRACKING_ENABLED !== "false" && <Analytics />}
+
     <main>
       <nav
         class="flex relative justify-center lg:justify-start bg-slate-50 py-2 sm:py-4 px-2"
