@@ -1,6 +1,7 @@
 ---
 import ListCardItem from "../ListCardItem.astro";
 import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
 import { TrailAttributeValue } from "../TrailAttributeValue/TrailAttributeValue";
 import { TrailAttributeName } from "../TrailAttributeName/TrailAttributeName";
 import TrailAttribute from "../TrailAttribute.astro";
@@ -13,13 +14,13 @@ const { route, properties } = Astro.props;
 <ListCardItem link={`/routes/${route.data.geojson.id}/`}>
   {
     route.data.preview?.src && (
-      <img
-        src={route.data.preview.src}
+      <Image
+        src={route.data.preview}
+        width="160"
+        height="160"
         class="w-20 h-20 grayscale-75 group-hover:grayscale-0"
+        alt={"Preview of the route on the map"}
         slot="image"
-        alt="Preview of the route on the map"
-        loading="lazy"
-        decoding="async"
       />
     )
   }
