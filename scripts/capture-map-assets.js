@@ -10,14 +10,26 @@ const routes = list
     return name.slice(0, -4);
   });
 
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+let lastRequestTime = Date.now();
+
+function waitForIdle(timeout = 2000, checkEvery = 500) {
+  return new Promise((resolve) => {
+    const interval = setInterval(() => {
+      if (Date.now() - lastRequestTime > timeout) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, checkEvery);
+  });
+}
+
 async function captureMapAssets({ page, route }) {
   await page.goto(`http://localhost:4321${route}`);
 
   await page.waitForSelector(".maplibregl-map", { timeout: 30_000 });
 
   // await page.waitForNetworkIdle(); doesn't work with interception
-  await wait(3_000);
+  await waitForIdle(3_000);
 }
 
 function saveMapAssets(route, assetUrls) {
@@ -29,7 +41,11 @@ function saveMapAssets(route, assetUrls) {
 
   fs.writeFileSync(
     mapAssetsFile,
-    JSON.stringify({ urls: Array.from(assetUrls) }, null, 2),
+    JSON.stringify(
+      { urls: Array.from(assetUrls).sort((a, b) => a.localeCompare(b)) },
+      null,
+      2,
+    ),
   );
 }
 
@@ -64,6 +80,8 @@ async function run() {
   };
 
   page.on("request", async (request) => {
+    lastRequestTime = Date.now();
+
     const url = request.url();
     if (url.startsWith("https://api.maptiler.com") && assetUrls) {
       assetUrls.add(url);
