@@ -41,7 +41,15 @@ const geodataCollection = defineCollection({
   }),
 });
 
+const mapTilesCollection = defineCollection({
+  type: "data",
+  schema: z.object({
+    urls: z.array(z.string()),
+  }),
+});
+
 export const collections = {
   routes: routesCollection,
   geodata: geodataCollection,
+  "map-tiles": mapTilesCollection,
 };

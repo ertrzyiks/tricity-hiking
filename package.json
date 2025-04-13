@@ -11,6 +11,7 @@
     "astro": "astro",
     "capture": "concurrently \"PUBLIC_ASTRO_USE_MAPTILER_MAP_STYLE=true astro dev\" \"sleep 1 && node scripts/capture.js\" --kill-others",
     "capture:preview": "concurrently \"PUBLIC_ASTRO_USE_MAPTILER_MAP_STYLE=true astro dev\" \"sleep 1 && node scripts/capture-route-preview.js\" --kill-others",
+    "capture:map-tiles": "concurrently \"PUBLIC_ASTRO_USE_MAPTILER_MAP_STYLE=true astro dev\" \"sleep 1 && node scripts/capture-map-assets.js\" --kill-others",
     "gpx2json": "node scripts/gpx-to-json.js && prettier --write src/content/geodata",
     "prepare": "husky"
   },
