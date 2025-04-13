@@ -22,17 +22,7 @@ export default defineConfig({
       name: "Tricity Hiking",
       short_name: "Tricity Hiking",
       icons: {
-        android: [
-          "android-chrome-192x192.png",
-          {
-            name: "android-chrome-512x512.png",
-            sizes: [{ width: 512, height: 512 }],
-            purpose: "maskable",
-            transparent: true,
-            rotate: false,
-            offset: 5,
-          },
-        ],
+        android: ["android-chrome-192x192.png", "android-chrome-512x512.png"],
         appleIcon: [
           "apple-touch-icon.png",
           "apple-touch-icon-precomposed.png",
