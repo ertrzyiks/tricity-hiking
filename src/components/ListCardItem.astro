@@ -1,5 +1,5 @@
 ---
-const { link, bordered } = Astro.props;
+const { link } = Astro.props;
 
 const securityProps = link.startsWith("http")
   ? { target: "_blank", rel: "noopener" }
