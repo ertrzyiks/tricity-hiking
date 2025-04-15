@@ -3,8 +3,26 @@
   import { StatsigSessionReplayPlugin } from "@statsig/session-replay";
   import { StatsigAutoCapturePlugin } from "@statsig/web-analytics";
 
+  type CookieConsentEvent = {
+    detail: {
+      cookie: {
+        services: {
+          analytics: string[];
+        };
+      };
+    };
+  };
+
   if (import.meta.env.PUBLIC_ASTRO_STATSIG_TRACKING_ENABLED === "true") {
-    window.addEventListener("cc:onConsent", ({ detail }) => {
+    window.addEventListener("cc:onConsent", (event) => {
+      if (!("detail" in event)) {
+        return;
+      }
+
+      const cookieConsentEvent = event as CookieConsentEvent;
+
+      const detail = cookieConsentEvent.detail;
+
       const isStatsigAllowed =
         detail.cookie.services.analytics.includes("statsig");
 
