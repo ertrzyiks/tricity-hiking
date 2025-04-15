@@ -21,6 +21,7 @@
     "@astrojs/preact": "^4.0.4",
     "@astrojs/sitemap": "^3.2.1",
     "@iconify-json/mdi": "^1.1.68",
+    "@jop-software/astro-cookieconsent": "^3.0.1",
     "@piwikpro/tracking-base-library": "^1.2.3",
     "@tailwindcss/vite": "^4.0.8",
     "astro": "^5.2.3",
@@ -31,7 +32,8 @@
     "preact": "^10.22.0",
     "sharp": "0.33.5",
     "tailwindcss": "^4.0.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vanilla-cookieconsent": "^3.1.0"
   },
   "devDependencies": {
     "@tmcw/togeojson": "5.8.1",

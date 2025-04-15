@@ -9,6 +9,7 @@ import { getEntry } from "astro:content";
 import SidebarSwitch from "../components/SidebarSwitch/SidebarSwitch.tsx";
 import NavLink from "../components/NavLink.astro";
 import Analytics from "../components/Analytics.astro";
+import CookieConsent from "../components/CookieConsent/CookieConsent.astro";
 import logo from "../assets/logo.png";
 
 const pathname = new URL(Astro.request.url).pathname;
@@ -61,6 +62,7 @@ const { title } = Astro.props;
   </head>
   <body>
     {import.meta.env.PIWIK_TRACKING_ENABLED !== "false" && <Analytics />}
+    <CookieConsent />
 
     <main>
       <nav
@@ -122,6 +124,14 @@ const { title } = Astro.props;
                 target="_blank"
                 rel="noopener">Github</a
               >
+            </li>
+            <li>
+              <button
+                class="text-slate-600 hover:underline cursor-pointer"
+                type="button"
+                data-cc="show-preferencesModal"
+                >Cookies
+              </button>
             </li>
             <li>
               <a

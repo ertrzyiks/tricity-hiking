@@ -1,10 +1,9 @@
-<script>
-  import PiwikPro from "@piwikpro/tracking-base-library";
-
-  if (import.meta.env.PUBLIC_ASTRO_PIWIK_TRACKING_ENABLED === "true") {
-    PiwikPro.initialize(
-      "9382e2e1-6d85-4abb-b055-b8804ded0293",
-      "https://ertrzyiks.piwik.pro",
-    );
-  }
-</script>
+{
+  import.meta.env.PUBLIC_ASTRO_STATSIG_TRACKING_ENABLED === "true" && (
+    <script
+      data-category="analytics"
+      data-service="Statsig"
+      data-src="https://cdn.jsdelivr.net/npm/@statsig/js-client@3/build/statsig-js-client+session-replay+web-analytics.min.js?apikey=client-LvIEhUfKLEVA78IOUgqT9i8r4Fs1CDqr4OcUyHqsF5x"
+    />
+  )
+}
