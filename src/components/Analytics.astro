@@ -8,22 +8,24 @@
       const isStatsigAllowed =
         detail.cookie.services.analytics.includes("statsig");
 
-      if (isStatsigAllowed) {
-        const options: StatsigOptions = {
-          plugins: [
-            new StatsigSessionReplayPlugin(),
-            new StatsigAutoCapturePlugin(),
-          ],
-          environment: { tier: import.meta.env.MODE }, // Optionally set the environment
-        };
-
-        const myStatsigClient = new StatsigClient(
-          "client-LvIEhUfKLEVA78IOUgqT9i8r4Fs1CDqr4OcUyHqsF5x",
-          {},
-          options,
-        );
-        myStatsigClient.initializeAsync();
+      if (!isStatsigAllowed) {
+        return;
       }
+
+      const options: StatsigOptions = {
+        plugins: [
+          new StatsigSessionReplayPlugin(),
+          new StatsigAutoCapturePlugin(),
+        ],
+        environment: { tier: import.meta.env.MODE },
+      };
+
+      const myStatsigClient = new StatsigClient(
+        "client-LvIEhUfKLEVA78IOUgqT9i8r4Fs1CDqr4OcUyHqsF5x",
+        {},
+        options,
+      );
+      myStatsigClient.initializeAsync();
     });
   }
 </script>
