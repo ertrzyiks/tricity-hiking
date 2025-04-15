@@ -1,7 +1,6 @@
 import { defineConfig } from "astro/config";
 import preact from "@astrojs/preact";
 import mdx from "@astrojs/mdx";
-import cookieconsent from "@jop-software/astro-cookieconsent";
 import icon from "astro-icon";
 
 import tailwindcss from "@tailwindcss/vite";
@@ -34,7 +33,6 @@ export default defineConfig({
         yandex: true,
       },
     }),
-    // cookieconsent(),
   ],
 
   vite: {
