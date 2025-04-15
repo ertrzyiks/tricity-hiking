@@ -1,9 +1,29 @@
-{
-  import.meta.env.PUBLIC_ASTRO_STATSIG_TRACKING_ENABLED === "true" && (
-    <script
-      data-category="analytics"
-      data-service="Statsig"
-      data-src="https://cdn.jsdelivr.net/npm/@statsig/js-client@3/build/statsig-js-client+session-replay+web-analytics.min.js?apikey=client-LvIEhUfKLEVA78IOUgqT9i8r4Fs1CDqr4OcUyHqsF5x"
-    />
-  )
-}
+<script>
+  import { StatsigClient, type StatsigOptions } from "@statsig/js-client";
+  import { StatsigSessionReplayPlugin } from "@statsig/session-replay";
+  import { StatsigAutoCapturePlugin } from "@statsig/web-analytics";
+
+  if (import.meta.env.PUBLIC_ASTRO_STATSIG_TRACKING_ENABLED === "true") {
+    window.addEventListener("cc:onConsent", ({ detail }) => {
+      const isStatsigAllowed =
+        detail.cookie.services.analytics.includes("statsig");
+
+      if (isStatsigAllowed) {
+        const options: StatsigOptions = {
+          plugins: [
+            new StatsigSessionReplayPlugin(),
+            new StatsigAutoCapturePlugin(),
+          ],
+          environment: { tier: import.meta.env.MODE }, // Optionally set the environment
+        };
+
+        const myStatsigClient = new StatsigClient(
+          "client-LvIEhUfKLEVA78IOUgqT9i8r4Fs1CDqr4OcUyHqsF5x",
+          {},
+          options,
+        );
+        myStatsigClient.initializeAsync();
+      }
+    });
+  }
+</script>

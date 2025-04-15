@@ -3,7 +3,14 @@ export const config = {
     necessary: {
       readOnly: true,
     },
-    analytics: {},
+    analytics: {
+      services: {
+        statsig: {
+          label:
+            '<a href="https://www.statsig.com/legal/online-dpa" target="_blank">Statsig</a>',
+        },
+      },
+    },
   },
 
   language: {
