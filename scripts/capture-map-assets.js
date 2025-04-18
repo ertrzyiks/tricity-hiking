@@ -84,7 +84,9 @@ async function run() {
 
     const url = request.url();
     if (url.startsWith("https://api.maptiler.com") && assetUrls) {
-      assetUrls.add(url);
+      if (url.includes("/fonts/") || url.includes("/maps/")) {
+        assetUrls.add(url);
+      }
     }
     request.continue().catch(console.error);
   });

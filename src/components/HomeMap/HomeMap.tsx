@@ -45,6 +45,11 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
       const bounds = getBounds(coordinates);
 
+      map.fitBounds(bounds, {
+        animate: false,
+        padding: 50,
+      });
+
       map.addSource("lines", {
         type: "geojson",
         data: routes,
@@ -87,11 +92,6 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
       const image = await map.loadImage(pointImage.src);
       if (!map.hasImage("poi_15")) map.addImage("poi_15", image.data);
-
-      map.fitBounds(bounds, {
-        animate: false,
-        padding: 50,
-      });
 
       const tooltip = new maplibregl.Popup({
         closeButton: false,
