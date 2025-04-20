@@ -47,8 +47,7 @@ const config = {
 };
 
 // Get the configuration for the selected type
-const { iconPath, color, textColor, titleColor, iconColor } =
-  config[type] || config.info;
+const { iconPath, color, titleColor, iconColor } = config[type] || config.info;
 ---
 
 <div class={`${color} bg-slate-50 border-l-4 p-4 mb-4`}>
