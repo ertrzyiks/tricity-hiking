@@ -1,10 +1,25 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ListItem from "../components/ListItem.astro";
+import Admonition from "../components/Admonition.astro";
+import { Icon } from "astro-icon/components";
 ---
 
 <Layout title="Tricity hiking - Transportation">
   <div class="max-w-(--breakpoint-xl) mx-auto py-4">
+    <Admonition type="info" title="Info">
+      Plan you route and buy tickets for all public transport in Tricity using
+      <strong>
+        <a
+          class="hover:underline inline-flex items-baseline"
+          href="https://jakdojade.pl/"
+          target="_blank"
+          rel="noopener"
+        >
+          Jak dojadę <Icon name="mdi:arrow-top-right-thin" class="w-3 h-3" />
+        </a>
+      </strong> application. It supports also many more cities in Poland btw.
+    </Admonition>
+
     <div class="my-4">
       <h2 class="text-2xl mb-3">Public transport</h2>
       <p class="my-2">
@@ -16,19 +31,6 @@ import ListItem from "../components/ListItem.astro";
         <li>tram</li>
         <li>SKM train</li>
         <li>PKM train</li>
-      </ul>
-    </div>
-
-    <div class="my-4">
-      <h2 class="text-2xl mb-3">Applications</h2>
-      <p class="my-2"></p>
-
-      <ul>
-        <ListItem
-          name="Jak dojadę"
-          description="Plan you route and buy tickets for all public transport in Tricity (and many more cities in Poland btw)."
-          link="https://jakdojade.pl/"
-        />
       </ul>
     </div>
   </div>
