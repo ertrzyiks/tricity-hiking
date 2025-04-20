@@ -4,13 +4,23 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "../HomeMap/mapStyle";
 import { getBounds } from "../../services/getBounds";
+import { $routePoints } from "../../atoms/routePoints";
 import pointImage from "../../assets/places/point.png";
+import markerImage from "../../assets/places/marker.png";
 
 export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
   const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (mapRef.current === null) return;
+
+    const feature = route.features.find(
+      (f) => f.geometry.type === "LineString",
+    );
+
+    if (!feature || feature.geometry.type !== "LineString") {
+      return;
+    }
 
     const map = new maplibregl.Map({
       container: mapRef.current,
@@ -42,6 +52,27 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
         data: route,
       });
 
+      const point = {
+        type: "FeatureCollection" as const,
+        features: [
+          {
+            type: "Feature" as const,
+            properties: {
+              iconSize: 0,
+            },
+            geometry: {
+              type: "Point" as const,
+              coordinates: coordinates[0],
+            },
+          },
+        ],
+      };
+
+      map.addSource("point", {
+        type: "geojson",
+        data: point,
+      });
+
       map.addLayer({
         id: "lines",
         type: "line",
@@ -55,6 +86,9 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
       const image = await map.loadImage(pointImage.src);
       if (!map.hasImage("poi_15")) map.addImage("poi_15", image.data);
 
+      const image2 = await map.loadImage(markerImage.src);
+      if (!map.hasImage("marker_15")) map.addImage("marker_15", image2.data);
+
       map.addLayer({
         id: "places",
         type: "symbol",
@@ -65,10 +99,42 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
         },
       });
 
+      map.addLayer({
+        id: "point",
+        source: "point",
+        type: "symbol",
+        layout: {
+          "icon-image": "marker_15",
+          "icon-overlap": "always",
+          "icon-size": ["get", "iconSize"],
+          "icon-allow-overlap": true,
+          "icon-ignore-placement": true,
+          "icon-anchor": "bottom",
+        },
+      });
+
       map.fitBounds(bounds, {
         animate: false,
         padding: 50,
       });
+
+      const cleanUpRoutePointListener = $routePoints.subscribe((progress) => {
+        if (progress === null) {
+          point.features[0].properties.iconSize = 0;
+        } else {
+          const index = Math.floor(progress * coordinates.length);
+          const currentCoordinate = coordinates[index];
+          point.features[0].geometry.coordinates = currentCoordinate;
+          point.features[0].properties.iconSize = 1;
+        }
+
+        const source = map.getSource("point") as maplibregl.GeoJSONSource;
+        source.setData(point);
+      });
+
+      return () => {
+        cleanUpRoutePointListener();
+      };
     });
   }, []);
 
