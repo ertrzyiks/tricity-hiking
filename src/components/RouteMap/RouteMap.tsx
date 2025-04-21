@@ -122,7 +122,10 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
         if (progress === null) {
           point.features[0].properties.iconSize = 0;
         } else {
-          const index = Math.floor(progress * coordinates.length);
+          const index = Math.min(
+            coordinates.length - 1,
+            Math.floor(progress * coordinates.length),
+          );
           const currentCoordinate = coordinates[index];
           point.features[0].geometry.coordinates = currentCoordinate;
           point.features[0].properties.iconSize = 1;
