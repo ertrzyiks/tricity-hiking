@@ -109,7 +109,7 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
           "icon-size": ["get", "iconSize"],
           "icon-allow-overlap": true,
           "icon-ignore-placement": true,
-          "icon-anchor": "bottom",
+          "icon-anchor": "center",
         },
       });
 
