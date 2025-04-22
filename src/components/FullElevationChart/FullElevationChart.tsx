@@ -1,7 +1,7 @@
 import { type JSX } from "preact";
-import { useRef, useLayoutEffect } from "preact/hooks";
+import { useRef, useLayoutEffect, useEffect } from "preact/hooks";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
-import { setPoint, resetPoint } from "../../atoms/routePoints";
+import { setPoint, resetPoint, $routePoints } from "../../atoms/routePoints";
 
 export const FullElevationChart = ({
   points,
@@ -15,40 +15,43 @@ export const FullElevationChart = ({
   const markerRef = useRef(null);
   const chartRef = useRef<HTMLDivElement>(null);
 
-  const showMarker = (x: number) => {
-    if (markerRef.current) {
-      const marker = markerRef.current as unknown as HTMLDivElement;
-      marker.style.left = `${x * 100}%`;
-      marker.style.display = "block";
-      setPoint(x);
-    }
-  };
+  useLayoutEffect(() => {
+    resetPoint();
+  }, []);
 
-  const hideMarker = () => {
-    if (markerRef.current) {
+  useEffect(() => {
+    return $routePoints.subscribe((progress) => {
+      if (!markerRef.current) {
+        return;
+      }
+
       const marker = markerRef.current as unknown as HTMLDivElement;
-      marker.style.display = "none";
-      resetPoint();
-    }
-  };
+
+      if (progress === null) {
+        marker.style.display = "none";
+      } else {
+        marker.style.left = `${progress * 100}%`;
+        marker.style.display = "block";
+      }
+    });
+  }, []);
 
   const handleMouseMove = (e: JSX.TargetedMouseEvent<HTMLDivElement>) => {
-    // showMarker(e.offsetX, e.currentTarget.offsetWidth);
     if (!chartRef.current) {
       return;
     }
 
-    const bbox1 = chartRef.current.getBoundingClientRect();
+    const bbox = chartRef.current.getBoundingClientRect();
 
-    if (e.pageX < bbox1.x || e.pageX > bbox1.x + bbox1.width) {
+    if (e.pageX < bbox.x || e.pageX > bbox.x + bbox.width) {
       return;
     }
-    const offsetX = e.pageX - bbox1.x;
-    const offsetWidth = bbox1.width;
-    showMarker(offsetX / offsetWidth);
+    const offsetX = e.pageX - bbox.x;
+    const offsetWidth = bbox.width;
+    setPoint(offsetX / offsetWidth);
   };
   const handleMouseLeave = () => {
-    hideMarker();
+    resetPoint();
   };
 
   const handleTouchMove = (e: JSX.TargetedTouchEvent<HTMLDivElement>) => {
@@ -69,12 +72,8 @@ export const FullElevationChart = ({
 
     const offsetX = e.touches[0].pageX - bbox1.x;
     const offsetWidth = bbox1.width;
-    showMarker(offsetX / offsetWidth);
+    setPoint(offsetX / offsetWidth);
   };
-
-  useLayoutEffect(() => {
-    hideMarker();
-  }, []);
 
   return (
     <div
