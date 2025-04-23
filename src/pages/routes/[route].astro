@@ -60,10 +60,6 @@ if (!feature) {
 ---
 
 <Layout title={`Tricity hiking - ${entry.data.title}`}>
-  <div class="max-w-(--breakpoint-xl) mx-auto">
-    <h2 class="py-4 px-2">{entry.data.title}</h2>
-  </div>
-
   <div
     class="max-w-(--breakpoint-xl) mx-auto relative h-[50vh] px-2 lg:px-0"
     transition:name="map"
@@ -125,6 +121,8 @@ if (!feature) {
         </div>
       </div>
       <div>
+        <h1 class="py-4 text-4xl">{entry.data.title}</h1>
+
         <Content components={config} />
       </div>
     </div>

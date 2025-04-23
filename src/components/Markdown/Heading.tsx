@@ -4,5 +4,5 @@ interface Props {
   children: ComponentChildren;
 }
 export const Heading = ({ children }: Props) => {
-  return <h1 className="text-2xl py-3">{children}</h1>;
+  return <h2 className="text-2xl py-3">{children}</h2>;
 };
