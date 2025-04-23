@@ -23,5 +23,6 @@ export const createMap = (
 
   return () => {
     cleanUp?.();
+    map.remove();
   };
 };
