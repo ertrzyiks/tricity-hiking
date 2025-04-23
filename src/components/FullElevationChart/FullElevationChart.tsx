@@ -1,7 +1,20 @@
 import { type JSX } from "preact";
 import { useRef, useLayoutEffect, useEffect } from "preact/hooks";
+import { useStore } from "@nanostores/preact";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
 import { setPoint, resetPoint, $routePoints } from "../../atoms/routePoints";
+
+const ConnectedElevationChart = ({
+  points,
+  height = 50,
+}: {
+  points: number[];
+  height?: number;
+}) => {
+  const point = useStore($routePoints);
+
+  return <ElevationChart points={points} height={height} highlightAt={point} />;
+};
 
 export const FullElevationChart = ({
   points,
@@ -12,28 +25,10 @@ export const FullElevationChart = ({
 }) => {
   const max = Math.max(...points);
   const min = 0;
-  const markerRef = useRef(null);
   const chartRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     resetPoint();
-  }, []);
-
-  useEffect(() => {
-    return $routePoints.subscribe((progress) => {
-      if (!markerRef.current) {
-        return;
-      }
-
-      const marker = markerRef.current as unknown as HTMLDivElement;
-
-      if (progress === null) {
-        marker.style.display = "none";
-      } else {
-        marker.style.left = `${progress * 100}%`;
-        marker.style.display = "block";
-      }
-    });
   }, []);
 
   const handleMouseMove = (e: JSX.TargetedMouseEvent<HTMLDivElement>) => {
@@ -90,12 +85,7 @@ export const FullElevationChart = ({
 
       <div className="w-full h-full px-2 relative border-t border-b border-slate-300 border-solid">
         <div ref={chartRef} className="relative">
-          <div
-            ref={markerRef}
-            className="absolute top-0 bottom-0 border-l-2 border-slate-500 bg-slate-500 pointer-events-none"
-            style={{ display: "none" }}
-          ></div>
-          <ElevationChart points={points} height={height} />
+          <ConnectedElevationChart points={points} height={height} />
         </div>
       </div>
     </div>
