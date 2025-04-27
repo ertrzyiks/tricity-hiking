@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "preact/hooks";
-import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { createMap } from "./createMap";

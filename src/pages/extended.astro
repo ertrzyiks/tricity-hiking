@@ -8,7 +8,10 @@ import { enhance } from "../services/enhance";
 import mapImage from "../assets/home-map.jpg";
 import { HomeMap } from "../components/HomeMap/HomeMap";
 
-const routes = await getCollection("routes");
+const allRoutes = await getCollection("routes");
+const routes = allRoutes.filter((route) => {
+  return !route.data.draft;
+});
 
 const geojsonList = [];
 

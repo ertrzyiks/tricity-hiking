@@ -15,7 +15,11 @@ import TrailAttribute from "../../components/TrailAttribute.astro";
 export async function getStaticPaths() {
   const allRoutes = await getCollection("routes");
 
-  return allRoutes.map((route) => {
+  const routes = allRoutes.filter((route) => {
+    return !route.data.draft;
+  });
+
+  return routes.map((route) => {
     return {
       params: {
         route: route.slug,

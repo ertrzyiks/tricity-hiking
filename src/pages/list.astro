@@ -6,7 +6,10 @@ import { enhance } from "../services/enhance";
 import { getLineStringFeature } from "../services/getLineStringFeature";
 import RouteListItem from "../components/ListCardItem/Route.astro";
 
-const routes = await getCollection("routes");
+const allRoutes = await getCollection("routes");
+const routes = allRoutes.filter((route) => {
+  return !route.data.draft;
+});
 
 const geojsonList = [];
 
