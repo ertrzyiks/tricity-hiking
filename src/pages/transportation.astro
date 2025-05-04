@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Admonition from "../components/Admonition.astro";
+import Link from "../components/Link.astro";
 import { Icon } from "astro-icon/components";
 ---
 
@@ -10,7 +11,7 @@ import { Icon } from "astro-icon/components";
       Plan you route and buy tickets for all public transport in Tricity using
       <strong>
         <a
-          class="hover:underline inline-flex items-baseline"
+          class="hover:underline text-green-500 inline-flex items-baseline"
           href="https://jakdojade.pl/"
           target="_blank"
           rel="noopener"
@@ -21,17 +22,55 @@ import { Icon } from "astro-icon/components";
     </Admonition>
 
     <div class="my-4">
-      <h2 class="text-2xl mb-3">Public transport</h2>
+      <h2 class="text-2xl my-6">Public transport</h2>
       <p class="my-2">
         There are several public transport options available in Tricity,
         including:
       </p>
       <ul class="list list-disc list-inside">
-        <li>bus</li>
-        <li>tram</li>
+        <li>bus and tram</li>
         <li>SKM train</li>
         <li>PKM train</li>
+        <li>regional train</li>
+        <li>ferry</li>
       </ul>
+      <h3 class="text-xl my-4">Bus and tram</h3>
+      <p class="my-2">
+        Busses and trams are operated by ZTM Gdańsk. Tickets are available for a
+        single ride or for a time period. The time-constrained tickets are valid
+        for both bus and tram - you can change the vehicle during the ride.
+      </p>
+      <p class="my-2">
+        One of the most convenient way to buy tickets is using <Link
+          href="https://ztm.gda.pl/bilety/bilety-online-w-aplikacjach-mobilnych,a,5555"
+        >
+          one of the supported mobile applications
+        </Link>. You won't be disappointed by <Link href="https://jakdojade.pl/"
+          >Jak dojadę</Link
+        > which allows to not only buy the tickets but also is great for planning
+        your trip.
+      </p>
+      <p class="my-2">
+        You can also buy paper tickets in ticket machines located near stops or
+        buy them in kiosks. Those tickets must be validated inside the vehicle.
+        One more option is to buy tickets using the machines inside the trams.
+        This way you can buy only the single ride tickets that are valid for
+        that particular vehicle.
+      </p>
+
+      <h3 class="text-xl my-4">SKM train</h3>
+
+      <p class="my-2">
+        The name stands for "fast city train" and it's a line connecting all
+        major parts of the city along the coast. The standard route is from
+        Gdańsk Śródmieście to Wejherowo and goes through Sopot and Gdynia.
+        Selected services go beyond the standard route and connect Tricity with
+        Lębork.
+      </p>
+      <p>
+        In the hours of the highest traffic the train goes every 7-10 minutes in
+        each direction.
+      </p>
     </div>
   </div>
 </Layout>
