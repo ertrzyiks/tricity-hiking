@@ -13,7 +13,7 @@ export async function getStaticPaths() {
   return allRoutes.map((route) => {
     return {
       params: {
-        route: route.slug,
+        route: route.id,
       },
     };
   });
@@ -30,6 +30,12 @@ if (!entry) {
   return;
 }
 const geojson = await getEntry(entry.data.geojson);
+
+if (!geojson) {
+  Astro.response.status = 404;
+  Astro.response.statusText = "Not found";
+  return;
+}
 ---
 
 <div id="preview">
