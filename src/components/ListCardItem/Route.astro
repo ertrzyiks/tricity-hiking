@@ -11,7 +11,7 @@ import { formatTime } from "../../services/formatTime";
 const { route, properties } = Astro.props;
 ---
 
-<ListCardItem link={`/routes/${route.data.geojson.id}/`}>
+<ListCardItem link={`/routes/${route.id}/`}>
   {
     route.data.preview?.src && (
       <Image

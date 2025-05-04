@@ -1,6 +1,6 @@
 ---
 import type { InferGetStaticParamsType } from "astro";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import { RouteMap } from "../../components/RouteMap/RouteMap";
 import { FullElevationChart } from "../../components/FullElevationChart/FullElevationChart";
@@ -22,7 +22,7 @@ export async function getStaticPaths() {
   return routes.map((route) => {
     return {
       params: {
-        route: route.slug,
+        route: route.id,
       },
     };
   });
@@ -41,7 +41,7 @@ if (!entry) {
 }
 
 const geojson = await getEntry(entry.data.geojson);
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 
 const attitudes = geojson.data.features[0].geometry.coordinates
   .map((coord) => {

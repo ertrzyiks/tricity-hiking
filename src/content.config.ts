@@ -1,7 +1,8 @@
 import { z, reference, defineCollection } from "astro:content";
+import { glob } from "astro/loaders";
 
 const routesCollection = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.mdx", base: "./src/content/routes" }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -14,7 +15,7 @@ const routesCollection = defineCollection({
 });
 
 const geodataCollection = defineCollection({
-  type: "data",
+  loader: glob({ pattern: "**/*.json", base: "./src/content/geodata" }),
   schema: z.object({
     type: z.literal("FeatureCollection"),
     features: z.array(
@@ -43,7 +44,7 @@ const geodataCollection = defineCollection({
 });
 
 const mapTilesCollection = defineCollection({
-  type: "data",
+  loader: glob({ pattern: "**/*.json", base: "./src/content/map-tiles" }),
   schema: z.object({
     urls: z.array(z.string()),
   }),
