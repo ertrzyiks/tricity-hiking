@@ -8,7 +8,7 @@ const BASE_PATH = "src/content";
 
 const getRouteTitle = (name) => {
   const content = fs
-    .readFileSync(`${BASE_PATH}/routes/${name}.mdx`, "utf8")
+    .readFileSync(`${BASE_PATH}/routes/${name}/${name}.mdx`, "utf8")
     .toString();
 
   const title = content.match(/title: (.*)/)[1];
@@ -51,13 +51,8 @@ const process = (name, json) => {
   return json;
 };
 
-const convert = (fileName) => {
-  if (!fileName.endsWith(".mdx")) {
-    return { result: "IGNORE" };
-  }
-
-  const name = fileName.replace(".mdx", "");
-  const gpxFilePath = `${BASE_PATH}/routes/${name}.gpx`;
+const convert = (name) => {
+  const gpxFilePath = `${BASE_PATH}/routes/${name}/${name}.gpx`;
 
   if (!fs.existsSync(gpxFilePath)) {
     return { result: "Not found" };
@@ -86,6 +81,10 @@ const convert = (fileName) => {
 const list = fs.readdirSync(`${BASE_PATH}/routes`);
 
 list.forEach((name) => {
+  if (!fs.statSync(`${BASE_PATH}/routes/${name}`).isDirectory()) {
+    return;
+  }
+
   const { result } = convert(name);
 
   if (result !== "IGNORE") {

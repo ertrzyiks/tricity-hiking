@@ -4,11 +4,9 @@ import fs from "fs";
 const BASE_PATH = "src/content";
 
 const list = fs.readdirSync(`${BASE_PATH}/routes`);
-const routes = list
-  .filter((name) => name.endsWith(".mdx"))
-  .map((name) => {
-    return name.slice(0, -4);
-  });
+const routes = list.filter((name) => {
+  return fs.statSync(`${BASE_PATH}/routes/${name}`).isDirectory();
+});
 
 async function captureRoutePreview({ page, route }) {
   await page.goto(`http://localhost:4321/preview/${route}`);
@@ -19,7 +17,7 @@ async function captureRoutePreview({ page, route }) {
 
   const element = await page.$(".maplibregl-map");
   await element.screenshot({
-    path: `./src/assets/routes/${route}.jpg`,
+    path: `${BASE_PATH}/routes/${route}/${route}.jpg`,
     type: "jpeg",
   });
 }
@@ -29,7 +27,7 @@ async function run() {
   const page = await browser.newPage();
 
   for (const route of routes) {
-    if (fs.existsSync(`./src/assets/routes/${route}.jpg`)) {
+    if (fs.existsSync(`${BASE_PATH}/routes/${route}/${route}.jpg`)) {
       console.log(`Skipping ${route}`);
       continue;
     }

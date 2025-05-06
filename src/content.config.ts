@@ -2,7 +2,16 @@ import { z, reference, defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 
 const routesCollection = defineCollection({
-  loader: glob({ pattern: "**/*.mdx", base: "./src/content/routes" }),
+  loader: glob({
+    pattern: "**/*.mdx",
+    base: "./src/content/routes",
+    generateId: (options) => {
+      const segments = options.entry.split("/");
+      segments.shift();
+
+      return segments.join("/").replace(/\.mdx$/, "");
+    },
+  }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
