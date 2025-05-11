@@ -1,11 +1,17 @@
 ---
-const { title } = Astro.props;
+const { title, description } = Astro.props;
+import Deco from "../assets/deco.svg";
 ---
 
-<div class="bg-linear-45 from-green-500 via-green-400 to-green-300">
+<div class="bg-linear-45 from-green-700 via-green-600 to-green-700">
   <div
     class="max-w-(--breakpoint-xl) mx-auto relative px-4 lg:px-0 py-12 lg:py-24"
   >
-    <h1 class="text-2xl lg:text-4xl">{title}</h1>
+    <h1 class="text-2xl lg:text-4xl text-slate-100 mb-8 max-w-78">{title}</h1>
+    <h2 class="text-l lg:text-xl text-slate-100 max-w-120">{description}</h2>
+  </div>
+
+  <div class="h-[12vh] overflow-hidden">
+    <Deco class="text-slate-50 w-full h-full relative -bottom-1" />
   </div>
 </div>
