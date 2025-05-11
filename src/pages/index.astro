@@ -6,6 +6,7 @@ import { enhance } from "../services/enhance";
 import { getLineStringFeature } from "../services/getLineStringFeature";
 import RouteListItem from "../components/ListCardItem/Route.astro";
 import TricityMap from "../assets/tricity.svg";
+import { Icon } from "astro-icon/components";
 
 const allRoutes = await getCollection("routes");
 const routes = allRoutes.filter((route) => {
@@ -62,8 +63,11 @@ for (const route of tricityRoutes) {
       <h2 class="text-2xl mb-8">Why?</h2>
 
       <div class="flex flex-col lg:flex-row gap-8">
-        <div class="flex-1">
-          <h3 class="text-lg">Explore Nature</h3>
+        <div class="flex-1 bg-white p-8 rounded-lg shadow-lg">
+          <div class="flex items-center gap-2">
+            <Icon name="mdi:forest" class="w-6 h-6" />
+            <h3 class="text-lg font-bold">Explore Nature</h3>
+          </div>
           <p class="text-slate-700 mt-4">
             Almost 200,000 square meters of landscape protected area. The
             terrain is pleasantly varied, offering forest trails, occasional
@@ -71,8 +75,13 @@ for (const route of tricityRoutes) {
           </p>
         </div>
 
-        <div class="flex-1">
-          <h3 class="text-lg">Unearth a Rich History</h3>
+        <div class="flex-1 bg-white p-8 rounded-lg shadow-lg">
+          <div class="flex items-center gap-2">
+            <Icon name="mdi:museum" class="w-6 h-6" />
+            <h3 class="text-lg font-bold flex items-center gap-2">
+              Unearth a Rich History
+            </h3>
+          </div>
           <p class="text-slate-700 mt-4">
             With over 1,000 years of history in Gdańsk, the charming seaside
             town of Sopot, which has attracted visitors since the 19th century,
@@ -80,8 +89,11 @@ for (const route of tricityRoutes) {
             everywhere.
           </p>
         </div>
-        <div class="flex-1">
-          <h3 class="text-lg">Take Break</h3>
+        <div class="flex-1 bg-white p-8 rounded-lg shadow-lg">
+          <div class="flex items-center gap-2">
+            <Icon name="mdi:local-restaurant" class="w-6 h-6" />
+            <h3 class="text-lg font-bold">Take a Break</h3>
+          </div>
           <p class="text-slate-700 mt-4">
             After a long day of hiking, you can relax in one of the many
             restaurants or cafes. Tricity offers a wide range of dining options,
