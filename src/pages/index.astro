@@ -35,24 +35,68 @@ for (const route of tricityRoutes) {
     slot="hero"
   />
 
-  <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0 my-8">
-    <h2 class="text-2xl">Routes</h2>
+  <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0 my-16">
+    <h2 class="text-2xl mb-8">Tricity</h2>
 
-    <ul>
-      {
-        geojsonList.map(({ route, properties }) => (
-          <RouteListItem route={route} properties={properties} />
-        ))
-      }
-    </ul>
-
-    <a class="simple-link" href="/routes">See All Routes</a>
+    <p class="text-slate-700">
+      Tricity—made up of Gdańsk, Sopot, and Gdynia—is a unique region in
+      northern Poland where the Baltic Sea meets the gentle hills of the Tricity
+      Landscape Park. From the medieval streets of Gdańsk to the vibrant pier of
+      Sopot and the modern charm of Gdynia, Tricity blends nature, history, and
+      coastal life in one inviting destination.
+    </p>
   </div>
-</Layout>
 
-<style is:global>
-  .maplibregl-map {
-    height: 100%;
-    width: 100%;
-  }
-</style>
+  <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0 my-16">
+    <h2 class="text-2xl mb-8">Why?</h2>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+      <div class="flex-1">
+        <h3 class="text-lg">Explore Nature</h3>
+        <p class="text-slate-700 mt-4">
+          Almost 200,000 square meters of landscape protected area. The terrain
+          is pleasantly varied, offering forest trails, occasional viewpoints,
+          and a refreshing break from flat cityscapes.
+        </p>
+      </div>
+
+      <div class="flex-1">
+        <h3 class="text-lg">Unearth a Rich History</h3>
+        <p class="text-slate-700 mt-4">
+          "With over 1,000 years of history in Gdańsk, the charming seaside town
+          of Sopot, which has attracted visitors since the 19th century, and the
+          rise of Gdynia in the 20th century, traces of history are everywhere.
+        </p>
+      </div>
+      <div class="flex-1">
+        <h3 class="text-lg">Take Break</h3>
+        <p class="text-slate-700 mt-4">
+          After a long day of hiking, you can relax in one of the many
+          restaurants or cafes. Tricity offers a wide range of dining options,
+          where you can unwind and enjoy the local culture.
+        </p>
+      </div>
+    </div>
+
+    <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0 my-16">
+      <h2 class="text-2xl">Recommended routes</h2>
+
+      <ul>
+        {
+          geojsonList.map(({ route, properties }) => (
+            <RouteListItem route={route} properties={properties} />
+          ))
+        }
+      </ul>
+
+      <a class="simple-link" href="/routes">See All Routes</a>
+    </div>
+  </div>
+
+  <style is:global>
+    .maplibregl-map {
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</Layout>
