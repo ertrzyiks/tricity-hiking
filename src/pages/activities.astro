@@ -3,12 +3,18 @@ import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import ActivityListCardItem from "../components/ListCardItem/Activity.astro";
 import ListCardItem from "../components/ListCardItem.astro";
-import {
-  ships,
-  orienteering,
-  outdoorPlaygrounds,
-  indoorPlaygrounds,
-} from "../content/activities";
+import { getCollection } from "astro:content";
+
+const activities = await getCollection("activities");
+
+const getByType = (type: string) => {
+  return activities.filter((item) => item.data.type === type);
+};
+
+const ships = getByType("ship");
+const orienteering = getByType("orienteering");
+const outdoorPlaygrounds = getByType("outdoor-playground");
+const indoorPlaygrounds = getByType("indoor-playground");
 ---
 
 <Layout title="Tricity hiking - Activities">
@@ -26,23 +32,25 @@ import {
 
       <ul>
         {
-          ships.map((item) => (
-            <ListCardItem link={item.link}>
-              <Image
-                src={item.image}
-                width="160"
-                height="160"
-                class="w-20 h-20 grayscale-50 group-hover:grayscale-0"
-                alt={`Photo of ${item.name}`}
-                slot="image"
-              />
+          ships.map(({ data }) => (
+            <ListCardItem link={data.link}>
+              {data.image && (
+                <Image
+                  src={data.image}
+                  width="160"
+                  height="160"
+                  class="w-20 h-20 grayscale-50 group-hover:grayscale-0"
+                  alt={`Photo of ${data.name}`}
+                  slot="image"
+                />
+              )}
 
               <span class="group-hover:text-green-600" slot="title">
-                {item.name}
+                {data.name}
               </span>
 
               <span class="group-hover:text-green-600" slot="description">
-                {item.description}
+                {data.description}
               </span>
             </ListCardItem>
           ))
@@ -69,12 +77,12 @@ import {
 
       <ul>
         {
-          orienteering.map((item) => (
+          orienteering.map(({ data }) => (
             <ActivityListCardItem
-              link={item.link}
+              link={data.link}
               icon="mdi:map-outline"
-              name={item.name}
-              description={item.description}
+              name={data.name}
+              description={data.description}
             />
           ))
         }
@@ -90,12 +98,12 @@ import {
 
       <ul>
         {
-          outdoorPlaygrounds.map((item) => (
+          outdoorPlaygrounds.map(({ data }) => (
             <ActivityListCardItem
-              link={item.link}
+              link={data.link}
               icon="mdi:playground-seesaw"
-              name={item.name}
-              description={item.description}
+              name={data.name}
+              description={data.description}
             />
           ))
         }
@@ -108,12 +116,12 @@ import {
 
       <ul>
         {
-          indoorPlaygrounds.map((item) => (
+          indoorPlaygrounds.map(({ data }) => (
             <ActivityListCardItem
-              link={item.link}
+              link={data.link}
               icon="mdi:playground-slide"
-              name={item.name}
-              description={item.description}
+              name={data.name}
+              description={data.description}
             />
           ))
         }
