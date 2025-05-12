@@ -24,7 +24,16 @@ const routesCollection = defineCollection({
 });
 
 const geodataCollection = defineCollection({
-  loader: glob({ pattern: "**/*.json", base: "./src/content/geodata" }),
+  loader: glob({
+    pattern: "**/*.json",
+    base: "./src/content/routes",
+    generateId: (options) => {
+      const segments = options.entry.split("/");
+      segments.shift();
+
+      return segments.join("/").replace(/\.json$/, "");
+    },
+  }),
   schema: z.object({
     type: z.literal("FeatureCollection"),
     features: z.array(

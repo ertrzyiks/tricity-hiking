@@ -71,7 +71,7 @@ const convert = (name) => {
   }
 
   fs.writeFileSync(
-    `${BASE_PATH}/geodata/${name}.json`,
+    `${BASE_PATH}/routes/${name}/${name}.json`,
     JSON.stringify(processed, null, 2),
   );
 
