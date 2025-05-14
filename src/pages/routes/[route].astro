@@ -63,7 +63,10 @@ if (!feature) {
 }
 ---
 
-<Layout title={`Tricity hiking - ${entry.data.title}`}>
+<Layout
+  title={`Tricity hiking - ${entry.data.title}`}
+  description={entry.data.htmlDescription ?? entry.data.description}
+>
   <div
     class="max-w-(--breakpoint-xl) mx-auto relative h-[50vh] px-2 lg:px-0"
     transition:name="map"
