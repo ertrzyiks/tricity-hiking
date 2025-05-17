@@ -1,4 +1,24 @@
 {
+  "top-sights": [
+    {
+      "name": "The Crane in Gdańsk",
+      "description": "The largest and the oldest medieval port crane in Europe.",
+      "link": "https://nmm.pl/en/crane/",
+      "location": "Gdańsk"
+    },
+    {
+      "name": "Sopot Pier",
+      "description": "The longest wooden pier in Europe.",
+      "link": "https://visit.sopot.pl/en/discover-sopot/tourist-attractions/#molo-i-marina",
+      "location": "Sopot"
+    },
+    {
+      "name": "Gdynia Boulevard",
+      "description": "A scenic promenade perfect for walks, cycling, and relaxing by the sea.",
+      "link": "https://www.gdynia.pl/turystyczna-en/tourist-attractions-top-12,6738/bulwar-nadmorski,495107",
+      "location": "Gdynia"
+    }
+  ],
   "ship": [
     {
       "name": "Sołdek",

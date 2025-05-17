@@ -15,6 +15,7 @@ const ships = getByType("ship");
 const orienteering = getByType("orienteering");
 const outdoorPlaygrounds = getByType("outdoor-playground");
 const indoorPlaygrounds = getByType("indoor-playground");
+const topSights = getByType("top-sights");
 ---
 
 <Layout title="Tricity hiking - Activities">
@@ -22,6 +23,28 @@ const indoorPlaygrounds = getByType("indoor-playground");
     class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0"
     transition:name="map"
   >
+    <div class="my-4">
+      <h2 class="text-2xl mb-3">Top sights</h2>
+      <p class="my-2">
+        Each city in the agglomeration has its own landmarks. These places
+        attract many visitors and can be crowded during the high tourist season,
+        but they offer valuable insight into the region's identity.
+      </p>
+
+      <ul>
+        {
+          topSights.map(({ data }) => (
+            <ActivityListCardItem
+              link={data.link}
+              icon="mdi:star-circle"
+              name={data.name}
+              description={data.description}
+            />
+          ))
+        }
+      </ul>
+    </div>
+
     <div class="my-4">
       <h2 class="text-2xl mb-3">Ship-museums</h2>
       <p class="my-2">
