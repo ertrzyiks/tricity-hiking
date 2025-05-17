@@ -1,0 +1,35 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import { enhance } from "../services/enhance";
+import { getLineStringFeature } from "../services/getLineStringFeature";
+
+const allRoutes = await getCollection("routes");
+const routes = allRoutes.filter((route) => {
+  return !route.data.draft;
+});
+const tricityRoutes = routes.filter((route) => route.data.tricity).slice(0, 3);
+
+const geojsonList = [];
+
+for (const route of tricityRoutes) {
+  const geojson = await getEntry(route.data.geojson);
+  const enhancedGeojson = enhance({
+    collection: geojson.data,
+    route: route.data,
+  });
+  geojsonList.push({
+    route,
+    properties:
+      getLineStringFeature({ collection: enhancedGeojson })?.properties ?? {},
+  });
+}
+---
+
+<Layout title="Tricity hiking">
+  <div
+    class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0 my-6 lg:my-16"
+  >
+    <h2 class="text-2xl mb-8">Page not found</h2>
+  </div>
+</Layout>
