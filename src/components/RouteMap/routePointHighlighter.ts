@@ -1,8 +1,9 @@
 import { type Map } from "maplibre-gl";
 import { $routePoints } from "../../atoms/routePoints";
 import markerImage from "../../assets/places/marker.png";
+import { loadImageToMap } from "./loadImageToMap";
 
-export const routePointHighlighter = async (
+export const routePointHighlighter = (
   map: Map,
   { coordinates }: { coordinates: number[][] },
 ) => {
@@ -27,8 +28,7 @@ export const routePointHighlighter = async (
     data: point,
   });
 
-  const image = await map.loadImage(markerImage.src);
-  if (!map.hasImage("marker_15")) map.addImage("marker_15", image.data);
+  loadImageToMap(map, "marker_15", markerImage.src);
 
   map.addLayer({
     id: "point",

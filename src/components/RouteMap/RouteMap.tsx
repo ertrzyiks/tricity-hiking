@@ -5,6 +5,7 @@ import { createMap } from "./createMap";
 import { routePointHighlighter } from "./routePointHighlighter";
 import { getBounds } from "../../services/getBounds";
 import pointImage from "../../assets/places/point.png";
+import { loadImageToMap } from "./loadImageToMap";
 
 export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -49,8 +50,7 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
         },
       });
 
-      const image = await map.loadImage(pointImage.src);
-      if (!map.hasImage("poi_15")) map.addImage("poi_15", image.data);
+      loadImageToMap(map, "poi_15", pointImage.src);
 
       map.addLayer({
         id: "places",
@@ -67,7 +67,7 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
         padding: 50,
       });
 
-      return await routePointHighlighter(map, {
+      return routePointHighlighter(map, {
         coordinates,
       });
     });

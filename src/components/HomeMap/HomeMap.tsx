@@ -90,9 +90,6 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
         },
       });
 
-      const image = await map.loadImage(pointImage.src);
-      if (!map.hasImage("poi_15")) map.addImage("poi_15", image.data);
-
       const tooltip = new maplibregl.Popup({
         closeButton: false,
         closeOnClick: false,
