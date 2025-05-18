@@ -12,11 +12,13 @@ const allRoutes = await getCollection("routes");
 const routes = allRoutes.filter((route) => {
   return !route.data.draft;
 });
-const tricityRoutes = routes.filter((route) => route.data.tricity).slice(0, 3);
+const featuredRoutes = routes
+  .filter((route) => route.data.featured === "homepage")
+  .slice(0, 3);
 
 const geojsonList = [];
 
-for (const route of tricityRoutes) {
+for (const route of featuredRoutes) {
   const geojson = await getEntry(route.data.geojson);
   const enhancedGeojson = enhance({
     collection: geojson.data,

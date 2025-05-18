@@ -19,6 +19,7 @@ const routesCollection = defineCollection({
       description: z.string(),
       htmlDescription: z.string().optional(),
       tricity: z.boolean().optional(),
+      featured: z.literal("homepage").optional(),
       draft: z.boolean().optional(),
       preview: image().optional(),
     }),

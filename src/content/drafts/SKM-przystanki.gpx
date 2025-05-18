@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="https://gpx.studio" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd http://www.garmin.com/xmlschemas/PowerExtension/v1 http://www.garmin.com/xmlschemas/PowerExtensionv1.xsd http://www.topografix.com/GPX/gpx_style/0/2 http://www.topografix.com/GPX/gpx_style/0/2/gpx_style.xsd" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:gpxpx="http://www.garmin.com/xmlschemas/PowerExtension/v1" xmlns:gpx_style="http://www.topografix.com/GPX/gpx_style/0/2">
+  <metadata>
+    <name>New file 1</name>
+    <author>
+      <name>gpx.studio</name>
+      <link href="https://gpx.studio"/>
+    </author>
+  </metadata>
+  <wpt lat="54.389778" lon="18.591534">
+    <ele>17.395749033708697</ele>
+    <name>Gdańsk Zaspa</name>
+  </wpt>
+  <wpt lat="54.381769" lon="18.605499">
+    <ele>13.621172898309746</ele>
+    <name>Gdańsk Wrzeszcz</name>
+  </wpt>
+  <wpt lat="54.374197" lon="18.627393">
+    <ele>6.805467179511655</ele>
+    <name>Gdańsk Politechnika</name>
+  </wpt>
+  <wpt lat="54.364622" lon="18.64177">
+    <ele>1.4447945123541388</ele>
+    <name>Gdańsk Stocznia</name>
+  </wpt>
+  <wpt lat="54.35641" lon="18.64422">
+    <ele>2.5616465666797565</ele>
+    <name>Gdańsk Główny</name>
+  </wpt>
+  <wpt lat="54.34691" lon="18.644406">
+    <ele>6.3851869866265965</ele>
+    <name>Gdańsk Śródmieście</name>
+  </wpt>
+  <wpt lat="54.400762" lon="18.576606">
+    <ele>19.3855194640358</ele>
+    <name>Gdańsk Przymorze-Uniwersytet</name>
+  </wpt>
+  <wpt lat="54.409438" lon="18.571888">
+    <ele>19.708363631740973</ele>
+    <name>Gdańsk Oliwa</name>
+  </wpt>
+  <wpt lat="54.420812" lon="18.568504">
+    <ele>17.005899548810934</ele>
+    <name>Gdańsk Żabianka - AWFiS</name>
+  </wpt>
+  <wpt lat="54.431299" lon="18.565244">
+    <ele>16.546016568876972</ele>
+    <name>Sopot Wyścigi</name>
+  </wpt>
+  <wpt lat="54.440091" lon="18.562343">
+    <ele>16</ele>
+    <name>Sopot</name>
+  </wpt>
+  <wpt lat="54.457643" lon="18.55357">
+    <ele>30.708474004502236</ele>
+    <name>Sopot Kamienny Potok</name>
+  </wpt>
+  <wpt lat="54.476652" lon="18.548641">
+    <ele>28.433810631093</ele>
+    <name>Gdynia Orłowo</name>
+  </wpt>
+  <wpt lat="54.491528" lon="18.538371">
+    <ele>33.72788537283586</ele>
+    <name>Gdynia Redłowo</name>
+  </wpt>
+  <wpt lat="54.507617" lon="18.535485">
+    <ele>25.252789190133065</ele>
+    <name>Gdynia Wzgórze Świętego Maksymiliana</name>
+  </wpt>
+  <wpt lat="54.521624" lon="18.527482">
+    <ele>12.264225039410793</ele>
+    <name>Gdynia Główna</name>
+  </wpt>
+  <wpt lat="54.525544" lon="18.519275">
+    <ele>11.850325140582763</ele>
+    <name>Gdynia Stocznia - Uniwersytet Morski</name>
+  </wpt>
+  <wpt lat="54.534347" lon="18.495895">
+    <ele>9.594453415926889</ele>
+    <name>Gdynia Grabówek</name>
+  </wpt>
+  <wpt lat="54.541343" lon="18.478518">
+    <ele>17.80000000000109</ele>
+    <name>Gdynia Leszczynki</name>
+  </wpt>
+  <wpt lat="54.545754" lon="18.463668">
+    <ele>21.45443257791336</ele>
+    <name>Gdynia Chylonia</name>
+  </wpt>
+  <trk>
+    <name>New file 1</name>
+  </trk>
+</gpx>
