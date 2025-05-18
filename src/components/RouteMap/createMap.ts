@@ -1,8 +1,9 @@
-import { Map } from "maplibre-gl";
+import { Map, type MapOptions } from "maplibre-gl";
 import { style } from "../HomeMap/mapStyle";
 export const createMap = (
   container: HTMLElement,
-  initializer: (map: Map) => Promise<() => void>,
+  options: Omit<MapOptions, "container" | "style">,
+  initializer: (map: Map) => Promise<(() => void) | void>,
 ) => {
   const map = new Map({
     container: container,
@@ -10,6 +11,7 @@ export const createMap = (
     zoom: 10,
     minZoom: 9,
     maxZoom: 15,
+    ...options,
   });
 
   map.dragRotate.disable();

@@ -7,9 +7,11 @@ import { getRouteStats } from "./get-route-stats.js";
 const BASE_PATH = "src/content";
 
 const getRouteTitle = (name) => {
-  const content = fs
-    .readFileSync(`${BASE_PATH}/routes/${name}/${name}.mdx`, "utf8")
-    .toString();
+  const filepath = `${BASE_PATH}/routes/${name}/${name}.mdx`;
+  if (!fs.existsSync(filepath)) {
+    return null;
+  }
+  const content = fs.readFileSync(filepath, "utf8").toString();
 
   const title = content.match(/title: (.*)/)[1];
   return title.trim();
@@ -51,15 +53,13 @@ const process = (name, json) => {
   return json;
 };
 
-const convert = (name) => {
-  const gpxFilePath = `${BASE_PATH}/routes/${name}/${name}.gpx`;
-
-  if (!fs.existsSync(gpxFilePath)) {
+const convert = ({ name, input, output }) => {
+  if (!fs.existsSync(input)) {
     return { result: "Not found" };
   }
 
   const gpxFile = new DOMParser().parseFromString(
-    fs.readFileSync(gpxFilePath, "utf8"),
+    fs.readFileSync(input, "utf8"),
   );
 
   const converted = gpx(gpxFile);
@@ -67,13 +67,14 @@ const convert = (name) => {
 
   const feature = processed.features[0];
   if (feature.type === "Feature") {
-    feature.properties.name = getRouteTitle(name);
+    const routeTitle = getRouteTitle(name);
+
+    if (routeTitle) {
+      feature.properties.name = routeTitle;
+    }
   }
 
-  fs.writeFileSync(
-    `${BASE_PATH}/routes/${name}/${name}.json`,
-    JSON.stringify(processed, null, 2),
-  );
+  fs.writeFileSync(output, JSON.stringify(processed, null, 2));
 
   return { result: "OK" };
 };
@@ -85,7 +86,31 @@ list.forEach((name) => {
     return;
   }
 
-  const { result } = convert(name);
+  const { result } = convert({
+    input: `${BASE_PATH}/routes/${name}/${name}.gpx`,
+    output: `${BASE_PATH}/routes/${name}/${name}.json`,
+    name,
+  });
+
+  if (result !== "IGNORE") {
+    console.log(name, result);
+  }
+});
+
+const list2 = fs.readdirSync(`${BASE_PATH}/transportation`);
+
+list2.forEach((name) => {
+  if (fs.statSync(`${BASE_PATH}/transportation/${name}`).isDirectory()) {
+    return;
+  }
+
+  const fileName = name.split(".").slice(0, -1).join(".");
+
+  const { result } = convert({
+    input: `${BASE_PATH}/transportation/${fileName}.gpx`,
+    output: `${BASE_PATH}/transportation/${fileName}.json`,
+    name: fileName,
+  });
 
   if (result !== "IGNORE") {
     console.log(name, result);

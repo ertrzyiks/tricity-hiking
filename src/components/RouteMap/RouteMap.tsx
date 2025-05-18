@@ -21,7 +21,7 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
       return;
     }
 
-    return createMap(mapRef.current, async (map) => {
+    return createMap(mapRef.current, {}, async (map) => {
       const coordinates = route.features.reduce(
         (acc: [number, number][], feature: any) => {
           if (feature.geometry.type === "LineString") {

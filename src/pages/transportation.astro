@@ -1,8 +1,20 @@
 ---
+import { getEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Admonition from "../components/Admonition.astro";
 import Link from "../components/Link.astro";
+import { TransportationMap } from "../components/TransportationMap/TransportationMap";
 import { Icon } from "astro-icon/components";
+import { merge } from "../services/merge";
+
+const stops = await getEntry("geodata", "transportation/skm-main-stops");
+const line = await getEntry("geodata", "transportation/skm-main");
+
+if (!stops || !line) {
+  throw new Error("Missing geodata for transportation");
+}
+
+const geodata = merge([stops.data, line.data]);
 ---
 
 <Layout title="Tricity hiking - Transportation">
@@ -71,6 +83,8 @@ import { Icon } from "astro-icon/components";
         In the hours of the highest traffic the train goes every 7-10 minutes in
         each direction.
       </p>
+
+      <TransportationMap data={geodata} client:only="preact" />
     </div>
   </div>
 </Layout>
