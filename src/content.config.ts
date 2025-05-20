@@ -27,11 +27,14 @@ const routesCollection = defineCollection({
 
 const geodataCollection = defineCollection({
   loader: glob({
-    pattern: "**/*.json",
-    base: "./src/content/routes",
+    pattern: ["routes/**/*.json", "transportation/**/*.json"],
+    base: "./src/content",
     generateId: (options) => {
       const segments = options.entry.split("/");
-      segments.shift();
+
+      if (segments[0] === "routes") {
+        return segments[1];
+      }
 
       return segments.join("/").replace(/\.json$/, "");
     },

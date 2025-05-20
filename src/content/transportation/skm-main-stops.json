@@ -1,0 +1,205 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Zaspa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.591534, 54.389778, 17.395749033708697]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Wrzeszcz"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.605499, 54.381769, 13.621172898309746]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Politechnika"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.627393, 54.374197, 6.805467179511655]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Stocznia"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.64177, 54.364622, 1.4447945123541388]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Główny"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.64422, 54.35641, 2.5616465666797565]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Śródmieście"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.644406, 54.34691, 6.3851869866265965]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Przymorze-Uniwersytet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.576606, 54.400762, 19.3855194640358]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Oliwa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.571888, 54.409438, 19.708363631740973]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Żabianka - AWFiS"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.568504, 54.420812, 17.005899548810934]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sopot Wyścigi"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.565244, 54.431299, 16.546016568876972]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sopot"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.562343, 54.440091, 16]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sopot Kamienny Potok"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.55357, 54.457643, 30.708474004502236]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdynia Orłowo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.548641, 54.476652, 28.433810631093]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdynia Redłowo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.538371, 54.491528, 33.72788537283586]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdynia Wzgórze Świętego Maksymiliana"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.535485, 54.507617, 25.252789190133065]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdynia Główna"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.527482, 54.521624, 12.264225039410793]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdynia Stocznia - Uniwersytet Morski"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.519275, 54.525544, 11.850325140582763]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdynia Grabówek"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.495895, 54.534347, 9.594453415926889]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdynia Leszczynki"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.478518, 54.541343, 17.80000000000109]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdynia Chylonia"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.463668, 54.545754, 21.45443257791336]
+      }
+    }
+  ]
+}
