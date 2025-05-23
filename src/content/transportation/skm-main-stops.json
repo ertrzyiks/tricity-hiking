@@ -4,31 +4,23 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Gdańsk Zaspa"
+        "name": "Gdańsk Śródmieście"
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [18.591534, 54.389778, 17.395749033708697]
+        "coordinates": [18.644406, 54.34691, 6.3851869866265965]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "name": "Gdańsk Wrzeszcz"
+        "name": "Gdańsk Główny",
+        "desc": "{\"isStation\":true}",
+        "desc:isStation": true
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [18.605499, 54.381769, 13.621172898309746]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "Gdańsk Politechnika"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [18.627393, 54.374197, 6.805467179511655]
+        "coordinates": [18.64422, 54.35641, 2.5616465666797565]
       }
     },
     {
@@ -44,21 +36,33 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Gdańsk Główny"
+        "name": "Gdańsk Politechnika"
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [18.64422, 54.35641, 2.5616465666797565]
+        "coordinates": [18.627393, 54.374197, 6.805467179511655]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "name": "Gdańsk Śródmieście"
+        "name": "Gdańsk Wrzeszcz",
+        "desc": "{\"isStation\":true}",
+        "desc:isStation": true
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [18.644406, 54.34691, 6.3851869866265965]
+        "coordinates": [18.605499, 54.381769, 13.621172898309746]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Zaspa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.591534, 54.389778, 17.395749033708697]
       }
     },
     {
@@ -74,7 +78,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Gdańsk Oliwa"
+        "name": "Gdańsk Oliwa",
+        "desc": "{\"isStation\":true}",
+        "desc:isStation": true
       },
       "geometry": {
         "type": "Point",
@@ -104,7 +110,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Sopot"
+        "name": "Sopot",
+        "desc": "{\"isStation\":true}",
+        "desc:isStation": true
       },
       "geometry": {
         "type": "Point",
@@ -144,7 +152,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Gdynia Wzgórze Świętego Maksymiliana"
+        "name": "Gdynia Wzgórze Świętego Maksymiliana",
+        "desc": "{\"isStation\":true}",
+        "desc:isStation": true
       },
       "geometry": {
         "type": "Point",
@@ -154,7 +164,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Gdynia Główna"
+        "name": "Gdynia Główna",
+        "desc": "{\"isStation\":true}",
+        "desc:isStation": true
       },
       "geometry": {
         "type": "Point",

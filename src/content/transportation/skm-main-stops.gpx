@@ -7,29 +7,31 @@
       <link href="https://gpx.studio"/>
     </author>
   </metadata>
-  <wpt lat="54.389778" lon="18.591534">
-    <ele>17.395749033708697</ele>
-    <name>Gdańsk Zaspa</name>
+  <wpt lat="54.34691" lon="18.644406">
+    <ele>6.3851869866265965</ele>
+    <name>Gdańsk Śródmieście</name>
   </wpt>
-  <wpt lat="54.381769" lon="18.605499">
-    <ele>13.621172898309746</ele>
-    <name>Gdańsk Wrzeszcz</name>
+   <wpt lat="54.35641" lon="18.64422">
+    <ele>2.5616465666797565</ele>
+    <name>Gdańsk Główny</name>
+    <desc>{"isStation":true}</desc>
+  </wpt>
+   <wpt lat="54.364622" lon="18.64177">
+    <ele>1.4447945123541388</ele>
+    <name>Gdańsk Stocznia</name>
   </wpt>
   <wpt lat="54.374197" lon="18.627393">
     <ele>6.805467179511655</ele>
     <name>Gdańsk Politechnika</name>
   </wpt>
-  <wpt lat="54.364622" lon="18.64177">
-    <ele>1.4447945123541388</ele>
-    <name>Gdańsk Stocznia</name>
+  <wpt lat="54.381769" lon="18.605499">
+    <ele>13.621172898309746</ele>
+    <name>Gdańsk Wrzeszcz</name>
+    <desc>{"isStation":true}</desc>
   </wpt>
-  <wpt lat="54.35641" lon="18.64422">
-    <ele>2.5616465666797565</ele>
-    <name>Gdańsk Główny</name>
-  </wpt>
-  <wpt lat="54.34691" lon="18.644406">
-    <ele>6.3851869866265965</ele>
-    <name>Gdańsk Śródmieście</name>
+   <wpt lat="54.389778" lon="18.591534">
+    <ele>17.395749033708697</ele>
+    <name>Gdańsk Zaspa</name>
   </wpt>
   <wpt lat="54.400762" lon="18.576606">
     <ele>19.3855194640358</ele>
@@ -38,6 +40,7 @@
   <wpt lat="54.409438" lon="18.571888">
     <ele>19.708363631740973</ele>
     <name>Gdańsk Oliwa</name>
+    <desc>{"isStation":true}</desc>
   </wpt>
   <wpt lat="54.420812" lon="18.568504">
     <ele>17.005899548810934</ele>
@@ -50,6 +53,7 @@
   <wpt lat="54.440091" lon="18.562343">
     <ele>16</ele>
     <name>Sopot</name>
+    <desc>{"isStation":true}</desc>
   </wpt>
   <wpt lat="54.457643" lon="18.55357">
     <ele>30.708474004502236</ele>
@@ -66,10 +70,12 @@
   <wpt lat="54.507617" lon="18.535485">
     <ele>25.252789190133065</ele>
     <name>Gdynia Wzgórze Świętego Maksymiliana</name>
+    <desc>{"isStation":true}</desc>
   </wpt>
   <wpt lat="54.521624" lon="18.527482">
     <ele>12.264225039410793</ele>
     <name>Gdynia Główna</name>
+    <desc>{"isStation":true}</desc>
   </wpt>
   <wpt lat="54.525544" lon="18.519275">
     <ele>11.850325140582763</ele>

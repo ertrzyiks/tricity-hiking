@@ -3,7 +3,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import { createMap } from "../RouteMap/createMap";
 import { getBounds } from "../../services/getBounds";
-import pointImage from "../../assets/places/point.png";
+import pointImage from "../../assets/places/skm_stop.png";
 
 export const TransportationMap = ({
   data,
@@ -43,7 +43,10 @@ export const TransportationMap = ({
         map.addSource("lines", {
           type: "geojson",
           data,
+          cluster: false,
         });
+
+        console.log("data", data);
 
         map.addLayer({
           id: "lines",
@@ -56,15 +59,41 @@ export const TransportationMap = ({
         });
 
         const image = await map.loadImage(pointImage.src);
-        if (!map.hasImage("poi_15")) map.addImage("poi_15", image.data);
+        if (!map.hasImage("skm-stop")) map.addImage("skm-stop", image.data);
 
         map.addLayer({
           id: "places",
           type: "symbol",
           source: "lines",
           layout: {
-            "icon-image": `poi_15`,
-            "icon-overlap": "always",
+            "icon-image": `skm-stop`,
+            "icon-allow-overlap": true,
+            "icon-size": [
+              "case",
+              ["==", ["get", "desc:isStation"], true],
+              1.3,
+              0.8,
+            ],
+            "text-allow-overlap": true,
+            "text-field": ["get", "name"],
+            "text-font": ["Roboto Regular", "Noto Sans Regular"],
+            "text-size": [
+              "step",
+              ["zoom"],
+              ["case", ["==", ["get", "desc:isStation"], true], 15, 0],
+              10,
+              ["case", ["==", ["get", "desc:isStation"], true], 15, 12],
+              14,
+              ["case", ["==", ["get", "desc:isStation"], true], 15, 13],
+            ],
+
+            "text-offset": [-1.5, 0],
+            "text-anchor": "right",
+          },
+          paint: {
+            "text-color": "#333",
+            "text-halo-width": 1,
+            "text-halo-color": "#fff",
           },
         });
 

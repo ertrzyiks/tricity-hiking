@@ -22,6 +22,25 @@ const estimateTime = (distance, totalGain) => {
   return distance / speed + (totalGain / 500) * 0.5;
 };
 
+const prefixKeys = (obj, prefix) => {
+  const prefixedObj = {};
+  Object.keys(obj).forEach((key) => {
+    const newKey = `${prefix}${key}`;
+    prefixedObj[newKey] = obj[key];
+  });
+  return prefixedObj;
+};
+
+const parseDescPayload = (filename, desc) => {
+  try {
+    const payload = JSON.parse(desc);
+    return prefixKeys(payload, "desc:");
+  } catch (e) {
+    console.error(`Error parsing ${filename} desc payload`, e);
+    return {};
+  }
+};
+
 const process = (name, json) => {
   json.features.forEach((feature) => {
     if (feature.geometry.type !== "LineString") {
@@ -73,6 +92,19 @@ const convert = ({ name, input, output }) => {
       feature.properties.name = routeTitle;
     }
   }
+
+  processed.features = processed.features.map((feature) => {
+    if (feature.properties.desc) {
+      const payload = parseDescPayload(name, feature.properties.desc);
+      if (payload) {
+        feature.properties = {
+          ...feature.properties,
+          ...payload,
+        };
+      }
+    }
+    return feature;
+  });
 
   fs.writeFileSync(output, JSON.stringify(processed, null, 2));
 

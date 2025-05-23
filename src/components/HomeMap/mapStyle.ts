@@ -20,3 +20,6 @@ export const style =
           },
         ],
       };
+
+export const glyphs =
+  "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=bHa0L2mKhjZqOJctPuVf";

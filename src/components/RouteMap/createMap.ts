@@ -1,5 +1,5 @@
 import { Map, type MapOptions } from "maplibre-gl";
-import { style } from "../HomeMap/mapStyle";
+import { style, glyphs } from "../HomeMap/mapStyle";
 export const createMap = (
   container: HTMLElement,
   options: Omit<MapOptions, "container" | "style">,
@@ -16,10 +16,12 @@ export const createMap = (
 
   map.dragRotate.disable();
   map.touchZoomRotate.disableRotation();
+  // map.showCollisionBoxes = true;
 
   let cleanUp: (() => void) | void;
 
   map.on("load", async () => {
+    map.setGlyphs(glyphs);
     cleanUp = await initializer(map);
   });
 
