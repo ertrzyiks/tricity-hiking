@@ -105,5 +105,5 @@ export const TransportationMap = ({
     );
   }, []);
 
-  return <div ref={mapRef} className="h-128"></div>;
+  return <div ref={mapRef} className="h-full"></div>;
 };

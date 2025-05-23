@@ -42,88 +42,101 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
       </strong> application. It supports also many more cities in Poland btw.
     </Admonition>
 
-    <div class="my-4">
-      <h2 class="text-2xl my-6">Public transport</h2>
-      <p class="my-2">
-        There are several public transport options available in Tricity,
-        including:
-      </p>
-      <ul class="list list-disc list-inside">
-        <li>bus and tram</li>
-        <li>SKM train</li>
-        <li>PKM train</li>
-        <li>regional train</li>
-        <li>ferry</li>
-      </ul>
-      <h3 class="text-xl my-4">Bus and tram</h3>
-      <p class="my-2">
-        Busses and trams are operated by ZTM Gdańsk. Tickets are available for a
-        single ride or for a time period. The time-constrained tickets are valid
-        for both bus and tram - you can change the vehicle during the ride.
-      </p>
-      <p class="my-2">
-        One of the most convenient way to buy tickets is using <Link
-          href="https://ztm.gda.pl/bilety/bilety-online-w-aplikacjach-mobilnych,a,5555"
-        >
-          one of the supported mobile applications
-        </Link>. You won't be disappointed by <Link href="https://jakdojade.pl/"
-          >Jak dojadę</Link
-        > which allows to not only buy the tickets but also is great for planning
-        your trip.
-      </p>
-      <p class="my-2">
-        You can also buy paper tickets in ticket machines located near stops or
-        buy them in kiosks. Those tickets must be validated inside the vehicle.
-        One more option is to buy tickets using the machines inside the trams.
-        This way you can buy only the single ride tickets that are valid for
-        that particular vehicle.
-      </p>
+    <div class="my-4 flex flex-col gap-4">
+      <div>
+        <h2 class="text-3xl my-4">Public transport</h2>
+        <p class="my-2">
+          There are several public transport options available in Tricity,
+          including:
+        </p>
 
-      <h3 class="text-xl my-4">SKM train</h3>
+        <ul class="list list-disc list-inside">
+          <li>bus and tram</li>
+          <li>SKM train</li>
+          <li>PKM train</li>
+          <li>regional train</li>
+          <li>ferry</li>
+        </ul>
+      </div>
 
-      <p class="my-2">
-        The name stands for "fast city train" and it's a line connecting all
-        major parts of the city along the coast. The most important for the
-        internal communication is part of the route between Gdańsk Śródmieście
-        and Gdynia Chylonia. This train is also a convenient way to go to
-        Wejherowo because that's where the standard route reaches. Selected
-        services go even beyond that and connect Tricity with Lębork.
-      </p>
-      <p class="my-2">
-        In the hours of the highest traffic the train goes every 7-10 minutes in
-        each direction.
-      </p>
+      <div>
+        <h3 class="text-2xl my-4">Bus and tram</h3>
+        <p class="my-2">
+          Busses and trams are operated by ZTM Gdańsk. Tickets are available for
+          a single ride or for a time period. The time-constrained tickets are
+          valid for both bus and tram - you can change the vehicle during the
+          ride.
+        </p>
+        <p class="my-2">
+          One of the most convenient way to buy tickets is using <Link
+            href="https://ztm.gda.pl/bilety/bilety-online-w-aplikacjach-mobilnych,a,5555"
+          >
+            one of the supported mobile applications
+          </Link>. You won't be disappointed by <Link
+            href="https://jakdojade.pl/">Jak dojadę</Link
+          > which allows to not only buy the tickets but also is great for planning
+          your trip.
+        </p>
+        <p class="my-2">
+          You can also buy paper tickets in ticket machines located near stops
+          or buy them in kiosks. Those tickets must be validated inside the
+          vehicle. One more option is to buy tickets using the machines inside
+          the trams. This way you can buy only the single ride tickets that are
+          valid for that particular vehicle.
+        </p>
+      </div>
 
-      <figure>
-        <TransportationMap data={skm} client:only="preact" />
-        <figcaption class="text-sm text-slate-500 text-center my-2">
-          SKM train map (selected fragment)
-        </figcaption>
-      </figure>
+      <div>
+        <h3 class="text-2xl my-4">SKM train</h3>
 
-      <h3 class="text-xl my-4">PKM train</h3>
+        <p class="my-2">
+          The name stands for "fast city train" and it's a line connecting all
+          major parts of the city along the coast. The most important for the
+          internal communication is part of the route between Gdańsk Śródmieście
+          and Gdynia Chylonia. This train is also a convenient way to go to
+          Wejherowo because that's where the standard route reaches. Selected
+          services go even beyond that and connect Tricity with Lębork.
+        </p>
+        <p class="my-2">
+          In the hours of the highest traffic the train goes every 7-10 minutes
+          in each direction.
+        </p>
 
-      <p class="my-2">
-        PKM operates on a few lines in the pomeranian voivodeship. One of them
-        goes from Gdańsk Wrzeszcz to Gdynia through the airport. If you happen
-        to travel by plane it may be your way to the city. That trip takes
-        around 25 minutes and trains go every 15-30 minutes depending on the
-        time of the day.
-      </p>
+        <figure class="my-4 h-128">
+          <TransportationMap data={skm} client:only="preact" />
+          <figcaption class="text-sm text-slate-500 text-center my-2">
+            SKM train map (selected fragment)
+          </figcaption>
+        </figure>
+      </div>
 
-      <p class="my-2">
-        Other lines operated by PKM connect cities like Kartuzy and Kościerzyna
-        with Tricity. Those connections can be your gate to explore Kashubia -
-        pretty unique region of Poland with its own language and culture. The
-        area is known for the beautiful lakes and forests.
-      </p>
+      <div>
+        <h3 class="text-2xl my-4">PKM train</h3>
 
-      <figure>
-        <TransportationMap data={pkm} client:only="preact" />
-        <figcaption class="text-sm text-slate-500 text-center my-2">
-          PKM train map (selected fragment)
-        </figcaption>
-      </figure>
+        <p class="my-2">
+          PKM operates on a few lines in the pomeranian voivodeship. One of them
+          goes from Gdańsk Wrzeszcz to Gdynia through the airport. If you happen
+          to travel by plane it may be your way to the city. That trip takes
+          around 25 minutes and trains go every 15-30 minutes depending on the
+          time of the day.
+        </p>
+
+        <p class="my-2">
+          Other lines operated by PKM connect cities like Kartuzy and
+          Kościerzyna with Tricity. Those connections can be your gate to
+          explore Kashubia - pretty unique region of Poland with its own
+          language and culture. The area is known for the beautiful lakes and
+          forests.
+        </p>
+
+        <figure class="my-4 h-128">
+          <TransportationMap data={pkm} client:only="preact" />
+
+          <figcaption class="text-sm text-slate-500 text-center my-2">
+            PKM train map (selected fragment)
+          </figcaption>
+        </figure>
+      </div>
     </div>
   </div>
 </Layout>
