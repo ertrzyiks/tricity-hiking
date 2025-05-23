@@ -81,7 +81,7 @@ export const TransportationMap = ({
               "step",
               ["zoom"],
               ["case", ["==", ["get", "desc:isStation"], true], 15, 0],
-              10,
+              11,
               ["case", ["==", ["get", "desc:isStation"], true], 15, 12],
               14,
               ["case", ["==", ["get", "desc:isStation"], true], 15, 13],
