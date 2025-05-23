@@ -7,14 +7,23 @@ import { TransportationMap } from "../components/TransportationMap/Transportatio
 import { Icon } from "astro-icon/components";
 import { merge } from "../services/merge";
 
-const stops = await getEntry("geodata", "transportation/skm-main-stops");
-const line = await getEntry("geodata", "transportation/skm-main");
+const skmStops = await getEntry("geodata", "transportation/skm-main-stops");
+const skmLine = await getEntry("geodata", "transportation/skm-main");
 
-if (!stops || !line) {
+if (!skmStops || !skmLine) {
   throw new Error("Missing geodata for transportation");
 }
 
-const geodata = merge([stops.data, line.data]);
+const skm = merge([skmStops.data, skmLine.data]);
+
+const pkmStops = await getEntry("geodata", "transportation/pkm-main-stops");
+const pkmLine = await getEntry("geodata", "transportation/pkm-main");
+
+if (!pkmStops || !pkmLine) {
+  throw new Error("Missing geodata for transportation");
+}
+
+const pkm = merge([pkmStops.data, pkmLine.data]);
 ---
 
 <Layout title="Tricity hiking - Transportation">
@@ -74,17 +83,47 @@ const geodata = merge([stops.data, line.data]);
 
       <p class="my-2">
         The name stands for "fast city train" and it's a line connecting all
-        major parts of the city along the coast. The standard route is from
-        Gdańsk Śródmieście to Wejherowo and goes through Sopot and Gdynia.
-        Selected services go beyond the standard route and connect Tricity with
-        Lębork.
+        major parts of the city along the coast. The most important for the
+        internal communication is part of the route between Gdańsk Śródmieście
+        and Gdynia Chylonia. This train is also a convenient way to go to
+        Wejherowo because that's where the standard route reaches. Selected
+        services go even beyond that and connect Tricity with Lębork.
       </p>
       <p class="my-2">
         In the hours of the highest traffic the train goes every 7-10 minutes in
         each direction.
       </p>
 
-      <TransportationMap data={geodata} client:only="preact" />
+      <figure>
+        <TransportationMap data={skm} client:only="preact" />
+        <figcaption class="text-sm text-slate-500 text-center my-2">
+          SKM train map (selected fragment)
+        </figcaption>
+      </figure>
+
+      <h3 class="text-xl my-4">PKM train</h3>
+
+      <p class="my-2">
+        PKM operates on a few lines in the pomeranian voivodeship. One of them
+        goes from Gdańsk Wrzeszcz to Gdynia through the airport. If you happen
+        to travel by plane it may be your way to the city. That trip takes
+        around 25 minutes and trains go every 15-30 minutes depending on the
+        time of the day.
+      </p>
+
+      <p class="my-2">
+        Other lines operated by PKM connect cities like Kartuzy and Kościerzyna
+        with Tricity. Those connections can be your gate to explore Kashubia -
+        pretty unique region of Poland with its own language and culture. The
+        area is known for the beautiful lakes and forests.
+      </p>
+
+      <figure>
+        <TransportationMap data={pkm} client:only="preact" />
+        <figcaption class="text-sm text-slate-500 text-center my-2">
+          PKM train map (selected fragment)
+        </figcaption>
+      </figure>
     </div>
   </div>
 </Layout>

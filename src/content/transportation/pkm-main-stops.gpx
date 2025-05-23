@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="https://gpx.studio" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd http://www.garmin.com/xmlschemas/PowerExtension/v1 http://www.garmin.com/xmlschemas/PowerExtensionv1.xsd http://www.topografix.com/GPX/gpx_style/0/2 http://www.topografix.com/GPX/gpx_style/0/2/gpx_style.xsd" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:gpxpx="http://www.garmin.com/xmlschemas/PowerExtension/v1" xmlns:gpx_style="http://www.topografix.com/GPX/gpx_style/0/2">
+  <metadata>
+    <name>PKM stops</name>
+    <author>
+      <name>gpx.studio</name>
+      <link href="https://gpx.studio"/>
+    </author>
+  </metadata>
+  <wpt lat="54.521584" lon="18.52741">
+    <ele>12.18590007248137</ele>
+    <name>Gdynia Główna</name>
+    <desc>{"isStation":true}</desc>
+  </wpt>
+  <wpt lat="54.496155" lon="18.5332">
+    <ele>36.25697422223259</ele>
+    <name>Gdynia Stadion</name>
+  </wpt>
+  <wpt lat="54.469838" lon="18.508766">
+    <ele>106.77394261327628</ele>
+    <name>Gdynia Karwiny</name>
+  </wpt>
+  <wpt lat="54.422119" lon="18.452913">
+    <ele>146.7056729599375</ele>
+    <name>Gdynia Osowa</name>
+  </wpt>
+  <wpt lat="54.387451" lon="18.446516">
+    <ele>131.1406606938695</ele>
+    <name>Gdańsk Rębiechowo</name>
+  </wpt>
+  <wpt lat="54.382737" lon="18.466597">
+    <ele>133.96528042671338</ele>
+    <name>Gdańsk Port Lotniczy</name>
+    <desc>{"isStation":true}</desc>
+  </wpt>
+  <wpt lat="54.378282" lon="18.487173">
+    <ele>152.13404731745882</ele>
+    <name>Gdańsk Firoga</name>
+  </wpt>
+   <wpt lat="54.373435" lon="18.506299">
+    <ele>150.20870063882398</ele>
+    <name>Gdańsk Matarnia</name>
+  </wpt>
+  <wpt lat="54.355354" lon="18.528497">
+    <ele>105</ele>
+    <name>Gdańsk Kiełpinek</name>
+  </wpt>
+  <wpt lat="54.35371" lon="18.550297">
+    <ele>97.1507659613631</ele>
+    <name>Gdańsk Jasień</name>
+  </wpt>
+  <wpt lat="54.365127" lon="18.573515">
+    <ele>65.73452897726085</ele>
+    <name>Gdańsk Brętowo</name>
+  </wpt>
+  <wpt lat="54.37819" lon="18.57202">
+    <ele>44.703570922820425</ele>
+    <name>Gdańsk Niedźwiednik</name>
+  </wpt>
+  <wpt lat="54.391749" lon="18.578851">
+    <ele>27.146644594939957</ele>
+    <name>Gdańsk Strzyża</name>
+  </wpt>
+  <wpt lat="54.381673" lon="18.605529">
+    <ele>13.911478201300318</ele>
+    <name>Gdańsk Wrzeszcz</name>
+    <desc>{"isStation":true}</desc>
+  </wpt>
+</gpx>

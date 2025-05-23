@@ -1,0 +1,151 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdynia Główna",
+        "desc": "{\"isStation\":true}",
+        "desc:isStation": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.52741, 54.521584, 12.18590007248137]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdynia Stadion"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.5332, 54.496155, 36.25697422223259]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdynia Karwiny"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.508766, 54.469838, 106.77394261327628]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdynia Osowa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.452913, 54.422119, 146.7056729599375]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Rębiechowo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.446516, 54.387451, 131.1406606938695]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Port Lotniczy",
+        "desc": "{\"isStation\":true}",
+        "desc:isStation": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.466597, 54.382737, 133.96528042671338]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Firoga"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.487173, 54.378282, 152.13404731745882]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Matarnia"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.506299, 54.373435, 150.20870063882398]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Kiełpinek"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.528497, 54.355354, 105]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Jasień"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.550297, 54.35371, 97.1507659613631]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Brętowo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.573515, 54.365127, 65.73452897726085]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Niedźwiednik"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.57202, 54.37819, 44.703570922820425]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Strzyża"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.578851, 54.391749, 27.146644594939957]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gdańsk Wrzeszcz",
+        "desc": "{\"isStation\":true}",
+        "desc:isStation": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.605529, 54.381673, 13.911478201300318]
+      }
+    }
+  ]
+}

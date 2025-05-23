@@ -87,7 +87,7 @@ export const TransportationMap = ({
               ["case", ["==", ["get", "desc:isStation"], true], 15, 13],
             ],
 
-            "text-offset": [-1.5, 0],
+            "text-offset": [-1.0, 0],
             "text-anchor": "right",
           },
           paint: {
