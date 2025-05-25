@@ -11,6 +11,7 @@ export const createMap = (
     zoom: 10,
     minZoom: 9,
     maxZoom: 15,
+    cooperativeGestures: true,
     ...options,
   });
 
