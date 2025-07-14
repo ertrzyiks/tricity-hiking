@@ -3,7 +3,10 @@ import fs from "fs";
 import { getRouteStats } from "./get-route-stats.js";
 
 const data = JSON.parse(
-  fs.readFileSync("./src/content/geodata/gora-markowca.json", "utf-8"),
+  fs.readFileSync(
+    "./src/content/routes/gora-markowca/gora-markowca.json",
+    "utf-8",
+  ),
 );
 
 describe("getRouteStats", () => {
