@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "preact/hooks";
 import "maplibre-gl/dist/maplibre-gl.css";
 
-import { createMap } from "./createMap";
+import { createMap } from "../../services/createMap";
 import { routePointHighlighter } from "./routePointHighlighter";
 import { getBounds } from "../../services/getBounds";
 import pointImage from "../../assets/places/point.png";
