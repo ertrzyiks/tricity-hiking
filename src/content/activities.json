@@ -103,5 +103,25 @@
       "link": "https://amazonia.gdynia.pl/en/",
       "location": "Gdynia"
     }
+  ],
+  "fairs": [
+    {
+      "name": "St. Dominic's Fair",
+      "description": "Traditional annual fair in Gdańsk's Old Town, featuring crafts, food, and entertainment.",
+      "link": "https://www.gdansk.pl/en/events/st-dominics-fair",
+      "location": "Gdańsk"
+    },
+    {
+      "name": "Christmas Market",
+      "description": "Festive seasonal market with holiday crafts, food, and decorations.",
+      "link": "https://www.gdansk.pl/en/events/christmas-market",
+      "location": "Gdańsk"
+    },
+    {
+      "name": "Flea market in Oliwa",
+      "description": "Weekly antique and second-hand market in the historic Oliwa district.",
+      "link": "https://www.gdansk.pl/en/events/oliwa-flea-market",
+      "location": "Gdańsk"
+    }
   ]
 }
