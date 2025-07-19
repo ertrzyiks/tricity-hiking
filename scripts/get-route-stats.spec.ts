@@ -26,7 +26,7 @@ describe("getRouteStats", () => {
     });
   });
 
-  it.only("should return correct stats for gora markowca", () => {
+  it("should return correct stats for gora markowca", () => {
     const stats = getRouteStats(data.features[0].geometry.coordinates);
 
     expect(stats.distance).toBeCloseTo(3596.1, 1);
