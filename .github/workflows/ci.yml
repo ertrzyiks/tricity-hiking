@@ -1,18 +1,12 @@
 name: Build the site
 
 on:
-  # Trigger the workflow every time you push to the `main` branch
-  # Using a different branch name? Replace `main` with your branch’s name
-  push:
-    branches: [main]
-  # Allows you to run this workflow manually from the Actions tab on GitHub.
-  workflow_dispatch:
+  # Trigger the workflow on pull requests
+  pull_request:
 
-# Allow this job to clone the repo and create a page deployment
+# Allow this job to clone the repo
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 jobs:
   build:
@@ -20,8 +14,15 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
-      - name: Install, build, and upload your site
-        uses: withastro/action@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          package-manager: pnpm@latest
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build the site
+        run: pnpm run build
