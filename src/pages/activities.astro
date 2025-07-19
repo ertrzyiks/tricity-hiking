@@ -16,6 +16,7 @@ const orienteering = getByType("orienteering");
 const outdoorPlaygrounds = getByType("outdoor-playground");
 const indoorPlaygrounds = getByType("indoor-playground");
 const topSights = getByType("top-sights");
+const fairs = getByType("fairs");
 ---
 
 <Layout title="Tricity hiking - Activities">
@@ -143,6 +144,26 @@ const topSights = getByType("top-sights");
             <ActivityListCardItem
               link={data.link}
               icon="mdi:playground-slide"
+              name={data.name}
+              description={data.description}
+            />
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="my-4">
+      <h2 class="text-2xl mb-3">Fairs</h2>
+      <p class="my-2">
+        Tricity hosts various traditional and seasonal fairs throughout the year. These events offer unique shopping experiences, local crafts, and cultural entertainment that reflect the region's rich heritage.
+      </p>
+
+      <ul>
+        {
+          fairs.map(({ data }) => (
+            <ActivityListCardItem
+              link={data.link}
+              icon="mdi:store"
               name={data.name}
               description={data.description}
             />
