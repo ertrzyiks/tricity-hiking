@@ -10,6 +10,7 @@ import { Button } from "../Button/Button";
 import { TrailAttributeName } from "../TrailAttributeName/TrailAttributeName";
 import { TrailAttributeValue } from "../TrailAttributeValue/TrailAttributeValue";
 import pointImage from "../../assets/places/point.png";
+import { trackEvent } from "../../services/analytics";
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
@@ -125,6 +126,10 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
             .setText(hoveredFeature.properties.name)
             .addTo(map)
             .trackPointer();
+
+          trackEvent("route hovered", {
+            slug: hoveredFeature.properties.routeSlug,
+          });
         }
       });
 
@@ -156,6 +161,9 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
         });
 
         setSelectedFeature(feature);
+        trackEvent("route clicked", {
+          slug: feature.properties?.routeSlug,
+        });
         tooltip.remove();
       });
 
