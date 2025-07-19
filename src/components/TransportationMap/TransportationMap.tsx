@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "preact/hooks";
 import "maplibre-gl/dist/maplibre-gl.css";
 
-import { createMap } from "../RouteMap/createMap";
+import { createMap } from "../../services/createMap";
 import { getBounds } from "../../services/getBounds";
 import pointImage from "../../assets/places/skm_stop.png";
 
@@ -14,12 +14,6 @@ export const TransportationMap = ({
 
   useEffect(() => {
     if (mapRef.current === null) return;
-
-    const feature = data.features.find((f) => f.geometry.type === "LineString");
-
-    if (!feature || feature.geometry.type !== "LineString") {
-      return;
-    }
 
     return createMap(
       mapRef.current,
