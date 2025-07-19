@@ -107,20 +107,20 @@
   "fairs": [
     {
       "name": "St. Dominic's Fair",
-      "description": "Traditional annual fair in Gdańsk's Old Town, featuring crafts, food, and entertainment.",
-      "link": "https://www.gdansk.pl/en/events/st-dominics-fair",
+      "description": "For over 700 years, this historic fair has filled the streets of Gdańsk's Main Town with vibrant crafts, food, and art.",
+      "link": "https://jarmarkswdominika.pl/en/news/",
       "location": "Gdańsk"
     },
     {
       "name": "Christmas Market",
-      "description": "Festive seasonal market with holiday crafts, food, and decorations.",
-      "link": "https://www.gdansk.pl/en/events/christmas-market",
+      "description": "Gdańsk Christmas Market fills the Main Town with lights, festive treats, and seasonal crafts.",
+      "link": "https://bozonarodzeniowy.pl/en/",
       "location": "Gdańsk"
     },
     {
       "name": "Flea market in Oliwa",
-      "description": "Weekly antique and second-hand market in the historic Oliwa district.",
-      "link": "https://www.gdansk.pl/en/events/oliwa-flea-market",
+      "description": "The Oliwa Flea Market overflows with second-hand gems and handmade crafts.",
+      "link": "https://pchlitarggdansk.pl",
       "location": "Gdańsk"
     }
   ]
