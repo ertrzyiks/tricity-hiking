@@ -11,6 +11,11 @@ import { TrailAttributeName } from "../TrailAttributeName/TrailAttributeName";
 import { TrailAttributeValue } from "../TrailAttributeValue/TrailAttributeValue";
 import pointImage from "../../assets/places/point.png";
 import { trackEvent } from "../../services/analytics";
+import {
+  createRouteMarkersData,
+  generateTriangleSVG,
+  generatePerpendicularLineSVG,
+} from "../../services/routeMarkers";
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
@@ -90,6 +95,100 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           "line-color": "#e11d48",
         },
       });
+
+      // Add start and end markers for routes
+      const { startMarkers, endMarkers } = createRouteMarkersData(routes);
+
+      // Add start markers (triangles)
+      map.addSource("start-markers", {
+        type: "geojson",
+        data: startMarkers,
+      });
+
+      // Add end markers (perpendicular lines)
+      map.addSource("end-markers", {
+        type: "geojson",
+        data: endMarkers,
+      });
+
+      // Load all marker images asynchronously
+      const loadMarkerImages = async () => {
+        const imagePromises: Promise<void>[] = [];
+
+        // Generate and add start marker images
+        startMarkers.features.forEach((feature, index) => {
+          const bearing = feature.properties?.bearing || 0;
+          const iconId = `start-triangle-${index}`;
+          const dataUrl = generateTriangleSVG(bearing, 16, "#059669"); // green color for start
+
+          const promise = new Promise<void>((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+              map.addImage(iconId, img);
+              resolve();
+            };
+            img.onerror = () => {
+              console.error(`Failed to load start marker image ${iconId}`);
+              resolve();
+            };
+            img.src = dataUrl;
+          });
+
+          imagePromises.push(promise);
+        });
+
+        // Generate and add end marker images
+        endMarkers.features.forEach((feature, index) => {
+          const bearing = feature.properties?.bearing || 0;
+          const iconId = `end-line-${index}`;
+          const dataUrl = generatePerpendicularLineSVG(bearing, 16, "#dc2626"); // red color for end
+
+          const promise = new Promise<void>((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+              map.addImage(iconId, img);
+              resolve();
+            };
+            img.onerror = () => {
+              console.error(`Failed to load end marker image ${iconId}`);
+              resolve();
+            };
+            img.src = dataUrl;
+          });
+
+          imagePromises.push(promise);
+        });
+
+        // Wait for all images to load
+        await Promise.all(imagePromises);
+
+        // Add start marker layer
+        map.addLayer({
+          id: "start-markers-layer",
+          type: "symbol",
+          source: "start-markers",
+          layout: {
+            "icon-image": ["concat", "start-triangle-", ["get", "index"]],
+            "icon-size": 1,
+            "icon-allow-overlap": true,
+          },
+        });
+
+        // Add end marker layer
+        map.addLayer({
+          id: "end-markers-layer",
+          type: "symbol",
+          source: "end-markers",
+          layout: {
+            "icon-image": ["concat", "end-line-", ["get", "index"]],
+            "icon-size": 1,
+            "icon-allow-overlap": true,
+          },
+        });
+      };
+
+      // Load markers after map is ready
+      loadMarkerImages().catch(console.error);
 
       const tooltip = new maplibregl.Popup({
         closeButton: false,
