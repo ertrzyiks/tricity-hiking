@@ -17,6 +17,7 @@ const outdoorPlaygrounds = getByType("outdoor-playground");
 const indoorPlaygrounds = getByType("indoor-playground");
 const topSights = getByType("top-sights");
 const fairs = getByType("fairs");
+const other = getByType("other");
 ---
 
 <Layout title="Tricity hiking - Activities">
@@ -164,6 +165,26 @@ const fairs = getByType("fairs");
             <ActivityListCardItem
               link={data.link}
               icon="mdi:store"
+              name={data.name}
+              description={data.description}
+            />
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="my-4">
+      <h2 class="text-2xl mb-3">Other</h2>
+      <p class="my-2">
+        Additional points of interest and activities in the Tricity area.
+      </p>
+
+      <ul>
+        {
+          other.map(({ data }) => (
+            <ActivityListCardItem
+              link={data.link}
+              icon="mdi:map-marker"
               name={data.name}
               description={data.description}
             />
