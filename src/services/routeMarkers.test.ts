@@ -89,7 +89,7 @@ describe("routeMarkers", () => {
 
   describe("generateTriangleSVG", () => {
     it("should generate a valid SVG data URL", () => {
-      const svg = generateTriangleSVG(90, 16, "#ff0000");
+      const svg = generateTriangleSVG(16, "#ff0000");
       expect(svg).toMatch(/^data:image\/svg\+xml;charset=utf-8,/);
       expect(decodeURIComponent(svg)).toContain("<svg");
       expect(decodeURIComponent(svg)).toContain("polygon");
@@ -99,7 +99,7 @@ describe("routeMarkers", () => {
 
   describe("generatePerpendicularLineSVG", () => {
     it("should generate a valid SVG data URL", () => {
-      const svg = generatePerpendicularLineSVG(90, 16, "#00ff00");
+      const svg = generatePerpendicularLineSVG(16, "#00ff00");
       expect(svg).toMatch(/^data:image\/svg\+xml;charset=utf-8,/);
       expect(decodeURIComponent(svg)).toContain("<svg");
       expect(decodeURIComponent(svg)).toContain("<line");
@@ -155,7 +155,7 @@ describe("routeMarkers", () => {
         (endMarkers.features[0].geometry as GeoJSON.Point).coordinates,
       ).toEqual([2, 0]);
       expect(endMarkers.features[0].properties?.index).toBe(0);
-      expect(endMarkers.features[0].properties?.bearing).toBeCloseTo(90, 1);
+      expect(endMarkers.features[0].properties?.bearing).toBeCloseTo(180, 1); // perpendicular to eastward (90° + 90° = 180°)
     });
   });
 });

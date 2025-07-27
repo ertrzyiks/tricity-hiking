@@ -113,25 +113,12 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
       // Load all marker images asynchronously
       const loadMarkerImages = async () => {
-        // Generate and add start marker images
-        for (let index = 0; index < startMarkers.features.length; index++) {
-          const feature = startMarkers.features[index];
-          const bearing = feature.properties?.bearing || 0;
-          const iconId = `start-triangle-${index}`;
-          const dataUrl = generateTriangleSVG(bearing, 16, "#059669"); // green color for start
+        // Generate and load single images for each marker type
+        const startTriangleDataUrl = generateTriangleSVG(16, "#059669"); // green color for start
+        const endLineDataUrl = generatePerpendicularLineSVG(16, "#dc2626"); // red color for end
 
-          loadImageToMap(map, iconId, dataUrl);
-        }
-
-        // Generate and add end marker images
-        for (let index = 0; index < endMarkers.features.length; index++) {
-          const feature = endMarkers.features[index];
-          const bearing = feature.properties?.bearing || 0;
-          const iconId = `end-line-${index}`;
-          const dataUrl = generatePerpendicularLineSVG(bearing, 16, "#dc2626"); // red color for end
-
-          loadImageToMap(map, iconId, dataUrl);
-        }
+        loadImageToMap(map, "start-triangle", startTriangleDataUrl);
+        loadImageToMap(map, "end-line", endLineDataUrl);
 
         // Give some time for images to load before adding layers
         await new Promise((resolve) => setTimeout(resolve, 100));
@@ -142,7 +129,8 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           type: "symbol",
           source: "start-markers",
           layout: {
-            "icon-image": ["concat", "start-triangle-", ["get", "index"]],
+            "icon-image": "start-triangle",
+            "icon-rotate": ["get", "bearing"],
             "icon-size": 1,
             "icon-allow-overlap": true,
           },
@@ -154,7 +142,8 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           type: "symbol",
           source: "end-markers",
           layout: {
-            "icon-image": ["concat", "end-line-", ["get", "index"]],
+            "icon-image": "end-line",
+            "icon-rotate": ["get", "bearing"],
             "icon-size": 1,
             "icon-allow-overlap": true,
           },

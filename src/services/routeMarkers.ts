@@ -82,10 +82,9 @@ export const getEndPointWithDirection = (
 };
 
 /**
- * Generate SVG for a triangle marker pointing in a specific direction
+ * Generate SVG for a triangle marker pointing north (no rotation applied)
  */
 export const generateTriangleSVG = (
-  bearing: number,
   size: number = 12,
   color: string = "#e11d48",
 ): string => {
@@ -93,37 +92,31 @@ export const generateTriangleSVG = (
   const height = size * 0.866; // equilateral triangle height
 
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-      <g transform="rotate(${bearing} ${halfSize} ${halfSize})">
         <polygon points="${halfSize},${halfSize - height / 2} ${halfSize - halfSize},${halfSize + height / 2} ${halfSize + halfSize},${halfSize + height / 2}" 
                  fill="${color}" 
                  stroke="white" 
                  stroke-width="1"/>
-      </g>
     </svg>`;
 
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 };
 
 /**
- * Generate SVG for a perpendicular line marker
+ * Generate SVG for a horizontal line marker (no rotation applied)
  */
 export const generatePerpendicularLineSVG = (
-  bearing: number,
   size: number = 12,
   color: string = "#e11d48",
 ): string => {
   const halfSize = size / 2;
   const lineLength = size * 0.8;
-  const perpBearing = (bearing + 90) % 360; // perpendicular to the trail direction
 
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-      <g transform="rotate(${perpBearing} ${halfSize} ${halfSize})">
-        <line x1="${halfSize}" y1="${halfSize - lineLength / 2}" 
-              x2="${halfSize}" y2="${halfSize + lineLength / 2}" 
+        <line x1="${halfSize - lineLength / 2}" y1="${halfSize}" 
+              x2="${halfSize + lineLength / 2}" y2="${halfSize}" 
               stroke="${color}" 
               stroke-width="3" 
               stroke-linecap="round"/>
-      </g>
     </svg>`;
 
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
@@ -175,7 +168,7 @@ export const createRouteMarkersData = (
           coordinates: endData.point,
         },
         properties: {
-          bearing: endData.bearing,
+          bearing: (endData.bearing + 90) % 360, // perpendicular to trail direction
           routeId: feature.id,
           routeName: feature.properties?.name,
           index: endIndex,
