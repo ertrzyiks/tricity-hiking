@@ -3,16 +3,18 @@ import GroupHeader from "./GroupHeader/GroupHeader.astro";
 import ActivityListCardItem from "../ListCardItem/Activity.astro";
 import { ranks } from "./ranks";
 import { content } from "./content";
+import type { CollectionEntry } from "astro:content";
 
 const { activities, groupBy = "type" } = Astro.props;
 type GroupByKey = keyof typeof ranks;
-type Activity = any;
+type Activity = CollectionEntry<'activities'>;
 
 const groupContent = content[groupBy as keyof typeof content] || {};
 
 const groupedActivities = activities.reduce(
   (acc: Record<string, Activity[]>, activity: Activity) => {
-    const key = activity.data[groupBy] || "other";
+    const groupValue = activity.data[groupBy as keyof Activity['data']];
+    const key = String(groupValue || "other");
     if (!acc[key]) {
       acc[key] = [];
     }
