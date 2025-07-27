@@ -153,7 +153,7 @@ export const generateTriangleSVG = (
 };
 
 /**
- * Generate SVG for a perpendicular line marker (no rotation applied)
+ * Generate SVG for a perpendicular line marker pointing north (no rotation applied)
  */
 export const generatePerpendicularLineSVG = (
   size: number = 12,
@@ -163,8 +163,8 @@ export const generatePerpendicularLineSVG = (
   const lineLength = size * 0.8;
 
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-        <line x1="${halfSize - lineLength / 2}" y1="${halfSize}" 
-              x2="${halfSize + lineLength / 2}" y2="${halfSize}" 
+        <line x1="${halfSize}" y1="${halfSize - lineLength / 2}" 
+              x2="${halfSize}" y2="${halfSize + lineLength / 2}" 
               stroke="${color}" 
               stroke-width="3" 
               stroke-linecap="round"/>
@@ -275,7 +275,7 @@ export const createRouteMarkersData = (
             coordinates: endData.point,
           },
           properties: {
-            bearing: (endData.bearing + 90) % 360, // perpendicular to trail direction
+            bearing: endData.bearing, // line will be perpendicular when base is vertical
             routeId: feature.id,
             routeName: feature.properties?.name,
             index: endIndex,

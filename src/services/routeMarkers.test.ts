@@ -238,7 +238,7 @@ describe("routeMarkers", () => {
         (endMarkers.features[0].geometry as GeoJSON.Point).coordinates,
       ).toEqual([2, 0]);
       expect(endMarkers.features[0].properties?.index).toBe(0);
-      expect(endMarkers.features[0].properties?.bearing).toBeCloseTo(180, 1); // perpendicular to eastward (90° + 90° = 180°)
+      expect(endMarkers.features[0].properties?.bearing).toBeCloseTo(90, 1); // perpendicular achieved by vertical base + trail bearing
     });
 
     it("should create loop markers for circular routes", () => {
