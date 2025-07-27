@@ -14,6 +14,7 @@ import {
   createRouteMarkersData,
   generateTriangleSVG,
   generatePerpendicularLineSVG,
+  generateLoopMarkerSVG,
 } from "../../services/routeMarkers";
 import { loadImageToMap } from "../RouteMap/loadImageToMap";
 
@@ -97,7 +98,8 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
       });
 
       // Add start and end markers for routes
-      const { startMarkers, endMarkers } = createRouteMarkersData(routes);
+      const { startMarkers, endMarkers, loopMarkers } =
+        createRouteMarkersData(routes);
 
       // Add start markers (triangles)
       map.addSource("start-markers", {
@@ -111,14 +113,22 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
         data: endMarkers,
       });
 
+      // Add loop markers (combined start/end for loops)
+      map.addSource("loop-markers", {
+        type: "geojson",
+        data: loopMarkers,
+      });
+
       // Load all marker images asynchronously
       const loadMarkerImages = async () => {
         // Generate and load single images for each marker type
         const startTriangleDataUrl = generateTriangleSVG(16, "#059669"); // green color for start
         const endLineDataUrl = generatePerpendicularLineSVG(16, "#dc2626"); // red color for end
+        const loopMarkerDataUrl = generateLoopMarkerSVG(16, "#7c3aed"); // purple color for loops
 
         loadImageToMap(map, "start-triangle", startTriangleDataUrl);
         loadImageToMap(map, "end-line", endLineDataUrl);
+        loadImageToMap(map, "loop-marker", loopMarkerDataUrl);
 
         // Give some time for images to load before adding layers
         await new Promise((resolve) => setTimeout(resolve, 100));
@@ -143,6 +153,19 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           source: "end-markers",
           layout: {
             "icon-image": "end-line",
+            "icon-rotate": ["get", "bearing"],
+            "icon-size": 1,
+            "icon-allow-overlap": true,
+          },
+        });
+
+        // Add loop marker layer
+        map.addLayer({
+          id: "loop-markers-layer",
+          type: "symbol",
+          source: "loop-markers",
+          layout: {
+            "icon-image": "loop-marker",
             "icon-rotate": ["get", "bearing"],
             "icon-size": 1,
             "icon-allow-overlap": true,

@@ -28,6 +28,31 @@ export const calculateBearing = (
 };
 
 /**
+ * Calculate distance between two points in meters using Haversine formula
+ */
+export const calculateDistance = (
+  start: [number, number],
+  end: [number, number],
+): number => {
+  const [lon1, lat1] = start;
+  const [lon2, lat2] = end;
+
+  const R = 6371000; // Earth's radius in meters
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
+
+/**
  * Get start point and direction from a LineString feature
  */
 export const getStartPointWithDirection = (
@@ -82,6 +107,32 @@ export const getEndPointWithDirection = (
 };
 
 /**
+ * Check if a route is a loop (start and end points are close together)
+ */
+export const isRouteLoop = (
+  feature: GeoJSON.Feature,
+  thresholdMeters: number = 100,
+): boolean => {
+  if (feature.geometry.type !== "LineString") return false;
+
+  const coordinates = feature.geometry.coordinates as [
+    number,
+    number,
+    number?,
+  ][];
+  if (coordinates.length < 2) return false;
+
+  const start = [coordinates[0][0], coordinates[0][1]] as [number, number];
+  const end = [
+    coordinates[coordinates.length - 1][0],
+    coordinates[coordinates.length - 1][1],
+  ] as [number, number];
+
+  const distance = calculateDistance(start, end);
+  return distance <= thresholdMeters;
+};
+
+/**
  * Generate SVG for a triangle marker pointing north (no rotation applied)
  */
 export const generateTriangleSVG = (
@@ -102,7 +153,7 @@ export const generateTriangleSVG = (
 };
 
 /**
- * Generate SVG for a horizontal line marker (no rotation applied)
+ * Generate SVG for a perpendicular line marker (no rotation applied)
  */
 export const generatePerpendicularLineSVG = (
   size: number = 12,
@@ -123,6 +174,38 @@ export const generatePerpendicularLineSVG = (
 };
 
 /**
+ * Generate SVG for a combined start/end marker for loops (triangle + line, like ">|")
+ */
+export const generateLoopMarkerSVG = (
+  size: number = 16,
+  color: string = "#7c3aed",
+): string => {
+  const halfSize = size / 2;
+  const triangleSize = size * 0.4;
+  const lineLength = size * 0.3;
+
+  // Triangle pointing right (start indicator)
+  const trianglePoints = `${halfSize - triangleSize / 2},${halfSize - triangleSize / 2} ${halfSize + triangleSize / 2},${halfSize} ${halfSize - triangleSize / 2},${halfSize + triangleSize / 2}`;
+
+  // Vertical line on the right (end indicator)
+  const lineX = halfSize + triangleSize / 2 + 2;
+
+  const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="${trianglePoints}" 
+                 fill="${color}" 
+                 stroke="white" 
+                 stroke-width="1"/>
+        <line x1="${lineX}" y1="${halfSize - lineLength / 2}" 
+              x2="${lineX}" y2="${halfSize + lineLength / 2}" 
+              stroke="${color}" 
+              stroke-width="3" 
+              stroke-linecap="round"/>
+    </svg>`;
+
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+};
+
+/**
  * Create GeoJSON data for route markers
  */
 export const createRouteMarkersData = (
@@ -130,51 +213,76 @@ export const createRouteMarkersData = (
 ): {
   startMarkers: GeoJSON.FeatureCollection;
   endMarkers: GeoJSON.FeatureCollection;
+  loopMarkers: GeoJSON.FeatureCollection;
 } => {
   const startFeatures: GeoJSON.Feature[] = [];
   const endFeatures: GeoJSON.Feature[] = [];
+  const loopFeatures: GeoJSON.Feature[] = [];
 
   let startIndex = 0;
   let endIndex = 0;
+  let loopIndex = 0;
 
   routes.features.forEach((feature) => {
     if (feature.geometry.type !== "LineString") return;
 
-    const startData = getStartPointWithDirection(feature);
-    const endData = getEndPointWithDirection(feature);
+    // Check if this route is a loop
+    if (isRouteLoop(feature)) {
+      const startData = getStartPointWithDirection(feature);
+      if (startData) {
+        loopFeatures.push({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: startData.point,
+          },
+          properties: {
+            bearing: startData.bearing,
+            routeId: feature.id,
+            routeName: feature.properties?.name,
+            index: loopIndex,
+          },
+        });
+        loopIndex++;
+      }
+    } else {
+      // Regular route with separate start and end markers
+      const startData = getStartPointWithDirection(feature);
+      const endData = getEndPointWithDirection(feature);
 
-    if (startData) {
-      startFeatures.push({
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: startData.point,
-        },
-        properties: {
-          bearing: startData.bearing,
-          routeId: feature.id,
-          routeName: feature.properties?.name,
-          index: startIndex,
-        },
-      });
-      startIndex++;
-    }
+      if (startData) {
+        startFeatures.push({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: startData.point,
+          },
+          properties: {
+            bearing: startData.bearing,
+            routeId: feature.id,
+            routeName: feature.properties?.name,
+            index: startIndex,
+          },
+        });
+        startIndex++;
+      }
 
-    if (endData) {
-      endFeatures.push({
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: endData.point,
-        },
-        properties: {
-          bearing: (endData.bearing + 90) % 360, // perpendicular to trail direction
-          routeId: feature.id,
-          routeName: feature.properties?.name,
-          index: endIndex,
-        },
-      });
-      endIndex++;
+      if (endData) {
+        endFeatures.push({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: endData.point,
+          },
+          properties: {
+            bearing: (endData.bearing + 90) % 360, // perpendicular to trail direction
+            routeId: feature.id,
+            routeName: feature.properties?.name,
+            index: endIndex,
+          },
+        });
+        endIndex++;
+      }
     }
   });
 
@@ -186,6 +294,10 @@ export const createRouteMarkersData = (
     endMarkers: {
       type: "FeatureCollection",
       features: endFeatures,
+    },
+    loopMarkers: {
+      type: "FeatureCollection",
+      features: loopFeatures,
     },
   };
 };
