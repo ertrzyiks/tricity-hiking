@@ -9,8 +9,13 @@ import { ElevationChart } from "../ElevationChart/ElevationChart";
 import { Button } from "../Button/Button";
 import { TrailAttributeName } from "../TrailAttributeName/TrailAttributeName";
 import { TrailAttributeValue } from "../TrailAttributeValue/TrailAttributeValue";
-import pointImage from "../../assets/places/point.png";
 import { trackEvent } from "../../services/analytics";
+import {
+  createRouteMarkersData,
+  generateTriangleSVG,
+  generatePerpendicularLineSVG,
+  generateLoopMarkerSVG,
+} from "../../services/routeMarkers";
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
@@ -90,6 +95,135 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           "line-color": "#e11d48",
         },
       });
+
+      // Add start and end markers for routes
+      const { startMarkers, endMarkers, loopMarkers } =
+        createRouteMarkersData(routes);
+
+      // Add start markers (triangles)
+      map.addSource("start-markers", {
+        type: "geojson",
+        data: startMarkers,
+      });
+
+      // Add end markers (perpendicular lines)
+      map.addSource("end-markers", {
+        type: "geojson",
+        data: endMarkers,
+      });
+
+      // Add loop markers (combined start/end for loops)
+      map.addSource("loop-markers", {
+        type: "geojson",
+        data: loopMarkers,
+      });
+
+      // Load all marker images asynchronously
+      const loadMarkerImages = async () => {
+        // Generate and load single images for each marker type
+        const startTriangleDataUrl = generateTriangleSVG(16, "#059669"); // green color for start
+        const endLineDataUrl = generatePerpendicularLineSVG(16, "#dc2626"); // red color for end
+        const loopMarkerDataUrl = generateLoopMarkerSVG(16, "#7c3aed"); // purple color for loops
+
+        // Load images using Image() constructor to work with SVG data URLs
+        const imagePromises: Promise<void>[] = [];
+
+        // Load start triangle image
+        const startPromise = new Promise<void>((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            if (!map.hasImage("start-triangle")) {
+              map.addImage("start-triangle", img);
+            }
+            resolve();
+          };
+          img.onerror = () => {
+            console.error("Failed to load start triangle image");
+            resolve();
+          };
+          img.src = startTriangleDataUrl;
+        });
+        imagePromises.push(startPromise);
+
+        // Load end line image
+        const endPromise = new Promise<void>((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            if (!map.hasImage("end-line")) {
+              map.addImage("end-line", img);
+            }
+            resolve();
+          };
+          img.onerror = () => {
+            console.error("Failed to load end line image");
+            resolve();
+          };
+          img.src = endLineDataUrl;
+        });
+        imagePromises.push(endPromise);
+
+        // Load loop marker image
+        const loopPromise = new Promise<void>((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            if (!map.hasImage("loop-marker")) {
+              map.addImage("loop-marker", img);
+            }
+            resolve();
+          };
+          img.onerror = () => {
+            console.error("Failed to load loop marker image");
+            resolve();
+          };
+          img.src = loopMarkerDataUrl;
+        });
+        imagePromises.push(loopPromise);
+
+        // Wait for all images to load
+        await Promise.all(imagePromises);
+
+        // Add start marker layer
+        map.addLayer({
+          id: "start-markers-layer",
+          type: "symbol",
+          source: "start-markers",
+          layout: {
+            "icon-image": "start-triangle",
+            "icon-rotate": ["get", "bearing"],
+            "icon-size": 1,
+            "icon-allow-overlap": true,
+          },
+        });
+
+        // Add end marker layer
+        map.addLayer({
+          id: "end-markers-layer",
+          type: "symbol",
+          source: "end-markers",
+          layout: {
+            "icon-image": "end-line",
+            "icon-rotate": ["get", "bearing"],
+            "icon-size": 1,
+            "icon-allow-overlap": true,
+          },
+        });
+
+        // Add loop marker layer
+        map.addLayer({
+          id: "loop-markers-layer",
+          type: "symbol",
+          source: "loop-markers",
+          layout: {
+            "icon-image": "loop-marker",
+            "icon-rotate": ["get", "bearing"],
+            "icon-size": 1,
+            "icon-allow-overlap": true,
+          },
+        });
+      };
+
+      // Load markers after map is ready
+      loadMarkerImages().catch(console.error);
 
       const tooltip = new maplibregl.Popup({
         closeButton: false,
