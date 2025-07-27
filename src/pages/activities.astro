@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import ActivityListCardItem from "../components/ListCardItem/Activity.astro";
 import ListCardItem from "../components/ListCardItem.astro";
+import ActivityList from "../components/ActivitiesList/ActivityList.astro";
 import { getCollection } from "astro:content";
 
 const activities = await getCollection("activities");
@@ -17,6 +18,7 @@ const outdoorPlaygrounds = getByType("outdoor-playground");
 const indoorPlaygrounds = getByType("indoor-playground");
 const topSights = getByType("top-sights");
 const fairs = getByType("fairs");
+const other = getByType("other");
 ---
 
 <Layout title="Tricity hiking - Activities">
@@ -24,152 +26,6 @@ const fairs = getByType("fairs");
     class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0"
     transition:name="map"
   >
-    <div class="my-4">
-      <h2 class="text-2xl mb-3">Top sights</h2>
-      <p class="my-2">
-        Each city in the agglomeration has its own landmarks. These places
-        attract many visitors and can be crowded during the high tourist season,
-        but they offer valuable insight into the region's identity.
-      </p>
-
-      <ul>
-        {
-          topSights.map(({ data }) => (
-            <ActivityListCardItem
-              link={data.link}
-              icon="mdi:star-circle"
-              name={data.name}
-              description={data.description}
-            />
-          ))
-        }
-      </ul>
-    </div>
-
-    <div class="my-4">
-      <h2 class="text-2xl mb-3">Ship-museums</h2>
-      <p class="my-2">
-        There are three ship-museums in Tricity. Two of them located in Gdynia
-        and one in Gdańsk. They are all different have have long history of
-        active duty. They are open for visitors both on the deck and inside.
-      </p>
-
-      <ul>
-        {
-          ships.map(({ data }) => (
-            <ListCardItem link={data.link}>
-              {data.image && (
-                <Image
-                  src={data.image}
-                  width="160"
-                  height="160"
-                  class="w-20 h-20 grayscale-50 group-hover:grayscale-0"
-                  alt={`Photo of ${data.name}`}
-                  slot="image"
-                />
-              )}
-
-              <span class="group-hover:text-green-600" slot="title">
-                {data.name}
-              </span>
-
-              <span class="group-hover:text-green-600" slot="description">
-                {data.description}
-              </span>
-            </ListCardItem>
-          ))
-        }
-      </ul>
-    </div>
-
-    <div class="my-4">
-      <h2 class="text-2xl mb-3">Orienteering</h2>
-
-      <p class="my-2">
-        Orienteering is a sport that connects physical exertion and navigation.
-        You get a map with checkpoints and you have to find them in the forest
-        or urban terrain. You need to bring your own compass, in some of them
-        you can use compass from your phone but it may be considered as
-        cheating. If you are competitive you can run to get the best time, but
-        you can also just walk and enjoy the nature and the challenge of finding
-        the point.
-      </p>
-
-      <p class="my-2">
-        All 3 organizations prepare routes in four difficulty levels.
-      </p>
-
-      <ul>
-        {
-          orienteering.map(({ data }) => (
-            <ActivityListCardItem
-              link={data.link}
-              icon="mdi:map-outline"
-              name={data.name}
-              description={data.description}
-            />
-          ))
-        }
-      </ul>
-    </div>
-
-    <div class="my-4">
-      <h2 class="text-2xl mb-3">Playgrounds - outdoor</h2>
-      <p class="my-2">
-        Tricity has a lot of playgrounds for kids. The list below highlights the
-        biggest or the most interesting ones.
-      </p>
-
-      <ul>
-        {
-          outdoorPlaygrounds.map(({ data }) => (
-            <ActivityListCardItem
-              link={data.link}
-              icon="mdi:playground-seesaw"
-              name={data.name}
-              description={data.description}
-            />
-          ))
-        }
-      </ul>
-    </div>
-
-    <div class="my-4">
-      <h2 class="text-2xl mb-3">Playgrounds - indoor</h2>
-      <p class="my-2"></p>
-
-      <ul>
-        {
-          indoorPlaygrounds.map(({ data }) => (
-            <ActivityListCardItem
-              link={data.link}
-              icon="mdi:playground-slide"
-              name={data.name}
-              description={data.description}
-            />
-          ))
-        }
-      </ul>
-    </div>
-
-    <div class="my-4">
-      <h2 class="text-2xl mb-3">Fairs</h2>
-      <p class="my-2">
-        Tricity hosts various traditional and seasonal fairs throughout the year. These events offer unique shopping experiences, local crafts, and cultural entertainment that reflect the region's rich heritage.
-      </p>
-
-      <ul>
-        {
-          fairs.map(({ data }) => (
-            <ActivityListCardItem
-              link={data.link}
-              icon="mdi:store"
-              name={data.name}
-              description={data.description}
-            />
-          ))
-        }
-      </ul>
-    </div>
+    <ActivityList activities={activities} groupBy="type" />
   </div>
 </Layout>

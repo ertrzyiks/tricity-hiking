@@ -1,19 +1,33 @@
 ---
 import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
 import ListCardItem from "../ListCardItem.astro";
 import ListCardItemAttributes from "../ListCardItemAttributes.astro";
 import ListCardItemAttribute from "../ListCardItemAttribute.astro";
 
-const { link, icon, name, location, description } = Astro.props;
+const { link, icon, image, name, location, description } = Astro.props;
 ---
 
 <ListCardItem link={link}>
-  <div
-    slot="image"
-    class="bg-green-200 w-16 h-16 flex items-center justify-center group-hover:bg-black group-hover:text-green-200"
-  >
-    <Icon name={icon} class="w-12 h-12" />
-  </div>
+  {
+    image ? (
+      <Image
+        src={image}
+        width="160"
+        height="160"
+        class="w-20 h-20 grayscale-50 group-hover:grayscale-0"
+        alt={`Photo of ${name}`}
+        slot="image"
+      />
+    ) : (
+      <div
+        slot="image"
+        class="bg-green-200 w-16 h-16 flex items-center justify-center group-hover:bg-black group-hover:text-green-200"
+      >
+        <Icon name={icon} class="w-12 h-12" />
+      </div>
+    )
+  }
 
   <span class="group-hover:text-green-600" slot="title">
     {name}

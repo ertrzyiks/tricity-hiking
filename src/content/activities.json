@@ -123,5 +123,13 @@
       "link": "https://pchlitarggdansk.pl",
       "location": "Gdańsk"
     }
+  ],
+  "other": [
+    {
+      "name": "Zbiornik Wody Stara Orunia",
+      "description": "A water reservoir located in the Stara Orunia area.",
+      "link": "https://www.gdansk.pl/",
+      "location": "Gdańsk"
+    }
   ]
 }
