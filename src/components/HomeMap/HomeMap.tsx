@@ -16,7 +16,6 @@ import {
   generatePerpendicularLineSVG,
   generateLoopMarkerSVG,
 } from "../../services/routeMarkers";
-import { loadImageToMap } from "../RouteMap/loadImageToMap";
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
@@ -126,12 +125,62 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
         const endLineDataUrl = generatePerpendicularLineSVG(16, "#dc2626"); // red color for end
         const loopMarkerDataUrl = generateLoopMarkerSVG(16, "#7c3aed"); // purple color for loops
 
-        loadImageToMap(map, "start-triangle", startTriangleDataUrl);
-        loadImageToMap(map, "end-line", endLineDataUrl);
-        loadImageToMap(map, "loop-marker", loopMarkerDataUrl);
+        // Load images using Image() constructor to work with SVG data URLs
+        const imagePromises: Promise<void>[] = [];
 
-        // Give some time for images to load before adding layers
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        // Load start triangle image
+        const startPromise = new Promise<void>((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            if (!map.hasImage("start-triangle")) {
+              map.addImage("start-triangle", img);
+            }
+            resolve();
+          };
+          img.onerror = () => {
+            console.error("Failed to load start triangle image");
+            resolve();
+          };
+          img.src = startTriangleDataUrl;
+        });
+        imagePromises.push(startPromise);
+
+        // Load end line image
+        const endPromise = new Promise<void>((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            if (!map.hasImage("end-line")) {
+              map.addImage("end-line", img);
+            }
+            resolve();
+          };
+          img.onerror = () => {
+            console.error("Failed to load end line image");
+            resolve();
+          };
+          img.src = endLineDataUrl;
+        });
+        imagePromises.push(endPromise);
+
+        // Load loop marker image
+        const loopPromise = new Promise<void>((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            if (!map.hasImage("loop-marker")) {
+              map.addImage("loop-marker", img);
+            }
+            resolve();
+          };
+          img.onerror = () => {
+            console.error("Failed to load loop marker image");
+            resolve();
+          };
+          img.src = loopMarkerDataUrl;
+        });
+        imagePromises.push(loopPromise);
+
+        // Wait for all images to load
+        await Promise.all(imagePromises);
 
         // Add start marker layer
         map.addLayer({
