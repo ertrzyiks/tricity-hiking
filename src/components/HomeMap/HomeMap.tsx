@@ -9,13 +9,13 @@ import { ElevationChart } from "../ElevationChart/ElevationChart";
 import { Button } from "../Button/Button";
 import { TrailAttributeName } from "../TrailAttributeName/TrailAttributeName";
 import { TrailAttributeValue } from "../TrailAttributeValue/TrailAttributeValue";
-import pointImage from "../../assets/places/point.png";
 import { trackEvent } from "../../services/analytics";
 import {
   createRouteMarkersData,
   generateTriangleSVG,
   generatePerpendicularLineSVG,
 } from "../../services/routeMarkers";
+import { loadImageToMap } from "../RouteMap/loadImageToMap";
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
@@ -113,54 +113,28 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
       // Load all marker images asynchronously
       const loadMarkerImages = async () => {
-        const imagePromises: Promise<void>[] = [];
-
         // Generate and add start marker images
-        startMarkers.features.forEach((feature, index) => {
+        for (let index = 0; index < startMarkers.features.length; index++) {
+          const feature = startMarkers.features[index];
           const bearing = feature.properties?.bearing || 0;
           const iconId = `start-triangle-${index}`;
           const dataUrl = generateTriangleSVG(bearing, 16, "#059669"); // green color for start
 
-          const promise = new Promise<void>((resolve) => {
-            const img = new Image();
-            img.onload = () => {
-              map.addImage(iconId, img);
-              resolve();
-            };
-            img.onerror = () => {
-              console.error(`Failed to load start marker image ${iconId}`);
-              resolve();
-            };
-            img.src = dataUrl;
-          });
-
-          imagePromises.push(promise);
-        });
+          loadImageToMap(map, iconId, dataUrl);
+        }
 
         // Generate and add end marker images
-        endMarkers.features.forEach((feature, index) => {
+        for (let index = 0; index < endMarkers.features.length; index++) {
+          const feature = endMarkers.features[index];
           const bearing = feature.properties?.bearing || 0;
           const iconId = `end-line-${index}`;
           const dataUrl = generatePerpendicularLineSVG(bearing, 16, "#dc2626"); // red color for end
 
-          const promise = new Promise<void>((resolve) => {
-            const img = new Image();
-            img.onload = () => {
-              map.addImage(iconId, img);
-              resolve();
-            };
-            img.onerror = () => {
-              console.error(`Failed to load end marker image ${iconId}`);
-              resolve();
-            };
-            img.src = dataUrl;
-          });
+          loadImageToMap(map, iconId, dataUrl);
+        }
 
-          imagePromises.push(promise);
-        });
-
-        // Wait for all images to load
-        await Promise.all(imagePromises);
+        // Give some time for images to load before adding layers
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
         // Add start marker layer
         map.addLayer({
