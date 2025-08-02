@@ -174,32 +174,20 @@ export const generatePerpendicularLineSVG = (
 };
 
 /**
- * Generate SVG for a combined start/end marker for loops (triangle + line, like ">|")
+ * Generate SVG for a circle marker for loops
  */
 export const generateLoopMarkerSVG = (
   size: number = 16,
   color: string = "#7c3aed",
 ): string => {
   const halfSize = size / 2;
-  const triangleSize = size * 0.4;
-  const lineLength = size * 0.3;
-
-  // Triangle pointing right (start indicator)
-  const trianglePoints = `${halfSize - triangleSize / 2},${halfSize - triangleSize / 2} ${halfSize + triangleSize / 2},${halfSize} ${halfSize - triangleSize / 2},${halfSize + triangleSize / 2}`;
-
-  // Vertical line on the right (end indicator)
-  const lineX = halfSize + triangleSize / 2 + 2;
+  const radius = halfSize * 0.7; // Make circle slightly smaller than the full size
 
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="${trianglePoints}"
-                 fill="${color}"
-                 stroke="white"
-                 stroke-width="1"/>
-        <line x1="${lineX}" y1="${halfSize - lineLength / 2}"
-              x2="${lineX}" y2="${halfSize + lineLength / 2}"
-              stroke="${color}"
-              stroke-width="3"
-              stroke-linecap="round"/>
+        <circle cx="${halfSize}" cy="${halfSize}" r="${radius}"
+                fill="${color}"
+                stroke="white"
+                stroke-width="2"/>
     </svg>`;
 
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
