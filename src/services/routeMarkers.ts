@@ -143,9 +143,9 @@ export const generateTriangleSVG = (
   const height = size * 0.866; // equilateral triangle height
 
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="${halfSize},${halfSize - height / 2} ${halfSize - halfSize},${halfSize + height / 2} ${halfSize + halfSize},${halfSize + height / 2}" 
-                 fill="${color}" 
-                 stroke="white" 
+        <polygon points="${halfSize},${halfSize - height / 2} ${halfSize - halfSize},${halfSize + height / 2} ${halfSize + halfSize},${halfSize + height / 2}"
+                 fill="${color}"
+                 stroke="white"
                  stroke-width="1"/>
     </svg>`;
 
@@ -163,10 +163,10 @@ export const generatePerpendicularLineSVG = (
   const lineLength = size * 0.8;
 
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-        <line x1="${halfSize}" y1="${halfSize - lineLength / 2}" 
-              x2="${halfSize}" y2="${halfSize + lineLength / 2}" 
-              stroke="${color}" 
-              stroke-width="3" 
+        <line y1="${halfSize}" x1="${halfSize - lineLength / 2}"
+              y2="${halfSize}" x2="${halfSize + lineLength / 2}"
+              stroke="${color}"
+              stroke-width="3"
               stroke-linecap="round"/>
     </svg>`;
 
@@ -191,14 +191,14 @@ export const generateLoopMarkerSVG = (
   const lineX = halfSize + triangleSize / 2 + 2;
 
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="${trianglePoints}" 
-                 fill="${color}" 
-                 stroke="white" 
+        <polygon points="${trianglePoints}"
+                 fill="${color}"
+                 stroke="white"
                  stroke-width="1"/>
-        <line x1="${lineX}" y1="${halfSize - lineLength / 2}" 
-              x2="${lineX}" y2="${halfSize + lineLength / 2}" 
-              stroke="${color}" 
-              stroke-width="3" 
+        <line x1="${lineX}" y1="${halfSize - lineLength / 2}"
+              x2="${lineX}" y2="${halfSize + lineLength / 2}"
+              stroke="${color}"
+              stroke-width="3"
               stroke-linecap="round"/>
     </svg>`;
 
