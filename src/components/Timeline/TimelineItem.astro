@@ -1,0 +1,24 @@
+<li
+  class="min-h-12 flex"
+  class:list={{
+    "before-filler": !Astro.slots.has("opposite-content"),
+    "after-filler": !Astro.slots.has("content"),
+  }}
+>
+  <slot name="opposite-content" />
+  <slot name="separator" />
+  <slot name="content" />
+</li>
+
+<style>
+  .before-filler:before {
+    content: "";
+    flex: 1;
+    padding: 6px 16px;
+  }
+  .after-filler:after {
+    content: "";
+    flex: 1;
+    padding: 6px 16px;
+  }
+</style>
