@@ -1,5 +1,10 @@
+---
+const { height } = Astro.props;
+---
+
 <li
   class="min-h-12 flex"
+  style={{ minHeight: height ? `${Math.max(height, 40)}px` : "24px" }}
   class:list={{
     "before-filler": !Astro.slots.has("opposite-content"),
     "after-filler": !Astro.slots.has("content"),

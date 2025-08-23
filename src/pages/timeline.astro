@@ -1,7 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-// import { Content as TimelineContent } from "./timeline2.md";
-// import { Timeline } from "../components/Timeline/Timeline";
 import TimelineRoot from "../components/Timeline/Timeline.astro";
 import TimelineItem from "../components/Timeline/TimelineItem.astro";
 import TimelineOppositeContent from "../components/Timeline/TimelineOppositeContent.astro";
@@ -9,6 +7,98 @@ import TimelineSeparator from "../components/Timeline/TimelineSeparator.astro";
 import TimelineDot from "../components/Timeline/TimelineDot.astro";
 import TimelineConnector from "../components/Timeline/TimelineConnector.astro";
 import TimelineContent from "../components/Timeline/TimelineContent.astro";
+
+type TimelineEvent = {
+  year: number;
+  event: string;
+  description?: string;
+  label?: string;
+  minor?: boolean;
+};
+
+const timelineConfig: TimelineEvent[] = [
+  {
+    year: 997,
+    event: "First record of GYDDANYZC",
+  },
+  {
+    year: 1308,
+    event: "Danzig massacre",
+    label: "Teutonic Order",
+  },
+  {
+    year: 1410,
+    event: "Battle of Grunwald",
+    description:
+      "Danzig paid homage to Polish King, but returned to Teutonic control soon after",
+    label: "Teutonic Order",
+    minor: true,
+  },
+  {
+    year: 1454,
+    event: "Danzig rebellion",
+    label: "Poland",
+  },
+  {
+    year: 1793,
+    event: "Third Partition of Poland",
+    label: "Prussia",
+  },
+  {
+    year: 1807,
+    event: "Siege of Danzig",
+    label: "Free City (Napoleonic)",
+  },
+  {
+    year: 1814,
+    event: "Siege of Danzig",
+    label: "Prussia",
+  },
+  {
+    year: 1871,
+    event: "Unification of Germany",
+    label: "Germany",
+    minor: true,
+  },
+  {
+    year: 1918,
+    event: "Weimar Republic is established",
+    label: "Weimar Republic",
+    minor: true,
+  },
+  {
+    year: 1920,
+    event: "Treaty of Versailles",
+    label: "Free City (Versailles)",
+  },
+  {
+    year: 1939,
+    event: "Invasion of Poland",
+    label: "Nazi Germany",
+  },
+  {
+    year: 1945,
+    event: "Liberation of Danzig",
+    label: "Poland",
+  },
+];
+
+type TimelineConfigProcessed = {
+  year: number;
+  event: string;
+  duration: number;
+};
+
+const timelineConfigProcessed: TimelineConfigProcessed[] = [];
+
+timelineConfig.forEach((item, index) => {
+  timelineConfigProcessed.push({
+    year: item.year,
+    event: item.event,
+    duration:
+      (timelineConfig[index + 1]?.year || new Date().getFullYear()) - item.year,
+  });
+});
 ---
 
 <Layout title={`Tricity hiking - Gdańsk history timeline`}>
@@ -18,95 +108,19 @@ import TimelineContent from "../components/Timeline/TimelineContent.astro";
         <TimelineConnector />
       </TimelineSeparator>
     </TimelineItem>
-    <TimelineItem>
-      <TimelineOppositeContent slot="opposite-content">
-        First record of GYDDANYZC
-      </TimelineOppositeContent>
-      <TimelineSeparator slot="separator">
-        <TimelineDot />
-        <TimelineConnector />
-      </TimelineSeparator>
-      <TimelineContent slot="content">997</TimelineContent>
-    </TimelineItem>
-    <TimelineItem>
-      <TimelineOppositeContent slot="opposite-content">
-        Teutonic Order
-      </TimelineOppositeContent>
-      <TimelineSeparator slot="separator">
-        <TimelineDot />
-        <TimelineConnector />
-      </TimelineSeparator>
-      <TimelineContent slot="content">1309</TimelineContent>
-    </TimelineItem>
-    <TimelineItem>
-      <TimelineOppositeContent slot="opposite-content">
-        Poland / PLC
-      </TimelineOppositeContent>
-      <TimelineSeparator slot="separator">
-        <TimelineDot />
-        <TimelineConnector />
-      </TimelineSeparator>
-      <TimelineContent slot="content">1454</TimelineContent>
-    </TimelineItem>
-    <TimelineItem>
-      <TimelineOppositeContent slot="opposite-content">
-        Prussia
-      </TimelineOppositeContent>
-      <TimelineSeparator slot="separator">
-        <TimelineDot />
-        <TimelineConnector />
-      </TimelineSeparator>
-      <TimelineContent slot="content">1793</TimelineContent>
-    </TimelineItem>
-    <TimelineItem>
-      <TimelineOppositeContent slot="opposite-content">
-        Free City (Napoleonic)
-      </TimelineOppositeContent>
-      <TimelineSeparator slot="separator">
-        <TimelineDot />
-        <TimelineConnector />
-      </TimelineSeparator>
-      <TimelineContent slot="content">1807</TimelineContent>
-    </TimelineItem>
-    <TimelineItem>
-      <TimelineOppositeContent slot="opposite-content">
-        Prussia/Germany
-      </TimelineOppositeContent>
-      <TimelineSeparator slot="separator">
-        <TimelineDot />
-        <TimelineConnector />
-      </TimelineSeparator>
-      <TimelineContent slot="content">1815</TimelineContent>
-    </TimelineItem>
-    <TimelineItem>
-      <TimelineOppositeContent slot="opposite-content">
-        Free City (Versailles)
-      </TimelineOppositeContent>
-      <TimelineSeparator slot="separator">
-        <TimelineDot />
-        <TimelineConnector />
-      </TimelineSeparator>
-      <TimelineContent slot="content">1920</TimelineContent>
-    </TimelineItem>
-    <TimelineItem>
-      <TimelineOppositeContent slot="opposite-content">
-        Nazi Germany
-      </TimelineOppositeContent>
-      <TimelineSeparator slot="separator">
-        <TimelineDot />
-        <TimelineConnector />
-      </TimelineSeparator>
-      <TimelineContent slot="content">1939</TimelineContent>
-    </TimelineItem>
-    <TimelineItem>
-      <TimelineOppositeContent slot="opposite-content">
-        Poland
-      </TimelineOppositeContent>
-      <TimelineSeparator slot="separator">
-        <TimelineDot />
-        <TimelineConnector />
-      </TimelineSeparator>
-      <TimelineContent slot="content">1945</TimelineContent>
-    </TimelineItem>
+    {
+      timelineConfigProcessed.map((item) => (
+        <TimelineItem key={item.year} height={40 + item.duration * 0.4}>
+          <TimelineOppositeContent slot="opposite-content">
+            {item.event}
+          </TimelineOppositeContent>
+          <TimelineSeparator slot="separator">
+            <TimelineDot />
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent slot="content">{item.year}</TimelineContent>
+        </TimelineItem>
+      ))
+    }
   </TimelineRoot>
 </Layout>
