@@ -1,0 +1,112 @@
+---
+import Layout from "../layouts/Layout.astro";
+// import { Content as TimelineContent } from "./timeline2.md";
+// import { Timeline } from "../components/Timeline/Timeline";
+import TimelineRoot from "../components/Timeline/Timeline.astro";
+import TimelineItem from "../components/Timeline/TimelineItem.astro";
+import TimelineOppositeContent from "../components/Timeline/TimelineOppositeContent.astro";
+import TimelineSeparator from "../components/Timeline/TimelineSeparator.astro";
+import TimelineDot from "../components/Timeline/TimelineDot.astro";
+import TimelineConnector from "../components/Timeline/TimelineConnector.astro";
+import TimelineContent from "../components/Timeline/TimelineContent.astro";
+---
+
+<Layout title={`Tricity hiking - Gdańsk history timeline`}>
+  <TimelineRoot>
+    <TimelineItem>
+      <TimelineSeparator slot="separator">
+        <TimelineConnector />
+      </TimelineSeparator>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineOppositeContent slot="opposite-content">
+        First record of GYDDANYZC
+      </TimelineOppositeContent>
+      <TimelineSeparator slot="separator">
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent slot="content">997</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineOppositeContent slot="opposite-content">
+        Teutonic Order
+      </TimelineOppositeContent>
+      <TimelineSeparator slot="separator">
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent slot="content">1309</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineOppositeContent slot="opposite-content">
+        Poland / PLC
+      </TimelineOppositeContent>
+      <TimelineSeparator slot="separator">
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent slot="content">1454</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineOppositeContent slot="opposite-content">
+        Prussia
+      </TimelineOppositeContent>
+      <TimelineSeparator slot="separator">
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent slot="content">1793</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineOppositeContent slot="opposite-content">
+        Free City (Napoleonic)
+      </TimelineOppositeContent>
+      <TimelineSeparator slot="separator">
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent slot="content">1807</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineOppositeContent slot="opposite-content">
+        Prussia/Germany
+      </TimelineOppositeContent>
+      <TimelineSeparator slot="separator">
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent slot="content">1815</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineOppositeContent slot="opposite-content">
+        Free City (Versailles)
+      </TimelineOppositeContent>
+      <TimelineSeparator slot="separator">
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent slot="content">1920</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineOppositeContent slot="opposite-content">
+        Nazi Germany
+      </TimelineOppositeContent>
+      <TimelineSeparator slot="separator">
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent slot="content">1939</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineOppositeContent slot="opposite-content">
+        Poland
+      </TimelineOppositeContent>
+      <TimelineSeparator slot="separator">
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <TimelineContent slot="content">1945</TimelineContent>
+    </TimelineItem>
+  </TimelineRoot>
+</Layout>
