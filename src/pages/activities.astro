@@ -1,24 +1,9 @@
 ---
-import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
-import ActivityListCardItem from "../components/ListCardItem/Activity.astro";
-import ListCardItem from "../components/ListCardItem.astro";
 import ActivityList from "../components/ActivitiesList/ActivityList.astro";
 import { getCollection } from "astro:content";
 
 const activities = await getCollection("activities");
-
-const getByType = (type: string) => {
-  return activities.filter((item) => item.data.type === type);
-};
-
-const ships = getByType("ship");
-const orienteering = getByType("orienteering");
-const outdoorPlaygrounds = getByType("outdoor-playground");
-const indoorPlaygrounds = getByType("indoor-playground");
-const topSights = getByType("top-sights");
-const fairs = getByType("fairs");
-const other = getByType("other");
 ---
 
 <Layout title="Tricity hiking - Activities">
