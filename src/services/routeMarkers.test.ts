@@ -182,7 +182,7 @@ describe("routeMarkers", () => {
       const svg = generateLoopMarkerSVG(16, "#7c3aed");
       expect(svg).toMatch(/^data:image\/svg\+xml;charset=utf-8,/);
       expect(decodeURIComponent(svg)).toContain("<svg");
-      expect(decodeURIComponent(svg)).toContain("circle");
+      expect(decodeURIComponent(svg)).toContain("polygon");
       expect(decodeURIComponent(svg)).toContain("#7c3aed");
     });
   });
