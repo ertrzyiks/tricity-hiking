@@ -13,6 +13,7 @@ import Deco from "../assets/deco.svg";
     </div>
     <div class="px-5">
       <a
+        id="hero-get-started-btn"
         href="/routes"
         class="bg-slate-100 block text-green-700 py-3 px-8 rounded text-2xl"
       >
@@ -25,3 +26,16 @@ import Deco from "../assets/deco.svg";
     <Deco class="text-slate-50 w-full h-full relative -bottom-1" />
   </div>
 </div>
+
+<script>
+  import { trackEvent } from "../services/analytics";
+
+  document.addEventListener("astro:page-load", () => {
+    const getStartedBtn = document.getElementById("hero-get-started-btn");
+    if (getStartedBtn) {
+      getStartedBtn.addEventListener("click", () => {
+        trackEvent("clicked homeHeroCTA");
+      });
+    }
+  });
+</script>
