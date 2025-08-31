@@ -174,20 +174,28 @@ export const generatePerpendicularLineSVG = (
 };
 
 /**
- * Generate SVG for a circle marker for loops
+ * Generate SVG for a right-pointing triangle marker for loops
  */
 export const generateLoopMarkerSVG = (
   size: number = 16,
   color: string = "#7c3aed",
 ): string => {
   const halfSize = size / 2;
-  const radius = halfSize * 0.7; // Make circle slightly smaller than the full size
+  const triangleSize = size * 0.7; // Make triangle slightly smaller than the full size
+  const triangleHeight = triangleSize * 0.866; // equilateral triangle height
+
+  // Calculate points for a right-pointing triangle centered in the viewBox
+  const leftX = halfSize - triangleSize / 2;
+  const rightX = halfSize + triangleSize / 2;
+  const topY = halfSize - triangleHeight / 2;
+  const bottomY = halfSize + triangleHeight / 2;
+  const middleY = halfSize;
 
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${halfSize}" cy="${halfSize}" r="${radius}"
-                fill="${color}"
-                stroke="white"
-                stroke-width="2"/>
+        <polygon points="${leftX},${topY} ${rightX},${middleY} ${leftX},${bottomY}"
+                 fill="${color}"
+                 stroke="white"
+                 stroke-width="2"/>
     </svg>`;
 
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
