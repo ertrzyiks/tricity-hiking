@@ -174,28 +174,40 @@ export const generatePerpendicularLineSVG = (
 };
 
 /**
- * Generate SVG for a right-pointing triangle marker for loops
+ * Generate SVG for a combined triangle and line marker for loops
+ * Combines start icon (triangle) and end icon (line) as requested
  */
 export const generateLoopMarkerSVG = (
   size: number = 16,
   color: string = "#7c3aed",
 ): string => {
   const halfSize = size / 2;
-  const triangleSize = size * 0.7; // Make triangle slightly smaller than the full size
+  
+  // Triangle configuration (similar to start marker)
+  const triangleSize = size * 0.5; // Make triangle smaller to fit with line
   const triangleHeight = triangleSize * 0.866; // equilateral triangle height
-
-  // Calculate points for a right-pointing triangle centered in the viewBox
-  const leftX = halfSize - triangleSize / 2;
-  const rightX = halfSize + triangleSize / 2;
-  const topY = halfSize - triangleHeight / 2;
-  const bottomY = halfSize + triangleHeight / 2;
-  const middleY = halfSize;
+  
+  // Position triangle in upper part of the icon
+  const triangleCenterY = halfSize * 0.6; // Move triangle up
+  const triangleTop = triangleCenterY - triangleHeight / 2;
+  const triangleBottom = triangleCenterY + triangleHeight / 2;
+  
+  // Line configuration (similar to end marker)
+  const lineLength = size * 0.6;
+  const lineY = halfSize * 1.4; // Position line in lower part
+  const lineStartX = halfSize - lineLength / 2;
+  const lineEndX = halfSize + lineLength / 2;
 
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="${leftX},${topY} ${rightX},${middleY} ${leftX},${bottomY}"
+        <polygon points="${halfSize},${triangleTop} ${halfSize - triangleSize/2},${triangleBottom} ${halfSize + triangleSize/2},${triangleBottom}"
                  fill="${color}"
                  stroke="white"
-                 stroke-width="2"/>
+                 stroke-width="1"/>
+        <line x1="${lineStartX}" y1="${lineY}"
+              x2="${lineEndX}" y2="${lineY}"
+              stroke="${color}"
+              stroke-width="2"
+              stroke-linecap="round"/>
     </svg>`;
 
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
