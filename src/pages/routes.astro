@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import Homepage from "../components/Homepage.astro";
 import { merge } from "../services/merge";
 import { enhance } from "../services/enhance";
+import RouteMapLegend from "../components/RouteMapLegend.astro";
 
 import mapImage from "../assets/home-map.jpg";
 import { HomeMap } from "../components/HomeMap/HomeMap";
@@ -40,6 +41,8 @@ const geojson = merge(geojsonList);
 
       <HomeMap client:only="preact" routes={geojson} />
     </div>
+
+    <RouteMapLegend />
   </Homepage>
 </Layout>
 

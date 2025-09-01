@@ -11,6 +11,7 @@ import { mToKm } from "../../services/mToKm";
 import { formatTime } from "../../services/formatTime";
 import { Icon } from "astro-icon/components";
 import TrailAttribute from "../../components/TrailAttribute.astro";
+import RouteMapLegend from "../../components/RouteMapLegend.astro";
 
 export async function getStaticPaths() {
   const allRoutes = await getCollection("routes");
@@ -73,6 +74,8 @@ if (!feature) {
   >
     <RouteMap client:only="preact" route={geojson.data} />
   </div>
+
+  <RouteMapLegend />
 
   <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0">
     <FullElevationChart client:load points={attitudes} />
