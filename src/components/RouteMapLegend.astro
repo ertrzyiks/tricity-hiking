@@ -1,0 +1,31 @@
+---
+// Import the marker generation functions from the services
+import {
+  generateTriangleSVG,
+  generatePerpendicularLineSVG,
+  generateLoopMarkerSVG,
+} from "../services/routeMarkers";
+
+// Generate the same SVG data URLs as used in the RouteMap component
+const startIcon = generateTriangleSVG(16, "#059669"); // green color for start
+const endIcon = generatePerpendicularLineSVG(16, "#dc2626"); // red color for end
+const loopIcon = generateLoopMarkerSVG(16, "#7c3aed"); // purple color for loops
+---
+
+<div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0 my-4">
+  <h3 class="text-lg font-medium mb-3">Map Legend</h3>
+  <ul class="space-y-2">
+    <li class="flex items-center gap-3">
+      <img src={startIcon} alt="Start marker" class="w-4 h-4" />
+      <span class="text-sm">Start</span>
+    </li>
+    <li class="flex items-center gap-3">
+      <img src={endIcon} alt="End marker" class="w-4 h-4" />
+      <span class="text-sm">End</span>
+    </li>
+    <li class="flex items-center gap-3">
+      <img src={loopIcon} alt="Loop marker" class="w-4 h-4" />
+      <span class="text-sm">Loop</span>
+    </li>
+  </ul>
+</div>
