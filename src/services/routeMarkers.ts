@@ -183,28 +183,28 @@ export const generateLoopMarkerSVG = (
 ): string => {
   const halfSize = size / 2;
   
-  // Triangle configuration (similar to start marker)
-  const triangleSize = size * 0.5; // Make triangle smaller to fit with line
+  // Triangle configuration (similar to start marker) - positioned on LEFT side
+  const triangleSize = size * 0.4; // Make triangle smaller to fit with line
   const triangleHeight = triangleSize * 0.866; // equilateral triangle height
   
-  // Position triangle in upper part of the icon
-  const triangleCenterY = halfSize * 0.6; // Move triangle up
-  const triangleTop = triangleCenterY - triangleHeight / 2;
-  const triangleBottom = triangleCenterY + triangleHeight / 2;
+  // Position triangle on left side, vertically centered
+  const triangleCenterX = halfSize * 0.6; // Move triangle to left
+  const triangleLeft = triangleCenterX - triangleSize / 2;
+  const triangleRight = triangleCenterX + triangleSize / 2;
   
-  // Line configuration (similar to end marker)
+  // Vertical line configuration - positioned on RIGHT side
   const lineLength = size * 0.6;
-  const lineY = halfSize * 1.4; // Position line in lower part
-  const lineStartX = halfSize - lineLength / 2;
-  const lineEndX = halfSize + lineLength / 2;
+  const lineX = halfSize * 1.4; // Position line on right side
+  const lineStartY = halfSize - lineLength / 2;
+  const lineEndY = halfSize + lineLength / 2;
 
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="${halfSize},${triangleTop} ${halfSize - triangleSize/2},${triangleBottom} ${halfSize + triangleSize/2},${triangleBottom}"
+        <polygon points="${triangleRight},${halfSize} ${triangleLeft},${halfSize - triangleHeight/2} ${triangleLeft},${halfSize + triangleHeight/2}"
                  fill="${color}"
                  stroke="white"
                  stroke-width="1"/>
-        <line x1="${lineStartX}" y1="${lineY}"
-              x2="${lineEndX}" y2="${lineY}"
+        <line x1="${lineX}" y1="${lineStartY}"
+              x2="${lineX}" y2="${lineEndY}"
               stroke="${color}"
               stroke-width="2"
               stroke-linecap="round"/>
