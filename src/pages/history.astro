@@ -87,6 +87,7 @@ type TimelineConfigProcessed = {
   year: number;
   event: string;
   duration: number;
+  minor?: boolean;
 };
 
 const timelineConfigProcessed: TimelineConfigProcessed[] = [];
@@ -95,6 +96,7 @@ timelineConfig.forEach((item, index) => {
   timelineConfigProcessed.push({
     year: item.year,
     event: item.event,
+    minor: item.minor,
     duration:
       (timelineConfig[index + 1]?.year || new Date().getFullYear()) - item.year,
   });
@@ -115,7 +117,7 @@ timelineConfig.forEach((item, index) => {
             {item.event}
           </TimelineOppositeContent>
           <TimelineSeparator slot="separator">
-            <TimelineDot />
+            <TimelineDot variant={item.minor ? "minor" : "regular"} />
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent slot="content">{item.year}</TimelineContent>
