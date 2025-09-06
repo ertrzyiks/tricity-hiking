@@ -3,10 +3,12 @@ import Layout from "../layouts/Layout.astro";
 import TimelineRoot from "../components/Timeline/Timeline.astro";
 import TimelineItem from "../components/Timeline/TimelineItem.astro";
 import TimelineOppositeContent from "../components/Timeline/TimelineOppositeContent.astro";
+import TimelineOppositeContentSecondary from "../components/Timeline/TimelineOppositeContentSecondary.astro";
 import TimelineSeparator from "../components/Timeline/TimelineSeparator.astro";
 import TimelineDot from "../components/Timeline/TimelineDot.astro";
 import TimelineConnector from "../components/Timeline/TimelineConnector.astro";
 import TimelineContent from "../components/Timeline/TimelineContent.astro";
+import TimelineContentLabel from "../components/Timeline/TimelineContentLabel.astro";
 
 type TimelineEvent = {
   year: number;
@@ -20,6 +22,7 @@ const timelineConfig: TimelineEvent[] = [
   {
     year: 997,
     event: "First record of GYDDANYZC",
+    label: "Mostly Pomerelian dukes",
   },
   {
     year: 1308,
@@ -30,7 +33,7 @@ const timelineConfig: TimelineEvent[] = [
     year: 1410,
     event: "Battle of Grunwald",
     description:
-      "Danzig paid homage to Polish King, but returned to Teutonic control soon after",
+      "Danzig paid homage to Polish King, but returned to Teutonic control a couple months after",
     label: "Teutonic Order",
     minor: true,
   },
@@ -86,7 +89,9 @@ const timelineConfig: TimelineEvent[] = [
 type TimelineConfigProcessed = {
   year: number;
   event: string;
+  label?: string;
   duration: number;
+  description?: string;
   minor?: boolean;
 };
 
@@ -97,6 +102,8 @@ timelineConfig.forEach((item, index) => {
     year: item.year,
     event: item.event,
     minor: item.minor,
+    label: item.label,
+    description: item.description,
     duration:
       (timelineConfig[index + 1]?.year || new Date().getFullYear()) - item.year,
   });
@@ -104,25 +111,48 @@ timelineConfig.forEach((item, index) => {
 ---
 
 <Layout title={`Tricity hiking - Gdańsk history`}>
-  <TimelineRoot>
-    <TimelineItem>
-      <TimelineSeparator slot="separator">
-        <TimelineConnector />
-      </TimelineSeparator>
-    </TimelineItem>
-    {
-      timelineConfigProcessed.map((item) => (
-        <TimelineItem key={item.year} height={40 + item.duration * 0.4}>
-          <TimelineOppositeContent slot="opposite-content">
-            {item.event}
-          </TimelineOppositeContent>
-          <TimelineSeparator slot="separator">
-            <TimelineDot variant={item.minor ? "minor" : "regular"} />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent slot="content">{item.year}</TimelineContent>
-        </TimelineItem>
-      ))
-    }
-  </TimelineRoot>
+  <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
+    <h2 class="text-3xl my-4">History</h2>
+
+    <p class="my-4">
+      The timeline below presents the key events in the history of Gdańsk. On
+      the left there is a title and brief summary of the event, while on the
+      right there is the year and the political entity that ruled Gdańsk at that
+      time. The length of the vertical line roughly corresponds to the duration
+      of the rule.
+    </p>
+
+    <TimelineRoot>
+      <TimelineItem>
+        <TimelineSeparator slot="separator">
+          <TimelineConnector />
+        </TimelineSeparator>
+      </TimelineItem>
+      {
+        timelineConfigProcessed.map((item) => (
+          <TimelineItem key={item.year} height={40 + item.duration * 0.4}>
+            <TimelineOppositeContent slot="opposite-content">
+              {item.event}
+
+              {item.description && (
+                <TimelineOppositeContentSecondary>
+                  {item.description}
+                </TimelineOppositeContentSecondary>
+              )}
+            </TimelineOppositeContent>
+            <TimelineSeparator slot="separator">
+              <TimelineDot variant={item.minor ? "minor" : "regular"} />
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent slot="content">
+              {item.year}
+              {item.label && (
+                <TimelineContentLabel>{item.label}</TimelineContentLabel>
+              )}
+            </TimelineContent>
+          </TimelineItem>
+        ))
+      }
+    </TimelineRoot>
+  </div>
 </Layout>
