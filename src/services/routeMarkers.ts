@@ -179,32 +179,32 @@ export const generatePerpendicularLineSVG = (
  */
 export const generateLoopMarkerSVG = (
   size: number = 16,
-  color: string = "#7c3aed",
+  color: string = "#e11d48",
 ): string => {
   const halfSize = size / 2;
-  
+
   // Vertical line configuration - positioned on LEFT side
-  const lineLength = size * 0.6;
-  const lineX = halfSize * 0.6; // Position line on left side
-  const lineStartY = halfSize - lineLength / 2;
-  const lineEndY = halfSize + lineLength / 2;
-  
+  const lineLength = size * 0.7;
+  const lineStartX = halfSize - lineLength / 2;
+  const lineEndX = halfSize + lineLength / 2;
+  const lineY = halfSize * 0.1;
+
   // Triangle configuration (similar to start marker) - positioned on RIGHT side
-  const triangleSize = size * 0.4; // Make triangle smaller to fit with line
+  const triangleSize = size * 0.8; // Make triangle smaller to fit with line
   const triangleHeight = triangleSize * 0.866; // equilateral triangle height
-  
+
   // Position triangle on right side, vertically centered, pointing right
-  const triangleCenterX = halfSize * 1.4; // Move triangle to right
+  const triangleCenterX = halfSize; // Move triangle to right
   const triangleLeft = triangleCenterX - triangleSize / 2;
   const triangleRight = triangleCenterX + triangleSize / 2;
 
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-        <line x1="${lineX}" y1="${lineStartY}"
-              x2="${lineX}" y2="${lineEndY}"
+        <line x1="${lineStartX}" y1="${lineY}"
+              x2="${lineEndX}" y2="${lineY}"
               stroke="${color}"
               stroke-width="2"
               stroke-linecap="round"/>
-        <polygon points="${triangleRight},${halfSize} ${triangleLeft},${halfSize - triangleHeight/2} ${triangleLeft},${halfSize + triangleHeight/2}"
+        <polygon points="${halfSize},${halfSize - triangleHeight / 2} ${triangleLeft},${halfSize + triangleHeight / 2} ${triangleRight},${halfSize + triangleHeight / 2}"
                  fill="${color}"
                  stroke="white"
                  stroke-width="1"/>
