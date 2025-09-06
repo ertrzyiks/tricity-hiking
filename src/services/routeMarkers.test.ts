@@ -178,12 +178,14 @@ describe("routeMarkers", () => {
   });
 
   describe("generateLoopMarkerSVG", () => {
-    it("should generate a valid SVG data URL for loop markers", () => {
+    it("should generate a valid SVG data URL for loop markers with both triangle and line", () => {
       const svg = generateLoopMarkerSVG(16, "#7c3aed");
       expect(svg).toMatch(/^data:image\/svg\+xml;charset=utf-8,/);
-      expect(decodeURIComponent(svg)).toContain("<svg");
-      expect(decodeURIComponent(svg)).toContain("circle");
-      expect(decodeURIComponent(svg)).toContain("#7c3aed");
+      const decodedSvg = decodeURIComponent(svg);
+      expect(decodedSvg).toContain("<svg");
+      expect(decodedSvg).toContain("polygon"); // triangle element
+      expect(decodedSvg).toContain("line"); // line element
+      expect(decodedSvg).toContain("#7c3aed");
     });
   });
 

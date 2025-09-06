@@ -174,20 +174,40 @@ export const generatePerpendicularLineSVG = (
 };
 
 /**
- * Generate SVG for a circle marker for loops
+ * Generate SVG for a combined triangle and line marker for loops
+ * Creates |> pattern: vertical line on left, triangle pointing right on right
  */
 export const generateLoopMarkerSVG = (
   size: number = 16,
-  color: string = "#7c3aed",
+  color: string = "#e11d48",
 ): string => {
   const halfSize = size / 2;
-  const radius = halfSize * 0.7; // Make circle slightly smaller than the full size
+
+  // Vertical line configuration - positioned on LEFT side
+  const lineLength = size * 0.7;
+  const lineStartX = halfSize - lineLength / 2;
+  const lineEndX = halfSize + lineLength / 2;
+  const lineY = halfSize * 0.1;
+
+  // Triangle configuration (similar to start marker) - positioned on RIGHT side
+  const triangleSize = size * 0.8; // Make triangle smaller to fit with line
+  const triangleHeight = triangleSize * 0.866; // equilateral triangle height
+
+  // Position triangle on right side, vertically centered, pointing right
+  const triangleCenterX = halfSize; // Move triangle to right
+  const triangleLeft = triangleCenterX - triangleSize / 2;
+  const triangleRight = triangleCenterX + triangleSize / 2;
 
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${halfSize}" cy="${halfSize}" r="${radius}"
-                fill="${color}"
-                stroke="white"
-                stroke-width="2"/>
+        <line x1="${lineStartX}" y1="${lineY}"
+              x2="${lineEndX}" y2="${lineY}"
+              stroke="${color}"
+              stroke-width="2"
+              stroke-linecap="round"/>
+        <polygon points="${halfSize},${halfSize - triangleHeight / 2} ${triangleLeft},${halfSize + triangleHeight / 2} ${triangleRight},${halfSize + triangleHeight / 2}"
+                 fill="${color}"
+                 stroke="white"
+                 stroke-width="1"/>
     </svg>`;
 
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
