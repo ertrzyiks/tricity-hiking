@@ -121,9 +121,9 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
       // Load all marker images asynchronously
       const loadMarkerImages = async () => {
         // Generate and load single images for each marker type
-        const startTriangleDataUrl = generateTriangleSVG(16, "#059669"); // green color for start
-        const endLineDataUrl = generatePerpendicularLineSVG(16, "#dc2626"); // red color for end
-        const loopMarkerDataUrl = generateLoopMarkerSVG(16, "#7c3aed"); // purple color for loops
+        const startTriangleDataUrl = generateTriangleSVG(16, "#dc2626");
+        const endLineDataUrl = generatePerpendicularLineSVG(16, "#dc2626");
+        const loopMarkerDataUrl = generateLoopMarkerSVG(16, "#dc2626");
 
         // Load images using Image() constructor to work with SVG data URLs
         const imagePromises: Promise<void>[] = [];
