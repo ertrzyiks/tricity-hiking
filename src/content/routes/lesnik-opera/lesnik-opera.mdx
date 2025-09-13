@@ -7,7 +7,7 @@ featured: "homepage"
 preview: ./lesnik-opera.jpg
 ---
 
-import { Image } from "astro:assets";
+import ArticleImage from "../../../components/ArticleImage.astro";
 import wielkaGwiazda from "../../../assets/photos/wielka-gwiazda.jpg";
 import lysaGora from "../../../assets/photos/lysa-gora.jpg";
 import wzniesienieStrzeleckie from "../../../assets/photos/wzniesienie-strzeleckie.jpg";
@@ -29,9 +29,7 @@ burned down, only a few fragments of the foundations remain.
 
 Nowadays it's a great place to rest and have a snack in one of the wooden bowers.
 
-<div class="my-4">
-  <Image src={wielkaGwiazda} alt="Wielka Gwiazda recreation spot" />
-</div>
+<ArticleImage src={wielkaGwiazda} alt="Wielka Gwiazda recreation spot" />
 
 # Mała Gwiazda
 
@@ -45,9 +43,7 @@ It's one of the few places in the forrest nearby Sopot where the view is not blo
 The panoramic view from the hill allows to see a big part of Sopot and Gdańsk.
 In the winter the hill turns into a ski slope, the only one in Tricity.
 
-<div class="my-4">
-  <Image src={lysaGora} alt="Łysa Góra" />
-</div>
+<ArticleImage src={lysaGora} alt="Łysa Góra" />
 
 # Wzniesienie Strzeleckie
 
@@ -56,9 +52,7 @@ features the former ski jumping hill with K-point of 25 meters. It's unused sinc
 take-off point is still visible. A few minutes of walk later we face a choice - to climp a steap hill forward or walk around it to the left.
 Both paths leads to the same place - the Wzniesienie Strzeleckie (eng. Shooter's Hill). It's a viewpoint with a nice view on Sopot.
 
-<div class="my-4">
-  <Image src={wzniesienieStrzeleckie} alt="Wzniesienie Strzeleckie" />
-</div>
+<ArticleImage src={wzniesienieStrzeleckie} alt="Wzniesienie Strzeleckie" />
 
 # Going back
 
