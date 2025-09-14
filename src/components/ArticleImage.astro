@@ -4,11 +4,21 @@ import { Image } from "astro:assets";
 interface Props {
   src: ImageMetadata;
   alt: string;
+  caption?: string;
 }
 
-const { src, alt } = Astro.props;
+const { src, alt, caption } = Astro.props;
 ---
 
-<div class="my-4 lg:mx-12">
-  <Image src={src} alt={alt} layout="full-width" />
-</div>
+{caption ? (
+  <figure class="my-4 lg:mx-12">
+    <Image src={src} alt={alt} layout="full-width" />
+    <figcaption class="text-sm text-gray-600 mt-2 text-center italic">
+      {caption}
+    </figcaption>
+  </figure>
+) : (
+  <div class="my-4 lg:mx-12">
+    <Image src={src} alt={alt} layout="full-width" />
+  </div>
+)}
