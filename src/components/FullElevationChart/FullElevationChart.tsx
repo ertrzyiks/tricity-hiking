@@ -63,8 +63,6 @@ export const FullElevationChart = ({
       return;
     }
 
-    e.preventDefault();
-
     const offsetX = e.touches[0].pageX - bbox1.x;
     const offsetWidth = bbox1.width;
     setPoint(offsetX / offsetWidth);
@@ -72,7 +70,7 @@ export const FullElevationChart = ({
 
   return (
     <div
-      className="w-full h-[84px] flex py-4 relative"
+      className="w-full h-[84px] flex py-4 relative touch-pan-y"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onTouchMove={handleTouchMove}
