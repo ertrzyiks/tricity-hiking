@@ -4,8 +4,6 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { createMap } from "../../services/createMap";
 import { routePointHighlighter } from "./routePointHighlighter";
 import { getBounds } from "../../services/getBounds";
-import pointImage from "../../assets/places/point.png";
-import { loadImageToMap } from "./loadImageToMap";
 import {
   createRouteMarkersData,
   generateTriangleSVG,
@@ -53,18 +51,6 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
         paint: {
           "line-width": 5,
           "line-color": "#e11d48",
-        },
-      });
-
-      loadImageToMap(map, "poi_15", pointImage.src);
-
-      map.addLayer({
-        id: "places",
-        type: "symbol",
-        source: "lines",
-        layout: {
-          "icon-image": `poi_15`,
-          "icon-overlap": "always",
         },
       });
 
