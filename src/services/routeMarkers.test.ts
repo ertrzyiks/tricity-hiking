@@ -120,6 +120,29 @@ describe("routeMarkers", () => {
         "Need at least 2 coordinates",
       );
     });
+
+    it("should provide better direction than simple first-two-points approach", () => {
+      // Route that has a misleading first segment but clear overall direction
+      const coordinates: [number, number, number?][] = [
+        [0, 0, 100], // start
+        [0.00001, 0.0001, 110], // tiny northeast - misleading if only using this
+        [0.0002, 0.0002, 120], // small northeast
+        [0.001, 0.0001, 130], // primarily eastward - better representation
+        [0.002, 0.0001, 140], // continues east
+      ];
+
+      // Old approach: just first two points
+      const oldBearing = calculateBearing([0, 0], [0.00001, 0.0001]);
+
+      // New approach: smart selection
+      const newBearing = calculateSmartStartBearing(coordinates);
+
+      // Old bearing should be more northward (closer to 45°)
+      // New bearing should be more eastward (closer to 90°)
+      expect(oldBearing).toBeLessThan(60); // more northward
+      expect(newBearing).toBeGreaterThan(75); // more eastward
+      expect(newBearing).toBeLessThan(95); // still reasonable
+    });
   });
 
   describe("getStartPointWithDirection", () => {
