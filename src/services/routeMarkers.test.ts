@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   calculateBearing,
   calculateDistance,
+  calculateSmartStartBearing,
   getStartPointWithDirection,
   getEndPointWithDirection,
   isRouteLoop,
@@ -29,6 +30,118 @@ describe("routeMarkers", () => {
       // West
       const westBearing = calculateBearing([1, 0], [0, 0]);
       expect(westBearing).toBeCloseTo(270, 1);
+    });
+  });
+
+  describe("calculateSmartStartBearing", () => {
+    it("should use the first point that meets distance threshold", () => {
+      // Create a route that goes east for a significant distance
+      const coordinates: [number, number, number?][] = [
+        [0, 0, 100], // start
+        [0.0001, 0, 110], // 11m east - too short
+        [0.0005, 0, 120], // 56m east - still short for 75m threshold
+        [0.001, 0, 130], // 111m east - meets threshold
+        [0.002, 0, 140], // 222m east
+        [0.005, 0, 150], // further points...
+      ];
+
+      const bearing = calculateSmartStartBearing(coordinates, 75);
+
+      // Should use the bearing to point at index 3 (0.001, 0) which is ~111m away
+      expect(bearing).toBeCloseTo(90, 1); // eastward
+    });
+
+    it("should use farthest available point when threshold is not met", () => {
+      // Short route where no point meets the 75m threshold
+      const coordinates: [number, number, number?][] = [
+        [0, 0, 100], // start
+        [0.0001, 0, 110], // 11m east
+        [0.0002, 0, 120], // 22m east
+        [0.0003, 0, 130], // 33m east - farthest available
+      ];
+
+      const bearing = calculateSmartStartBearing(coordinates, 75);
+
+      // Should use the farthest point (index 3)
+      expect(bearing).toBeCloseTo(90, 1); // eastward
+    });
+
+    it("should handle routes with direction changes", () => {
+      // Route that starts south then turns east
+      const coordinates: [number, number, number?][] = [
+        [0, 0, 100], // start
+        [0, -0.0001, 110], // 11m south - small initial movement
+        [0, -0.0002, 120], // 22m south
+        [0.001, -0.0002, 130], // then 111m east - should use this bearing
+        [0.002, -0.0002, 140], // continues east
+      ];
+
+      const bearing = calculateSmartStartBearing(coordinates, 75);
+
+      // Should use bearing from start to the point that meets threshold
+      // This will be primarily eastward bearing (close to 90°)
+      expect(bearing).toBeGreaterThan(80);
+      expect(bearing).toBeLessThan(110);
+    });
+
+    it("should respect suggested indices [1, 2, 3, 5, 8, 13]", () => {
+      // Create a route where index 4 would meet threshold but it's not in suggested indices
+      const coordinates: [number, number, number?][] = new Array(15)
+        .fill(null)
+        .map((_, i) => [i * 0.0001, 0, 100 + i * 10]) as [
+        number,
+        number,
+        number?,
+      ][];
+
+      // Manually set index 5 to be far enough to meet 75m threshold
+      coordinates[5] = [0.001, 0, 150]; // ~111m from start
+
+      const bearing = calculateSmartStartBearing(coordinates, 75);
+
+      // Should use index 5 (first suggested index that meets threshold)
+      expect(bearing).toBeCloseTo(90, 1); // eastward
+    });
+
+    it("should fallback to index 1 for very short routes", () => {
+      const coordinates: [number, number, number?][] = [
+        [0, 0, 100],
+        [0.0001, 0, 110], // ~11m east
+      ];
+
+      const bearing = calculateSmartStartBearing(coordinates, 75);
+      expect(bearing).toBeCloseTo(90, 1); // eastward
+    });
+
+    it("should throw error for insufficient coordinates", () => {
+      const coordinates: [number, number, number?][] = [[0, 0, 100]];
+
+      expect(() => calculateSmartStartBearing(coordinates)).toThrow(
+        "Need at least 2 coordinates",
+      );
+    });
+
+    it("should provide better direction than simple first-two-points approach", () => {
+      // Route that has a misleading first segment but clear overall direction
+      const coordinates: [number, number, number?][] = [
+        [0, 0, 100], // start
+        [0.00001, 0.0001, 110], // tiny northeast - misleading if only using this
+        [0.0002, 0.0002, 120], // small northeast
+        [0.001, 0.0001, 130], // primarily eastward - better representation
+        [0.002, 0.0001, 140], // continues east
+      ];
+
+      // Old approach: just first two points
+      const oldBearing = calculateBearing([0, 0], [0.00001, 0.0001]);
+
+      // New approach: smart selection
+      const newBearing = calculateSmartStartBearing(coordinates);
+
+      // Old bearing should be more northward (closer to 45°)
+      // New bearing should be more eastward (closer to 90°)
+      expect(oldBearing).toBeLessThan(60); // more northward
+      expect(newBearing).toBeGreaterThan(75); // more eastward
+      expect(newBearing).toBeLessThan(95); // still reasonable
     });
   });
 

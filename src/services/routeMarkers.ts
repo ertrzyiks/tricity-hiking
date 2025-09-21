@@ -53,6 +53,53 @@ export const calculateDistance = (
 };
 
 /**
+ * Calculate smart bearing for route start using multiple points
+ * Looks at suggested indices [0, 1, 2, 3, 5, 8, 13] and finds the best representative direction
+ */
+export const calculateSmartStartBearing = (
+  coordinates: [number, number, number?][],
+  distanceThresholdMeters: number = 75,
+): number => {
+  if (coordinates.length < 2) {
+    throw new Error("Need at least 2 coordinates to calculate bearing");
+  }
+
+  const start = [coordinates[0][0], coordinates[0][1]] as [number, number];
+  const suggestedIndices = [1, 2, 3, 5, 8, 13];
+
+  // Find the first point that meets our distance threshold
+  let bestIndex = 1; // fallback to second point
+  let cumulativeDistance = 0;
+
+  for (const index of suggestedIndices) {
+    if (index >= coordinates.length) break;
+
+    const targetPoint = [coordinates[index][0], coordinates[index][1]] as [
+      number,
+      number,
+    ];
+    const distance = calculateDistance(start, targetPoint);
+
+    if (distance >= distanceThresholdMeters) {
+      bestIndex = index;
+      break;
+    }
+
+    // Keep track of the farthest point we can use if threshold isn't met
+    if (distance > cumulativeDistance) {
+      cumulativeDistance = distance;
+      bestIndex = index;
+    }
+  }
+
+  const targetPoint = [
+    coordinates[bestIndex][0],
+    coordinates[bestIndex][1],
+  ] as [number, number];
+  return calculateBearing(start, targetPoint);
+};
+
+/**
  * Get start point and direction from a LineString feature
  */
 export const getStartPointWithDirection = (
@@ -68,11 +115,11 @@ export const getStartPointWithDirection = (
   if (coordinates.length < 2) return null;
 
   const start = [coordinates[0][0], coordinates[0][1]] as [number, number];
-  const second = [coordinates[1][0], coordinates[1][1]] as [number, number];
+  const bearing = calculateSmartStartBearing(coordinates);
 
   return {
     point: start,
-    bearing: calculateBearing(start, second),
+    bearing,
   };
 };
 
