@@ -42,6 +42,8 @@ const geojson = merge(geojsonList);
       <HomeMap client:only="preact" routes={geojson} />
     </div>
 
+    <RouteMapLegend />
+
     <div class="max-w-(--breakpoint-xl) mx-auto px-2 lg:px-0 py-4">
       <a
         class="px-4 py-2 rounded-md border border-solid bg-green-50 hover:bg-green-200 text-slate-900 border-green-300 inline-block"
@@ -50,8 +52,6 @@ const geojson = merge(geojsonList);
         Map (extended)
       </a>
     </div>
-
-    <RouteMapLegend />
   </Homepage>
 </Layout>
 
