@@ -1,3 +1,15 @@
-<div class="flex">
+<div class="flex overflow-x-auto snap-x snap-mandatory">
   <slot />
 </div>
+
+<style>
+  /* Hide scrollbar for webkit browsers */
+  div::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for Firefox */
+  div {
+    scrollbar-width: none;
+  }
+</style>
