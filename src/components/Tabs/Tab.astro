@@ -1,0 +1,16 @@
+---
+const { href, active } = Astro.props;
+---
+
+<a
+  class:list={[
+    "px-8 py-4 text-sm font-medium inline-flex items-center gap-2 relative -mb-0.5 border-b-2",
+    {
+      "text-green-600 border-b-green-600": active,
+      "text-gray-500 border-b-transparent": !active,
+    },
+  ]}
+  href={href}
+>
+  <slot />
+</a>

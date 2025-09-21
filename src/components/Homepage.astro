@@ -1,62 +1,23 @@
 ---
 import { Icon } from "astro-icon/components";
+import Tabs from "./Tabs/Tabs.astro";
+import Tab from "./Tabs/Tab.astro";
 const pathname = new URL(Astro.request.url).pathname;
 ---
 
 <div class="max-w-(--breakpoint-xl) mx-auto py-4">
-  <nav class="flex gap-4 text-sm">
-    <div class="inline-flex shadow-md rounded-md overflow-hidden">
-      <a
-        class:list={[
-          "px-2 py-1 inline-flex items-center gap-2 rounded-l-md",
-          "border border-solid",
-          {
-            "bg-green-500 hover:bg-green-600 text-white":
-              pathname.startsWith("/routes/"),
-            "bg-green-50 border-green-300 hover:bg-green-200 text-slate-900":
-              !pathname.startsWith("/routes/"),
-          },
-        ]}
-        href="/routes/"
-      >
+  <nav class="relative">
+    <Tabs>
+      <Tab active={pathname.startsWith("/routes/")} href="/routes/">
         <Icon name="mdi:map" class="w-4 h-4" />
-
         Map
-      </a>
+      </Tab>
 
-      <a
-        class:list={[
-          "px-2 py-1 inline-flex items-center gap-2 rounded-r-md",
-          "border border-solid border-l-0",
-          {
-            "bg-green-500 border-green-500 hover:bg-green-600 text-white":
-              pathname.startsWith("/list/"),
-            "bg-green-50 border-green-300 hover:bg-green-200  text-slate-900":
-              !pathname.startsWith("/list/"),
-          },
-        ]}
-        href="/list/"
-      >
+      <Tab active={pathname.startsWith("/list/")} href="/list/">
         <Icon name="mdi:view-list" class="w-4 h-4" />
         List
-      </a>
-    </div>
-
-    <a
-      class:list={[
-        "px-4 py-2 rounded-md",
-        "border border-solid",
-        {
-          "bg-green-500 hover:bg-green-600 border-green-500 text-white":
-            pathname.startsWith("/extended/"),
-          "bg-green-50 hover:bg-green-200  text-slate-900 border-green-300":
-            !pathname.startsWith("/extended/"),
-        },
-      ]}
-      href="/extended/"
-    >
-      Map (extended)
-    </a>
+      </Tab>
+    </Tabs>
   </nav>
 </div>
 
