@@ -8,7 +8,11 @@ const pathname = new URL(Astro.request.url).pathname;
 <div class="max-w-(--breakpoint-xl) mx-auto py-4">
   <nav class="relative">
     <Tabs>
-      <Tab active={pathname.startsWith("/routes/")} href="/routes/">
+      <Tab
+        active={pathname.startsWith("/routes/") ||
+          pathname.startsWith("/extended")}
+        href="/routes/"
+      >
         <Icon name="mdi:map" class="w-4 h-4" />
         Map
       </Tab>
