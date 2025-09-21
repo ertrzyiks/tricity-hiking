@@ -1,3 +1,11 @@
-<div class="flex">
+<div class="flex overflow-x-auto snap-x snap-mandatory">
   <slot />
 </div>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll('a[data-active="true"]').forEach((el) => {
+      el.scrollIntoView({ block: "nearest", inline: "center" });
+    });
+  });
+</script>
