@@ -2,6 +2,8 @@
  * Utility functions for creating route start and end markers
  */
 
+import { MAP_MARKER_COLOR } from "../constants/colors";
+
 /**
  * Calculate bearing between two points in degrees
  */
@@ -137,7 +139,7 @@ export const isRouteLoop = (
  */
 export const generateTriangleSVG = (
   size: number = 12,
-  color: string = "#991b1b",
+  color: string = MAP_MARKER_COLOR,
 ): string => {
   const halfSize = size / 2;
   const height = size * 0.866; // equilateral triangle height
@@ -157,7 +159,7 @@ export const generateTriangleSVG = (
  */
 export const generatePerpendicularLineSVG = (
   size: number = 12,
-  color: string = "#991b1b",
+  color: string = MAP_MARKER_COLOR,
 ): string => {
   const halfSize = size / 2;
   const lineLength = size * 0.8;
@@ -179,7 +181,7 @@ export const generatePerpendicularLineSVG = (
  */
 export const generateLoopMarkerSVG = (
   size: number = 16,
-  color: string = "#991b1b",
+  color: string = MAP_MARKER_COLOR,
 ): string => {
   const halfSize = size / 2;
 
