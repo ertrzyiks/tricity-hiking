@@ -2,6 +2,9 @@
 import type { InferGetStaticParamsType } from "astro";
 import { getCollection, getEntry, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
+import { enhance } from "../../services/enhance";
+import { getLineStringFeature } from "../../services/getLineStringFeature";
+import RouteListItem from "../../components/ListCardItem/Route.astro";
 
 export async function getStaticPaths() {
   const allBlogPosts = await getCollection("blog");
@@ -33,10 +36,29 @@ if (!entry) {
 
 const { Content } = await render(entry);
 
+// Load highlighted routes for the blog post
+const highlightedRouteIds = ["lesnik-opera", "samborowo-glowica", "wawoz-huzarow", "orlowo-bulwar"];
+const allRoutes = await getCollection("routes");
+const highlightedRoutes = [];
+
+for (const routeId of highlightedRouteIds) {
+  const route = allRoutes.find(r => r.id === routeId);
+  if (route && !route.data.draft) {
+    const geojson = await getEntry(route.data.geojson);
+    const enhancedGeojson = enhance({
+      collection: geojson.data,
+      route: route.data,
+    });
+    highlightedRoutes.push({
+      route,
+      properties: getLineStringFeature({ collection: enhancedGeojson })?.properties ?? {},
+    });
+  }
+}
+
 const publishedDate = entry.data.publishDate.toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",
-  day: "numeric",
 });
 ---
 
@@ -78,6 +100,17 @@ const publishedDate = entry.data.publishDate.toLocaleDateString("en-US", {
       <div class="prose prose-lg max-w-none">
         <Content />
       </div>
+      
+      {highlightedRoutes.length > 0 && (
+        <section class="mt-12">
+          <h2 class="text-2xl font-bold mb-6">Featured Trails</h2>
+          <ul class="space-y-4">
+            {highlightedRoutes.map(({ route, properties }) => (
+              <RouteListItem route={route} properties={properties} />
+            ))}
+          </ul>
+        </section>
+      )}
     </article>
 
     <nav class="mt-12 pt-8 border-t border-slate-200">
