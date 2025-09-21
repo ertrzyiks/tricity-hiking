@@ -2,14 +2,10 @@
   <slot />
 </div>
 
-<style>
-  /* Hide scrollbar for webkit browsers */
-  div::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* Hide scrollbar for Firefox */
-  div {
-    scrollbar-width: none;
-  }
-</style>
+<script>
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll('a[data-active="true"]').forEach((el) => {
+      el.scrollIntoView({ block: "nearest", inline: "center" });
+    });
+  });
+</script>
