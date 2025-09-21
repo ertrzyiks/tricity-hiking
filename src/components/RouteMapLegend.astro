@@ -5,11 +5,12 @@ import {
   generatePerpendicularLineSVG,
   generateLoopMarkerSVG,
 } from "../services/routeMarkers";
+import { MAP_MARKER_COLOR } from "../constants/colors";
 
 // Generate the same SVG data URLs as used in the RouteMap component
-const startIcon = generateTriangleSVG(16, "#dc2626"); // green color for start
-const endIcon = generatePerpendicularLineSVG(16, "#dc2626"); // red color for end
-const loopIcon = generateLoopMarkerSVG(16, "#dc2626"); // purple color for loops
+const startIcon = generateTriangleSVG(16, MAP_MARKER_COLOR); // red color for start
+const endIcon = generatePerpendicularLineSVG(16, MAP_MARKER_COLOR); // red color for end
+const loopIcon = generateLoopMarkerSVG(16, MAP_MARKER_COLOR); // red color for loops
 ---
 
 <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0 my-4">
