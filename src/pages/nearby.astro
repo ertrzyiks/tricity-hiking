@@ -11,11 +11,11 @@ const routes = allRoutes.filter((route) => {
   return !route.data.draft;
 });
 
-const tricityRoutes = routes.filter((route) => route.data.tricity);
+const nearbyRoutes = routes.filter((route) => !route.data.tricity);
 
 const geojsonList = [];
 
-for (const route of tricityRoutes) {
+for (const route of nearbyRoutes) {
   const geojson = await getEntry(route.data.geojson);
   const enhancedGeojson = enhance({
     collection: geojson.data,
@@ -29,7 +29,7 @@ for (const route of tricityRoutes) {
 }
 ---
 
-<Layout title="Tricity hiking - list of routes close to Tricity">
+<Layout title="Tricity hiking - list of routes nearby Tricity">
   <Homepage>
     <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0">
       <ul>
