@@ -33,8 +33,8 @@
 
 @utility sidebar--open {
   @apply block fixed left-0 right-0 rounded-none border-none z-10;
-  top: 40px;
-  height: calc(100dvh - 40px);
+  top: 48px;
+  height: calc(100dvh - 48px);
 
   @media (width >= theme(--breakpoint-lg)) {
     @apply block static;
