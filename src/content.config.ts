@@ -103,9 +103,32 @@ const activitiesCollection = defineCollection({
     }),
 });
 
+const blogCollection = defineCollection({
+  loader: glob({
+    pattern: "**/*.mdx",
+    base: "./src/content/blog",
+    generateId: (options) => {
+      const segments = options.entry.split("/");
+
+      return segments.join("/").replace(/\.mdx$/, "");
+    },
+  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      publishDate: z.coerce.date(),
+      author: z.string().optional(),
+      draft: z.boolean().optional(),
+      tags: z.array(z.string()).optional(),
+      coverImage: image().optional(),
+    }),
+});
+
 export const collections = {
   routes: routesCollection,
   geodata: geodataCollection,
   activities: activitiesCollection,
   "map-tiles": mapTilesCollection,
+  blog: blogCollection,
 };
