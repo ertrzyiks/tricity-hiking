@@ -6,10 +6,10 @@ import { Image } from "astro:assets";
 import { localizedHTML as favicons } from "astro-favicons/middleware";
 import { getEntry } from "astro:content";
 
-import SidebarSwitch from "../components/SidebarSwitch/SidebarSwitch.tsx";
-import NavLink from "../components/NavLink.astro";
-import Analytics from "../components/Analytics.astro";
-import CookieConsent from "../components/CookieConsent/CookieConsent.astro";
+import SidebarSwitch from "../components/ui/SidebarSwitch/SidebarSwitch.tsx";
+import NavLink from "../components/ui/NavLink.astro";
+import Analytics from "../components/ui/Analytics.astro";
+import CookieConsent from "../components/ui/CookieConsent/CookieConsent.astro";
 import logo from "../assets/logo.png";
 
 const pathname = new URL(Astro.request.url).pathname;
