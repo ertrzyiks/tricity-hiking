@@ -5,7 +5,7 @@ import FoodListCardItem from "../components/ListCardItem/Food.astro";
 const icons: Record<string, string> = {
   Breakfast: "mdi:silverware",
   "Lunch/Dinner": "mdi:silverware-fork-knife",
-  Caffe: "mdi:coffee",
+  Cafe: "mdi:coffee",
 };
 
 const places = [
@@ -72,37 +72,37 @@ const places = [
   {
     name: "Flaming & Co",
     link: "https://flaming-co.com/",
-    kind: "Caffe",
+    kind: "Cafe",
     location: "Sopot",
   },
   {
     name: "Santa Cafe",
     link: "https://www.facebook.com/santacafe2020/",
-    kind: "Caffe",
+    kind: "Cafe",
     location: "Sopot",
   },
   {
     name: "KAISER Patisserie",
     link: "https://kaiserpatisserie.pl/sopot/",
-    kind: "Caffe",
+    kind: "Cafe",
     location: "Sopot",
   },
   {
     name: "Ancymon",
     link: "https://www.ancymoncafe.com/",
-    kind: "Caffe",
+    kind: "Cafe",
     location: "Gdańsk",
   },
 ];
 ---
 
-<Layout title="Tricity hiking - Food">
+<Layout title="The best places to eat in Gdańsk, Sopot, and Gdynia">
   <div
     class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0"
     transition:name="map"
   >
     {
-      ["Breakfast", "Lunch/Dinner", "Caffe"].map((category) => (
+      ["Breakfast", "Lunch/Dinner", "Cafe"].map((category) => (
         <div class="my-4">
           <h2 class="text-2xl mb-3">{category}</h2>
           <ul>
