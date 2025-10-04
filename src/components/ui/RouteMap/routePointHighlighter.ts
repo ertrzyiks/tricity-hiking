@@ -1,6 +1,6 @@
 import { type Map } from "maplibre-gl";
-import { $routePoints } from "../../atoms/routePoints";
-import markerImage from "../../assets/places/marker.png";
+import { $routePoints } from "../../../atoms/routePoints";
+import markerImage from "../../../assets/places/marker.png";
 import { loadImageToMap } from "./loadImageToMap";
 
 export const routePointHighlighter = (

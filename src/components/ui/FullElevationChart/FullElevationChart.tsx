@@ -2,7 +2,7 @@ import { type JSX } from "preact";
 import { useRef, useLayoutEffect, useEffect } from "preact/hooks";
 import { useStore } from "@nanostores/preact";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
-import { setPoint, resetPoint, $routePoints } from "../../atoms/routePoints";
+import { setPoint, resetPoint, $routePoints } from "../../../atoms/routePoints";
 
 const ConnectedElevationChart = ({
   points,

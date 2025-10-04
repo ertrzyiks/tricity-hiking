@@ -1,6 +1,6 @@
 ---
 const { title, description } = Astro.props;
-import Deco from "../assets/deco.svg";
+import Deco from "../../assets/deco.svg";
 ---
 
 <div class="bg-linear-45 from-green-700 via-green-600 to-green-700">
@@ -28,7 +28,7 @@ import Deco from "../assets/deco.svg";
 </div>
 
 <script>
-  import { trackEvent } from "../services/analytics";
+  import { trackEvent } from "../../services/analytics";
 
   document.addEventListener("astro:page-load", () => {
     const getStartedBtn = document.getElementById("hero-get-started-btn");

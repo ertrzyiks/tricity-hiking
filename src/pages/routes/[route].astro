@@ -2,16 +2,16 @@
 import type { InferGetStaticParamsType } from "astro";
 import { getCollection, getEntry, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
-import { RouteMap } from "../../components/RouteMap/RouteMap";
-import { FullElevationChart } from "../../components/FullElevationChart/FullElevationChart";
-import { config } from "../../components/Markdown";
-import { TrailAttributeValue } from "../../components/TrailAttributeValue/TrailAttributeValue";
-import { TrailAttributeName } from "../../components/TrailAttributeName/TrailAttributeName";
+import { RouteMap } from "../../components/ui/RouteMap/RouteMap";
+import { FullElevationChart } from "../../components/ui/FullElevationChart/FullElevationChart";
+import { config } from "../../components/ui/Markdown";
+import { TrailAttributeValue } from "../../components/ui/TrailAttributeValue/TrailAttributeValue";
+import { TrailAttributeName } from "../../components/ui/TrailAttributeName/TrailAttributeName";
 import { mToKm } from "../../services/mToKm";
 import { formatTime } from "../../services/formatTime";
 import { Icon } from "astro-icon/components";
-import TrailAttribute from "../../components/TrailAttribute.astro";
-import RouteMapLegend from "../../components/RouteMapLegend.astro";
+import TrailAttribute from "../../components/ui/TrailAttribute.astro";
+import RouteMapLegend from "../../components/ui/RouteMapLegend.astro";
 
 export async function getStaticPaths() {
   const allRoutes = await getCollection("routes");

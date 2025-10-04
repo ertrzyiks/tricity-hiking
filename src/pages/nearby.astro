@@ -1,10 +1,10 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-import Homepage from "../components/Homepage.astro";
+import Homepage from "../components/ui/Homepage.astro";
 import { enhance } from "../services/enhance";
 import { getLineStringFeature } from "../services/getLineStringFeature";
-import RouteListItem from "../components/ListCardItem/Route.astro";
+import RouteListItem from "../components/ui/ListCardItem/Route.astro";
 
 const allRoutes = await getCollection("routes");
 const routes = allRoutes.filter((route) => {

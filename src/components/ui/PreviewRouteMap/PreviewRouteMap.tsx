@@ -3,8 +3,8 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "../HomeMap/mapStyle";
-import { getBounds } from "../../services/getBounds";
-import pointImage from "../../assets/places/point.png";
+import { getBounds } from "../../../services/getBounds";
+import pointImage from "../../../assets/places/point.png";
 
 export const PreviewRouteMap = ({
   route,
