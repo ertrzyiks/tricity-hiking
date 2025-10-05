@@ -1,13 +1,13 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-import Homepage from "../components/Homepage.astro";
+import Homepage from "../components/ui/Homepage.astro";
 import { merge } from "../services/merge";
 import { enhance } from "../services/enhance";
-import RouteMapLegend from "../components/RouteMapLegend.astro";
+import RouteMapLegend from "../components/ui/RouteMapLegend.astro";
 
 import mapImage from "../assets/home-map.jpg";
-import { HomeMap } from "../components/HomeMap/HomeMap";
+import { HomeMap } from "../components/ui/HomeMap/HomeMap";
 
 const allRoutes = await getCollection("routes");
 const routes = allRoutes.filter((route) => {

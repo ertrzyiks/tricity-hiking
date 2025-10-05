@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
 
-import { useDebounce } from "../useDebounce";
+import { useDebounce } from "../../useDebounce";
 
 export const ElevationChart = ({
   points,

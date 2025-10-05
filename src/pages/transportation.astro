@@ -1,9 +1,9 @@
 ---
 import { getEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-import Admonition from "../components/Admonition.astro";
-import Link from "../components/Link.astro";
-import { TransportationMap } from "../components/TransportationMap/TransportationMap";
+import Admonition from "../components/ui/Admonition.astro";
+import Link from "../components/ui/Link.astro";
+import { TransportationMap } from "../components/ui/TransportationMap/TransportationMap";
 import { Icon } from "astro-icon/components";
 import { merge } from "../services/merge";
 
@@ -45,7 +45,7 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
     <div class="my-4 flex flex-col gap-4">
       <div>
         <h2 class="text-3xl my-4">Public transport</h2>
-        <p class="my-2">
+        <p class="text-lg my-2">
           There are several public transport options available in Tricity,
           including:
         </p>
@@ -61,13 +61,13 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
 
       <div>
         <h3 class="text-2xl my-4">Bus and tram</h3>
-        <p class="my-2">
+        <p class="text-lg my-2">
           Busses and trams are operated by ZTM Gdańsk. Tickets are available for
           a single ride or for a time period. The time-constrained tickets are
           valid for both bus and tram - you can change the vehicle during the
           ride.
         </p>
-        <p class="my-2">
+        <p class="text-lg my-2">
           One of the most convenient way to buy tickets is using <Link
             href="https://ztm.gda.pl/bilety/bilety-online-w-aplikacjach-mobilnych,a,5555"
           >
@@ -77,7 +77,7 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
           > which allows to not only buy the tickets but also is great for planning
           your trip.
         </p>
-        <p class="my-2">
+        <p class="text-lg my-2">
           You can also buy paper tickets in ticket machines located near stops
           or buy them in kiosks. Those tickets must be validated inside the
           vehicle. One more option is to buy tickets using the machines inside
@@ -89,7 +89,7 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
       <div>
         <h3 class="text-2xl my-4">SKM train</h3>
 
-        <p class="my-2">
+        <p class="text-lg my-2">
           The name stands for "fast city train" and it's a line connecting all
           major parts of the city along the coast. The most important for the
           internal communication is part of the route between Gdańsk Śródmieście
@@ -97,14 +97,14 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
           Wejherowo because that's where the standard route reaches. Selected
           services go even beyond that and connect Tricity with Lębork.
         </p>
-        <p class="my-2">
+        <p class="text-lg my-2">
           In the hours of the highest traffic the train goes every 7-10 minutes
           in each direction.
         </p>
 
         <figure class="my-4 h-128">
           <TransportationMap data={skm} client:only="preact" />
-          <figcaption class="text-sm text-slate-500 text-center my-2">
+          <figcaption class="text-base text-slate-500 text-center my-2">
             SKM train map (selected fragment)
           </figcaption>
         </figure>
@@ -113,7 +113,7 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
       <div>
         <h3 class="text-2xl my-4">PKM train</h3>
 
-        <p class="my-2">
+        <p class="text-lg my-2">
           PKM operates on a few lines in the pomeranian voivodeship. One of them
           goes from Gdańsk Wrzeszcz to Gdynia through the airport. If you happen
           to travel by plane it may be your way to the city. That trip takes
@@ -121,7 +121,7 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
           time of the day.
         </p>
 
-        <p class="my-2">
+        <p class="text-lg my-2">
           Other lines operated by PKM connect cities like Kartuzy and
           Kościerzyna with Tricity. Those connections can be your gate to
           explore Kashubia - pretty unique region of Poland with its own
@@ -132,7 +132,7 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
         <figure class="my-4 h-128">
           <TransportationMap data={pkm} client:only="preact" />
 
-          <figcaption class="text-sm text-slate-500 text-center my-2">
+          <figcaption class="text-base text-slate-500 text-center my-2">
             PKM train map (selected fragment)
           </figcaption>
         </figure>

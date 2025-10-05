@@ -3,20 +3,20 @@ import maplibregl, { type LngLatLike } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "./mapStyle";
-import { getBounds } from "../../services/getBounds";
-import { mToKm } from "../../services/mToKm";
+import { getBounds } from "../../../services/getBounds";
+import { mToKm } from "../../../services/mToKm";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
 import { Button } from "../Button/Button";
 import { TrailAttributeName } from "../TrailAttributeName/TrailAttributeName";
 import { TrailAttributeValue } from "../TrailAttributeValue/TrailAttributeValue";
-import { trackEvent } from "../../services/analytics";
+import { trackEvent } from "../../../services/analytics";
 import {
   createRouteMarkersData,
   generateTriangleSVG,
   generatePerpendicularLineSVG,
   generateLoopMarkerSVG,
-} from "../../services/routeMarkers";
-import { MAP_MARKER_COLOR } from "../../constants/colors";
+} from "../../../services/routeMarkers";
+import { MAP_MARKER_COLOR } from "../../../constants/colors";
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<

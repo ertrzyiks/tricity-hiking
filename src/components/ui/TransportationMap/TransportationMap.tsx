@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "preact/hooks";
 import "maplibre-gl/dist/maplibre-gl.css";
 
-import { createMap } from "../../services/createMap";
-import { getBounds } from "../../services/getBounds";
-import pointImage from "../../assets/places/skm_stop.png";
+import { createMap } from "../../../services/createMap";
+import { getBounds } from "../../../services/getBounds";
+import pointImage from "../../../assets/places/skm_stop.png";
 
 export const TransportationMap = ({
   data,

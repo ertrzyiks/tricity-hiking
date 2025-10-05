@@ -1,0 +1,23 @@
+---
+import { getEntry } from "astro:content";
+import { enhance } from "../services/enhance";
+import { getLineStringFeature } from "../services/getLineStringFeature";
+import ListCardItem from "./ui/ListCardItem/Route.astro";
+
+const { route } = Astro.props;
+const routeData = await getEntry("routes", route);
+
+if (!routeData) {
+  throw new Error(`Route with id ${route} not found`);
+}
+const geojson = await getEntry(routeData.data.geojson);
+
+const enhancedGeojson = enhance({
+  collection: geojson.data,
+  route: routeData.data,
+});
+const properties =
+  getLineStringFeature({ collection: enhancedGeojson })?.properties ?? {};
+---
+
+<ListCardItem route={routeData} properties={properties} />

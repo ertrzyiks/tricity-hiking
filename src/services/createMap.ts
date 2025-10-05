@@ -1,5 +1,5 @@
 import { Map, type MapOptions } from "maplibre-gl";
-import { style, glyphs } from "../components/HomeMap/mapStyle";
+import { style, glyphs } from "../components/ui/HomeMap/mapStyle";
 export const createMap = (
   container: HTMLElement,
   options: Omit<MapOptions, "container" | "style">,

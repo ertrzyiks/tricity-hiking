@@ -1,7 +1,7 @@
 ---
 import type { InferGetStaticParamsType } from "astro";
 import { getCollection, getEntry } from "astro:content";
-import { PreviewRouteMap } from "../../components/PreviewRouteMap/PreviewRouteMap";
+import { PreviewRouteMap } from "../../components/ui/PreviewRouteMap/PreviewRouteMap";
 
 if (import.meta.env.MODE !== "development") {
   return new Response(null, { status: 404 });

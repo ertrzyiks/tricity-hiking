@@ -1,14 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import TimelineRoot from "../components/Timeline/Timeline.astro";
-import TimelineItem from "../components/Timeline/TimelineItem.astro";
-import TimelineOppositeContent from "../components/Timeline/TimelineOppositeContent.astro";
-import TimelineOppositeContentSecondary from "../components/Timeline/TimelineOppositeContentSecondary.astro";
-import TimelineSeparator from "../components/Timeline/TimelineSeparator.astro";
-import TimelineDot from "../components/Timeline/TimelineDot.astro";
-import TimelineConnector from "../components/Timeline/TimelineConnector.astro";
-import TimelineContent from "../components/Timeline/TimelineContent.astro";
-import TimelineContentLabel from "../components/Timeline/TimelineContentLabel.astro";
+import TimelineRoot from "../components/ui/Timeline/Timeline.astro";
+import TimelineItem from "../components/ui/Timeline/TimelineItem.astro";
+import TimelineOppositeContent from "../components/ui/Timeline/TimelineOppositeContent.astro";
+import TimelineOppositeContentSecondary from "../components/ui/Timeline/TimelineOppositeContentSecondary.astro";
+import TimelineSeparator from "../components/ui/Timeline/TimelineSeparator.astro";
+import TimelineDot from "../components/ui/Timeline/TimelineDot.astro";
+import TimelineConnector from "../components/ui/Timeline/TimelineConnector.astro";
+import TimelineContent from "../components/ui/Timeline/TimelineContent.astro";
+import TimelineContentLabel from "../components/ui/Timeline/TimelineContentLabel.astro";
 
 type TimelineEvent = {
   year: number;
@@ -120,7 +120,7 @@ timelineConfig.forEach((item, index) => {
   <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
     <h2 class="text-3xl my-4">History</h2>
 
-    <p class="my-4">
+    <p class="text-lg my-4">
       The timeline below presents the key events in the history of Gdańsk. On
       the left there is a title and brief summary of the event, while on the
       right there is the year and the political entity that ruled Gdańsk at that
