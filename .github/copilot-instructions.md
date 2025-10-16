@@ -16,3 +16,8 @@ The project is configured with `pnpm-lock.yaml` and includes pnpm-specific confi
 - `pnpm run build` - Build the project
 - `pnpm run test` - Run tests
 - `pnpm run preview` - Preview the built project
+
+## Pre-commit operations
+
+- run `pnpm run build` to ensure the project builds correctly
+- run `pnpm run test --run` to ensure all tests pass
