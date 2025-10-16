@@ -11,7 +11,7 @@ const ROUTES_PATH = `${BASE_PATH}/routes`;
  * @param {string} gpxFilePath - Path to the GPX file
  * @returns {string|null} - Route name or null if not found
  */
-const getRouteNameFromGpx = (gpxFilePath) => {
+export const getRouteNameFromGpx = (gpxFilePath) => {
   try {
     const gpxContent = fs.readFileSync(gpxFilePath, "utf8");
     const gpxDoc = new DOMParser().parseFromString(gpxContent, "text/xml");

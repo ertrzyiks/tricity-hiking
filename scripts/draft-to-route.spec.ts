@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fs from "fs";
 import path from "path";
-import { nameToSlug } from "./draft-to-route.js";
+import { nameToSlug, getRouteNameFromGpx } from "./draft-to-route.js";
 import { execSync } from "child_process";
 
 const TEST_DRAFTS_PATH = "/tmp/test-drafts";
@@ -64,16 +64,9 @@ describe("draft-to-route script", () => {
     const gpxFile = path.join(TEST_DRAFTS_PATH, "test-route.gpx");
     fs.writeFileSync(gpxFile, SAMPLE_GPX);
 
-    // Import and test the function
-    const { DOMParser } = require("@xmldom/xmldom");
-    const gpxContent = fs.readFileSync(gpxFile, "utf8");
-    const gpxDoc = new DOMParser().parseFromString(gpxContent, "text/xml");
+    const routeName = getRouteNameFromGpx(gpxFile);
 
-    const metadataName = gpxDoc
-      .getElementsByTagName("metadata")[0]
-      ?.getElementsByTagName("name")[0]?.textContent;
-
-    expect(metadataName).toBe("Test Route");
+    expect(routeName).toBe("Test Route");
   });
 
   it("should convert route name to slug correctly", () => {
