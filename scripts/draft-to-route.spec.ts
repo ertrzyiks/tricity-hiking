@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fs from "fs";
 import path from "path";
+import { nameToSlug } from "./draft-to-route.js";
 import { execSync } from "child_process";
 
 const TEST_DRAFTS_PATH = "/tmp/test-drafts";
@@ -76,36 +77,12 @@ describe("draft-to-route script", () => {
   });
 
   it("should convert route name to slug correctly", () => {
-    const nameToSlug = (name) => {
-      return name
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/ł/g, "l")
-        .replace(/[^\w\s-]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-")
-        .replace(/^-|-$/g, "");
-    };
-
     expect(nameToSlug("Test Route")).toBe("test-route");
     expect(nameToSlug("Droga Królewska")).toBe("droga-krolewska");
     expect(nameToSlug("Route   With    Spaces")).toBe("route-with-spaces");
   });
 
   it("should handle Polish characters in route names", () => {
-    const nameToSlug = (name) => {
-      return name
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/ł/g, "l")
-        .replace(/[^\w\s-]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-")
-        .replace(/^-|-$/g, "");
-    };
-
     expect(nameToSlug("Droga marnych mostów")).toBe("droga-marnych-mostow");
     expect(nameToSlug("Wyspa Sobieszewska")).toBe("wyspa-sobieszewska");
     expect(nameToSlug("Dolina Elfów")).toBe("dolina-elfow");

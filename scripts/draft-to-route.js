@@ -46,7 +46,7 @@ const getRouteNameFromGpx = (gpxFilePath) => {
  * @param {string} name - Route name
  * @returns {string} - URL-friendly slug
  */
-const nameToSlug = (name) => {
+export const nameToSlug = (name) => {
   return name
     .toLowerCase()
     .normalize("NFD") // Normalize to decomposed form
