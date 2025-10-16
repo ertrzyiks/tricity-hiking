@@ -70,7 +70,8 @@ title: ${routeName}
 geojson: ${slug}
 description: TODO
 htmlDescription: TODO
-tricity: false
+tricity: true
+draft: true
 ---
 
 ## Description
@@ -173,8 +174,10 @@ const main = () => {
     console.log(
       '\nNext steps:\n  1. Run "pnpm run gpx2json" to generate JSON files from GPX files',
     );
-    console.log("  2. Update the MDX files with proper descriptions");
-    console.log("  3. Run capture scripts to generate preview images");
+    console.log(
+      '  2. Run "pnpm run capture:preview" to generate preview images',
+    );
+    console.log("  3. Update the MDX files with proper descriptions");
   }
 };
 
