@@ -33,14 +33,26 @@ Any static assets, like images, can be placed in the `public/` directory.
 
 All commands are run from the root of the project, from a terminal:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| Command                    | Action                                           |
+| :------------------------- | :----------------------------------------------- |
+| `pnpm install`             | Installs dependencies                            |
+| `pnpm run dev`             | Starts local dev server at `localhost:4321`      |
+| `pnpm run build`           | Build your production site to `./dist/`          |
+| `pnpm run preview`         | Preview your build locally, before deploying     |
+| `pnpm run draft2route`     | Convert draft GPX files to new routes            |
+| `pnpm run gpx2json`        | Generate JSON files from GPX routes              |
+| `pnpm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `pnpm run astro -- --help` | Get help using the Astro CLI                     |
+
+## 📝 Working with Routes
+
+### Creating a new route from a draft
+
+1. Place your GPX file in `src/content/drafts/`
+2. Run `pnpm run draft2route` to convert drafts to routes
+3. Run `pnpm run gpx2json` to generate JSON files from the GPX files
+4. Edit the generated MDX files in `src/content/routes/{route-name}/` to add descriptions
+5. Run capture scripts to generate preview images if needed
 
 ## 👀 Want to learn more?
 
