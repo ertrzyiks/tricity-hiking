@@ -161,6 +161,5 @@ The added notes in the MDX files now direct users to verify current schedules, r
 ---
 
 **Review completed by:** GitHub Copilot
-**Date:** 2025-10-26
 **Files reviewed:** 15 MDX files in src/content/routes/
-**Changes made:** 6 files modified, 1 file created (TRANSPORTATION_REVIEW.md)
+**Changes made:** 5 route MDX files modified, 2 documentation files created (TRANSPORTATION_REVIEW.md, FINDINGS.md)
