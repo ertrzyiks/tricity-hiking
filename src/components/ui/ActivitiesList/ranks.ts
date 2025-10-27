@@ -8,4 +8,13 @@ export const ranks = {
     "fairs",
     "other",
   ],
+  category: [
+    "top-sights",
+    "ship",
+    "orienteering",
+    "outdoor-playground",
+    "indoor-playground",
+    "fairs",
+    "other",
+  ],
 };

@@ -122,6 +122,9 @@ const blogCollection = defineCollection({
       draft: z.boolean().optional(),
       tags: z.array(z.string()).optional(),
       coverImage: image().optional(),
+      category: z.string().optional(),
+      link: z.string().optional(),
+      location: z.string().optional(),
     }),
 });
 
