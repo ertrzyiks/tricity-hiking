@@ -9,24 +9,27 @@ const securityProps = link.startsWith("http")
 <li
   class="my-4 border-b border-solid border-slate-200 last:border-0 w-full group"
 >
-  <a class="flex py-4" href={link} {...securityProps}>
-    <slot name="image" />
-    <div class="flex flex-col w-full">
-      <div class="text-2xl ml-4">
+  <a class="grid grid-cols-[80px_1fr] py-4" href={link} {...securityProps}>
+    <div class="row-span-1 sm:row-span-2">
+      <slot name="image" />
+    </div>
+
+    <div class="ml-4">
+      <div class="text-2xl">
         <slot name="title" />
       </div>
 
       {
         Astro.slots.has("description") && (
-          <div class="text-l ml-4 text-slate-500">
+          <div class="text-l text-slate-500">
             <slot name="description" />
           </div>
         )
       }
+    </div>
 
-      <div class="px-4 py-4">
-        <slot name="attributes" />
-      </div>
+    <div class="col-span-full sm:col-auto px-4 py-4">
+      <slot name="attributes" />
     </div>
   </a>
 </li>
