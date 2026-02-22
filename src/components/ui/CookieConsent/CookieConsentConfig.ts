@@ -1,4 +1,12 @@
 export const config = {
+  guiOptions: {
+    consentModal: {
+      equalWeightButtons: false,
+    },
+    preferencesModal: {
+      equalWeightButtons: false,
+    },
+  },
   categories: {
     necessary: {
       readOnly: true,
