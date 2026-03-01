@@ -46,9 +46,27 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
       });
 
       map.addLayer({
+        id: "lines-outline",
+        type: "line",
+        source: "lines",
+        layout: {
+          "line-cap": "round",
+          "line-join": "round",
+        },
+        paint: {
+          "line-width": 7,
+          "line-color": "#f3f4f6",
+        },
+      });
+
+      map.addLayer({
         id: "lines",
         type: "line",
         source: "lines",
+        layout: {
+          "line-cap": "round",
+          "line-join": "round",
+        },
         paint: {
           "line-width": 5,
           "line-color": "#e11d48",
