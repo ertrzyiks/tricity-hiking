@@ -1,5 +1,5 @@
 export const ranks = {
-  type: [
+  category: [
     "top-sights",
     "ship",
     "orienteering",

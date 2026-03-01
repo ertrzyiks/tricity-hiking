@@ -1,5 +1,5 @@
 import { z, reference, defineCollection } from "astro:content";
-import { file, glob } from "astro/loaders";
+import { glob } from "astro/loaders";
 
 const routesCollection = defineCollection({
   loader: glob({
@@ -74,32 +74,24 @@ const mapTilesCollection = defineCollection({
 });
 
 const activitiesCollection = defineCollection({
-  loader: file("src/content/activities.json", {
-    parser: (text) => {
-      const data = JSON.parse(text);
+  loader: glob({
+    pattern: "**/*.mdx",
+    base: "./src/content/activities",
+    generateId: (options) => {
+      const segments = options.entry.split("/");
 
-      return Object.entries(data).flatMap(([key, value]) => {
-        if (!Array.isArray(value)) {
-          throw new Error(`Invalid data format for key: ${key}`);
-        }
-
-        return value.map((item) => ({
-          id: `${key}-${item.name}`,
-          ...item,
-          type: key,
-        }));
-      });
+      return segments.join("/").replace(/\.mdx$/, "");
     },
   }),
   schema: ({ image }) =>
     z.object({
-      id: z.string(),
-      type: z.string(),
-      name: z.string(),
+      title: z.string(),
       description: z.string(),
-      image: image().optional(),
+      category: z.string(),
       link: z.string(),
       location: z.string().optional(),
+      coverImage: image().optional(),
+      draft: z.boolean().optional(),
     }),
 });
 

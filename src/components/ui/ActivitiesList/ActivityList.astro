@@ -5,7 +5,7 @@ import { ranks } from "./ranks";
 import { content } from "./content";
 import type { CollectionEntry } from "astro:content";
 
-const { activities, groupBy = "type" } = Astro.props;
+const { activities, groupBy = "category" } = Astro.props;
 type GroupByKey = keyof typeof ranks;
 type Activity = CollectionEntry<'activities'>;
 
@@ -44,8 +44,8 @@ const sortedActivities = Object.entries(groupedActivities).sort((a, b) => {
           <ActivityListCardItem
             link={activity.data.link}
             icon={groupContent[type as keyof typeof groupContent].defaultIcon}
-            image={activity.data.image}
-            name={activity.data.name}
+            image={activity.data.coverImage}
+            name={activity.data.title}
             description={activity.data.description}
           />
         ))}

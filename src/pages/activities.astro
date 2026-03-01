@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import ActivityList from "../components/ui/ActivitiesList/ActivityList.astro";
 import { getCollection } from "astro:content";
 
-const activities = await getCollection("activities");
+const activities = await getCollection("activities", ({ data }) => !data.draft);
 ---
 
 <Layout title="Outdoor activities in Gdańsk, Sopot, and Gdynia">
@@ -11,6 +11,6 @@ const activities = await getCollection("activities");
     class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0"
     transition:name="map"
   >
-    <ActivityList activities={activities} groupBy="type" />
+    <ActivityList activities={activities} groupBy="category" />
   </div>
 </Layout>
