@@ -5,32 +5,11 @@ import { ranks } from "./ranks";
 import { content } from "./content";
 import type { CollectionEntry } from "astro:content";
 
-const { activities, groupBy = "type" } = Astro.props;
+const { activities, groupBy = "category" } = Astro.props;
 type GroupByKey = keyof typeof ranks;
-type Activity = CollectionEntry<'activities'> | CollectionEntry<'blog'>;
+type Activity = CollectionEntry<'activities'>;
 
 const groupContent = content[groupBy as keyof typeof content] || {};
-
-// Helper functions to safely extract values from either collection type
-function getName(activity: Activity): string {
-  if ('name' in activity.data) {
-    return activity.data.name;
-  }
-  if ('title' in activity.data) {
-    return activity.data.title;
-  }
-  return '';
-}
-
-function getImage(activity: Activity) {
-  if ('image' in activity.data && activity.data.image) {
-    return activity.data.image;
-  }
-  if ('coverImage' in activity.data && activity.data.coverImage) {
-    return activity.data.coverImage;
-  }
-  return undefined;
-}
 
 const groupedActivities = activities.reduce(
   (acc: Record<string, Activity[]>, activity: Activity) => {
@@ -65,8 +44,8 @@ const sortedActivities = Object.entries(groupedActivities).sort((a, b) => {
           <ActivityListCardItem
             link={activity.data.link}
             icon={groupContent[type as keyof typeof groupContent].defaultIcon}
-            image={getImage(activity)}
-            name={getName(activity)}
+            image={activity.data.coverImage}
+            name={activity.data.title}
             description={activity.data.description}
             location={activity.data.location}
           />

@@ -3,8 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import ActivityList from "../components/ui/ActivitiesList/ActivityList.astro";
 import { getCollection } from "astro:content";
 
-const allBlogPosts = await getCollection("blog");
-const activities = allBlogPosts.filter((post) => post.data.category && !post.data.draft);
+const activities = await getCollection("activities", ({ data }) => !data.draft);
 ---
 
 <Layout title="Outdoor activities in Gdańsk, Sopot, and Gdynia">
