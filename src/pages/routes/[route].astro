@@ -12,6 +12,7 @@ import { formatTime } from "../../services/formatTime";
 import { Icon } from "astro-icon/components";
 import TrailAttribute from "../../components/ui/TrailAttribute.astro";
 import RouteMapLegend from "../../components/ui/RouteMapLegend.astro";
+import { Image } from "astro:assets";
 
 export async function getStaticPaths() {
   const allRoutes = await getCollection("routes");
@@ -68,22 +69,33 @@ if (!feature) {
   title={`${entry.data.title}`}
   description={entry.data.htmlDescription ?? entry.data.description}
 >
-  <div
-    class="max-w-(--breakpoint-xl) mx-auto relative h-[50vh] px-2 lg:px-0"
-    transition:name="map"
-  >
-    <RouteMap client:only="preact" route={geojson.data} />
-  </div>
-
-  <RouteMapLegend />
-
-  <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0">
-    <FullElevationChart client:load points={attitudes} />
-  </div>
-
   <div class="max-w-(--breakpoint-xl) mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] px-4 xl:px-0">
+    <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 px-4 xl:px-0">
       <div>
+        {
+          entry.data.preview?.src && (
+            <div class="relative w-full mb-4" transition:name="map">
+              <Image
+                src={entry.data.preview}
+                width="320"
+                height="320"
+                class=""
+                alt={"Preview of the route on the map"}
+                slot="image"
+              />
+              <a href={`/routes/${route}/map`} class="absolute top-2 right-2">
+                <Icon
+                  name="mdi:arrow-expand"
+                  class="w-8 h-8 text-white bg-green-500 rounded-full p-1 opacity-75 hover:opacity-100 transition-opacity"
+                />
+              </a>
+            </div>
+          )
+        }
+        <div class="relative px-2 lg:px-0">
+          <FullElevationChart client:load points={attitudes} />
+        </div>
+
         <div class="py-4 grid grid-cols-2 gap-x-2 gap-y-4 items-center">
           <TrailAttribute>
             <Icon name="mdi:hiking" class="w-5 h-5" slot="icon" />
@@ -137,11 +149,4 @@ if (!feature) {
       </div>
     </div>
   </div>
-
-  <style is:global>
-    .maplibregl-map {
-      height: 100%;
-      width: 100%;
-    }
-  </style>
 </Layout>

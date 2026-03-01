@@ -1,0 +1,83 @@
+---
+import type { InferGetStaticParamsType } from "astro";
+import { getCollection, getEntry, render } from "astro:content";
+import Layout from "../../../layouts/Layout.astro";
+import { RouteMap } from "../../../components/ui/RouteMap/RouteMap";
+import { FullElevationChart } from "../../../components/ui/FullElevationChart/FullElevationChart";
+import RouteMapLegend from "../../../components/ui/RouteMapLegend.astro";
+
+export async function getStaticPaths() {
+  const allRoutes = await getCollection("routes");
+
+  const routes = allRoutes.filter((route) => {
+    return !route.data.draft;
+  });
+
+  return routes.map((route) => {
+    return {
+      params: {
+        route: route.id,
+      },
+    };
+  });
+}
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+
+const { route } = Astro.params as Params;
+
+const entry = await getEntry("routes", route);
+
+if (!entry) {
+  Astro.response.status = 404;
+  Astro.response.statusText = "Not found";
+  return;
+}
+
+const geojson = await getEntry(entry.data.geojson);
+const { Content } = await render(entry);
+
+const attitudes = geojson.data.features[0].geometry.coordinates
+  .map((coord) => {
+    if (!Array.isArray(coord)) {
+      return null;
+    }
+    return coord[2];
+  })
+  .filter((coords): coords is number => Boolean(coords));
+
+const feature = geojson.data.features.find(
+  (feature) => feature.geometry.type === "LineString",
+);
+
+if (!feature) {
+  Astro.response.status = 404;
+  Astro.response.statusText = "Not found";
+  return;
+}
+---
+
+<Layout
+  title={`${entry.data.title}`}
+  description={entry.data.htmlDescription ?? entry.data.description}
+>
+  <div
+    class="mx-auto relative h-[calc(100vh-190px)] px-2 lg:px-0"
+    transition:name="map"
+  >
+    <RouteMap client:only="preact" route={geojson.data} />
+
+    <div class="absolute bottom-0 left-0 w-96 bg-green-50">
+      <FullElevationChart client:load points={attitudes} />
+    </div>
+  </div>
+
+  <!-- <RouteMapLegend /> -->
+
+  <style is:global>
+    .maplibregl-map {
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</Layout>
