@@ -2,10 +2,8 @@
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import ListCardItem from "../ListCardItem.astro";
-import ListCardItemAttributes from "../ListCardItemAttributes.astro";
-import ListCardItemAttribute from "../ListCardItemAttribute.astro";
 
-const { link, icon, image, name, location, description } = Astro.props;
+const { link, icon, image, name, description } = Astro.props;
 ---
 
 <ListCardItem link={link}>
@@ -36,16 +34,4 @@ const { link, icon, image, name, location, description } = Astro.props;
   <span class="group-hover:text-green-600" slot="description">
     {description}
   </span>
-
-  {
-    location && (
-      <ListCardItemAttributes slot="attributes">
-        <ListCardItemAttribute
-          icon="mdi:location"
-          name="Location"
-          value={location}
-        />
-      </ListCardItemAttributes>
-    )
-  }
 </ListCardItem>
