@@ -27,7 +27,10 @@ async function run() {
   const page = await browser.newPage();
 
   for (const route of routes) {
-    if (fs.existsSync(`${BASE_PATH}/routes/${route}/${route}.jpg`)) {
+    if (
+      fs.existsSync(`${BASE_PATH}/routes/${route}/${route}.jpg`) &&
+      !process.env.FORCE
+    ) {
       console.log(`Skipping ${route}`);
       continue;
     }
