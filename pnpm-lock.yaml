@@ -58,7 +58,7 @@ importers:
         version: 2.1.0
       gantt-schedule-timeline-calendar:
         specifier: ^3.41.0
-        version: 3.41.0
+        version: 3.41.7
       maplibre-gl:
         specifier: ^4.2.0
         version: 4.6.0
@@ -2208,8 +2208,8 @@ packages:
     resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
     engines: {node: '>=0.11'}
 
-  dayjs@1.11.13:
-    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
+  dayjs@1.11.19:
+    resolution: {integrity: sha512-t5EcLVS6QPBNqM2z8fakk/NKel+Xzshgt8FFKAn+qwlD1pzZWxh0nVCrvFK7ZDb6XucZeF9z8C7CBWTRIVApAw==}
 
   debounce@2.1.0:
     resolution: {integrity: sha512-OkL3+0pPWCqoBc/nhO9u6TIQNTK44fnBnzuVtJAbp13Naxw9R6u21x+8tVTka87AhDZ3htqZ2pSSsZl9fqL2Wg==}
@@ -2564,8 +2564,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  gantt-schedule-timeline-calendar@3.41.0:
-    resolution: {integrity: sha512-ttqa07PKMW0ZOVi81kai4R41vRyLY55Qiv0/e0jeXe0ybYzAvcV4tqikPG1HMSOykuKmfdy5XbKUiT38TZOU/w==}
+  gantt-schedule-timeline-calendar@3.41.7:
+    resolution: {integrity: sha512-6lvGtUdNNFpSVj9K36RaQnIqh2EFIs4iW5mHDbRQV0WqMlaaqFt6USEuBjYZkFXK4QtyPpvGJ/wWOJKspSuPtg==}
 
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
@@ -2964,8 +2964,8 @@ packages:
     resolution: {integrity: sha512-iyAZCeyD+c1gPyE9qpFu8af0Y+MRtmKOncdGoA2S5EY8iFq99dmmvkNnHiWo+pj0s7yH7l3KPIgee77tKpXPWQ==}
     engines: {node: '>=18.0.0'}
 
-  lit-html@3.3.1:
-    resolution: {integrity: sha512-S9hbyDu/vs1qNrithiNyeyv64c9yqiW9l+DBgI18fL+MTvOtWoFR0FWiyq1TxaYef5wNlpEmzlXoBlZEO+WjoA==}
+  lit-html@3.3.2:
+    resolution: {integrity: sha512-Qy9hU88zcmaxBXcc10ZpdK7cOLXvXpRoBxERdtqV9QOrfpMZZ6pSYP91LhpPtap3sFMUiL7Tw2RImbe0Al2/kw==}
 
   local-pkg@0.5.0:
     resolution: {integrity: sha512-ok6z3qlYyCDS4ZEU27HaU6x/xZa9Whf8jD4ptH5UZTQYZVYeb9bnZ3ojVhiJNLiXK1Hfc0GNbLXcmZ5plLDDBg==}
@@ -5431,7 +5431,7 @@ snapshots:
 
   '@neuronet.io/vido@4.3.2':
     dependencies:
-      lit-html: 3.3.1
+      lit-html: 3.3.2
 
   '@oslojs/encoding@1.1.0': {}
 
@@ -6640,7 +6640,7 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.25.4
 
-  dayjs@1.11.13: {}
+  dayjs@1.11.19: {}
 
   debounce@2.1.0: {}
 
@@ -7039,10 +7039,10 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  gantt-schedule-timeline-calendar@3.41.0:
+  gantt-schedule-timeline-calendar@3.41.7:
     dependencies:
       '@neuronet.io/vido': 4.3.2
-      dayjs: 1.11.13
+      dayjs: 1.11.19
       deep-state-observer: 5.5.14
 
   gensync@1.0.0-beta.2: {}
@@ -7465,7 +7465,7 @@ snapshots:
       rfdc: 1.4.1
       wrap-ansi: 9.0.0
 
-  lit-html@3.3.1:
+  lit-html@3.3.2:
     dependencies:
       '@types/trusted-types': 2.0.7
 
