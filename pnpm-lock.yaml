@@ -54,8 +54,8 @@ importers:
         specifier: 1.1.5
         version: 1.1.5
       debounce:
-        specifier: 2.1.1
-        version: 2.1.1
+        specifier: 2.2.0
+        version: 2.2.0
       gantt-schedule-timeline-calendar:
         specifier: 3.41.7
         version: 3.41.7
@@ -1745,8 +1745,8 @@ packages:
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
-  debounce@2.1.1:
-    resolution: {integrity: sha512-+xRWxgel9LgTC4PwKlm7TJUK6B6qsEK77NaiNvXmeQ7Y3e6OVVsBC4a9BSptS/mAYceyAz37Oa8JTTuPRft7uQ==}
+  debounce@2.2.0:
+    resolution: {integrity: sha512-Xks6RUDLZFdz8LIdR6q0MTH44k7FikOmnh5xkSjMig6ch45afc8sjTjRQf3P6ax8dMgcQrYO/AR2RGWURrruqw==}
     engines: {node: '>=18'}
 
   debug@4.4.3:
@@ -5617,7 +5617,7 @@ snapshots:
 
   dayjs@1.11.13: {}
 
-  debounce@2.1.1: {}
+  debounce@2.2.0: {}
 
   debug@4.4.3:
     dependencies:
