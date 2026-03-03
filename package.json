@@ -52,7 +52,7 @@
     "prettier": "3.4.2",
     "prettier-plugin-astro": "0.14.1",
     "puppeteer": "22.15.0",
-    "vitest": "3.0.9"
+    "vitest": "3.2.4"
   },
   "pnpm": {
     "overrides": {
