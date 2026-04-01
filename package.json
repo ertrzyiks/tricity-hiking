@@ -35,7 +35,7 @@
     "gantt-schedule-timeline-calendar": "3.41.7",
     "maplibre-gl": "4.7.1",
     "nanostores": "1.2.0",
-    "playwright": "1.59.0",
+    "playwright": "1.59.1",
     "preact": "10.29.0",
     "recharts": "3.8.1",
     "sharp": "0.34.5",
