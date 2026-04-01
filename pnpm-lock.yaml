@@ -30,8 +30,8 @@ importers:
         specifier: 1.0.0
         version: 1.0.0(nanostores@1.0.1)(preact@10.26.10)
       '@piwikpro/tracking-base-library':
-        specifier: 1.3.0
-        version: 1.3.0
+        specifier: 1.6.0
+        version: 1.6.0
       '@statsig/js-client':
         specifier: 3.15.5
         version: 3.15.5
@@ -968,8 +968,8 @@ packages:
   '@oslojs/encoding@1.1.0':
     resolution: {integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==}
 
-  '@piwikpro/tracking-base-library@1.3.0':
-    resolution: {integrity: sha512-aFmqKletJSMHJRvWfVGk4+MeNi9OpC/riUhKW/wem+6yOThdcsFGNM8LuUS145ZrhXRMQqBgWjUa+BDc1Zy6GA==}
+  '@piwikpro/tracking-base-library@1.6.0':
+    resolution: {integrity: sha512-jd88qqxGAtjSfdDLPuFzrk1hjnIQKCdSFynm3GE/fHB0drPsXZ/o1oXPY9YpAVX2dIkurrycRAzEhtC6KwSlfw==}
     engines: {node: '>=18.0.0'}
 
   '@preact/preset-vite@2.10.3':
@@ -4852,7 +4852,7 @@ snapshots:
 
   '@oslojs/encoding@1.1.0': {}
 
-  '@piwikpro/tracking-base-library@1.3.0': {}
+  '@piwikpro/tracking-base-library@1.6.0': {}
 
   '@preact/preset-vite@2.10.3(@babel/core@7.29.0)(preact@10.26.10)(rollup@4.59.0)(vite@6.4.1(@types/node@25.3.3)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.8.2))':
     dependencies:
