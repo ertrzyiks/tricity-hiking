@@ -27,8 +27,8 @@ importers:
         specifier: 1.2.3
         version: 1.2.3
       '@nanostores/preact':
-        specifier: 1.0.0
-        version: 1.0.0(nanostores@1.2.0)(preact@10.29.0)
+        specifier: 1.1.0
+        version: 1.1.0(nanostores@1.2.0)(preact@10.29.0)
       '@piwikpro/tracking-base-library':
         specifier: 1.6.0
         version: 1.6.0
@@ -946,11 +946,11 @@ packages:
   '@mdx-js/mdx@3.1.1':
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
 
-  '@nanostores/preact@1.0.0':
-    resolution: {integrity: sha512-woHYvSwau1YtO9AEnGsh/jRPU2u5DTfNSrDHtKMZOeDUWV6EJfvyv7dJ7AaMps2I9uJcY6OlqXKkA9qTctEjyw==}
+  '@nanostores/preact@1.1.0':
+    resolution: {integrity: sha512-oiu9z85AiZlBTKJ8YsfAs8TALpDij70LmmKuRkeF22rS9zUBhVtYDWXEvV1qUUStNNwSFdhTMkwzOYL/IsA+UA==}
     engines: {node: ^20.0.0 || >=22.0.0}
     peerDependencies:
-      nanostores: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^1.0.0
+      nanostores: ^1.2.0
       preact: '>=10.0.0'
 
   '@neuronet.io/vido@4.3.2':
@@ -3270,10 +3270,6 @@ packages:
   sass-formatter@0.7.9:
     resolution: {integrity: sha512-CWZ8XiSim+fJVG0cFLStwDvft1VI7uvXdCNJYXhDvowiv+DsbD1nXLiQ4zrE5UBvj5DWZJ93cwN0NX5PMsr1Pw==}
 
-  sax@1.4.4:
-    resolution: {integrity: sha512-1n3r/tGXO6b6VXMdFT54SHzT9ytu9yr7TaELowdYpMqY/Ao7EnlQGmAQ1+RatX7Tkkdm6hONI2owqNx2aZj5Sw==}
-    engines: {node: '>=11.0.0'}
-
   sax@1.6.0:
     resolution: {integrity: sha512-6R3J5M4AcbtLUdZmRv2SygeVaM7IhrLXu9BmnOGmmACak8fiUtOsYNWUS4uK7upbmHIBbLBeFeI//477BKLBzA==}
     engines: {node: '>=11.0.0'}
@@ -4810,7 +4806,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nanostores/preact@1.0.0(nanostores@1.2.0)(preact@10.29.0)':
+  '@nanostores/preact@1.1.0(nanostores@1.2.0)(preact@10.29.0)':
     dependencies:
       nanostores: 1.2.0
       preact: 10.29.0
@@ -7666,8 +7662,6 @@ snapshots:
   sass-formatter@0.7.9:
     dependencies:
       suf-log: 2.5.3
-
-  sax@1.4.4: {}
 
   sax@1.6.0: {}
 
