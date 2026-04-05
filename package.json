@@ -57,6 +57,11 @@
   "pnpm": {
     "overrides": {
       "@iconify/tools": "4.2.0"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "puppeteer",
+      "sharp"
+    ]
   }
 }
