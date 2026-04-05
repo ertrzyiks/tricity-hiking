@@ -74,6 +74,36 @@ if (!feature) {
 
   <!-- <RouteMapLegend /> -->
 
+  <div id="escape-nav" data-route={route} aria-hidden="true" class="hidden">
+  </div>
+
+  <script>
+    import { navigate } from "astro:transitions/client";
+
+    document.addEventListener("astro:page-load", () => {
+      const escapeNav = document.getElementById("escape-nav");
+      const route = escapeNav?.dataset.route;
+
+      if (!route) return;
+
+      function onKeyDown(event: KeyboardEvent) {
+        if (event.key === "Escape") {
+          navigate(`/routes/${route}/`);
+        }
+      }
+
+      document.addEventListener("keydown", onKeyDown);
+
+      document.addEventListener(
+        "astro:before-swap",
+        () => {
+          document.removeEventListener("keydown", onKeyDown);
+        },
+        { once: true },
+      );
+    });
+  </script>
+
   <style is:global>
     .maplibregl-map {
       height: 100%;
