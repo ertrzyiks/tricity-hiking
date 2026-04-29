@@ -88,8 +88,8 @@ importers:
         version: 3.1.0
     devDependencies:
       '@tmcw/togeojson':
-        specifier: 5.8.1
-        version: 5.8.1(@types/geojson@7946.0.14)
+        specifier: 7.1.2
+        version: 7.1.2
       '@xmldom/xmldom':
         specifier: 0.9.9
         version: 0.9.9
@@ -1303,10 +1303,8 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7 || ^8
 
-  '@tmcw/togeojson@5.8.1':
-    resolution: {integrity: sha512-2YNrbis3l5kS0XrYwiHEZcGwiRp0MJ5CvwGwtMWp2z2tsVlskeec2qgvKHnF0RCwI5GnjrrBOoKsWfndEnd3LA==}
-    peerDependencies:
-      '@types/geojson': '*'
+  '@tmcw/togeojson@7.1.2':
+    resolution: {integrity: sha512-QKnFs9DAuqqBVj4d6c69tV1Dj2TspSBTqffivoN0YoBCVdP/JY1+WaYCJbzU49RkoU5NOSOJ3jtFHCdEUVh21A==}
 
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
@@ -1478,6 +1476,7 @@ packages:
   '@xmldom/xmldom@0.9.9':
     resolution: {integrity: sha512-qycIHAucxy/LXAYIjmLmtQ8q9GPnMbnjG1KXhWm9o5sCr6pOYDATkMPiTNa6/v8eELyqOQ2FsEqeoFYmgv/gJg==}
     engines: {node: '>=14.6'}
+    deprecated: this version has critical issues, please update to the latest version
 
   '@xstate/fsm@1.6.5':
     resolution: {integrity: sha512-b5o1I6aLNeYlU/3CPlj/Z91ybk1gUsKT+5NAJI+2W4UjvS5KLG28K9v5UvNoFVjHV8PajVZ00RH3vnjyQO7ZAw==}
@@ -1628,7 +1627,7 @@ packages:
   basic-ftp@5.0.5:
     resolution: {integrity: sha512-4Bcg1P8xhUuqcii/S0Z9wiHIrQVPMermM1any+MX5GeGD7faD3/msQUDGLol9wOcz4/jbg/WJnGqoJF6LiBdtg==}
     engines: {node: '>=10.0.0'}
-    deprecated: Security vulnerability fixed in 5.2.0, please upgrade
+    deprecated: Security vulnerability fixed in 5.2.1, please upgrade
 
   boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
@@ -5039,9 +5038,7 @@ snapshots:
       tailwindcss: 4.2.2
       vite: 6.4.1(@types/node@25.3.3)(jiti@2.6.1)(lightningcss@1.32.0)(yaml@2.8.2)
 
-  '@tmcw/togeojson@5.8.1(@types/geojson@7946.0.14)':
-    dependencies:
-      '@types/geojson': 7946.0.14
+  '@tmcw/togeojson@7.1.2': {}
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
