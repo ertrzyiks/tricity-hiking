@@ -56,7 +56,7 @@
   },
   "pnpm": {
     "overrides": {
-      "@iconify/tools": "4.2.0"
+      "@iconify/tools": "5.0.11"
     },
     "onlyBuiltDependencies": [
       "esbuild",
