@@ -46,7 +46,7 @@
   "devDependencies": {
     "@tmcw/togeojson": "5.8.1",
     "@xmldom/xmldom": "0.9.9",
-    "concurrently": "8.2.2",
+    "concurrently": "9.2.1",
     "husky": "9.1.7",
     "lint-staged": "16.4.0",
     "prettier": "3.8.1",
