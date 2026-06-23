@@ -2,6 +2,9 @@
   "name": "astro",
   "type": "module",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=26.0.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -53,15 +56,5 @@
     "prettier-plugin-astro": "0.14.1",
     "puppeteer": "22.15.0",
     "vitest": "3.2.4"
-  },
-  "pnpm": {
-    "overrides": {
-      "@iconify/tools": "4.2.0"
-    },
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "puppeteer",
-      "sharp"
-    ]
   }
 }

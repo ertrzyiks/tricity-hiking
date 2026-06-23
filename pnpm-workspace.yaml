@@ -1,0 +1,7 @@
+overrides:
+  "@iconify/tools": "4.2.0"
+
+allowBuilds:
+  esbuild: true
+  puppeteer: true
+  sharp: true
