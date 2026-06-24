@@ -57,8 +57,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       gantt-schedule-timeline-calendar:
-        specifier: 3.41.7
-        version: 3.41.7
+        specifier: 3.41.9
+        version: 3.41.9
       maplibre-gl:
         specifier: 4.7.1
         version: 4.7.1
@@ -953,8 +953,8 @@ packages:
       nanostores: ^1.2.0
       preact: '>=10.0.0'
 
-  '@neuronet.io/vido@4.3.2':
-    resolution: {integrity: sha512-M9wEUQqMd2mCipM+Vx/kOd94IEO/jY1nqBF2DzTMxEOEhSFfzcGi9Rh3ogh4y/siQN8P1aLXK7xA9rN6p5eA/Q==}
+  '@neuronet.io/vido@4.4.8':
+    resolution: {integrity: sha512-gl4nRE64NFEJu7Wf1ABsDNYI2xeihYU0PlChUpSC5pc06QIlhD9E98vxhYae5p5faAwh67Zx48jAqNMtAgZkxQ==}
 
   '@oslojs/encoding@1.1.0':
     resolution: {integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==}
@@ -1927,8 +1927,8 @@ packages:
     resolution: {integrity: sha512-h5k/5U50IJJFpzfL6nO9jaaumfjO/f2NjK/oYB2Djzm4p9L+3T9qWpZqZ2hAbLPuuYq9wrU08WQyBTL5GbPk5Q==}
     engines: {node: '>=6'}
 
-  deep-state-observer@5.5.14:
-    resolution: {integrity: sha512-rb4XCVPMvC9VDPLITJO7SS2e0tBnjPcyoFG+nD1qa+gVJm5o4JsZjxpE0j4Z/jDiTbuTKPaNhGZUZWxLs3CzAw==}
+  deep-state-observer@5.5.17:
+    resolution: {integrity: sha512-OTn+MnyFArzrE5v9g+8dQkU/3xMKsbhgbzlDEY/O8mi7AcJ6uszJUtXqA9mMk42m5R3jhlehLvLOyaQD0cw2DA==}
 
   defu@6.1.4:
     resolution: {integrity: sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg==}
@@ -2184,8 +2184,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  gantt-schedule-timeline-calendar@3.41.7:
-    resolution: {integrity: sha512-6lvGtUdNNFpSVj9K36RaQnIqh2EFIs4iW5mHDbRQV0WqMlaaqFt6USEuBjYZkFXK4QtyPpvGJ/wWOJKspSuPtg==}
+  gantt-schedule-timeline-calendar@3.41.9:
+    resolution: {integrity: sha512-nID1FID1ctH3n25Pi4aNLCiaXyoGh8TSKepcZj0bU7/RtUVpxHevPYxB1hQGZZDMI2Y0OjMu7JW8yZFeY8BUUQ==}
 
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
@@ -2555,8 +2555,8 @@ packages:
     resolution: {integrity: sha512-ME4Fb83LgEgwNw96RKNvKV4VTLuXfoKudAmm2lP8Kk87KaMK0/Xrx/aAkMWmT8mDb+3MlFDspfbCs7adjRxA2g==}
     engines: {node: '>=20.0.0'}
 
-  lit-html@3.3.1:
-    resolution: {integrity: sha512-S9hbyDu/vs1qNrithiNyeyv64c9yqiW9l+DBgI18fL+MTvOtWoFR0FWiyq1TxaYef5wNlpEmzlXoBlZEO+WjoA==}
+  lit-html@3.3.3:
+    resolution: {integrity: sha512-el8M6jK2o3RXBnrSHX3ZKrsN8zEV63pSExTO1wYJz7QndGYZ8353e2a5PPX+qHe2aGayfnchQmkAojaWAREOIA==}
 
   local-pkg@1.1.2:
     resolution: {integrity: sha512-arhlxbFRmoQHl33a0Zkle/YWlmNwoyt6QNZEIJcqNbdrsix5Lvc4HyyI3EnwxTYlZYc32EbYrQ8SzEZ7dqgg9A==}
@@ -4755,9 +4755,9 @@ snapshots:
       nanostores: 1.2.0
       preact: 10.29.1
 
-  '@neuronet.io/vido@4.3.2':
+  '@neuronet.io/vido@4.4.8':
     dependencies:
-      lit-html: 3.3.1
+      lit-html: 3.3.3
 
   '@oslojs/encoding@1.1.0': {}
 
@@ -5776,7 +5776,7 @@ snapshots:
 
   deep-eql@5.0.2: {}
 
-  deep-state-observer@5.5.14: {}
+  deep-state-observer@5.5.17: {}
 
   defu@6.1.4: {}
 
@@ -6073,11 +6073,11 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  gantt-schedule-timeline-calendar@3.41.7:
+  gantt-schedule-timeline-calendar@3.41.9:
     dependencies:
-      '@neuronet.io/vido': 4.3.2
+      '@neuronet.io/vido': 4.4.8
       dayjs: 1.11.13
-      deep-state-observer: 5.5.14
+      deep-state-observer: 5.5.17
 
   gensync@1.0.0-beta.2: {}
 
@@ -6477,7 +6477,7 @@ snapshots:
       rfdc: 1.4.1
       wrap-ansi: 9.0.2
 
-  lit-html@3.3.1:
+  lit-html@3.3.3:
     dependencies:
       '@types/trusted-types': 2.0.7
 
@@ -8086,11 +8086,11 @@ snapshots:
   vite@6.4.1(@types/node@25.3.3)(jiti@2.6.1)(lightningcss@1.32.0)(yaml@2.8.2):
     dependencies:
       esbuild: 0.25.12
-      fdir: 6.5.0(picomatch@4.0.3)
-      picomatch: 4.0.3
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
       postcss: 8.5.6
       rollup: 4.59.0
-      tinyglobby: 0.2.15
+      tinyglobby: 0.2.17
     optionalDependencies:
       '@types/node': 25.3.3
       fsevents: 2.3.3
@@ -8101,11 +8101,11 @@ snapshots:
   vite@6.4.1(@types/node@25.3.3)(jiti@2.6.1)(lightningcss@1.32.0)(yaml@2.9.0):
     dependencies:
       esbuild: 0.25.12
-      fdir: 6.5.0(picomatch@4.0.3)
-      picomatch: 4.0.3
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
       postcss: 8.5.6
       rollup: 4.59.0
-      tinyglobby: 0.2.15
+      tinyglobby: 0.2.17
     optionalDependencies:
       '@types/node': 25.3.3
       fsevents: 2.3.3
