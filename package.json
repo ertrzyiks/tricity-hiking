@@ -26,7 +26,7 @@
     "@astrojs/sitemap": "3.7.3",
     "@iconify-json/mdi": "1.2.3",
     "@nanostores/preact": "1.1.0",
-    "@piwikpro/tracking-base-library": "1.6.0",
+    "@piwikpro/tracking-base-library": "1.7.0",
     "@statsig/js-client": "3.32.6",
     "@statsig/session-replay": "3.32.6",
     "@statsig/web-analytics": "3.32.6",
