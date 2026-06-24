@@ -57,8 +57,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       gantt-schedule-timeline-calendar:
-        specifier: 3.41.9
-        version: 3.41.9
+        specifier: 3.43.14
+        version: 3.43.14
       maplibre-gl:
         specifier: 4.7.1
         version: 4.7.1
@@ -1852,8 +1852,8 @@ packages:
     resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
     engines: {node: '>=0.11'}
 
-  dayjs@1.11.13:
-    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
+  dayjs@1.11.21:
+    resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
 
   debounce@3.0.0:
     resolution: {integrity: sha512-64byRbF0/AirwbuHqB3/ZpMG9/nckDa6ZA0yd6UnaQNwbbemCOwvz2sL5sjXLHhZHADyiwLm0M5qMhltUUx+TA==}
@@ -2099,8 +2099,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  gantt-schedule-timeline-calendar@3.41.9:
-    resolution: {integrity: sha512-nID1FID1ctH3n25Pi4aNLCiaXyoGh8TSKepcZj0bU7/RtUVpxHevPYxB1hQGZZDMI2Y0OjMu7JW8yZFeY8BUUQ==}
+  gantt-schedule-timeline-calendar@3.43.14:
+    resolution: {integrity: sha512-jvAIAtcZkmk3ys1Kx8una2xOVurSef/AUkSqhNaZcrmCXT5hzi+kttj7NuDOmGGxeWSxLiW3mOXp+IWpZy88bA==}
 
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
@@ -5508,7 +5508,7 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.25.4
 
-  dayjs@1.11.13: {}
+  dayjs@1.11.21: {}
 
   debounce@3.0.0: {}
 
@@ -5787,10 +5787,10 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  gantt-schedule-timeline-calendar@3.41.9:
+  gantt-schedule-timeline-calendar@3.43.14:
     dependencies:
       '@neuronet.io/vido': 4.4.8
-      dayjs: 1.11.13
+      dayjs: 1.11.21
       deep-state-observer: 5.5.17
 
   gensync@1.0.0-beta.2: {}
