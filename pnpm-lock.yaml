@@ -33,14 +33,14 @@ importers:
         specifier: 1.7.0
         version: 1.7.0
       '@statsig/js-client':
-        specifier: 3.32.6
-        version: 3.32.6
+        specifier: 3.33.3
+        version: 3.33.3
       '@statsig/session-replay':
-        specifier: 3.32.6
-        version: 3.32.6
+        specifier: 3.33.3
+        version: 3.33.3
       '@statsig/web-analytics':
-        specifier: 3.32.6
-        version: 3.32.6
+        specifier: 3.33.3
+        version: 3.33.3
       '@tailwindcss/vite':
         specifier: 4.3.1
         version: 4.3.1(vite@6.4.1(@types/node@25.3.3)(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.0))
@@ -1363,17 +1363,17 @@ packages:
   '@standard-schema/utils@0.3.0':
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
-  '@statsig/client-core@3.32.6':
-    resolution: {integrity: sha512-VailldiMHr5GSI18tBB3yiqrVNMim9b5iE38JZJYSywJcb5WclJkbJMOAf2ql+g1OtIS0QzrjEQ7dP3Vf6sYAw==}
+  '@statsig/client-core@3.33.3':
+    resolution: {integrity: sha512-L9CMsROdc/dMsdEq8gXnoO8/XNUwxh3YjU5ZIbLLyc/DIDYVzioo+R2NIS9XDiiqaW7A7SRZdjjiUQq7qXloCw==}
 
-  '@statsig/js-client@3.32.6':
-    resolution: {integrity: sha512-F6yRAgzFuboVsgsRnxcr7hJrSZu4TK7B5I9DRkQKGxk+Em3oSLFz53SkzWgUcPqtt3htsFjic2aNhIfpeBFEqg==}
+  '@statsig/js-client@3.33.3':
+    resolution: {integrity: sha512-FjEZDYzLJ2iwie4Dma4lAOLbGXdU6W/xp6ib+7rqgDd2+0I9qduwof6W577NNc/gVzLTq2D8tsGauQD+oJmlPw==}
 
-  '@statsig/session-replay@3.32.6':
-    resolution: {integrity: sha512-BWiR7juEKi+so6Q53MNP+y79hJ8gVQmBq3GctmMwjaVKdHZ20b4yEsB/HZRHoqWSXG3Fz4ApnxOAZ5MHTb6+pQ==}
+  '@statsig/session-replay@3.33.3':
+    resolution: {integrity: sha512-KD9h3eRnbmbOyC8/VN1V6vpx6teIcu6hSFKp1F7u8pA2fhVxvV1cT80xmu+3a7QkO+9SFWNu0DJ/86DsHYz4QQ==}
 
-  '@statsig/web-analytics@3.32.6':
-    resolution: {integrity: sha512-TztjGKxfKjNrr/csmF3rec3b0a02Tq+eytYO6l1+5LzHeNrPrcx832iBVFyy1K6uVD+g5BvjitC84WOcQthgLw==}
+  '@statsig/web-analytics@3.33.3':
+    resolution: {integrity: sha512-raGSL9SnIH0x3RThOoroB9k+fiF9eSzoKXIgsfZMyfMFHiYzMxBra+oKiTtlyr2byHIHjMqHGvwKCiLANV3NCg==}
 
   '@tailwindcss/node@4.3.1':
     resolution: {integrity: sha512-6NDaqRoAMSXD1mr/RXu0HBvNE9a2n5tHPsxu9XHLws8o4Twes5rBM2205SUUiJ9goAtadrN6xTGX0UDEwp/N4A==}
@@ -5052,22 +5052,22 @@ snapshots:
 
   '@standard-schema/utils@0.3.0': {}
 
-  '@statsig/client-core@3.32.6': {}
+  '@statsig/client-core@3.33.3': {}
 
-  '@statsig/js-client@3.32.6':
+  '@statsig/js-client@3.33.3':
     dependencies:
-      '@statsig/client-core': 3.32.6
+      '@statsig/client-core': 3.33.3
 
-  '@statsig/session-replay@3.32.6':
+  '@statsig/session-replay@3.33.3':
     dependencies:
       '@rrweb/record': 2.0.0-alpha.17
-      '@statsig/client-core': 3.32.6
+      '@statsig/client-core': 3.33.3
       rrweb: 2.0.0-alpha.17
 
-  '@statsig/web-analytics@3.32.6':
+  '@statsig/web-analytics@3.33.3':
     dependencies:
-      '@statsig/client-core': 3.32.6
-      '@statsig/js-client': 3.32.6
+      '@statsig/client-core': 3.33.3
+      '@statsig/js-client': 3.33.3
       web-vitals: 5.0.3
 
   '@tailwindcss/node@4.3.1':
