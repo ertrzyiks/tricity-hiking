@@ -40,7 +40,7 @@
     "nanostores": "1.4.1",
     "playwright": "1.61.1",
     "preact": "10.29.7",
-    "recharts": "3.9.2",
+    "recharts": "3.10.0",
     "sharp": "0.35.3",
     "tailwindcss": "4.3.3",
     "typescript": "6.0.3",
