@@ -52,7 +52,7 @@
     "concurrently": "8.2.2",
     "husky": "9.1.7",
     "lint-staged": "16.4.0",
-    "prettier": "3.8.5",
+    "prettier": "3.9.6",
     "prettier-plugin-astro": "0.14.1",
     "puppeteer": "25.2.1",
     "vitest": "4.1.10"
