@@ -72,8 +72,8 @@ importers:
         specifier: 10.29.7
         version: 10.29.7(preact-render-to-string@6.6.6)
       recharts:
-        specifier: 3.9.2
-        version: 3.9.2(react-dom@19.1.1(react@19.1.1))(react-is@19.1.1)(react@19.1.1)(redux@5.0.1)
+        specifier: 3.10.0
+        version: 3.10.0(react-dom@19.1.1(react@19.1.1))(react-is@19.1.1)(react@19.1.1)(redux@5.0.1)
       sharp:
         specifier: 0.35.3
         version: 0.35.3(@types/node@25.3.3)
@@ -1359,9 +1359,6 @@ packages:
 
   '@shikijs/vscode-textmate@10.0.2':
     resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
-
-  '@standard-schema/spec@1.0.0':
-    resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -3075,8 +3072,8 @@ packages:
     resolution: {integrity: sha512-9u/XQ1pvrQtYyMpZe7DXKv2p5CNvyVwzUB6uhLAnQwHMSgKMBR62lc7AHljaeteeHXn11XTAaLLUVZYVZyuRBQ==}
     engines: {node: '>= 20.19.0'}
 
-  recharts@3.9.2:
-    resolution: {integrity: sha512-G4fy+Pk46RaXgwWMh+Nzhyo/lbFAVqXo9gtetlyehe6Ehge9CsgDuOTwQDD+i1+llaLktNBiNq4bhnGlDRXFtw==}
+  recharts@3.10.0:
+    resolution: {integrity: sha512-wulMvfncpIlmu2uFtRU/mE5/+NiVtASXkw2KdwJTdHs3WsASX0WxZlX+rpKgyn5BDbIhkPtCpUKkB9XNK5KE0w==}
     engines: {node: '>=18'}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -4905,7 +4902,7 @@ snapshots:
 
   '@reduxjs/toolkit@2.8.2(react-redux@9.2.0(react@19.1.1)(redux@5.0.1))(react@19.1.1)':
     dependencies:
-      '@standard-schema/spec': 1.0.0
+      '@standard-schema/spec': 1.1.0
       '@standard-schema/utils': 0.3.0
       immer: 10.1.1
       redux: 5.0.1
@@ -5044,8 +5041,6 @@ snapshots:
       '@types/hast': 3.0.4
 
   '@shikijs/vscode-textmate@10.0.2': {}
-
-  '@standard-schema/spec@1.0.0': {}
 
   '@standard-schema/spec@1.1.0': {}
 
@@ -7189,7 +7184,7 @@ snapshots:
 
   readdirp@5.0.0: {}
 
-  recharts@3.9.2(react-dom@19.1.1(react@19.1.1))(react-is@19.1.1)(react@19.1.1)(redux@5.0.1):
+  recharts@3.10.0(react-dom@19.1.1(react@19.1.1))(react-is@19.1.1)(react@19.1.1)(redux@5.0.1):
     dependencies:
       '@reduxjs/toolkit': 2.8.2(react-redux@9.2.0(react@19.1.1)(redux@5.0.1))(react@19.1.1)
       clsx: 2.1.1
