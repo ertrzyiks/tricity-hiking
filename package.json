@@ -51,7 +51,7 @@
     "@xmldom/xmldom": "0.9.10",
     "concurrently": "10.0.3",
     "husky": "9.1.7",
-    "lint-staged": "16.4.0",
+    "lint-staged": "17.1.1",
     "prettier": "3.9.6",
     "prettier-plugin-astro": "0.14.1",
     "puppeteer": "25.3.0",
