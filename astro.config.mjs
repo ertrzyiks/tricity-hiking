@@ -12,6 +12,9 @@ import favicons from "astro-favicons";
 // https://astro.build/config
 export default defineConfig({
   site: "https://tricity-hiking.ertrzyiks.me",
+  server: {
+    host: "0.0.0.0",
+  },
   integrations: [
     mdx(),
     preact(),
