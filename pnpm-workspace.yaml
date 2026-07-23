@@ -1,5 +1,5 @@
 overrides:
-  "@iconify/tools": "4.2.0"
+  "@iconify/tools": "5.0.12"
 
 allowBuilds:
   esbuild: true
