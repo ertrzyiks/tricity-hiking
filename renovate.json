@@ -6,5 +6,6 @@
     ":automergePatch",
     ":automergeMinor",
     ":automergeDigest"
-  ]
+  ],
+  "minimumReleaseAge": "30 days"
 }
