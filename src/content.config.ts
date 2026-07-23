@@ -44,7 +44,7 @@ const geodataCollection = defineCollection({
     features: z.array(
       z.object({
         type: z.literal("Feature"),
-        properties: z.record(z.any()),
+        properties: z.record(z.string(), z.any()),
         geometry: z.union([
           z.object({
             type: z.literal("LineString"),
