@@ -137,3 +137,7 @@ dist
 .astro
 
 .DS_Store
+
+# Only the clear-renovate-prs skill is checked in; other local/session skills are ignored
+.claude/skills/*
+!.claude/skills/clear-renovate-prs
