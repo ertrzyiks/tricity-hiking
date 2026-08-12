@@ -1,5 +1,6 @@
 ---
 import { getCollection, getEntry } from "astro:content";
+import { getImage } from "astro:assets";
 import KioskLayout from "../layouts/KioskLayout.astro";
 import { enhance } from "../services/enhance";
 import { getLineStringFeature } from "../services/getLineStringFeature";
@@ -28,10 +29,18 @@ for (const route of tricityRoutes) {
   const properties =
     getLineStringFeature({ collection: enhancedGeojson })?.properties ?? {};
 
+  const previewImage = route.data.preview
+    ? await getImage({
+        src: route.data.preview,
+        width: 1600,
+        height: 1600,
+      })
+    : null;
+
   routes.push({
     slug: route.id,
     title: route.data.title,
-    previewSrc: route.data.preview?.src ?? null,
+    previewSrc: previewImage?.src ?? null,
     distanceKm: mToKm(properties.distance ?? 0),
     time: formatTime(properties.estimatedTime ?? 0),
     totalGain: properties.totalGain ?? 0,

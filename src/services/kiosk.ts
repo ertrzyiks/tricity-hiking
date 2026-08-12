@@ -8,8 +8,13 @@ export interface KioskState {
 /** No touch input for this long returns the kiosk to its reset state. */
 export const IDLE_TIMEOUT_MS = 90_000;
 
-/** In attract mode, the current route slide advances at this interval. */
+/** In attract mode, the spotlighted route advances at this interval. */
 export const ATTRACT_INTERVAL_MS = 8_000;
+
+/** Wraps `index + delta` into `[0, count)`, treating the list as a ring. */
+function wrapIndex(index: number, delta: number, count: number): number {
+  return (index + delta + count) % count;
+}
 
 /** The persistent "Home" action: always returns to the overview grid. */
 export function goHome(): KioskState {
@@ -36,15 +41,16 @@ export function stepDetail(
     return state;
   }
 
-  const nextIndex = (state.index + direction + routeCount) % routeCount;
-
-  return { mode: "detail", index: nextIndex };
+  return {
+    mode: "detail",
+    index: wrapIndex(state.index, direction, routeCount),
+  };
 }
 
 /**
  * After IDLE_TIMEOUT_MS of no touch input, the kiosk resets to attract
- * mode: a slideshow that starts over from the first route, regardless of
- * where the visitor left off.
+ * mode: back to the overview grid, spotlighting routes in turn starting
+ * over from the first one, regardless of where the visitor left off.
  */
 export function handleIdleTimeout(state: KioskState): KioskState {
   if (state.mode === "attract") {
@@ -68,7 +74,7 @@ export function handleInteraction(state: KioskState): KioskState {
   return state;
 }
 
-/** Advances attract mode's slideshow by one route, wrapping around. */
+/** Advances attract mode's spotlight to the next route, wrapping around. */
 export function advanceAttract(
   state: KioskState,
   routeCount: number,
@@ -77,5 +83,5 @@ export function advanceAttract(
     return state;
   }
 
-  return { mode: "attract", index: (state.index + 1) % routeCount };
+  return { mode: "attract", index: wrapIndex(state.index, 1, routeCount) };
 }

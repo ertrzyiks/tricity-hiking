@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import type { KioskRoute } from "./types";
+import { trackEvent } from "../../../services/analytics";
 import {
   goHome,
   openRoute,
@@ -17,8 +18,9 @@ export const KioskCarousel = ({ routes }: { routes: KioskRoute[] }) => {
   const idleTimer = useRef<number | null>(null);
 
   // Any touch input resets the 90s idle clock. When it fires, the kiosk
-  // drops into an unattended attract-mode slideshow (see the effect below)
-  // regardless of where the previous visitor left off.
+  // drops into an unattended attract-mode spotlight cycle on the overview
+  // grid (see the effect below), regardless of where the previous visitor
+  // left off.
   useEffect(() => {
     const scheduleIdleReset = () => {
       if (idleTimer.current !== null) {
@@ -48,10 +50,10 @@ export const KioskCarousel = ({ routes }: { routes: KioskRoute[] }) => {
     };
   }, []);
 
-  // Attract mode auto-advances its own slideshow every 8s. Keyed only on
-  // the mode (not the index) so entering/leaving attract mode starts and
-  // stops a single steady-interval timer, rather than one that restarts
-  // (and skews) on every advance.
+  // Attract mode auto-advances its spotlight every 8s. Keyed only on the
+  // mode (not the index) so entering/leaving attract mode starts and stops
+  // a single steady-interval timer, rather than one that restarts (and
+  // skews) on every advance.
   useEffect(() => {
     if (state.mode !== "attract" || routes.length === 0) {
       return;
@@ -64,29 +66,54 @@ export const KioskCarousel = ({ routes }: { routes: KioskRoute[] }) => {
     return () => window.clearInterval(id);
   }, [state.mode, routes.length]);
 
-  const route = state.mode !== "overview" ? routes[state.index] : undefined;
+  const goHomeAndTrack = () => {
+    trackEvent("kiosk home tapped");
+    setState(goHome());
+  };
+
+  const openRouteAndTrack = (index: number) => {
+    const selected = routes[index];
+
+    if (selected) {
+      trackEvent("kiosk route opened", { slug: selected.slug });
+    }
+
+    setState(openRoute(index));
+  };
+
+  const stepAndTrack = (direction: 1 | -1) => {
+    setState((current) => {
+      const next = stepDetail(current, direction, routes.length);
+      const selected = routes[next.index];
+
+      if (selected) {
+        trackEvent("kiosk route stepped", {
+          slug: selected.slug,
+          direction: direction === 1 ? "next" : "prev",
+        });
+      }
+
+      return next;
+    });
+  };
 
   return (
     <div className="fixed inset-0 bg-slate-950 text-white select-none touch-none overflow-hidden">
-      <HomeButton onClick={() => setState(goHome())} />
+      <HomeButton onClick={goHomeAndTrack} />
 
-      {state.mode === "overview" && (
+      {state.mode !== "detail" && (
         <OverviewGrid
           routes={routes}
-          onSelect={(index) => setState(openRoute(index))}
+          spotlightIndex={state.mode === "attract" ? state.index : null}
+          onSelect={openRouteAndTrack}
         />
       )}
 
-      {route && (
+      {state.mode === "detail" && routes[state.index] && (
         <RouteSlide
-          route={route}
-          isAttract={state.mode === "attract"}
-          onPrev={() =>
-            setState((current) => stepDetail(current, -1, routes.length))
-          }
-          onNext={() =>
-            setState((current) => stepDetail(current, 1, routes.length))
-          }
+          route={routes[state.index]}
+          onPrev={() => stepAndTrack(-1)}
+          onNext={() => stepAndTrack(1)}
         />
       )}
     </div>
@@ -106,9 +133,11 @@ const HomeButton = ({ onClick }: { onClick: () => void }) => (
 
 const OverviewGrid = ({
   routes,
+  spotlightIndex,
   onSelect,
 }: {
   routes: KioskRoute[];
+  spotlightIndex: number | null;
   onSelect: (index: number) => void;
 }) => (
   <div className="h-full w-full overflow-y-auto pt-24 pb-8 px-8">
@@ -125,7 +154,9 @@ const OverviewGrid = ({
           key={route.slug}
           type="button"
           onClick={() => onSelect(index)}
-          className="group relative min-h-[200px] min-w-[200px] overflow-hidden rounded-2xl bg-slate-800 text-left"
+          className={`group relative min-h-[200px] min-w-[200px] overflow-hidden rounded-2xl bg-slate-800 text-left transition-transform ${
+            spotlightIndex === index ? "ring-4 ring-green-400 scale-105" : ""
+          }`}
         >
           {route.previewSrc && (
             <img
@@ -146,12 +177,10 @@ const OverviewGrid = ({
 
 const RouteSlide = ({
   route,
-  isAttract,
   onPrev,
   onNext,
 }: {
   route: KioskRoute;
-  isAttract: boolean;
   onPrev: () => void;
   onNext: () => void;
 }) => (
@@ -180,32 +209,22 @@ const RouteSlide = ({
       </div>
     </div>
 
-    {!isAttract && (
-      <>
-        <button
-          type="button"
-          onClick={onPrev}
-          aria-label="Previous route"
-          className="fixed left-4 top-1/2 z-10 flex h-16 w-16 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 active:bg-white/30"
-        >
-          <ChevronIcon direction="left" />
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          aria-label="Next route"
-          className="fixed right-4 top-1/2 z-10 flex h-16 w-16 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 active:bg-white/30"
-        >
-          <ChevronIcon direction="right" />
-        </button>
-      </>
-    )}
-
-    {isAttract && (
-      <div className="fixed bottom-4 right-4 z-10 rounded-full bg-white/10 px-4 py-2 text-sm uppercase tracking-wide text-slate-200 backdrop-blur-sm">
-        Touch to explore
-      </div>
-    )}
+    <button
+      type="button"
+      onClick={onPrev}
+      aria-label="Previous route"
+      className="fixed left-4 top-1/2 z-10 flex h-16 w-16 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 active:bg-white/30"
+    >
+      <ChevronIcon direction="left" />
+    </button>
+    <button
+      type="button"
+      onClick={onNext}
+      aria-label="Next route"
+      className="fixed right-4 top-1/2 z-10 flex h-16 w-16 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 active:bg-white/30"
+    >
+      <ChevronIcon direction="right" />
+    </button>
   </div>
 );
 
