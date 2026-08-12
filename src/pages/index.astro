@@ -1,35 +1,72 @@
 ---
+// Single continuous scroll homepage — prototype for issue #3 of the
+// new-ui-prototypes map (single scroll, no page nav). Spec:
+// .scratch/new-ui-prototypes/issues/03-single-scroll-no-nav.md
+//
+// Every section below is a summary of an existing standalone page, with a
+// "See more" link out to it. The standalone pages (/routes, /list,
+// /activities, /food, /history) stay live and unchanged — this page is an
+// additive front door, not a replacement for them content-wise.
 import { getCollection, getEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/ui/Hero.astro";
-import { enhance } from "../services/enhance";
-import { getLineStringFeature } from "../services/getLineStringFeature";
+import { AnchorNav } from "../components/ui/AnchorNav/AnchorNav";
+import { HomeMap } from "../components/ui/HomeMap/HomeMap";
+import RouteMapLegend from "../components/ui/RouteMapLegend.astro";
 import RouteListItem from "../components/ui/ListCardItem/Route.astro";
+import ActivityListCardItem from "../components/ui/ListCardItem/Activity.astro";
+import FoodListCardItem from "../components/ui/ListCardItem/Food.astro";
+import { enhance } from "../services/enhance";
+import { merge } from "../services/merge";
+import { getLineStringFeature } from "../services/getLineStringFeature";
+import { foodCategoryIcons, foodPlaces } from "../data/foodPlaces";
+import { timelineConfig } from "../data/historyTimeline";
+import { content as activityContent } from "../components/ui/ActivitiesList/content";
 import TricityMap from "../assets/tricity.svg";
+import mapImage from "../assets/home-map.jpg";
 import { Icon } from "astro-icon/components";
 
 const allRoutes = await getCollection("routes");
-const routes = allRoutes.filter((route) => {
-  return !route.data.draft;
-});
+const routes = allRoutes.filter((route) => !route.data.draft);
+
+// Map section — same "tricity" query as /routes, reused as-is.
+const tricityRoutes = routes.filter((route) => route.data.tricity);
+const mapGeojsonList = [];
+for (const route of tricityRoutes) {
+  const geojson = await getEntry(route.data.geojson);
+  mapGeojsonList.push(enhance({ collection: geojson.data, route: route.data }));
+}
+const mapGeojson = merge(mapGeojsonList);
+
+// Routes section — same "featured: homepage" query as today's index.astro.
 const featuredRoutes = routes
   .filter((route) => route.data.featured === "homepage")
   .slice(0, 3);
-
-const geojsonList = [];
-
+const featuredRouteCards = [];
 for (const route of featuredRoutes) {
   const geojson = await getEntry(route.data.geojson);
-  const enhancedGeojson = enhance({
-    collection: geojson.data,
-    route: route.data,
-  });
-  geojsonList.push({
+  const enhancedGeojson = enhance({ collection: geojson.data, route: route.data });
+  featuredRouteCards.push({
     route,
     properties:
       getLineStringFeature({ collection: enhancedGeojson })?.properties ?? {},
   });
 }
+
+// Activities section — a handful of picks, not the full grouped list.
+const allActivities = await getCollection(
+  "activities",
+  ({ data }) => !data.draft,
+);
+const activityPicks = allActivities.slice(0, 6);
+
+// Food section — one sample per category, same data as /food.
+const foodPicks = ["Breakfast", "Lunch/Dinner", "Cafe"]
+  .map((kind) => foodPlaces.find((place) => place.kind === kind))
+  .filter((place) => place !== undefined);
+
+// History section — major events only, collapsed to a compact list.
+const majorEvents = timelineConfig.filter((event) => !event.minor);
 ---
 
 <Layout title="List of the best hiking trails near Gdańsk, Sopot, and Gdynia">
@@ -39,84 +76,220 @@ for (const route of featuredRoutes) {
     slot="hero"
   />
 
-  <div
-    class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0 my-6 lg:my-16"
-  >
-    <h2 class="text-2xl mb-8">Tricity</h2>
-
+  <div class="bg-white">
     <div
-      class="flex flex-col lg:flex-row gap-4 lg:gap-16 items-center md:px-12 lg:px-16"
+      class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0 py-12 lg:py-16"
     >
-      <div>
-        <TricityMap class="w-56 h-56" />
-      </div>
-      <div class="px-2 lg:px-0">
-        <p class="text-slate-700">
-          Tricity—made up of Gdańsk, Sopot, and Gdynia—is a unique region in
-          northern Poland where the Baltic Sea meets the gentle hills of the
-          Tricity Landscape Park. From the medieval streets of Gdańsk to the
-          vibrant pier of Sopot and the modern charm of Gdynia, Tricity blends
-          nature, history, and coastal life in one inviting destination.
-        </p>
-      </div>
-    </div>
+      <h2 class="text-2xl mb-8">Tricity</h2>
 
-    <div class="my-16">
-      <h2 class="text-2xl mb-8">Why?</h2>
-
-      <div class="flex flex-col lg:flex-row gap-8">
-        <div class="flex-1 bg-white p-8 rounded-lg shadow-lg">
-          <div class="flex items-center gap-2">
-            <Icon name="mdi:forest" class="w-6 h-6" />
-            <h3 class="text-lg font-bold">Explore Nature</h3>
-          </div>
-          <p class="text-slate-700 mt-4">
-            Almost 200,000 square meters of landscape protected area. The
-            terrain is pleasantly varied, offering forest trails, occasional
-            viewpoints, and a refreshing break from flat cityscapes.
-          </p>
+      <div
+        class="flex flex-col lg:flex-row gap-4 lg:gap-16 items-center md:px-12 lg:px-16"
+      >
+        <div>
+          <TricityMap class="w-56 h-56" />
         </div>
-
-        <div class="flex-1 bg-white p-8 rounded-lg shadow-lg">
-          <div class="flex items-center gap-2">
-            <Icon name="mdi:museum" class="w-6 h-6" />
-            <h3 class="text-lg font-bold flex items-center gap-2">
-              Unearth a Rich History
-            </h3>
-          </div>
-          <p class="text-slate-700 mt-4">
-            With over 1,000 years of history in Gdańsk, the charming seaside
-            town of Sopot, which has attracted visitors since the 19th century,
-            and the rise of Gdynia in the 20th century, traces of history are
-            everywhere.
-          </p>
-        </div>
-        <div class="flex-1 bg-white p-8 rounded-lg shadow-lg">
-          <div class="flex items-center gap-2">
-            <Icon name="mdi:local-restaurant" class="w-6 h-6" />
-            <h3 class="text-lg font-bold">Take a Break</h3>
-          </div>
-          <p class="text-slate-700 mt-4">
-            After a long day of hiking, you can relax in one of the many
-            restaurants or cafes. Tricity offers a wide range of dining options,
-            where you can unwind and enjoy the local culture.
+        <div class="px-2 lg:px-0">
+          <p class="text-slate-700">
+            Tricity—made up of Gdańsk, Sopot, and Gdynia—is a unique region in
+            northern Poland where the Baltic Sea meets the gentle hills of the
+            Tricity Landscape Park. From the medieval streets of Gdańsk to the
+            vibrant pier of Sopot and the modern charm of Gdynia, Tricity
+            blends nature, history, and coastal life in one inviting
+            destination.
           </p>
         </div>
       </div>
 
-      <div class="my-16">
-        <h2 class="text-2xl">Recommended routes</h2>
+      <div class="mt-16">
+        <h2 class="text-2xl mb-8">Why?</h2>
 
-        <ul>
-          {
-            geojsonList.map(({ route, properties }) => (
-              <RouteListItem route={route} properties={properties} />
-            ))
-          }
-        </ul>
+        <div class="flex flex-col lg:flex-row gap-8">
+          <div class="flex-1 bg-slate-50 p-8 rounded-lg shadow-lg">
+            <div class="flex items-center gap-2">
+              <Icon name="mdi:forest" class="w-6 h-6" />
+              <h3 class="text-lg font-bold">Explore Nature</h3>
+            </div>
+            <p class="text-slate-700 mt-4">
+              Almost 200,000 square meters of landscape protected area. The
+              terrain is pleasantly varied, offering forest trails,
+              occasional viewpoints, and a refreshing break from flat
+              cityscapes.
+            </p>
+          </div>
 
-        <a class="simple-link" href="/routes">See All Routes</a>
+          <div class="flex-1 bg-slate-50 p-8 rounded-lg shadow-lg">
+            <div class="flex items-center gap-2">
+              <Icon name="mdi:museum" class="w-6 h-6" />
+              <h3 class="text-lg font-bold">Unearth a Rich History</h3>
+            </div>
+            <p class="text-slate-700 mt-4">
+              With over 1,000 years of history in Gdańsk, the charming
+              seaside town of Sopot, which has attracted visitors since the
+              19th century, and the rise of Gdynia in the 20th century,
+              traces of history are everywhere.
+            </p>
+          </div>
+          <div class="flex-1 bg-slate-50 p-8 rounded-lg shadow-lg">
+            <div class="flex items-center gap-2">
+              <Icon name="mdi:local-restaurant" class="w-6 h-6" />
+              <h3 class="text-lg font-bold">Take a Break</h3>
+            </div>
+            <p class="text-slate-700 mt-4">
+              After a long day of hiking, you can relax in one of the many
+              restaurants or cafes. Tricity offers a wide range of dining
+              options, where you can unwind and enjoy the local culture.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <AnchorNav client:load />
+
+  <section
+    id="map"
+    class="scroll-mt-14 bg-slate-50 min-h-screen flex flex-col justify-start"
+  >
+    <div class="max-w-(--breakpoint-xl) mx-auto w-full px-2 lg:px-0 py-12 lg:py-16">
+      <h2 class="text-2xl mb-8">Map</h2>
+
+      <div class="relative h-[60vh] lg:h-[65vh]" transition:name="map">
+        <div class="absolute inset-0 h-full overflow-hidden">
+          <img src={mapImage.src} class="absolute blur-2xl inset-0 h-full" />
+        </div>
+
+        <HomeMap client:visible routes={mapGeojson} />
+      </div>
+
+      <RouteMapLegend />
+
+      <a
+        class="px-4 py-2 rounded-md border border-solid bg-green-50 hover:bg-green-200 text-slate-900 border-green-300 inline-block"
+        href="/extended/"
+      >
+        Include nearby routes
+      </a>
+    </div>
+  </section>
+
+  <section
+    id="routes"
+    class="scroll-mt-14 bg-white min-h-screen flex flex-col justify-start"
+  >
+    <div class="max-w-(--breakpoint-xl) mx-auto w-full px-2 lg:px-0 py-12 lg:py-16">
+      <h2 class="text-2xl mb-8">Routes</h2>
+
+      <ul>
+        {
+          featuredRouteCards.map(({ route, properties }) => (
+            <RouteListItem route={route} properties={properties} />
+          ))
+        }
+      </ul>
+
+      <div class="flex flex-wrap gap-x-6 gap-y-2 mt-2">
+        <a class="simple-link" href="/routes">See all routes on the map →</a>
+        <a class="simple-link" href="/list">Browse all routes as a list →</a>
+      </div>
+    </div>
+  </section>
+
+  <section
+    id="activities"
+    class="scroll-mt-14 bg-slate-50 min-h-screen flex flex-col justify-start"
+  >
+    <div class="max-w-(--breakpoint-xl) mx-auto w-full px-2 lg:px-0 py-12 lg:py-16">
+      <h2 class="text-2xl mb-8">Activities</h2>
+
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
+        {
+          activityPicks.map((activity) => (
+            <ActivityListCardItem
+              link={activity.data.link}
+              icon={
+                activityContent.category[
+                  activity.data.category as keyof typeof activityContent.category
+                ]?.defaultIcon ?? "mdi:map-marker"
+              }
+              image={activity.data.coverImage}
+              name={activity.data.title}
+              description={activity.data.description}
+            />
+          ))
+        }
+      </ul>
+
+      <a class="simple-link" href="/activities">See all activities →</a>
+    </div>
+  </section>
+
+  <section
+    id="food"
+    class="scroll-mt-14 bg-white min-h-screen flex flex-col justify-start"
+  >
+    <div class="max-w-(--breakpoint-xl) mx-auto w-full px-2 lg:px-0 py-12 lg:py-16">
+      <h2 class="text-2xl mb-8">Food</h2>
+
+      <div class="flex flex-wrap gap-4 mb-8">
+        {
+          Object.entries(foodCategoryIcons).map(([category, icon]) => (
+            <div class="flex items-center gap-2 text-slate-700 bg-slate-50 rounded-full px-4 py-2">
+              <Icon name={icon} class="w-5 h-5" />
+              {category}
+            </div>
+          ))
+        }
+      </div>
+
+      <ul>
+        {
+          foodPicks.map((place) => (
+            <FoodListCardItem
+              link={place!.link}
+              name={place!.name}
+              location={place!.location}
+              icon={foodCategoryIcons[place!.kind]}
+            />
+          ))
+        }
+      </ul>
+
+      <a class="simple-link" href="/food">See all recommended places →</a>
+    </div>
+  </section>
+
+  <section
+    id="history"
+    class="scroll-mt-14 bg-slate-50 min-h-screen flex flex-col justify-start"
+  >
+    <div class="max-w-(--breakpoint-xl) mx-auto w-full px-2 lg:px-0 py-12 lg:py-16">
+      <h2 class="text-2xl mb-8">History</h2>
+
+      <ol class="border-l-2 border-green-500 pl-6 flex flex-col gap-6">
+        {
+          majorEvents.map((item) => (
+            <li>
+              <div class="text-sm text-slate-500">
+                {item.year}
+                {item.label && <span> · {item.label}</span>}
+              </div>
+              <div class="text-lg">{item.event}</div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <a class="simple-link mt-6 inline-block" href="/history">
+        See the full timeline →
+      </a>
+    </div>
+  </section>
 </Layout>
+
+<style is:global>
+  .maplibregl-map {
+    height: 100%;
+    width: 100%;
+  }
+</style>
