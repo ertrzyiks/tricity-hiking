@@ -1,5 +1,5 @@
 ---
-const { id, href, matches } = Astro.props;
+const { id, href, label, matches } = Astro.props;
 
 const pathname = new URL(Astro.request.url).pathname;
 const directMatch = pathname === href || pathname === `${href}/`;
@@ -9,6 +9,8 @@ const isActive = matches ? matches(pathname) : directMatch;
 <a
   id={id}
   href={href}
+  aria-label={label}
+  aria-current={isActive ? "page" : undefined}
   class:list={[
     "px-4 py-3 flex items-center space-x-4 text-gray-800 group border border-solid border-l-4 hover:bg-green-100",
     {

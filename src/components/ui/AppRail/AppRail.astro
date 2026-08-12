@@ -2,10 +2,13 @@
 // Persistent left-sidebar app shell rail.
 //
 // Visual/IA shell only — see .scratch/new-ui-prototypes/issues/02-persistent-sidebar-shell.md
-// for the resolved spec. Renders the same section links as the old horizontal
-// header nav, just re-parented into a vertical rail:
+// for the resolved spec. Renders the same sections the old horizontal header
+// nav linked to (same hrefs, same "routes" entry-point behaviour), re-parented
+// into a vertical rail — labels follow the spec's copy ("Blog" rather than
+// the old header's "Articles"):
 //   - icon-only (72px) between `lg` and `xl`, to avoid squeezing the map on
-//     mid-size laptops (the risk flagged in the spec)
+//     mid-size laptops (the risk flagged in the spec) — the label is still
+//     available to assistive tech at this width via aria-label
 //   - icon + label (220px) from `xl` up
 //   - below `lg` this element is the off-canvas drawer content, toggled by
 //     the existing SidebarSwitch component (reused verbatim, unmodified)
@@ -69,7 +72,12 @@ const navItems: NavItem[] = [
   <nav class="flex flex-col gap-1 px-2 py-2 overflow-y-auto">
     {
       navItems.map((item) => (
-        <SidebarLink id={item.id} href={item.href} matches={item.matches}>
+        <SidebarLink
+          id={item.id}
+          href={item.href}
+          label={item.label}
+          matches={item.matches}
+        >
           <Icon name={item.icon} class="w-5 h-5 shrink-0" slot="icon" />
           <span class="app-rail__label whitespace-nowrap">{item.label}</span>
         </SidebarLink>

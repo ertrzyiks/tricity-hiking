@@ -30,17 +30,22 @@
   hamburger that drives the open/closed toggle is `lg:hidden`, so the
   rail never actually enters the "open" state at those widths.
 */
+:root {
+  --rail-width-icon-only: 72px;
+  --rail-width-labelled: 220px;
+}
+
 @utility sidebar {
   @apply hidden rounded-none border-none;
 
   @media (width >= theme(--breakpoint-lg)) {
     @apply flex sticky top-0 self-start shrink-0 flex-col overflow-y-auto;
-    width: 72px;
+    width: var(--rail-width-icon-only);
     height: 100dvh;
   }
 
   @media (width >= theme(--breakpoint-xl)) {
-    width: 220px;
+    width: var(--rail-width-labelled);
   }
 }
 
@@ -53,11 +58,11 @@
     @apply sticky left-auto right-auto self-start shrink-0;
     top: 0;
     height: 100dvh;
-    width: 72px;
+    width: var(--rail-width-icon-only);
   }
 
   @media (width >= theme(--breakpoint-xl)) {
-    width: 220px;
+    width: var(--rail-width-labelled);
   }
 }
 
