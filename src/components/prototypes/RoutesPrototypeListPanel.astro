@@ -1,0 +1,40 @@
+---
+import RoutesPrototypeListItem from "./RoutesPrototypeListItem.astro";
+import type { RoutesPrototypeListItem as ListItem } from "../../services/getRoutesPrototypeData";
+
+interface Props {
+  panelId: "tricity" | "nearby";
+  heading: string;
+  items: ListItem[];
+  class?: string;
+  id?: string;
+  role?: "tabpanel";
+  "aria-labelledby"?: string;
+}
+
+const {
+  panelId,
+  heading,
+  items,
+  class: className = "",
+  id,
+  role,
+  "aria-labelledby": ariaLabelledby,
+} = Astro.props;
+---
+
+<div
+  data-panel={panelId}
+  hidden
+  id={id}
+  role={role}
+  aria-labelledby={ariaLabelledby}
+  class:list={[className]}
+>
+  <h2 data-panel-heading tabindex="-1" class="sr-only">{heading}</h2>
+  <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0">
+    <ul>
+      {items.map((item) => <RoutesPrototypeListItem item={item} />)}
+    </ul>
+  </div>
+</div>
