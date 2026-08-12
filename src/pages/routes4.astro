@@ -87,6 +87,8 @@ const overflowSections = primarySections.slice(3);
           <button
             type="button"
             role="tab"
+            id={`tab-${section.id}`}
+            aria-controls={`panel-${section.id}`}
             aria-selected={index === 0 ? "true" : "false"}
             tabindex={index === 0 ? 0 : -1}
             data-panel-target={section.id}
@@ -107,16 +109,27 @@ const overflowSections = primarySections.slice(3);
   </div>
 
   <main class="pb-24 lg:pb-10">
-    <RoutesPrototypeMapPanel geojson={mapGeojson} />
+    <RoutesPrototypeMapPanel
+      geojson={mapGeojson}
+      id="panel-map"
+      role="tabpanel"
+      aria-labelledby="tab-map"
+    />
     <RoutesPrototypeListPanel
       panelId="tricity"
       heading="Tricity routes"
       items={tricityItems}
+      id="panel-tricity"
+      role="tabpanel"
+      aria-labelledby="tab-tricity"
     />
     <RoutesPrototypeListPanel
       panelId="nearby"
       heading="Nearby routes"
       items={nearbyItems}
+      id="panel-nearby"
+      role="tabpanel"
+      aria-labelledby="tab-nearby"
     />
 
     <RoutesPrototypeDetailPanel

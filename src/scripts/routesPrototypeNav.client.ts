@@ -48,17 +48,30 @@ export function initRoutesPrototypeNav(root: ParentNode = document): void {
     root.querySelectorAll<HTMLElement>("[data-detail-id]"),
   );
 
-  const detailFields = {
-    title: root.querySelector<HTMLElement>("[data-detail-field='title']"),
-    description: root.querySelector<HTMLElement>(
-      "[data-detail-field='description']",
-    ),
-    distance: root.querySelector<HTMLElement>("[data-detail-field='distance']"),
-    time: root.querySelector<HTMLElement>("[data-detail-field='time']"),
-    gain: root.querySelector<HTMLElement>("[data-detail-field='gain']"),
-    loss: root.querySelector<HTMLElement>("[data-detail-field='loss']"),
-    image: root.querySelector<HTMLImageElement>("[data-detail-field='image']"),
-  };
+  // Each key here doubles as the `data-detail-field` value on the detail
+  // panel's markup *and* the suffix of the `data-detail-*` attribute on
+  // whichever list item was clicked (e.g. "distance" <-> data-detail-distance),
+  // so a single loop can copy every field instead of one branch per field.
+  const DETAIL_TEXT_FIELDS = [
+    "title",
+    "description",
+    "distance",
+    "time",
+    "gain",
+    "loss",
+  ] as const;
+  type DetailTextField = (typeof DETAIL_TEXT_FIELDS)[number];
+
+  const detailTextFields: Partial<Record<DetailTextField, HTMLElement>> = {};
+  DETAIL_TEXT_FIELDS.forEach((field) => {
+    const el = root.querySelector<HTMLElement>(
+      `[data-detail-field='${field}']`,
+    );
+    if (el) detailTextFields[field] = el;
+  });
+  const detailImageField = root.querySelector<HTMLImageElement>(
+    "[data-detail-field='image']",
+  );
 
   if (panels.length === 0) {
     return;
@@ -145,32 +158,22 @@ export function initRoutesPrototypeNav(root: ParentNode = document): void {
       returnPanel = sourcePanel;
     }
 
+    DETAIL_TEXT_FIELDS.forEach((field) => {
+      const el = detailTextFields[field];
+      if (!el) return;
+      const datasetKey = `detail${field[0].toUpperCase()}${field.slice(1)}`;
+      el.textContent = trigger.dataset[datasetKey] ?? "";
+    });
+
     const title = trigger.dataset.detailTitle ?? "";
 
-    if (detailFields.title) detailFields.title.textContent = title;
-    if (detailFields.description) {
-      detailFields.description.textContent =
-        trigger.dataset.detailDescription ?? "";
-    }
-    if (detailFields.distance) {
-      detailFields.distance.textContent = trigger.dataset.detailDistance ?? "";
-    }
-    if (detailFields.time) {
-      detailFields.time.textContent = trigger.dataset.detailTime ?? "";
-    }
-    if (detailFields.gain) {
-      detailFields.gain.textContent = trigger.dataset.detailGain ?? "";
-    }
-    if (detailFields.loss) {
-      detailFields.loss.textContent = trigger.dataset.detailLoss ?? "";
-    }
-    if (detailFields.image) {
+    if (detailImageField) {
       const src = trigger.dataset.detailImage;
       if (src) {
-        detailFields.image.src = src;
-        detailFields.image.hidden = false;
+        detailImageField.src = src;
+        detailImageField.hidden = false;
       } else {
-        detailFields.image.hidden = true;
+        detailImageField.hidden = true;
       }
     }
 
