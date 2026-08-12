@@ -1,7 +1,9 @@
 ---
 // Single continuous scroll homepage — prototype for issue #3 of the
-// new-ui-prototypes map (single scroll, no page nav). Spec:
-// .scratch/new-ui-prototypes/issues/03-single-scroll-no-nav.md
+// new-ui-prototypes map (single scroll, no page nav). Resolved spec lives in
+// the project's local UI-prototypes tracker at
+// .scratch/new-ui-prototypes/issues/03-single-scroll-no-nav.md (untracked —
+// ask the team for it if that path is missing on your checkout).
 //
 // Every section below is a summary of an existing standalone page, with a
 // "See more" link out to it. The standalone pages (/routes, /list,
@@ -11,17 +13,26 @@ import { getCollection, getEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/ui/Hero.astro";
 import { AnchorNav } from "../components/ui/AnchorNav/AnchorNav";
+import AnchorSection from "../components/ui/AnchorNav/AnchorSection.astro";
 import { HomeMap } from "../components/ui/HomeMap/HomeMap";
 import RouteMapLegend from "../components/ui/RouteMapLegend.astro";
 import RouteListItem from "../components/ui/ListCardItem/Route.astro";
-import ActivityListCardItem from "../components/ui/ListCardItem/Activity.astro";
+import ActivityList from "../components/ui/ActivitiesList/ActivityList.astro";
 import FoodListCardItem from "../components/ui/ListCardItem/Food.astro";
+import TimelineRoot from "../components/ui/Timeline/Timeline.astro";
+import TimelineItem from "../components/ui/Timeline/TimelineItem.astro";
+import TimelineOppositeContent from "../components/ui/Timeline/TimelineOppositeContent.astro";
+import TimelineOppositeContentSecondary from "../components/ui/Timeline/TimelineOppositeContentSecondary.astro";
+import TimelineSeparator from "../components/ui/Timeline/TimelineSeparator.astro";
+import TimelineDot from "../components/ui/Timeline/TimelineDot.astro";
+import TimelineConnector from "../components/ui/Timeline/TimelineConnector.astro";
+import TimelineContent from "../components/ui/Timeline/TimelineContent.astro";
+import TimelineContentLabel from "../components/ui/Timeline/TimelineContentLabel.astro";
 import { enhance } from "../services/enhance";
 import { merge } from "../services/merge";
 import { getLineStringFeature } from "../services/getLineStringFeature";
-import { foodCategoryIcons, foodPlaces } from "../data/foodPlaces";
-import { timelineConfig } from "../data/historyTimeline";
-import { content as activityContent } from "../components/ui/ActivitiesList/content";
+import { foodCategoryIcons, foodPlaces, type FoodPlace } from "../data/foodPlaces";
+import { timelineConfig, processTimeline } from "../data/historyTimeline";
 import TricityMap from "../assets/tricity.svg";
 import mapImage from "../assets/home-map.jpg";
 import { Icon } from "astro-icon/components";
@@ -53,7 +64,8 @@ for (const route of featuredRoutes) {
   });
 }
 
-// Activities section — a handful of picks, not the full grouped list.
+// Activities section — same ActivityList component as /activities, just fed
+// a handful of picks instead of the full collection.
 const allActivities = await getCollection(
   "activities",
   ({ data }) => !data.draft,
@@ -63,10 +75,15 @@ const activityPicks = allActivities.slice(0, 6);
 // Food section — one sample per category, same data as /food.
 const foodPicks = ["Breakfast", "Lunch/Dinner", "Cafe"]
   .map((kind) => foodPlaces.find((place) => place.kind === kind))
-  .filter((place) => place !== undefined);
+  .filter((place): place is FoodPlace => place !== undefined);
 
-// History section — major events only, collapsed to a compact list.
-const majorEvents = timelineConfig.filter((event) => !event.minor);
+// History section — same <Timeline> as /history, "collapsed" to major
+// events only. Filtering before processTimeline() means each bar's duration
+// is the gap to the *next major event*, not a hidden minor one, so the
+// shorter timeline still reads correctly on its own.
+const majorTimeline = processTimeline(
+  timelineConfig.filter((event) => !event.minor),
+);
 ---
 
 <Layout title="List of the best hiking trails near Gdańsk, Sopot, and Gdynia">
@@ -145,146 +162,133 @@ const majorEvents = timelineConfig.filter((event) => !event.minor);
     </div>
   </div>
 
-  <AnchorNav client:load />
+  <AnchorNav client:visible />
 
-  <section
-    id="map"
-    class="scroll-mt-14 bg-slate-50 min-h-screen flex flex-col justify-start"
-  >
-    <div class="max-w-(--breakpoint-xl) mx-auto w-full px-2 lg:px-0 py-12 lg:py-16">
-      <h2 class="text-2xl mb-8">Map</h2>
+  <AnchorSection id="map" background="slate">
+    <h2 class="text-2xl mb-8">Map</h2>
 
-      <div class="relative h-[60vh] lg:h-[65vh]" transition:name="map">
-        <div class="absolute inset-0 h-full overflow-hidden">
-          <img src={mapImage.src} class="absolute blur-2xl inset-0 h-full" />
-        </div>
-
-        <HomeMap client:visible routes={mapGeojson} />
+    <div class="relative h-[60vh] lg:h-[65vh]" transition:name="map">
+      <div class="absolute inset-0 h-full overflow-hidden">
+        <img src={mapImage.src} class="absolute blur-2xl inset-0 h-full" />
       </div>
 
-      <RouteMapLegend />
-
-      <a
-        class="px-4 py-2 rounded-md border border-solid bg-green-50 hover:bg-green-200 text-slate-900 border-green-300 inline-block"
-        href="/extended/"
-      >
-        Include nearby routes
-      </a>
+      {
+        /*
+          Every other page mounts HomeMap with client:only="preact" (it
+          renders nothing server-side and hydrates immediately). Here it's
+          client:visible instead — required by the spec so this map/chart-
+          heavy island only pays its hydration cost once scrolled into view,
+          now that it's sharing the page load with four other sections.
+        */
+      }
+      <HomeMap client:visible routes={mapGeojson} />
     </div>
-  </section>
 
-  <section
-    id="routes"
-    class="scroll-mt-14 bg-white min-h-screen flex flex-col justify-start"
-  >
-    <div class="max-w-(--breakpoint-xl) mx-auto w-full px-2 lg:px-0 py-12 lg:py-16">
-      <h2 class="text-2xl mb-8">Routes</h2>
+    <RouteMapLegend />
 
-      <ul>
-        {
-          featuredRouteCards.map(({ route, properties }) => (
-            <RouteListItem route={route} properties={properties} />
-          ))
-        }
-      </ul>
+    <a
+      class="px-4 py-2 rounded-md border border-solid bg-green-50 hover:bg-green-200 text-slate-900 border-green-300 inline-block"
+      href="/extended/"
+    >
+      Include nearby routes
+    </a>
+  </AnchorSection>
 
-      <div class="flex flex-wrap gap-x-6 gap-y-2 mt-2">
-        <a class="simple-link" href="/routes">See all routes on the map →</a>
-        <a class="simple-link" href="/list">Browse all routes as a list →</a>
-      </div>
+  <AnchorSection id="routes">
+    <h2 class="text-2xl mb-8">Routes</h2>
+
+    <ul>
+      {
+        featuredRouteCards.map(({ route, properties }) => (
+          <RouteListItem route={route} properties={properties} />
+        ))
+      }
+    </ul>
+
+    <div class="flex flex-wrap gap-x-6 gap-y-2 mt-2">
+      <a class="simple-link" href="/routes">See all routes on the map →</a>
+      <a class="simple-link" href="/list">Browse all routes as a list →</a>
     </div>
-  </section>
+  </AnchorSection>
 
-  <section
-    id="activities"
-    class="scroll-mt-14 bg-slate-50 min-h-screen flex flex-col justify-start"
-  >
-    <div class="max-w-(--breakpoint-xl) mx-auto w-full px-2 lg:px-0 py-12 lg:py-16">
-      <h2 class="text-2xl mb-8">Activities</h2>
+  <AnchorSection id="activities" background="slate">
+    <h2 class="text-2xl mb-8">Activities</h2>
 
-      <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
-        {
-          activityPicks.map((activity) => (
-            <ActivityListCardItem
-              link={activity.data.link}
-              icon={
-                activityContent.category[
-                  activity.data.category as keyof typeof activityContent.category
-                ]?.defaultIcon ?? "mdi:map-marker"
-              }
-              image={activity.data.coverImage}
-              name={activity.data.title}
-              description={activity.data.description}
-            />
-          ))
-        }
-      </ul>
+    <ActivityList activities={activityPicks} groupBy="category" />
 
-      <a class="simple-link" href="/activities">See all activities →</a>
+    <a class="simple-link" href="/activities">See all activities →</a>
+  </AnchorSection>
+
+  <AnchorSection id="food">
+    <h2 class="text-2xl mb-8">Food</h2>
+
+    <div class="flex flex-wrap gap-4 mb-8">
+      {
+        Object.entries(foodCategoryIcons).map(([category, icon]) => (
+          <div class="flex items-center gap-2 text-slate-700 bg-slate-50 rounded-full px-4 py-2">
+            <Icon name={icon} class="w-5 h-5" />
+            {category}
+          </div>
+        ))
+      }
     </div>
-  </section>
 
-  <section
-    id="food"
-    class="scroll-mt-14 bg-white min-h-screen flex flex-col justify-start"
-  >
-    <div class="max-w-(--breakpoint-xl) mx-auto w-full px-2 lg:px-0 py-12 lg:py-16">
-      <h2 class="text-2xl mb-8">Food</h2>
+    <ul>
+      {
+        foodPicks.map((place) => (
+          <FoodListCardItem
+            link={place.link}
+            name={place.name}
+            location={place.location}
+            icon={foodCategoryIcons[place.kind]}
+          />
+        ))
+      }
+    </ul>
 
-      <div class="flex flex-wrap gap-4 mb-8">
-        {
-          Object.entries(foodCategoryIcons).map(([category, icon]) => (
-            <div class="flex items-center gap-2 text-slate-700 bg-slate-50 rounded-full px-4 py-2">
-              <Icon name={icon} class="w-5 h-5" />
-              {category}
-            </div>
-          ))
-        }
-      </div>
+    <a class="simple-link" href="/food">See all recommended places →</a>
+  </AnchorSection>
 
-      <ul>
-        {
-          foodPicks.map((place) => (
-            <FoodListCardItem
-              link={place!.link}
-              name={place!.name}
-              location={place!.location}
-              icon={foodCategoryIcons[place!.kind]}
-            />
-          ))
-        }
-      </ul>
+  <AnchorSection id="history" background="slate">
+    <h2 class="text-2xl mb-8">History</h2>
 
-      <a class="simple-link" href="/food">See all recommended places →</a>
-    </div>
-  </section>
+    <TimelineRoot>
+      <TimelineItem>
+        <TimelineSeparator slot="separator">
+          <TimelineConnector />
+        </TimelineSeparator>
+      </TimelineItem>
+      {
+        majorTimeline.map((item) => (
+          <TimelineItem key={item.year} height={40 + item.duration * 0.4}>
+            <TimelineOppositeContent slot="opposite-content">
+              {item.event}
 
-  <section
-    id="history"
-    class="scroll-mt-14 bg-slate-50 min-h-screen flex flex-col justify-start"
-  >
-    <div class="max-w-(--breakpoint-xl) mx-auto w-full px-2 lg:px-0 py-12 lg:py-16">
-      <h2 class="text-2xl mb-8">History</h2>
+              {item.description && (
+                <TimelineOppositeContentSecondary>
+                  {item.description}
+                </TimelineOppositeContentSecondary>
+              )}
+            </TimelineOppositeContent>
+            <TimelineSeparator slot="separator">
+              <TimelineDot variant="regular" />
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent slot="content">
+              {item.year}
+              {item.label && (
+                <TimelineContentLabel>{item.label}</TimelineContentLabel>
+              )}
+            </TimelineContent>
+          </TimelineItem>
+        ))
+      }
+    </TimelineRoot>
 
-      <ol class="border-l-2 border-green-500 pl-6 flex flex-col gap-6">
-        {
-          majorEvents.map((item) => (
-            <li>
-              <div class="text-sm text-slate-500">
-                {item.year}
-                {item.label && <span> · {item.label}</span>}
-              </div>
-              <div class="text-lg">{item.event}</div>
-            </li>
-          ))
-        }
-      </ol>
-
-      <a class="simple-link mt-6 inline-block" href="/history">
-        See the full timeline →
-      </a>
-    </div>
-  </section>
+    <a class="simple-link mt-6 inline-block" href="/history">
+      See the full timeline →
+    </a>
+  </AnchorSection>
 </Layout>
 
 <style is:global>

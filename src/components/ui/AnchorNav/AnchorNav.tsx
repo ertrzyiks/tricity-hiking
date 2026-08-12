@@ -1,7 +1,9 @@
 import { useEffect, useState } from "preact/hooks";
 
-// Prototype for issue #3 (single continuous scroll, no page nav) — see
-// .scratch/new-ui-prototypes/issues/03-single-scroll-no-nav.md.
+// Prototype for issue #3 (single continuous scroll, no page nav) — resolved
+// spec in the project's local UI-prototypes tracker at
+// .scratch/new-ui-prototypes/issues/03-single-scroll-no-nav.md (untracked —
+// ask the team for it if that path is missing on your checkout).
 //
 // Rendered right before the `#map` section on the single-scroll homepage, so
 // it only starts sticking to the top of the viewport once the hero and the

@@ -1,0 +1,23 @@
+---
+// Paired with AnchorNav.tsx — one full-viewport, alternating-background band
+// per entry in AnchorNav's SECTIONS list. `id` must match a SECTIONS id for
+// scroll-spy and the jump links to line up.
+interface Props {
+  id: string;
+  background?: "white" | "slate";
+}
+
+const { id, background = "white" } = Astro.props;
+const bgClass = background === "slate" ? "bg-slate-50" : "bg-white";
+---
+
+<section
+  id={id}
+  class={`scroll-mt-14 ${bgClass} min-h-screen flex flex-col justify-start`}
+>
+  <div
+    class="max-w-(--breakpoint-xl) mx-auto w-full px-2 lg:px-0 py-12 lg:py-16"
+  >
+    <slot />
+  </div>
+</section>

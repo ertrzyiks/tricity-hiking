@@ -9,6 +9,24 @@ export type TimelineEvent = {
   minor?: boolean;
 };
 
+export type TimelineEventProcessed = TimelineEvent & {
+  duration: number;
+};
+
+// Turns a (possibly filtered) list of events into the shape <Timeline>
+// renders: each item's `duration` is the gap to the *next item in the given
+// list* (or to today's year for the last one), so passing a full-events list
+// vs. a major-events-only list both produce internally consistent bar
+// lengths — filtering first is enough, no separate "collapsed" variant of
+// this function is needed.
+export const processTimeline = (
+  events: TimelineEvent[],
+): TimelineEventProcessed[] =>
+  events.map((item, index) => ({
+    ...item,
+    duration: (events[index + 1]?.year ?? new Date().getFullYear()) - item.year,
+  }));
+
 export const timelineConfig: TimelineEvent[] = [
   {
     year: 997,

@@ -9,30 +9,9 @@ import TimelineDot from "../components/ui/Timeline/TimelineDot.astro";
 import TimelineConnector from "../components/ui/Timeline/TimelineConnector.astro";
 import TimelineContent from "../components/ui/Timeline/TimelineContent.astro";
 import TimelineContentLabel from "../components/ui/Timeline/TimelineContentLabel.astro";
-import { timelineConfig } from "../data/historyTimeline";
+import { timelineConfig, processTimeline } from "../data/historyTimeline";
 
-type TimelineConfigProcessed = {
-  year: number;
-  event: string;
-  label?: string;
-  duration: number;
-  description?: string;
-  minor?: boolean;
-};
-
-const timelineConfigProcessed: TimelineConfigProcessed[] = [];
-
-timelineConfig.forEach((item, index) => {
-  timelineConfigProcessed.push({
-    year: item.year,
-    event: item.event,
-    minor: item.minor,
-    label: item.label,
-    description: item.description,
-    duration:
-      (timelineConfig[index + 1]?.year || new Date().getFullYear()) - item.year,
-  });
-});
+const timelineConfigProcessed = processTimeline(timelineConfig);
 ---
 
 <Layout title={`Overview of the major events in the history of Gdańsk`}>
