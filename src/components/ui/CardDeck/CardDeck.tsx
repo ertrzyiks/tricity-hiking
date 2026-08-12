@@ -7,6 +7,7 @@ import {
 } from "../../../services/cardDeck";
 import type { DeckCard } from "./types";
 import { trackEvent } from "../../../services/analytics";
+import { Button } from "../Button/Button";
 
 const SWIPE_THRESHOLD = 60;
 
@@ -14,6 +15,9 @@ const DECK_LABELS: Record<DeckKey, string> = {
   tricity: "Tricity",
   nearby: "Nearby",
 };
+
+const getSlugFromURL = () =>
+  new URL(window.location.href).searchParams.get("route");
 
 const updateURL = (slug: string) => {
   const url = new URL(window.location.href);
@@ -31,23 +35,37 @@ export const CardDeck = ({ decks }: { decks: Record<DeckKey, DeckCard[]> }) => {
   const cards = decks[activeDeck];
   const card = cards[activeIndex] as DeckCard | undefined;
 
-  // Restore deck/index from a shared `?route=<slug>` URL on first mount.
+  // Restore deck/index from a shared `?route=<slug>` URL: on first mount,
+  // and again on browser back/forward so the deck follows history rather
+  // than just the address bar.
   useEffect(() => {
-    const slug = new URL(window.location.href).searchParams.get("route");
-    const located = locateCardBySlug(decks, slug);
+    const restoreFromURL = () => {
+      const located = locateCardBySlug(decks, getSlugFromURL());
 
-    if (located) {
-      setActiveDeck(located.deckKey);
-      setActiveIndex(located.index);
-    }
+      if (located) {
+        setActiveDeck(located.deckKey);
+        setActiveIndex(located.index);
+      }
+    };
 
+    restoreFromURL();
     hasRestoredFromURL.current = true;
+
+    window.addEventListener("popstate", restoreFromURL);
+    return () => window.removeEventListener("popstate", restoreFromURL);
   }, []);
 
   // Keep the URL in sync so a given card is shareable/bookmarkable, without
-  // triggering a full navigation.
+  // triggering a full navigation. Skipped when the URL already points at
+  // this card, so restoring state from a `popstate` event doesn't turn
+  // right back around and push a new entry on top of the one the user
+  // just navigated back to.
   useEffect(() => {
     if (!hasRestoredFromURL.current || !card) {
+      return;
+    }
+
+    if (getSlugFromURL() === card.slug) {
       return;
     }
 
@@ -175,7 +193,7 @@ export const CardDeck = ({ decks }: { decks: Record<DeckKey, DeckCard[]> }) => {
             />
           )}
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
 
           <div className="absolute inset-x-0 bottom-0 p-6 text-white pointer-events-none">
             <h2 className="text-2xl font-bold mb-1">{card.title}</h2>
@@ -212,13 +230,9 @@ export const CardDeck = ({ decks }: { decks: Record<DeckKey, DeckCard[]> }) => {
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={openDetail}
-              className="pointer-events-auto select-none rounded-lg bg-green-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-900/10 transition-all hover:shadow-lg hover:shadow-green-900/20"
-            >
-              View route →
-            </button>
+            <div className="pointer-events-auto inline-block">
+              <Button onClick={openDetail}>View route →</Button>
+            </div>
           </div>
         </div>
 
