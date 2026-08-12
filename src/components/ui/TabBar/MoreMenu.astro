@@ -1,0 +1,76 @@
+---
+// "More" tab: a native <details>/<summary> disclosure so the overflow
+// links (Food, History, Transportation, Blog) need no client JS.
+// Styled for either the mobile bottom sheet or the desktop dropdown.
+import { Icon } from "astro-icon/components";
+
+interface Link {
+  href: string;
+  icon: string;
+  label: string;
+}
+
+interface Props {
+  links: Link[];
+  active: boolean;
+  variant: "mobile" | "desktop";
+}
+
+const { links, active, variant } = Astro.props;
+
+const variants = {
+  mobile: {
+    details: "group flex-1 [&_summary::-webkit-details-marker]:hidden",
+    summary:
+      "flex flex-col items-center justify-center gap-0.5 py-2 text-xs cursor-pointer list-none",
+    activeSummary: "text-green-700",
+    inactiveSummary: "text-slate-600 hover:text-green-700",
+    icon: "w-6 h-6",
+    panel:
+      "fixed inset-x-0 bottom-16 z-20 mx-2 rounded-lg border border-slate-200 bg-slate-50 shadow-lg",
+  },
+  desktop: {
+    details: "group relative",
+    summary:
+      "flex items-center gap-1.5 px-4 py-2 rounded-xl cursor-pointer list-none [&::-webkit-details-marker]:hidden",
+    activeSummary: "text-green-700 underline decoration-green-400",
+    inactiveSummary: "text-slate-600 hover:underline",
+    icon: "w-4 h-4",
+    panel:
+      "absolute right-0 top-full z-20 mt-1 w-56 rounded-lg border border-slate-200 bg-slate-50 shadow-lg",
+  },
+};
+
+const styles = variants[variant];
+---
+
+<details class={styles.details}>
+  <summary
+    aria-current={active ? "page" : undefined}
+    class:list={[
+      styles.summary,
+      active ? styles.activeSummary : styles.inactiveSummary,
+    ]}
+  >
+    <Icon name="mdi:dots-horizontal" class={styles.icon} />
+    More
+  </summary>
+
+  <div class={styles.panel}>
+    <ul class="list-none divide-y divide-slate-200">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-slate-100"
+            >
+              <Icon name={link.icon} class="w-5 h-5" />
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</details>

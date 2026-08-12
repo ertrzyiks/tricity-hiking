@@ -1,0 +1,42 @@
+---
+// One primary tab, styled for either the mobile bottom bar or the
+// desktop top bar. Shared by both so TabBar.astro doesn't carry two
+// copies of the same markup.
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  href: string;
+  icon: string;
+  label: string;
+  active: boolean;
+  variant: "mobile" | "desktop";
+}
+
+const { href, icon, label, active, variant } = Astro.props;
+
+const variants = {
+  mobile: {
+    link: "flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-xs",
+    activeLink: "text-green-700",
+    inactiveLink: "text-slate-600 hover:text-green-700",
+    icon: "w-6 h-6",
+  },
+  desktop: {
+    link: "flex items-center gap-1.5 px-4 py-2 rounded-xl",
+    activeLink: "text-green-700 underline decoration-green-400",
+    inactiveLink: "text-slate-600 hover:underline",
+    icon: "w-4 h-4",
+  },
+};
+
+const styles = variants[variant];
+---
+
+<a
+  href={href}
+  aria-current={active ? "page" : undefined}
+  class:list={[styles.link, active ? styles.activeLink : styles.inactiveLink]}
+>
+  <Icon name={icon} class={styles.icon} />
+  {label}
+</a>

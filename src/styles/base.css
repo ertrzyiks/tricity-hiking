@@ -3,6 +3,10 @@
 @theme {
   --grid-template-columns-header: 50px 1fr 50px;
   --grid-template-columns-layout: 300px 1fr;
+
+  /* Height reserved for TabBar.astro's fixed mobile bottom bar, shared
+     by every place that needs to clear it (see TabBar.astro). */
+  --spacing-tabbar: 4rem;
 }
 
 /*

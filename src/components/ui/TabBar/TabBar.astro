@@ -4,7 +4,8 @@
 // no client-side routing, the active tab is just pathname-matched styling.
 //
 // Spec: .scratch/new-ui-prototypes/issues/01-bottom-tab-bar-shell.md
-import { Icon } from "astro-icon/components";
+import TabBarLink from "./TabBarLink.astro";
+import MoreMenu from "./MoreMenu.astro";
 
 const pathname = new URL(Astro.request.url).pathname;
 
@@ -37,6 +38,11 @@ const tabs = [
   },
 ];
 
+// Food/History/Blog are the three the spec calls out as low-traffic
+// enough to live one tap deeper; Transportation joins them here too —
+// it has no other link into it once the old top-nav list is gone, and
+// the "every existing URL keeps working" spec goal reads as "stays
+// reachable", not just "still resolves if visited directly".
 const moreLinks = [
   { href: "/food/", icon: "mdi:food", label: "Food" },
   {
@@ -58,112 +64,12 @@ const moreLinks = [
   aria-label="Primary"
   class="fixed bottom-0 inset-x-0 z-20 flex lg:hidden bg-slate-50 border-t border-slate-200 pb-[env(safe-area-inset-bottom)]"
 >
-  {
-    tabs.map((tab) => (
-      <a
-        href={tab.href}
-        aria-current={tab.active ? "page" : undefined}
-        class:list={[
-          "flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-xs",
-          tab.active
-            ? "text-green-700"
-            : "text-slate-600 hover:text-green-700",
-        ]}
-      >
-        <Icon name={tab.icon} class="w-6 h-6" />
-        {tab.label}
-      </a>
-    ))
-  }
-
-  <details class="group flex-1 [&_summary::-webkit-details-marker]:hidden">
-    <summary
-      aria-current={isMoreActive ? "page" : undefined}
-      class:list={[
-        "flex flex-col items-center justify-center gap-0.5 py-2 text-xs cursor-pointer list-none",
-        isMoreActive
-          ? "text-green-700"
-          : "text-slate-600 hover:text-green-700",
-      ]}
-    >
-      <Icon name="mdi:dots-horizontal" class="w-6 h-6" />
-      More
-    </summary>
-
-    <div
-      class="fixed inset-x-0 bottom-16 z-20 mx-2 rounded-lg border border-slate-200 bg-slate-50 shadow-lg"
-    >
-      <ul class="list-none divide-y divide-slate-200">
-        {
-          moreLinks.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                class="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-slate-100"
-              >
-                <Icon name={link.icon} class="w-5 h-5" />
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </details>
+  {tabs.map((tab) => <TabBarLink {...tab} variant="mobile" />)}
+  <MoreMenu links={moreLinks} active={isMoreActive} variant="mobile" />
 </nav>
 
 <!-- Desktop: slim top bar, reusing the header's nav slot -->
 <div class="hidden lg:flex lg:items-center lg:gap-1">
-  {
-    tabs.map((tab) => (
-      <a
-        href={tab.href}
-        aria-current={tab.active ? "page" : undefined}
-        class:list={[
-          "flex items-center gap-1.5 px-4 py-2 rounded-xl",
-          tab.active
-            ? "text-green-700 underline decoration-green-400"
-            : "text-slate-600 hover:underline",
-        ]}
-      >
-        <Icon name={tab.icon} class="w-4 h-4" />
-        {tab.label}
-      </a>
-    ))
-  }
-
-  <details class="group relative">
-    <summary
-      aria-current={isMoreActive ? "page" : undefined}
-      class:list={[
-        "flex items-center gap-1.5 px-4 py-2 rounded-xl cursor-pointer list-none [&::-webkit-details-marker]:hidden",
-        isMoreActive
-          ? "text-green-700 underline decoration-green-400"
-          : "text-slate-600 hover:underline",
-      ]}
-    >
-      <Icon name="mdi:dots-horizontal" class="w-4 h-4" />
-      More
-    </summary>
-
-    <div
-      class="absolute right-0 top-full z-20 mt-1 w-56 rounded-lg border border-slate-200 bg-slate-50 shadow-lg"
-    >
-      <ul class="list-none divide-y divide-slate-200">
-        {
-          moreLinks.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                class="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-slate-100"
-              >
-                <Icon name={link.icon} class="w-5 h-5" />
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </details>
+  {tabs.map((tab) => <TabBarLink {...tab} variant="desktop" />)}
+  <MoreMenu links={moreLinks} active={isMoreActive} variant="desktop" />
 </div>
