@@ -77,11 +77,11 @@ export const FullElevationChart = ({
       onTouchEnd={handleMouseLeave}
     >
       <div className="flex flex-col justify-between items-end pr-2">
-        <span className="text-slate-500 -mt-3">{max}m</span>
-        <span className="text-slate-500 -mb-3">{min}m</span>
+        <span className="text-ink-muted -mt-3">{max}m</span>
+        <span className="text-ink-muted -mb-3">{min}m</span>
       </div>
 
-      <div className="w-full h-full px-2 relative border-t border-b border-slate-300 border-solid">
+      <div className="w-full h-full px-2 relative border-t border-b border-line border-solid">
         <div ref={chartRef} className="relative">
           <ConnectedElevationChart points={points} height={height} />
         </div>

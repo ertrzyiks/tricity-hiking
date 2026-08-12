@@ -24,14 +24,14 @@ const { route, properties } = Astro.props;
       />
     )
   }
-  <span class="flex gap-1 group-hover:text-green-600" slot="title">
-    <Icon name="mdi:location-on" class="text-green-500" />
+  <span class="flex gap-1 group-hover:text-accent-strong" slot="title">
+    <Icon name="mdi:location-on" class="text-accent" />
     {route.data.title}
   </span>
 
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-lg" slot="attributes">
     <TrailAttribute>
-      <Icon name="mdi:hiking" class="w-5 h-5 text-slate-500" slot="icon" />
+      <Icon name="mdi:hiking" class="w-5 h-5 text-ink-muted" slot="icon" />
 
       <TrailAttributeValue
         value={`${mToKm(properties.distance).toFixed(2)}km`}
@@ -40,7 +40,7 @@ const { route, properties } = Astro.props;
     </TrailAttribute>
 
     <TrailAttribute>
-      <Icon name="mdi:clock-fast" class="w-5 h-5 text-slate-500" slot="icon" />
+      <Icon name="mdi:clock-fast" class="w-5 h-5 text-ink-muted" slot="icon" />
 
       <TrailAttributeValue value={formatTime(properties.estimatedTime)} />
       <TrailAttributeName value="Time" />
@@ -49,7 +49,7 @@ const { route, properties } = Astro.props;
     <TrailAttribute>
       <Icon
         name="mdi:arrow-top-right-thin"
-        class="w-5 h-5 text-slate-500"
+        class="w-5 h-5 text-ink-muted"
         slot="icon"
       />
 
@@ -60,7 +60,7 @@ const { route, properties } = Astro.props;
     <TrailAttribute>
       <Icon
         name="mdi:arrow-bottom-right-thin"
-        class="w-5 h-5 text-slate-500"
+        class="w-5 h-5 text-ink-muted"
         slot="icon"
       />
 

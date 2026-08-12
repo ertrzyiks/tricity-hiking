@@ -3,6 +3,50 @@
 @theme {
   --grid-template-columns-header: 50px 1fr 50px;
   --grid-template-columns-layout: 300px 1fr;
+
+  /*
+    Dark "outdoor gear app" skin tokens (prototype for issue 06). Semantic
+    surface/text/accent colors used everywhere instead of hardcoded
+    slate/green utilities, so a single attribute flips the whole site.
+    Defaults here are the existing light palette; dark values are
+    overridden below under [data-theme="dark"].
+  */
+  --color-canvas: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f8fafc;
+  --color-ink: #0f172a;
+  --color-ink-muted: #475569;
+  --color-line: #e2e8f0;
+  --color-accent: #16a34a;
+  --color-accent-strong: #15803d;
+
+  /* Raw SVG stroke/fill colors for ElevationChart, which draws attributes
+     directly rather than through Tailwind utility classes. */
+  --chart-fill: #e2e8f0;
+  --chart-stroke: #94a3b8;
+  --chart-highlight: #0f172a;
+}
+
+/*
+  Lets `dark:` utilities key off a `data-theme="dark"` attribute (set by the
+  theme toggle) instead of Tailwind's default `prefers-color-scheme`-only
+  behavior - needed because this site has a manual toggle, not just an OS
+  preference (see src/atoms/theme.ts).
+*/
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root[data-theme="dark"] {
+  --color-canvas: #0d1117;
+  --color-surface: #161b22;
+  --color-surface-muted: #161b22;
+  --color-ink: #e6edf3;
+  --color-ink-muted: #9198a1;
+  --color-line: #30363d;
+  --color-accent: #a3e635;
+  --color-accent-strong: #bef264;
+  --chart-fill: #21262d;
+  --chart-stroke: #6e7681;
+  --chart-highlight: #e6edf3;
 }
 
 /*
@@ -55,6 +99,6 @@
 }
 
 .simple-link {
-  @apply text-green-600;
-  @apply hover:text-green-700 hover:underline;
+  @apply text-accent;
+  @apply hover:text-accent-strong hover:underline;
 }

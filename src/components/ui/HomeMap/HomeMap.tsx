@@ -2,7 +2,8 @@ import { useEffect, useState, useRef } from "preact/hooks";
 import maplibregl, { type LngLatLike } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
-import { style } from "./mapStyle";
+import { getMapStyle, subscribeMapTheme } from "./getMapStyle";
+import { getCurrentTheme } from "../../../atoms/theme";
 import { getBounds } from "../../../services/getBounds";
 import { mToKm } from "../../../services/mToKm";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
@@ -22,7 +23,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
     const map = new maplibregl.Map({
       container: mapRef.current,
-      style,
+      style: getMapStyle(getCurrentTheme()),
       zoom: 10,
       minZoom: 9,
       maxZoom: 15,
@@ -30,6 +31,8 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
     map.dragRotate.disable();
     map.touchZoomRotate.disableRotation();
+
+    const unsubscribeTheme = subscribeMapTheme(map);
 
     map.on("load", async () => {
       const coordinates = routes.features.reduce(
@@ -200,6 +203,10 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
         tooltip.remove();
       });
     });
+
+    return () => {
+      unsubscribeTheme();
+    };
   }, []);
 
   const handleCloseSelection = () => {
@@ -211,7 +218,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
       {selectedFeature && selectedFeature.properties && (
         <div
           id="sidebar"
-          className="absolute left-5 w-72 bottom-10 z-10 bg-slate-100 border-t-4 border-green-500"
+          className="absolute left-5 w-72 bottom-10 z-10 bg-surface border-t-4 border-accent"
         >
           <div class="flex flex-col px-4 py-3 pr-8">
             <h3 class="text-2xl">{selectedFeature.properties.name}</h3>

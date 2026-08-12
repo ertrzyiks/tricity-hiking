@@ -32,7 +32,7 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
       Plan you route and buy tickets for all public transport in Tricity using
       <strong>
         <a
-          class="hover:underline text-green-500 inline-flex items-baseline"
+          class="hover:underline text-accent inline-flex items-baseline"
           href="https://jakdojade.pl/"
           target="_blank"
           rel="noopener"
@@ -104,7 +104,7 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
 
         <figure class="my-4 h-128">
           <TransportationMap data={skm} client:only="preact" />
-          <figcaption class="text-base text-slate-500 text-center my-2">
+          <figcaption class="text-base text-ink-muted text-center my-2">
             SKM train map (selected fragment)
           </figcaption>
         </figure>
@@ -132,7 +132,7 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
         <figure class="my-4 h-128">
           <TransportationMap data={pkm} client:only="preact" />
 
-          <figcaption class="text-base text-slate-500 text-center my-2">
+          <figcaption class="text-base text-ink-muted text-center my-2">
             PKM train map (selected fragment)
           </figcaption>
         </figure>

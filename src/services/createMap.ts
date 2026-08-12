@@ -1,5 +1,11 @@
 import { Map, type MapOptions } from "maplibre-gl";
-import { style, glyphs } from "../components/ui/HomeMap/mapStyle";
+import {
+  getMapStyle,
+  glyphs,
+  subscribeMapTheme,
+} from "../components/ui/HomeMap/getMapStyle";
+import { getCurrentTheme } from "../atoms/theme";
+
 export const createMap = (
   container: HTMLElement,
   options: Omit<MapOptions, "container" | "style">,
@@ -7,7 +13,7 @@ export const createMap = (
 ) => {
   const map = new Map({
     container: container,
-    style,
+    style: getMapStyle(getCurrentTheme()),
     zoom: 10,
     minZoom: 9,
     maxZoom: 15,
@@ -26,7 +32,10 @@ export const createMap = (
     cleanUp = await initializer(map);
   });
 
+  const unsubscribeTheme = subscribeMapTheme(map);
+
   return () => {
+    unsubscribeTheme();
     cleanUp?.();
     map.remove();
   };

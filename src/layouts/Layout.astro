@@ -10,6 +10,7 @@ import SidebarSwitch from "../components/ui/SidebarSwitch/SidebarSwitch.tsx";
 import NavLink from "../components/ui/NavLink.astro";
 import Analytics from "../components/ui/Analytics.astro";
 import CookieConsent from "../components/ui/CookieConsent/CookieConsent.astro";
+import ThemeToggle from "../components/ui/ThemeToggle/ThemeToggle.tsx";
 import logo from "../assets/logo.png";
 
 const pathname = new URL(Astro.request.url).pathname;
@@ -33,6 +34,28 @@ const { title, description } = Astro.props;
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>
+      // Prototype for issue 06 (dark outdoor-gear skin): set data-theme
+      // before first paint so there's no flash of the wrong theme. Mirrors
+      // the pure logic in src/atoms/theme.ts#resolveInitialTheme, but has
+      // to be duplicated here as inline vanilla JS since ES module imports
+      // don't run early enough to beat the first paint.
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          var theme =
+            stored === "light" || stored === "dark"
+              ? stored
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          if (theme === "dark") {
+            document.documentElement.classList.add("cc--darkmode");
+          }
+        } catch (e) {}
+      })();
+    </script>
     <meta
       name="description"
       content={description ??
@@ -71,7 +94,7 @@ const { title, description } = Astro.props;
 
     <main>
       <nav
-        class="flex relative justify-center lg:justify-start bg-slate-50 py-2 sm:py-4 px-2"
+        class="flex relative justify-center lg:justify-start items-center bg-surface-muted py-2 sm:py-4 px-2"
       >
         <SidebarSwitch
           className="lg:hidden absolute left-3 top-2 cursor-pointer"
@@ -90,7 +113,7 @@ const { title, description } = Astro.props;
           />
         </a>
 
-        <div id="sidebar" class="sidebar bg-slate-50">
+        <div id="sidebar" class="sidebar bg-surface-muted">
           <div
             class="flex gap-2 items-center flex-col lg:flex-row lg:ml-4 h-full pt-2 lg:pt-0"
           >
@@ -109,6 +132,10 @@ const { title, description } = Astro.props;
             <NavLink href="/blog/the-best-hiking-trails-near-gdansk/">Articles</NavLink>
           </div>
         </div>
+
+        <div class="absolute right-3 top-1/2 -translate-y-1/2 lg:static lg:ml-auto lg:translate-y-0">
+          <ThemeToggle client:load />
+        </div>
       </nav>
 
       <div class="">
@@ -119,14 +146,14 @@ const { title, description } = Astro.props;
       </div>
     </main>
 
-    <footer class="px-2 lg:px-0 border-t border-solid border-slate-200">
+    <footer class="px-2 lg:px-0 border-t border-solid border-line">
       <div class="max-w-(--breakpoint-xl) mx-auto flex py-8 gap-8">
         <div>Tricity Hiking, {new Date().getFullYear()}</div>
         <nav>
           <ul class="list-none flex gap-4">
             <li>
               <a
-                class="text-slate-600 hover:underline"
+                class="text-ink-muted hover:underline"
                 href="https://github.com/ertrzyiks/tricity-hiking"
                 target="_blank"
                 rel="noopener">Github</a
@@ -134,7 +161,7 @@ const { title, description } = Astro.props;
             </li>
             <li>
               <button
-                class="text-slate-600 hover:underline cursor-pointer"
+                class="text-ink-muted hover:underline cursor-pointer"
                 type="button"
                 data-cc="show-preferencesModal"
                 >Cookies
@@ -142,7 +169,7 @@ const { title, description } = Astro.props;
             </li>
             <li>
               <a
-                class="text-slate-600 hover:underline"
+                class="text-ink-muted hover:underline"
                 href="https://byd5xay149t.typeform.com/to/R0pgudVy"
                 target="_blank"
                 rel="noopener">Contact</a
@@ -168,7 +195,11 @@ const { title, description } = Astro.props;
   }
   html {
     font-family: "Fira Sans", sans-serif;
-    background: #f8fafc;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
   }
   code {
     font-family:

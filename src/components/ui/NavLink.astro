@@ -12,8 +12,8 @@ const isActive = matches ? matches(pathname) : defaultMatch;
   class:list={[
     "px-4 py-2 w-full lg:w-auto relative lg:rounded-xl",
     {
-      "underline decoration-green-400 hover:decoration-green-600": isActive,
-      "text-slate-600 hover:underline": !isActive,
+      "underline decoration-accent hover:decoration-accent-strong": isActive,
+      "text-ink-muted hover:underline": !isActive,
     },
   ]}
 >

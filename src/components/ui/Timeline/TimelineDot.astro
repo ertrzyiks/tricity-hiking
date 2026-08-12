@@ -5,8 +5,8 @@ const { variant = "regular" } = Astro.props;
 {
   variant == "regular" && (
     <div class="flex flex-col flex-0 items-center relative">
-      <div class="w-0.5 bg-gray-400 flex-grow" />
-      <div class="p-1 my-3 rounded-full border-2 border-green-600 bg-green-600 absolute" />
+      <div class="w-0.5 bg-line flex-grow" />
+      <div class="p-1 my-3 rounded-full border-2 border-accent bg-accent absolute" />
     </div>
   )
 }
@@ -14,8 +14,8 @@ const { variant = "regular" } = Astro.props;
 {
   variant == "minor" && (
     <div class="flex flex-col flex-0 items-center relative">
-      <div class="w-0.5 bg-gray-400 flex-grow" />
-      <div class="p-0.5 my-3.5 rounded-full border-2 border-gray-400 bg-white absolute" />
+      <div class="w-0.5 bg-line flex-grow" />
+      <div class="p-0.5 my-3.5 rounded-full border-2 border-line bg-surface absolute" />
     </div>
   )
 }

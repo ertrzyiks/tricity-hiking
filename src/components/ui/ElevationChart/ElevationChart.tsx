@@ -59,8 +59,8 @@ export const ElevationChart = ({
       preserveAspectRatio="none"
     >
       <polyline
-        fill="#e2e8f0"
-        stroke="#94a3b8"
+        fill="var(--chart-fill)"
+        stroke="var(--chart-stroke)"
         strokeWidth="1"
         points={chartPoints.join("\n")}
       />
@@ -70,7 +70,7 @@ export const ElevationChart = ({
             cx={toChartX(highlightPoint[1])}
             cy={toChartY(max - highlightPoint[0])}
             fill="#64A3DB"
-            stroke="#000000"
+            stroke="var(--chart-highlight)"
             r="3"
           />
           <line
@@ -78,7 +78,7 @@ export const ElevationChart = ({
             y1={toChartY(max - highlightPoint[0]) + 3}
             x2={toChartX(highlightPoint[1])}
             y2={toChartY(max)}
-            stroke="#000000"
+            stroke="var(--chart-highlight)"
           />
         </>
       )}

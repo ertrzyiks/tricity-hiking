@@ -48,7 +48,7 @@ const publishedDate = entry.data.publishDate.toLocaleDateString("en-US", {
     <article>
       <header class="mb-8">
         <h1 class="text-4xl font-bold mb-4">{entry.data.title}</h1>
-        <div class="flex flex-wrap gap-4 text-sm text-slate-600 mb-4">
+        <div class="flex flex-wrap gap-4 text-sm text-ink-muted mb-4">
           <time class="flex items-center gap-1">
             <svg
               class="w-4 h-4"
@@ -90,7 +90,7 @@ const publishedDate = entry.data.publishDate.toLocaleDateString("en-US", {
           entry.data.tags && entry.data.tags.length > 0 && (
             <div class="flex flex-wrap gap-2">
               {entry.data.tags.map((tag) => (
-                <span class="px-3 py-1 text-xs bg-green-100 text-green-800 rounded-full">
+                <span class="px-3 py-1 text-xs bg-green-100 text-green-800 dark:bg-accent/15 dark:text-accent rounded-full">
                   {tag}
                 </span>
               ))}
@@ -104,10 +104,10 @@ const publishedDate = entry.data.publishDate.toLocaleDateString("en-US", {
       </div>
     </article>
 
-    <nav class="mt-12 pt-8 border-t border-slate-200">
+    <nav class="mt-12 pt-8 border-t border-line">
       <a
         href="/"
-        class="inline-flex items-center gap-2 text-green-600 hover:text-green-800 font-medium"
+        class="inline-flex items-center gap-2 text-accent hover:text-accent-strong font-medium"
       >
         <svg
           class="w-4 h-4"
