@@ -70,7 +70,19 @@ if (!feature) {
   description={entry.data.htmlDescription ?? entry.data.description}
 >
   <div class="max-w-(--breakpoint-xl) mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 px-4 xl:px-0">
+    <div class="px-4 xl:px-0">
+      <a
+        href="/list/"
+        class="inline-flex items-center gap-1 text-slate-600 hover:text-green-700 hover:underline"
+      >
+        <Icon name="mdi:chevron-left" class="w-5 h-5" />
+        Back to routes
+      </a>
+    </div>
+
+    <div
+      class="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 px-4 xl:px-0 pt-2"
+    >
       <div>
         {
           entry.data.preview?.src && (

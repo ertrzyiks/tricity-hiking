@@ -1,18 +1,14 @@
 ---
 import "../styles/base.css";
 import { ClientRouter } from "astro:transitions";
-import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import { localizedHTML as favicons } from "astro-favicons/middleware";
 import { getEntry } from "astro:content";
 
-import SidebarSwitch from "../components/ui/SidebarSwitch/SidebarSwitch.tsx";
-import NavLink from "../components/ui/NavLink.astro";
+import TabBar from "../components/ui/TabBar/TabBar.astro";
 import Analytics from "../components/ui/Analytics.astro";
 import CookieConsent from "../components/ui/CookieConsent/CookieConsent.astro";
 import logo from "../assets/logo.png";
-
-const pathname = new URL(Astro.request.url).pathname;
 
 let canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 canonicalURL += canonicalURL.endsWith("/") ? "" : "/";
@@ -71,15 +67,8 @@ const { title, description } = Astro.props;
 
     <main>
       <nav
-        class="flex relative justify-center lg:justify-start bg-slate-50 py-2 sm:py-4 px-2"
+        class="flex relative items-center justify-between bg-slate-50 py-2 sm:py-4 px-2"
       >
-        <SidebarSwitch
-          className="lg:hidden absolute left-3 top-2 cursor-pointer"
-          client:load
-        >
-          <Icon name="mdi:menu" class="text-3xl" />
-        </SidebarSwitch>
-
         <a href="/" class="flex items-center -my-2 sm:-my-4">
           <Image
             src={logo}
@@ -90,25 +79,7 @@ const { title, description } = Astro.props;
           />
         </a>
 
-        <div id="sidebar" class="sidebar bg-slate-50">
-          <div
-            class="flex gap-2 items-center flex-col lg:flex-row lg:ml-4 h-full pt-2 lg:pt-0"
-          >
-            <NavLink
-              id="navbar-routes"
-              href="/routes/"
-              matches={(pathname: string) =>
-                pathname.startsWith("/routes/") ||
-                pathname.startsWith("/list/") ||
-                pathname.startsWith("/extended/")}>Routes</NavLink
-            >
-            <NavLink href="/activities/">Activities</NavLink>
-            <NavLink href="/food/">Food</NavLink>
-            <NavLink href="/transportation/">Transportation</NavLink>
-            <NavLink href="/history/">History</NavLink>
-            <NavLink href="/blog/the-best-hiking-trails-near-gdansk/">Articles</NavLink>
-          </div>
-        </div>
+        <TabBar />
       </nav>
 
       <div class="">
@@ -119,7 +90,9 @@ const { title, description } = Astro.props;
       </div>
     </main>
 
-    <footer class="px-2 lg:px-0 border-t border-solid border-slate-200">
+    <footer
+      class="px-2 lg:px-0 pb-16 lg:pb-0 border-t border-solid border-slate-200"
+    >
       <div class="max-w-(--breakpoint-xl) mx-auto flex py-8 gap-8">
         <div>Tricity Hiking, {new Date().getFullYear()}</div>
         <nav>
@@ -182,44 +155,3 @@ const { title, description } = Astro.props;
       monospace;
   }
 </style>
-
-<script>
-  import { navigate } from "astro:transitions/client";
-
-  document.addEventListener("astro:page-load", () => {
-    const link = document.getElementById("navbar-routes");
-
-    if (link) {
-      link.addEventListener("click", (event) => {
-        let routePathName = null;
-
-        try {
-          const sessionRoute = sessionStorage.getItem("routes-entry-point");
-
-          if (
-            sessionRoute &&
-            ["/routes/", "/list/", "/extended/"].includes(sessionRoute)
-          ) {
-            routePathName = sessionRoute;
-          }
-        } catch {}
-
-        if (routePathName) {
-          event.preventDefault();
-
-          navigate(routePathName);
-        }
-      });
-    }
-  });
-</script>
-
-<script define:vars={{ pathname }} is:inline>
-  const routesEntryPoints = ["/routes/", "/list/", "/extended/"];
-
-  if (routesEntryPoints.includes(pathname)) {
-    try {
-      sessionStorage.setItem("routes-entry-point", pathname);
-    } catch (e) {}
-  }
-</script>
