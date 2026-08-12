@@ -1,0 +1,46 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import KioskLayout from "../layouts/KioskLayout.astro";
+import { enhance } from "../services/enhance";
+import { getLineStringFeature } from "../services/getLineStringFeature";
+import { mToKm } from "../services/mToKm";
+import { formatTime } from "../services/formatTime";
+import { firstTwoSentences } from "../services/firstTwoSentences";
+import { KioskCarousel } from "../components/ui/KioskCarousel/KioskCarousel";
+import type { KioskRoute } from "../components/ui/KioskCarousel/types";
+
+// Kiosk mode is scoped to the same in-city route set as routes.astro's
+// homepage map: a tourist-info desk kiosk is pitching the trails around it,
+// not a 2-hour out-of-town trip.
+const allRoutes = await getCollection("routes");
+const tricityRoutes = allRoutes.filter(
+  (route) => !route.data.draft && route.data.tricity,
+);
+
+const routes: KioskRoute[] = [];
+
+for (const route of tricityRoutes) {
+  const geojson = await getEntry(route.data.geojson);
+  const enhancedGeojson = enhance({
+    collection: geojson.data,
+    route: route.data,
+  });
+  const properties =
+    getLineStringFeature({ collection: enhancedGeojson })?.properties ?? {};
+
+  routes.push({
+    slug: route.id,
+    title: route.data.title,
+    previewSrc: route.data.preview?.src ?? null,
+    distanceKm: mToKm(properties.distance ?? 0),
+    time: formatTime(properties.estimatedTime ?? 0),
+    totalGain: properties.totalGain ?? 0,
+    totalLoss: properties.totalLoss ?? 0,
+    summary: firstTwoSentences(route.data.htmlDescription ?? route.data.description),
+  });
+}
+---
+
+<KioskLayout title="Tricity hiking trails — kiosk">
+  <KioskCarousel client:load routes={routes} />
+</KioskLayout>
