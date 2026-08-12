@@ -23,25 +23,6 @@
   }
 }
 
-@utility sidebar {
-  @apply hidden rounded-none border-none;
-
-  @media (width >= theme(--breakpoint-lg)) {
-    @apply block static;
-  }
-}
-
-@utility sidebar--open {
-  @apply block fixed left-0 right-0 rounded-none border-none z-10;
-  top: 48px;
-  height: calc(100dvh - 48px);
-
-  @media (width >= theme(--breakpoint-lg)) {
-    @apply block static;
-    height: auto;
-  }
-}
-
 .route_tooltip .maplibregl-popup-content {
   @apply text-xs text-gray-100;
   @apply p-2;

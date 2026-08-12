@@ -79,11 +79,16 @@ describe("groupSearchResults", () => {
     expect(groups[0].type).toBe("activity");
   });
 
-  it("matches food on kind and location", () => {
+  it("matches food on name and kind", () => {
     expect(groupSearchResults(items, "breakfast")[0].type).toBe("food");
+    expect(groupSearchResults(items, "pomelo")[0].type).toBe("food");
+  });
 
-    const byLocation = groupSearchResults(items, "gdańsk");
-    expect(byLocation.map((group) => group.type)).toContain("food");
+  it("does not match food on location — it's display-only context", () => {
+    // "gdańsk" only hits the route whose description mentions it; the food
+    // item located in Gdańsk isn't indexed on that field.
+    const groups = groupSearchResults(items, "gdańsk");
+    expect(groups.map((group) => group.type)).not.toContain("food");
   });
 
   it("omits groups with no matches", () => {

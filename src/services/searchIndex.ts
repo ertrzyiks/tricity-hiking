@@ -37,6 +37,10 @@ const GROUP_ORDER: SearchItem["type"][] = ["route", "activity", "food"];
 
 const MAX_RESULTS_PER_GROUP = 4;
 
+// Matches the spec's indexed-fields list exactly (route: title +
+// description, activity: title + category, food: name + kind). Food's
+// `location` is display-only context (see resultContext in
+// CommandPalette.tsx) and deliberately excluded here.
 function searchableText(item: SearchItem): string {
   switch (item.type) {
     case "route":
@@ -44,7 +48,7 @@ function searchableText(item: SearchItem): string {
     case "activity":
       return `${item.title} ${item.category}`;
     case "food":
-      return `${item.title} ${item.kind} ${item.location}`;
+      return `${item.title} ${item.kind}`;
   }
 }
 

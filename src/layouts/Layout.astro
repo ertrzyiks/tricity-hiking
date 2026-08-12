@@ -93,8 +93,34 @@ const { title, description } = Astro.props;
     </main>
 
     <footer class="px-2 lg:px-0 border-t border-solid border-slate-200">
-      <div class="max-w-(--breakpoint-xl) mx-auto flex py-8 gap-8">
+      <div
+        class="max-w-(--breakpoint-xl) mx-auto flex flex-col sm:flex-row py-8 gap-4 sm:gap-8"
+      >
         <div>Tricity Hiking, {new Date().getFullYear()}</div>
+        <nav>
+          <!-- Transportation and History have no icon/stat worth a palette
+               result row, and Articles is a single blog post rather than a
+               searchable collection — kept reachable here instead of being
+               orphaned now that the header nav is gone. -->
+          <ul class="list-none flex flex-wrap gap-4">
+            <li>
+              <a class="text-slate-600 hover:underline" href="/transportation/"
+                >Transportation</a
+              >
+            </li>
+            <li>
+              <a class="text-slate-600 hover:underline" href="/history/"
+                >History</a
+              >
+            </li>
+            <li>
+              <a
+                class="text-slate-600 hover:underline"
+                href="/blog/the-best-hiking-trails-near-gdansk/">Articles</a
+              >
+            </li>
+          </ul>
+        </nav>
         <nav>
           <ul class="list-none flex gap-4">
             <li>

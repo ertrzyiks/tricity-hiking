@@ -144,6 +144,7 @@ const CommandPalette = () => {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
+        onFocus={() => setIsOpen(true)}
         class="flex items-center gap-2 w-full max-w-xs rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-500 shadow-sm transition-colors hover:border-slate-300 hover:text-slate-700"
       >
         <Icon name="magnify" className="w-4 h-4 shrink-0" />
