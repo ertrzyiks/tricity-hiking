@@ -23,22 +23,48 @@
   }
 }
 
+/*
+  The persistent app rail (AppRail.astro). `sidebar` is the default (closed
+  on mobile) state, `sidebar--open` is toggled on by SidebarSwitch.tsx.
+  At `lg` and up the rail is always visible as a sticky column — the
+  hamburger that drives the open/closed toggle is `lg:hidden`, so the
+  rail never actually enters the "open" state at those widths.
+*/
 @utility sidebar {
   @apply hidden rounded-none border-none;
 
   @media (width >= theme(--breakpoint-lg)) {
-    @apply block static;
+    @apply flex sticky top-0 self-start shrink-0 flex-col overflow-y-auto;
+    width: 72px;
+    height: 100dvh;
+  }
+
+  @media (width >= theme(--breakpoint-xl)) {
+    width: 220px;
   }
 }
 
 @utility sidebar--open {
-  @apply block fixed left-0 right-0 rounded-none border-none z-10;
+  @apply flex fixed left-0 right-0 rounded-none border-none z-20 flex-col;
   top: 48px;
   height: calc(100dvh - 48px);
 
   @media (width >= theme(--breakpoint-lg)) {
-    @apply block static;
-    height: auto;
+    @apply sticky left-auto right-auto self-start shrink-0;
+    top: 0;
+    height: 100dvh;
+    width: 72px;
+  }
+
+  @media (width >= theme(--breakpoint-xl)) {
+    width: 220px;
+  }
+}
+
+/* Icon-only between `lg` and `xl` — see the risk note in the ticket 02 spec. */
+@media (width >= theme(--breakpoint-lg)) and (width < theme(--breakpoint-xl)) {
+  .app-rail__label {
+    display: none;
   }
 }
 

@@ -1,0 +1,79 @@
+---
+// Persistent left-sidebar app shell rail.
+//
+// Visual/IA shell only — see .scratch/new-ui-prototypes/issues/02-persistent-sidebar-shell.md
+// for the resolved spec. Renders the same section links as the old horizontal
+// header nav, just re-parented into a vertical rail:
+//   - icon-only (72px) between `lg` and `xl`, to avoid squeezing the map on
+//     mid-size laptops (the risk flagged in the spec)
+//   - icon + label (220px) from `xl` up
+//   - below `lg` this element is the off-canvas drawer content, toggled by
+//     the existing SidebarSwitch component (reused verbatim, unmodified)
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import SidebarLink from "../SidebarLink.astro";
+import logo from "../../../assets/logo.png";
+
+interface NavItem {
+  id?: string;
+  href: string;
+  icon: string;
+  label: string;
+  matches?: (pathname: string) => boolean;
+}
+
+const navItems: NavItem[] = [
+  {
+    id: "navbar-routes",
+    href: "/routes/",
+    icon: "mdi:hiking",
+    label: "Routes",
+    matches: (pathname: string) =>
+      pathname.startsWith("/routes/") ||
+      pathname.startsWith("/list/") ||
+      pathname.startsWith("/extended/"),
+  },
+  { href: "/activities/", icon: "mdi:run", label: "Activities" },
+  { href: "/food/", icon: "mdi:silverware-fork-knife", label: "Food" },
+  { href: "/transportation/", icon: "mdi:bus", label: "Transportation" },
+  { href: "/history/", icon: "mdi:history", label: "History" },
+  {
+    href: "/blog/the-best-hiking-trails-near-gdansk/",
+    icon: "mdi:post-outline",
+    label: "Blog",
+  },
+];
+---
+
+<div
+  id="sidebar"
+  class="sidebar app-rail bg-slate-50 border-r border-solid border-slate-200"
+>
+  <a
+    href="/"
+    class="hidden lg:flex items-center gap-2 px-4 py-4 shrink-0"
+    aria-label="Tricity Hiking home"
+  >
+    <Image
+      src={logo}
+      alt=""
+      height={128}
+      style="width: auto; height: 32px;"
+      loading="eager"
+    />
+    <span class="app-rail__label font-semibold text-slate-800 whitespace-nowrap"
+      >Tricity Hiking</span
+    >
+  </a>
+
+  <nav class="flex flex-col gap-1 px-2 py-2 overflow-y-auto">
+    {
+      navItems.map((item) => (
+        <SidebarLink id={item.id} href={item.href} matches={item.matches}>
+          <Icon name={item.icon} class="w-5 h-5 shrink-0" slot="icon" />
+          <span class="app-rail__label whitespace-nowrap">{item.label}</span>
+        </SidebarLink>
+      ))
+    }
+  </nav>
+</div>
