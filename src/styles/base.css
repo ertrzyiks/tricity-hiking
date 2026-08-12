@@ -3,6 +3,15 @@
 @theme {
   --grid-template-columns-header: 50px 1fr 50px;
   --grid-template-columns-layout: 300px 1fr;
+  /* Display serif for the magazine/editorial route layout (prototype
+     issue 07) - headings, pull-quotes, hero titles. Scoped to individual
+     components via `font-display`, not applied to `html`/body text, so it
+     doesn't bleed into other pages' typography. */
+  --font-display: "Fraunces", serif;
+}
+
+@utility font-display {
+  font-family: var(--font-display);
 }
 
 /*

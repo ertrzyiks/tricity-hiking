@@ -22,6 +22,10 @@ const routesCollection = defineCollection({
       featured: z.literal("homepage").optional(),
       draft: z.boolean().optional(),
       preview: image().optional(),
+      // Manual escape hatch for the magazine/editorial layout's automated
+      // pull-quote heuristic (see getPullQuotes.ts) - overrides the
+      // heuristic's picks for the 2nd, 4th, ... `##` section, in order.
+      pullQuotes: z.array(z.string()).optional(),
     }),
 });
 

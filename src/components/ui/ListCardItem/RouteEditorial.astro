@@ -1,0 +1,59 @@
+---
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import { mToKm } from "../../../services/mToKm";
+import { formatTime } from "../../../services/formatTime";
+
+const { route, properties, reverse = false } = Astro.props;
+
+const statLine = [
+  `${mToKm(properties.distance).toFixed(1)} km`,
+  formatTime(properties.estimatedTime),
+  `+${properties.totalGain.toFixed(0)}m`,
+].join(" · ");
+---
+
+<li class="group my-8 w-full border-b border-solid border-slate-200 pb-8 last:border-0 last:pb-0">
+  <a
+    href={`/routes/${route.id}/`}
+    class:list={[
+      "flex flex-col gap-6 sm:flex-row",
+      reverse && "sm:flex-row-reverse",
+    ]}
+  >
+    <div class="sm:w-2/5 sm:shrink-0">
+      {
+        route.data.preview?.src ? (
+          <Image
+            src={route.data.preview}
+            width="640"
+            height="480"
+            class="aspect-[4/3] w-full object-cover grayscale-75 transition-[filter] group-hover:grayscale-0"
+            alt="Preview of the route on the map"
+          />
+        ) : (
+          <div class="from-green-700 via-green-600 to-green-700 flex aspect-[4/3] w-full items-center justify-center bg-linear-45">
+            <Icon name="mdi:location-on" class="h-10 w-10 text-slate-100" />
+          </div>
+        )
+      }
+    </div>
+
+    <div class="flex flex-1 flex-col justify-center gap-2">
+      <span class="font-display flex items-center gap-1 text-2xl text-slate-900 group-hover:text-green-600 lg:text-3xl">
+        <Icon name="mdi:location-on" class="text-green-500" />
+        {route.data.title}
+      </span>
+
+      {
+        route.data.description && (
+          <p class="line-clamp-2 max-w-prose text-slate-500">
+            {route.data.description}
+          </p>
+        )
+      }
+
+      <span class="text-sm text-slate-500">{statLine}</span>
+    </div>
+  </a>
+</li>

@@ -4,7 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import Homepage from "../components/ui/Homepage.astro";
 import { enhance } from "../services/enhance";
 import { getLineStringFeature } from "../services/getLineStringFeature";
-import RouteListItem from "../components/ui/ListCardItem/Route.astro";
+import RouteListItem from "../components/ui/ListCardItem/RouteEditorial.astro";
 
 const allRoutes = await getCollection("routes");
 const routes = allRoutes.filter((route) => {
@@ -34,8 +34,12 @@ for (const route of tricityRoutes) {
     <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0">
       <ul>
         {
-          geojsonList.map(({ route, properties }) => (
-            <RouteListItem route={route} properties={properties} />
+          geojsonList.map(({ route, properties }, index) => (
+            <RouteListItem
+              route={route}
+              properties={properties}
+              reverse={index % 2 === 1}
+            />
           ))
         }
       </ul>
