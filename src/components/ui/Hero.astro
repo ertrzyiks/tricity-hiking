@@ -1,36 +1,60 @@
 ---
 const { title, description } = Astro.props;
 import Deco from "../../assets/deco.svg";
+
+const TRAIL_TRACK_COUNT = 3;
+const trailTracks = Array.from({ length: TRAIL_TRACK_COUNT }, (_, i) => i);
 ---
 
 <div class="bg-linear-45 from-green-700 via-green-600 to-green-700">
-  <div class="h-14 lg:h-20 overflow-hidden" aria-hidden="true">
-    <svg
-      id="hero-trail"
-      viewBox="0 0 1000 120"
-      preserveAspectRatio="none"
-      class="w-full h-full"
-    >
-      <mask id="hero-trail-mask">
-        <rect id="hero-trail-reveal" x="0" y="0" width="0" height="120" fill="white" />
-      </mask>
-      <path
-        id="hero-trail-path"
-        d=""
-        fill="none"
-        stroke="white"
-        stroke-opacity="0.35"
-        stroke-width="3"
-        stroke-linecap="round"
-        stroke-dasharray="10 8"
-        mask="url(#hero-trail-mask)"
-        vector-effect="non-scaling-stroke"
-      ></path>
-      <circle id="hero-trail-start" cx="0" cy="0" r="5" fill="white" fill-opacity="0.35" opacity="0"
-      ></circle>
-      <circle id="hero-trail-end" cx="0" cy="0" r="5" fill="white" fill-opacity="0.35" opacity="0"
-      ></circle>
+  <div
+    id="hero-trail"
+    class="relative h-14 lg:h-20 overflow-hidden"
+    aria-hidden="true"
+    data-track-count={TRAIL_TRACK_COUNT}
+  >
+    <svg viewBox="0 0 1000 120" preserveAspectRatio="none" class="absolute inset-0 w-full h-full">
+      {
+        trailTracks.map((i) => (
+          <>
+            <mask id={`hero-trail-mask-${i}`}>
+              <rect id={`hero-trail-reveal-${i}`} x="0" y="0" width="0" height="120" fill="white" />
+            </mask>
+            <path
+              id={`hero-trail-path-${i}`}
+              d=""
+              fill="none"
+              stroke="white"
+              stroke-opacity="0.35"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-dasharray="5 16"
+              mask={`url(#hero-trail-mask-${i})`}
+              vector-effect="non-scaling-stroke"
+            />
+          </>
+        ))
+      }
     </svg>
+    {
+      trailTracks.map((i) => (
+        <>
+          {/* Dots live outside the SVG's stretched viewBox (it uses
+              preserveAspectRatio="none" so the trail fills the strip) so
+              they stay perfectly round instead of scaling into ellipses. */}
+          <div
+            id={`hero-trail-start-${i}`}
+            class="absolute w-2 h-2 lg:w-2.5 lg:h-2.5 rounded-full bg-white/35 opacity-0"
+            style="left: 0; top: 0; transform: translate(-50%, -50%)"
+          />
+          <div
+            id={`hero-trail-end-${i}`}
+            class="absolute w-2 h-2 lg:w-2.5 lg:h-2.5 rounded-full bg-white/35 opacity-0"
+            style="left: 0; top: 0; transform: translate(-50%, -50%)"
+          />
+        </>
+      ))
+    }
   </div>
 
   <div
@@ -70,35 +94,48 @@ import Deco from "../../assets/deco.svg";
 </script>
 
 <script>
-  // Decorative "hiking trail" animation drawn across the top of the hero:
-  // a start point appears, a curvy dashed line draws itself to an end
+  // Decorative "hiking trail" animation drawn across the top of the hero.
+  // Several tracks run at once, each independently and out of sync: a
+  // start point fades in, a curvy dashed line draws itself over to an end
   // point, it holds for a beat, then fades out and starts again from a
-  // new, randomly placed pair of points.
-  let stopAnimation: (() => void) | null = null;
+  // new, randomly placed pair of points somewhere else in the strip.
 
-  function runHeroTrailAnimation() {
-    const svg = document.getElementById("hero-trail");
-    const path = document.getElementById("hero-trail-path");
-    const reveal = document.getElementById("hero-trail-reveal");
-    const startDot = document.getElementById("hero-trail-start");
-    const endDot = document.getElementById("hero-trail-end");
+  const VIEWBOX_WIDTH = 1000;
+  const VIEWBOX_HEIGHT = 120;
 
-    if (!svg || !path || !reveal || !startDot || !endDot) {
-      return null;
+  let stopAnimations: (() => void) | null = null;
+
+  const rand = (min: number, max: number) => Math.random() * (max - min) + min;
+  const pickSign = () => (Math.random() < 0.5 ? -1 : 1);
+
+  // Builds a wobbly (never straight) path between two points. Half the
+  // time it's a simple bulging curve, half the time a wavier S-curve, so
+  // the trails don't all look the same.
+  function makeTrailPath(x1: number, y1: number, x2: number, y2: number) {
+    const dx = x2 - x1;
+
+    if (Math.random() < 0.5) {
+      const midX = x1 + dx / 2;
+      const midY = rand(20, VIEWBOX_HEIGHT - 20) + pickSign() * rand(25, 70);
+      return `M ${x1} ${y1} Q ${midX} ${midY} ${x2} ${y2}`;
     }
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const c1x = x1 + dx * rand(0.2, 0.4);
+    const c1y = y1 + pickSign() * rand(25, 60);
+    const c2x = x1 + dx * rand(0.6, 0.8);
+    const c2y = y2 + pickSign() * rand(25, 60);
+    return `M ${x1} ${y1} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x2} ${y2}`;
+  }
+
+  function runTrail(index: number) {
+    const path = document.getElementById(`hero-trail-path-${index}`);
+    const reveal = document.getElementById(`hero-trail-reveal-${index}`);
+    const startDot = document.getElementById(`hero-trail-start-${index}`);
+    const endDot = document.getElementById(`hero-trail-end-${index}`);
+
+    if (!path || !reveal || !startDot || !endDot) {
       return null;
     }
-
-    const VIEWBOX_WIDTH = 1000;
-    const VIEWBOX_HEIGHT = 120;
-
-    const DRAW_DELAY = 500;
-    const DRAW_DURATION = 1600;
-    const HOLD_DURATION = 900;
-    const FADE_DURATION = 600;
-    const PAUSE_BEFORE_NEXT = 700;
 
     let cancelled = false;
     const timeouts: ReturnType<typeof setTimeout>[] = [];
@@ -106,31 +143,36 @@ import Deco from "../../assets/deco.svg";
       timeouts.push(setTimeout(fn, delay));
     };
 
-    const rand = (min: number, max: number) => Math.random() * (max - min) + min;
+    const toPercent = (value: number, axisSize: number) => `${(value / axisSize) * 100}%`;
 
     function nextCycle() {
       if (cancelled) return;
 
+      // Re-roll timings each cycle so tracks keep drifting apart rather
+      // than settling into a synchronised loop.
+      const drawDelay = 400;
+      const drawDuration = rand(1400, 2200);
+      const holdDuration = rand(700, 1300);
+      const fadeDuration = 600;
+      const pauseBeforeNext = rand(400, 1800);
+
       const margin = 80;
       const x1 = rand(margin, VIEWBOX_WIDTH * 0.35);
       const x2 = rand(VIEWBOX_WIDTH * 0.65, VIEWBOX_WIDTH - margin);
-      const y1 = rand(30, VIEWBOX_HEIGHT - 30);
-      const y2 = rand(30, VIEWBOX_HEIGHT - 30);
-      const midX = (x1 + x2) / 2;
-      const bulge = rand(-40, 40);
-      const controlY = rand(10, VIEWBOX_HEIGHT - 10);
+      const y1 = rand(20, VIEWBOX_HEIGHT - 20);
+      const y2 = rand(20, VIEWBOX_HEIGHT - 20);
 
-      path!.setAttribute("d", `M ${x1} ${y1} Q ${midX + bulge} ${controlY} ${x2} ${y2}`);
+      path!.setAttribute("d", makeTrailPath(x1, y1, x2, y2));
       path!.style.transition = "";
       path!.style.opacity = "1";
 
       reveal!.style.transition = "none";
       reveal!.setAttribute("width", "0");
 
-      startDot!.setAttribute("cx", String(x1));
-      startDot!.setAttribute("cy", String(y1));
-      endDot!.setAttribute("cx", String(x2));
-      endDot!.setAttribute("cy", String(y2));
+      startDot!.style.left = toPercent(x1, VIEWBOX_WIDTH);
+      startDot!.style.top = toPercent(y1, VIEWBOX_HEIGHT);
+      endDot!.style.left = toPercent(x2, VIEWBOX_WIDTH);
+      endDot!.style.top = toPercent(y2, VIEWBOX_HEIGHT);
       startDot!.style.transition = "none";
       endDot!.style.transition = "none";
       startDot!.style.opacity = "0";
@@ -146,37 +188,38 @@ import Deco from "../../assets/deco.svg";
       // 2. Draw the curvy dashed line towards the end point.
       schedule(() => {
         if (cancelled) return;
-        reveal!.style.transition = `width ${DRAW_DURATION}ms ease-in-out`;
+        reveal!.style.transition = `width ${drawDuration}ms ease-in-out`;
         reveal!.setAttribute("width", String(VIEWBOX_WIDTH));
-      }, DRAW_DELAY);
+      }, drawDelay);
 
       // 3. Reveal the end point once the line has finished drawing.
       schedule(() => {
         if (cancelled) return;
         endDot!.style.transition = "opacity 400ms ease";
         endDot!.style.opacity = "1";
-      }, DRAW_DELAY + DRAW_DURATION);
+      }, drawDelay + drawDuration);
 
       // 4. Hold, then fade the whole thing out.
       schedule(() => {
         if (cancelled) return;
-        const fade = `opacity ${FADE_DURATION}ms ease`;
+        const fade = `opacity ${fadeDuration}ms ease`;
         path!.style.transition = fade;
         startDot!.style.transition = fade;
         endDot!.style.transition = fade;
         path!.style.opacity = "0";
         startDot!.style.opacity = "0";
         endDot!.style.opacity = "0";
-      }, DRAW_DELAY + DRAW_DURATION + HOLD_DURATION);
+      }, drawDelay + drawDuration + holdDuration);
 
       // 5. Start the next line, in a new spot.
       schedule(
         nextCycle,
-        DRAW_DELAY + DRAW_DURATION + HOLD_DURATION + FADE_DURATION + PAUSE_BEFORE_NEXT,
+        drawDelay + drawDuration + holdDuration + fadeDuration + pauseBeforeNext,
       );
     }
 
-    nextCycle();
+    // Stagger this track's very first run so tracks don't all start together.
+    schedule(nextCycle, rand(0, 2500));
 
     return () => {
       cancelled = true;
@@ -184,13 +227,32 @@ import Deco from "../../assets/deco.svg";
     };
   }
 
+  function runHeroTrailAnimations() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return null;
+    }
+
+    const container = document.getElementById("hero-trail");
+    const trackCount = Number(container?.dataset.trackCount) || 0;
+
+    const stops: Array<() => void> = [];
+    for (let i = 0; i < trackCount; i++) {
+      const stop = runTrail(i);
+      if (stop) stops.push(stop);
+    }
+
+    if (stops.length === 0) return null;
+
+    return () => stops.forEach((stop) => stop());
+  }
+
   document.addEventListener("astro:page-load", () => {
-    stopAnimation?.();
-    stopAnimation = runHeroTrailAnimation();
+    stopAnimations?.();
+    stopAnimations = runHeroTrailAnimations();
   });
 
   document.addEventListener("astro:before-swap", () => {
-    stopAnimation?.();
-    stopAnimation = null;
+    stopAnimations?.();
+    stopAnimations = null;
   });
 </script>
