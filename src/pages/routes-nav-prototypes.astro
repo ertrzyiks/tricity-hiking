@@ -1,0 +1,53 @@
+---
+/**
+ * Index of the /routes navigation prototypes (/routes1 .. /routes5).
+ *
+ * Not linked from the live site — this exists purely so the five
+ * variants can be compared side by side while deciding on a direction.
+ */
+import { Icon } from "astro-icon/components";
+import PrototypeLayout from "../layouts/PrototypeLayout.astro";
+import { prototypeVariants } from "../config/routesPrototypeNav";
+---
+
+<PrototypeLayout
+  title="Routes navigation prototypes"
+  variantId=""
+  patternName="Index"
+>
+  <div class="max-w-(--breakpoint-md) mx-auto px-4 py-10">
+    <h1 class="text-3xl mb-2">Routes navigation prototypes</h1>
+    <p class="text-slate-600 mb-8">
+      Five throwaway variants of the navigation around the <code>/routes</code>
+      area, each covering both the site's top-level menu and the nested Map/Tricity/Nearby
+      subviews (plus a route detail drill-down), so the patterns can be compared before
+      picking one to build for real.
+    </p>
+
+    <ul class="flex flex-col gap-4">
+      {
+        prototypeVariants.map((variant, index) => (
+          <li class="border border-solid border-slate-200 rounded-xl p-5 hover:border-green-300 hover:bg-green-50/40">
+            <a href={variant.href} class="flex items-start gap-4">
+              <span class="shrink-0 w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center font-semibold">
+                {index + 1}
+              </span>
+              <span class="flex-1">
+                <span class="flex items-center gap-2 text-lg font-medium text-slate-900">
+                  {variant.pattern}
+                  <Icon
+                    name="mdi:arrow-top-right"
+                    class="w-4 h-4 text-slate-400"
+                  />
+                </span>
+                <span class="block text-sm text-slate-600 mt-1">
+                  {variant.summary}
+                </span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</PrototypeLayout>
