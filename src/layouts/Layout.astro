@@ -99,14 +99,16 @@ const { title, description } = Astro.props;
               href="/routes/"
               matches={(pathname: string) =>
                 pathname.startsWith("/routes/") ||
-                pathname.startsWith("/list/") ||
-                pathname.startsWith("/extended/")}>Routes</NavLink
+                pathname.startsWith("/list/")}>Routes</NavLink
             >
             <NavLink href="/activities/">Activities</NavLink>
             <NavLink href="/food/">Food</NavLink>
             <NavLink href="/transportation/">Transportation</NavLink>
             <NavLink href="/history/">History</NavLink>
-            <NavLink href="/blog/the-best-hiking-trails-near-gdansk/">Articles</NavLink>
+            <NavLink href="/day-trips/">Day trips</NavLink>
+            <NavLink href="/blog/the-best-hiking-trails-near-gdansk/"
+              >Articles</NavLink
+            >
           </div>
         </div>
       </nav>
@@ -196,10 +198,7 @@ const { title, description } = Astro.props;
         try {
           const sessionRoute = sessionStorage.getItem("routes-entry-point");
 
-          if (
-            sessionRoute &&
-            ["/routes/", "/list/", "/extended/"].includes(sessionRoute)
-          ) {
+          if (sessionRoute && ["/routes/", "/list/"].includes(sessionRoute)) {
             routePathName = sessionRoute;
           }
         } catch {}
@@ -215,7 +214,7 @@ const { title, description } = Astro.props;
 </script>
 
 <script define:vars={{ pathname }} is:inline>
-  const routesEntryPoints = ["/routes/", "/list/", "/extended/"];
+  const routesEntryPoints = ["/routes/", "/list/"];
 
   if (routesEntryPoints.includes(pathname)) {
     try {
