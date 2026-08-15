@@ -141,3 +141,6 @@ dist
 # Only the clear-renovate-prs skill is checked in; other local/session skills are ignored
 .claude/skills/*
 !.claude/skills/clear-renovate-prs
+
+# Personal Claude Code overrides, not shared with the team
+.claude/settings.local.json
