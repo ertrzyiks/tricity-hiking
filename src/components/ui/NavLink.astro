@@ -1,5 +1,7 @@
 ---
-const { id, href, matches } = Astro.props;
+import { Icon } from "astro-icon/components";
+
+const { id, href, matches, icon } = Astro.props;
 
 const pathname = new URL(Astro.request.url).pathname;
 const defaultMatch = pathname.startsWith(href);
@@ -10,12 +12,13 @@ const isActive = matches ? matches(pathname) : defaultMatch;
   id={id}
   href={href}
   class:list={[
-    "px-4 py-2 w-full lg:w-auto relative lg:rounded-xl",
+    "px-4 py-2 w-full lg:w-auto relative lg:rounded-xl inline-flex items-center justify-center lg:justify-start gap-1.5",
     {
       "underline decoration-green-400 hover:decoration-green-600": isActive,
       "text-slate-600 hover:underline": !isActive,
     },
   ]}
 >
+  {icon && <Icon name={icon} class="w-4 h-4 shrink-0" />}
   <slot />
 </a>
