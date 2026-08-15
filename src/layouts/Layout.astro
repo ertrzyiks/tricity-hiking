@@ -97,17 +97,25 @@ const { title, description } = Astro.props;
             <NavLink
               id="navbar-routes"
               href="/routes/"
+              icon="mdi:hiking"
               matches={(pathname: string) =>
                 pathname.startsWith("/routes/") ||
                 pathname.startsWith("/list/")}>Routes</NavLink
             >
-            <NavLink href="/activities/">Activities</NavLink>
-            <NavLink href="/food/">Food</NavLink>
-            <NavLink href="/transportation/">Transportation</NavLink>
-            <NavLink href="/history/">History</NavLink>
-            <NavLink href="/day-trips/">Day trips</NavLink>
-            <NavLink href="/blog/the-best-hiking-trails-near-gdansk/"
-              >Articles</NavLink
+            <NavLink href="/activities/" icon="mdi:bike">Activities</NavLink>
+            <NavLink href="/food/" icon="mdi:silverware-fork-knife"
+              >Food</NavLink
+            >
+            <NavLink href="/transportation/" icon="mdi:bus"
+              >Transportation</NavLink
+            >
+            <NavLink href="/history/" icon="mdi:bank">History</NavLink>
+            <NavLink href="/day-trips/" icon="mdi:compass-outline"
+              >Day trips</NavLink
+            >
+            <NavLink
+              href="/blog/the-best-hiking-trails-near-gdansk/"
+              icon="mdi:newspaper-variant-outline">Articles</NavLink
             >
           </div>
         </div>
