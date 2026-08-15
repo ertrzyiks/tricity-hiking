@@ -22,9 +22,9 @@ const pathname = new URL(Astro.request.url).pathname;
         Tricity
       </Tab>
 
-      <Tab active={pathname.startsWith("/nearby/")} href="/nearby/">
+      <Tab active={pathname.startsWith("/day-trips/")} href="/day-trips/">
         <Icon name="mdi:view-list" class="w-4 h-4" />
-        Nearby
+        Day trips
       </Tab>
     </Tabs>
   </nav>

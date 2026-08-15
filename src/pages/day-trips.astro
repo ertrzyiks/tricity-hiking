@@ -11,11 +11,11 @@ const routes = allRoutes.filter((route) => {
   return !route.data.draft;
 });
 
-const nearbyRoutes = routes.filter((route) => !route.data.tricity);
+const dayTripRoutes = routes.filter((route) => !route.data.tricity);
 
 const geojsonList = [];
 
-for (const route of nearbyRoutes) {
+for (const route of dayTripRoutes) {
   const geojson = await getEntry(route.data.geojson);
   const enhancedGeojson = enhance({
     collection: geojson.data,
@@ -30,7 +30,7 @@ for (const route of nearbyRoutes) {
 ---
 
 <Layout
-  title="List of the best hiking trails in Gdańsk, Sopot, Gdynia and nearby"
+  title="Day trips: the best hiking trails beyond Gdańsk, Sopot and Gdynia"
 >
   <Homepage>
     <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0">
