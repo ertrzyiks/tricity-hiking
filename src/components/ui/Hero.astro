@@ -184,7 +184,7 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       const endDot = document.getElementById(`hero-trail-end-${index}`);
       if (!path || !reveal || !startDot || !endDot) return;
 
-      const drawDelay = 400;
+      const drawDelay = 150;
       // The line itself draws slowly; dot fade-in/out below stays quick
       // (400ms) regardless of how long the line takes.
       const drawDuration = rand(2800, 4200);
@@ -231,10 +231,13 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
         startDot.style.opacity = "1";
       });
 
-      // 2. Draw the curvy dashed line towards the end point.
+      // 2. Draw the curvy dashed line towards the end point. Linear (not
+      // eased) so it doesn't decelerate to a near-standstill right before
+      // finishing - that deceleration was making the end dot feel like it
+      // took a beat to catch up once the line had visually arrived.
       schedule(() => {
         if (cancelled) return;
-        reveal.style.transition = `transform ${drawDuration}ms ease-in-out`;
+        reveal.style.transition = `transform ${drawDuration}ms linear`;
         reveal.style.transform = "scaleX(1)";
       }, drawDelay);
 
