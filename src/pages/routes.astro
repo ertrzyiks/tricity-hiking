@@ -1,10 +1,11 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-import Homepage from "../components/ui/Homepage.astro";
 import { merge } from "../services/merge";
 import { enhance } from "../services/enhance";
+import { getLineStringFeature } from "../services/getLineStringFeature";
 import RouteMapLegend from "../components/ui/RouteMapLegend.astro";
+import RouteListItem from "../components/ui/ListCardItem/Route.astro";
 
 import mapImage from "../assets/home-map.jpg";
 import { HomeMap } from "../components/ui/HomeMap/HomeMap";
@@ -16,6 +17,7 @@ const routes = allRoutes.filter((route) => {
 const tricityRoutes = routes.filter((route) => route.data.tricity);
 
 const geojsonList = [];
+const routeItems = [];
 
 for (const route of tricityRoutes) {
   const geojson = await getEntry(route.data.geojson);
@@ -24,26 +26,39 @@ for (const route of tricityRoutes) {
     route: route.data,
   });
   geojsonList.push(enhancedGeojson);
+  routeItems.push({
+    route,
+    properties:
+      getLineStringFeature({ collection: enhancedGeojson })?.properties ?? {},
+  });
 }
 
 const geojson = merge(geojsonList);
 ---
 
 <Layout title="Map of the best hiking trails near Gdańsk, Sopot, and Gdynia">
-  <Homepage>
-    <div
-      class="max-w-(--breakpoint-xl) mx-auto relative h-[70vh] px-2 lg:px-0"
-      transition:name="map"
-    >
-      <div class="absolute inset-0 h-full overflow-hidden">
-        <img src={mapImage.src} class="absolute blur-2xl inset-0 h-full" />
-      </div>
-
-      <HomeMap client:only="preact" routes={geojson} />
+  <div
+    class="max-w-(--breakpoint-xl) mx-auto relative h-[70vh] px-2 lg:px-0"
+    transition:name="map"
+  >
+    <div class="absolute inset-0 h-full overflow-hidden">
+      <img src={mapImage.src} class="absolute blur-2xl inset-0 h-full" />
     </div>
 
-    <RouteMapLegend />
-  </Homepage>
+    <HomeMap client:only="preact" routes={geojson} />
+  </div>
+
+  <RouteMapLegend />
+
+  <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0">
+    <ul>
+      {
+        routeItems.map(({ route, properties }) => (
+          <RouteListItem route={route} properties={properties} />
+        ))
+      }
+    </ul>
+  </div>
 </Layout>
 
 <style is:global>
