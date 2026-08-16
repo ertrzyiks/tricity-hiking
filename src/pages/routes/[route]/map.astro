@@ -4,7 +4,6 @@ import { getCollection, getEntry, render } from "astro:content";
 import Layout from "../../../layouts/Layout.astro";
 import { RouteMap } from "../../../components/ui/RouteMap/RouteMap";
 import { FullElevationChart } from "../../../components/ui/FullElevationChart/FullElevationChart";
-import RouteMapLegend from "../../../components/ui/RouteMapLegend.astro";
 
 export async function getStaticPaths() {
   const allRoutes = await getCollection("routes");
@@ -71,8 +70,6 @@ if (!feature) {
       <FullElevationChart client:load points={attitudes} />
     </div>
   </div>
-
-  <!-- <RouteMapLegend /> -->
 
   <div id="escape-nav" data-route={route} aria-hidden="true" class="hidden">
   </div>
