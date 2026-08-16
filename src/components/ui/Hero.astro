@@ -85,6 +85,17 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
   </div>
 </div>
 
+<style>
+  /* Belt-and-braces alongside the JS matchMedia check below: hide the
+     trail outright for reduced-motion users via the CSS media selector
+     itself, rather than relying only on script never starting it. */
+  @media (prefers-reduced-motion: reduce) {
+    #hero-trail {
+      display: none;
+    }
+  }
+</style>
+
 <script>
   import { trackEvent } from "../../services/analytics";
 
@@ -113,8 +124,8 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
   // A new trail starts every SPAWN_INTERVAL_MIN-MAX ms, on average shorter
   // than a single trail's own lifetime (draw + hold + fade below), so
   // multiple trails are visible at once.
-  const SPAWN_INTERVAL_MIN = 1200;
-  const SPAWN_INTERVAL_MAX = 1800;
+  const SPAWN_INTERVAL_MIN = 1800;
+  const SPAWN_INTERVAL_MAX = 2600;
 
   let stopAnimations: (() => void) | null = null;
 
@@ -174,7 +185,9 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       if (!path || !reveal || !startDot || !endDot) return;
 
       const drawDelay = 400;
-      const drawDuration = rand(1400, 2200);
+      // The line itself draws slowly; dot fade-in/out below stays quick
+      // (400ms) regardless of how long the line takes.
+      const drawDuration = rand(2800, 4200);
       const holdDuration = rand(700, 1300);
       const fadeDuration = 600;
 
