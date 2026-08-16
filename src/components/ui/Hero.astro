@@ -179,6 +179,7 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       const drawDuration = rand(2800, 4200);
       const holdDuration = rand(700, 1300);
       const fadeDuration = 600;
+      const dotFadeOutDuration = 200;
 
       // Most trails run left-to-right, but sometimes reverse so the walk
       // isn't always in the same direction.
@@ -234,13 +235,13 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
         endDot.style.opacity = "1";
       }, drawDelay + drawDuration);
 
-      // 4. Hold, then fade the whole thing out.
+      // 4. Hold, then fade the whole thing out. The dots fade out faster
+      // than the line itself.
       schedule(() => {
         if (cancelled) return;
-        const fade = `opacity ${fadeDuration}ms ease`;
-        path.style.transition = fade;
-        startDot.style.transition = fade;
-        endDot.style.transition = fade;
+        path.style.transition = `opacity ${fadeDuration}ms ease`;
+        startDot.style.transition = `opacity ${dotFadeOutDuration}ms ease`;
+        endDot.style.transition = `opacity ${dotFadeOutDuration}ms ease`;
         path.style.opacity = "0";
         startDot.style.opacity = "0";
         endDot.style.opacity = "0";
