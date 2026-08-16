@@ -184,6 +184,7 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       const endDot = document.getElementById(`hero-trail-end-${index}`);
       if (!path || !reveal || !startDot || !endDot) return;
 
+      const drawDelay = 0;
       const drawDuration = rand(2800, 4200);
       const holdDuration = rand(700, 1300);
       const fadeDuration = 600;
@@ -224,26 +225,21 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       // 1. Show the start point immediately, no fade-in.
       startDot.style.opacity = "1";
 
-      // Force a reflow so the browser actually commits the "scaleX(0),
-      // no transition" state above before we swap the transition in
-      // below. Without this, both style changes can land in the same
-      // frame (there's no more delay between them) and the browser skips
-      // the transition entirely, jumping straight to the fully-drawn
-      // line instead of animating it.
-      void reveal.offsetWidth;
-
       // 2. Draw the curvy dashed line towards the end point. Linear (not
       // eased) so it doesn't decelerate to a near-standstill right before
       // finishing - that deceleration was making the end dot feel like it
       // took a beat to catch up once the line had visually arrived.
-      reveal.style.transition = `transform ${drawDuration}ms linear`;
-      reveal.style.transform = "scaleX(1)";
+      schedule(() => {
+        if (cancelled) return;
+        reveal.style.transition = `transform ${drawDuration}ms linear`;
+        reveal.style.transform = "scaleX(1)";
+      }, drawDelay);
 
       // 3. Show the end point immediately once the line has finished drawing.
       schedule(() => {
         if (cancelled) return;
         endDot.style.opacity = "1";
-      }, drawDuration);
+      }, drawDelay + drawDuration);
 
       // 4. Hold, then fade the whole thing out.
       schedule(() => {
@@ -255,7 +251,7 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
         path.style.opacity = "0";
         startDot.style.opacity = "0";
         endDot.style.opacity = "0";
-      }, drawDuration + holdDuration);
+      }, drawDelay + drawDuration + holdDuration);
     }
 
     // Cycles through the pool round-robin so a slot is only reused once
