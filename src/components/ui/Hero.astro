@@ -2,8 +2,11 @@
 const { title, description } = Astro.props;
 import Deco from "../../assets/deco.svg";
 
-const TRAIL_TRACK_COUNT = 3;
-const trailTracks = Array.from({ length: TRAIL_TRACK_COUNT }, (_, i) => i);
+// Pool of reusable DOM slots for trails. Kept larger than the number of
+// trails visible at once (2-3) so a slot is never reused while its
+// previous trail animation is still fading out.
+const TRAIL_SLOT_COUNT = 6;
+const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
 ---
 
 <div class="bg-linear-45 from-green-700 via-green-600 to-green-700">
@@ -16,7 +19,7 @@ const trailTracks = Array.from({ length: TRAIL_TRACK_COUNT }, (_, i) => i);
       id="hero-trail"
       class="absolute inset-0 overflow-hidden pointer-events-none"
       aria-hidden="true"
-      data-track-count={TRAIL_TRACK_COUNT}
+      data-slot-count={TRAIL_SLOT_COUNT}
     >
       <svg viewBox="0 0 1000 120" preserveAspectRatio="none" class="absolute inset-0 w-full h-full">
         {
@@ -97,13 +100,21 @@ const trailTracks = Array.from({ length: TRAIL_TRACK_COUNT }, (_, i) => i);
 
 <script>
   // Decorative "hiking trail" animation drawn across the top of the hero.
-  // Several tracks run at once, each independently and out of sync: a
-  // start point fades in, a curvy dashed line draws itself over to an end
-  // point, it holds for a beat, then fades out and starts again from a
-  // new, randomly placed pair of points somewhere else in the strip.
+  // A single spawner keeps starting new trails on a short, randomised
+  // interval - independent of how long any previous trail takes to
+  // finish - so 2-3 are always overlapping and new ones keep appearing in
+  // a constant stream rather than in synchronised bursts-then-pause.
+  // Each trail: a start point fades in, a curvy dashed line draws itself
+  // over to an end point, it holds for a beat, then fades out.
 
   const VIEWBOX_WIDTH = 1000;
   const VIEWBOX_HEIGHT = 120;
+
+  // A new trail starts every SPAWN_INTERVAL_MIN-MAX ms, on average shorter
+  // than a single trail's own lifetime (draw + hold + fade below), so
+  // multiple trails are visible at once.
+  const SPAWN_INTERVAL_MIN = 1200;
+  const SPAWN_INTERVAL_MAX = 1800;
 
   let stopAnimations: (() => void) | null = null;
 
@@ -129,15 +140,14 @@ const trailTracks = Array.from({ length: TRAIL_TRACK_COUNT }, (_, i) => i);
     return `M ${x1} ${y1} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x2} ${y2}`;
   }
 
-  function runTrail(index: number) {
-    const path = document.getElementById(`hero-trail-path-${index}`);
-    const reveal = document.getElementById(`hero-trail-reveal-${index}`);
-    const startDot = document.getElementById(`hero-trail-start-${index}`);
-    const endDot = document.getElementById(`hero-trail-end-${index}`);
-
-    if (!path || !reveal || !startDot || !endDot) {
+  function runHeroTrailAnimations() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       return null;
     }
+
+    const container = document.getElementById("hero-trail");
+    const slotCount = Number(container?.dataset.slotCount) || 0;
+    if (slotCount === 0) return null;
 
     let cancelled = false;
     const timeouts: ReturnType<typeof setTimeout>[] = [];
@@ -147,16 +157,18 @@ const trailTracks = Array.from({ length: TRAIL_TRACK_COUNT }, (_, i) => i);
 
     const toPercent = (value: number, axisSize: number) => `${(value / axisSize) * 100}%`;
 
-    function nextCycle() {
-      if (cancelled) return;
+    // Plays a single start -> draw -> hold -> fade cycle on one pool slot.
+    function playTrail(index: number) {
+      const path = document.getElementById(`hero-trail-path-${index}`);
+      const reveal = document.getElementById(`hero-trail-reveal-${index}`);
+      const startDot = document.getElementById(`hero-trail-start-${index}`);
+      const endDot = document.getElementById(`hero-trail-end-${index}`);
+      if (!path || !reveal || !startDot || !endDot) return;
 
-      // Re-roll timings each cycle so tracks keep drifting apart rather
-      // than settling into a synchronised loop.
       const drawDelay = 400;
       const drawDuration = rand(1400, 2200);
       const holdDuration = rand(700, 1300);
       const fadeDuration = 600;
-      const pauseBeforeNext = rand(400, 1800);
 
       // Most trails run left-to-right, but sometimes reverse so the walk
       // isn't always in the same direction.
@@ -170,93 +182,77 @@ const trailTracks = Array.from({ length: TRAIL_TRACK_COUNT }, (_, i) => i);
       const y1 = rand(5, VIEWBOX_HEIGHT - 5);
       const y2 = rand(5, VIEWBOX_HEIGHT - 5);
 
-      path!.setAttribute("d", makeTrailPath(x1, y1, x2, y2));
-      path!.style.transition = "";
-      path!.style.opacity = "1";
+      path.setAttribute("d", makeTrailPath(x1, y1, x2, y2));
+      path.style.transition = "";
+      path.style.opacity = "1";
 
       // The reveal rect covers the full strip at all times; a scaleX
       // transform grows it out from the start edge (left for a
       // left-to-right trail, right for a reversed one) to uncover the
       // dashed path in the direction it's being "walked".
-      reveal!.style.transformOrigin = reversed ? "100% 50%" : "0% 50%";
-      reveal!.style.transition = "none";
-      reveal!.style.transform = "scaleX(0)";
+      reveal.style.transformOrigin = reversed ? "100% 50%" : "0% 50%";
+      reveal.style.transition = "none";
+      reveal.style.transform = "scaleX(0)";
 
-      startDot!.style.left = toPercent(x1, VIEWBOX_WIDTH);
-      startDot!.style.top = toPercent(y1, VIEWBOX_HEIGHT);
-      endDot!.style.left = toPercent(x2, VIEWBOX_WIDTH);
-      endDot!.style.top = toPercent(y2, VIEWBOX_HEIGHT);
-      startDot!.style.transition = "none";
-      endDot!.style.transition = "none";
-      startDot!.style.opacity = "0";
-      endDot!.style.opacity = "0";
+      startDot.style.left = toPercent(x1, VIEWBOX_WIDTH);
+      startDot.style.top = toPercent(y1, VIEWBOX_HEIGHT);
+      endDot.style.left = toPercent(x2, VIEWBOX_WIDTH);
+      endDot.style.top = toPercent(y2, VIEWBOX_HEIGHT);
+      startDot.style.transition = "none";
+      endDot.style.transition = "none";
+      startDot.style.opacity = "0";
+      endDot.style.opacity = "0";
 
       // 1. Reveal the start point.
       requestAnimationFrame(() => {
         if (cancelled) return;
-        startDot!.style.transition = "opacity 400ms ease";
-        startDot!.style.opacity = "1";
+        startDot.style.transition = "opacity 400ms ease";
+        startDot.style.opacity = "1";
       });
 
       // 2. Draw the curvy dashed line towards the end point.
       schedule(() => {
         if (cancelled) return;
-        reveal!.style.transition = `transform ${drawDuration}ms ease-in-out`;
-        reveal!.style.transform = "scaleX(1)";
+        reveal.style.transition = `transform ${drawDuration}ms ease-in-out`;
+        reveal.style.transform = "scaleX(1)";
       }, drawDelay);
 
       // 3. Reveal the end point once the line has finished drawing.
       schedule(() => {
         if (cancelled) return;
-        endDot!.style.transition = "opacity 400ms ease";
-        endDot!.style.opacity = "1";
+        endDot.style.transition = "opacity 400ms ease";
+        endDot.style.opacity = "1";
       }, drawDelay + drawDuration);
 
       // 4. Hold, then fade the whole thing out.
       schedule(() => {
         if (cancelled) return;
         const fade = `opacity ${fadeDuration}ms ease`;
-        path!.style.transition = fade;
-        startDot!.style.transition = fade;
-        endDot!.style.transition = fade;
-        path!.style.opacity = "0";
-        startDot!.style.opacity = "0";
-        endDot!.style.opacity = "0";
+        path.style.transition = fade;
+        startDot.style.transition = fade;
+        endDot.style.transition = fade;
+        path.style.opacity = "0";
+        startDot.style.opacity = "0";
+        endDot.style.opacity = "0";
       }, drawDelay + drawDuration + holdDuration);
-
-      // 5. Start the next line, in a new spot.
-      schedule(
-        nextCycle,
-        drawDelay + drawDuration + holdDuration + fadeDuration + pauseBeforeNext,
-      );
     }
 
-    // Stagger this track's very first run so tracks don't all start together.
-    schedule(nextCycle, rand(0, 2500));
+    // Cycles through the pool round-robin so a slot is only reused once
+    // its previous trail has long since faded out.
+    let nextSlot = 0;
+    function spawnNext() {
+      if (cancelled) return;
+      playTrail(nextSlot);
+      nextSlot = (nextSlot + 1) % slotCount;
+      schedule(spawnNext, rand(SPAWN_INTERVAL_MIN, SPAWN_INTERVAL_MAX));
+    }
+
+    schedule(spawnNext, rand(0, 400));
 
     return () => {
       cancelled = true;
       timeouts.forEach(clearTimeout);
     };
-  }
-
-  function runHeroTrailAnimations() {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return null;
-    }
-
-    const container = document.getElementById("hero-trail");
-    const trackCount = Number(container?.dataset.trackCount) || 0;
-
-    const stops: Array<() => void> = [];
-    for (let i = 0; i < trackCount; i++) {
-      const stop = runTrail(i);
-      if (stop) stops.push(stop);
-    }
-
-    if (stops.length === 0) return null;
-
-    return () => stops.forEach((stop) => stop());
   }
 
   document.addEventListener("astro:page-load", () => {
