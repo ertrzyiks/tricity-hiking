@@ -4,6 +4,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "./mapStyle";
 import { getBounds } from "../../../services/getBounds";
+import { padBounds } from "../../../services/padBounds";
 import { mToKm } from "../../../services/mToKm";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
 import { Button } from "../Button/Button";
@@ -15,6 +16,11 @@ import { MAP_MARKER_COLOR } from "../../../constants/colors";
 
 const NUMBER_MARKER_SIZE = 24;
 
+// How far past the routes' own bounding box the map can still be panned:
+// a fraction of that box's width/height on each side, plus a flat buffer.
+const MAX_BOUNDS_PADDING_RATIO = 0.5;
+const MAX_BOUNDS_EXTRA_KM = 30;
+
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
     GeoJSON.Feature | undefined
@@ -24,31 +30,37 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   useEffect(() => {
     if (mapRef.current === null) return;
 
+    const coordinates = routes.features.reduce(
+      (acc: [number, number][], feature: any) => {
+        if (feature.geometry.type === "LineString") {
+          return acc.concat(feature.geometry.coordinates);
+        }
+
+        return acc;
+      },
+      [],
+    );
+
+    const bounds = getBounds(coordinates);
+
+    const maxBounds = padBounds(bounds, {
+      paddingRatio: MAX_BOUNDS_PADDING_RATIO,
+      extraKm: MAX_BOUNDS_EXTRA_KM,
+    });
+
     const map = new maplibregl.Map({
       container: mapRef.current,
       style,
       zoom: 10,
       minZoom: 9,
       maxZoom: 15,
+      maxBounds,
     });
 
     map.dragRotate.disable();
     map.touchZoomRotate.disableRotation();
 
     map.on("load", async () => {
-      const coordinates = routes.features.reduce(
-        (acc: [number, number][], feature: any) => {
-          if (feature.geometry.type === "LineString") {
-            return acc.concat(feature.geometry.coordinates);
-          }
-
-          return acc;
-        },
-        [],
-      );
-
-      const bounds = getBounds(coordinates);
-
       map.fitBounds(bounds, {
         animate: false,
         padding: 50,
