@@ -13,6 +13,11 @@ import { TrailAttributeValue } from "../TrailAttributeValue/TrailAttributeValue"
 import { trackEvent } from "../../../services/analytics";
 import { generateNumberMarkerSVG } from "../../../services/routeMarkers";
 import { MAP_MARKER_COLOR } from "../../../constants/colors";
+import {
+  computeOffscreenIndicators,
+  type OffscreenIndicator,
+} from "../../../services/offscreenIndicator";
+import { OffscreenArrow } from "../OffscreenArrow/OffscreenArrow";
 
 const NUMBER_MARKER_SIZE = 24;
 
@@ -25,10 +30,14 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
     GeoJSON.Feature | undefined
   >();
+  const [indicators, setIndicators] = useState<OffscreenIndicator[]>([]);
   const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (mapRef.current === null) return;
+
+    // Set once the map loads, so it can be detached again on unmount.
+    let updateIndicators: (() => void) | undefined;
 
     const coordinates = routes.features.reduce(
       (acc: [number, number][], feature: any) => {
@@ -141,6 +150,11 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
       // overlap.
       const numberMarkerFeatures: GeoJSON.Feature[] = [];
       const routeNumbers = new Set<number>();
+      const offscreenTargets: {
+        id: string;
+        bounds: ReturnType<typeof getBounds>;
+        label: string;
+      }[] = [];
 
       routes.features.forEach((feature: any) => {
         if (feature.geometry.type !== "LineString") return;
@@ -166,6 +180,14 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           properties: {
             routeNumber,
           },
+        });
+
+        offscreenTargets.push({
+          id: String(
+            feature.id ?? feature.properties?.routeSlug ?? routeNumber,
+          ),
+          bounds: getBounds(lineCoordinates),
+          label: String(routeNumber),
         });
       });
 
@@ -312,7 +334,18 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
         tooltip.remove();
       });
+
+      // Track every route with an edge arrow + number whenever panning
+      // takes it fully out of view, until it becomes visible again.
+      updateIndicators = () =>
+        setIndicators(computeOffscreenIndicators(map, offscreenTargets));
+      updateIndicators();
+      map.on("move", updateIndicators);
     });
+
+    return () => {
+      if (updateIndicators) map.off("move", updateIndicators);
+    };
   }, []);
 
   const handleCloseSelection = () => {
@@ -321,6 +354,16 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
   return (
     <div ref={mapRef}>
+      {indicators.map((indicator) => (
+        <OffscreenArrow
+          key={indicator.id}
+          x={indicator.x}
+          y={indicator.y}
+          angle={indicator.angle}
+          label={indicator.label}
+        />
+      ))}
+
       {selectedFeature && selectedFeature.properties && (
         <div
           id="sidebar"

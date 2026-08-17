@@ -1,10 +1,15 @@
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { createMap } from "../../../services/createMap";
 import { routePointHighlighter } from "./routePointHighlighter";
 import { getBounds } from "../../../services/getBounds";
 import { padBounds } from "../../../services/padBounds";
+import {
+  computeOffscreenIndicators,
+  type OffscreenIndicator,
+} from "../../../services/offscreenIndicator";
+import { OffscreenArrow } from "../OffscreenArrow/OffscreenArrow";
 import {
   createRouteMarkersData,
   generateTriangleSVG,
@@ -20,6 +25,7 @@ const MAX_BOUNDS_EXTRA_KM = 30;
 
 export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const [indicators, setIndicators] = useState<OffscreenIndicator[]>([]);
 
   useEffect(() => {
     if (mapRef.current === null) return;
@@ -219,11 +225,35 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
         padding: 50,
       });
 
-      return routePointHighlighter(map, {
+      // Track the route with an edge arrow whenever panning takes it fully
+      // out of view, until it becomes visible again.
+      const target = [{ id: "route", bounds }];
+      const updateIndicators = () =>
+        setIndicators(computeOffscreenIndicators(map, target));
+      updateIndicators();
+      map.on("move", updateIndicators);
+
+      const cleanupHighlighter = routePointHighlighter(map, {
         coordinates,
       });
+
+      return () => {
+        map.off("move", updateIndicators);
+        cleanupHighlighter?.();
+      };
     });
   }, []);
 
-  return <div ref={mapRef}></div>;
+  return (
+    <div ref={mapRef}>
+      {indicators.map((indicator) => (
+        <OffscreenArrow
+          key={indicator.id}
+          x={indicator.x}
+          y={indicator.y}
+          angle={indicator.angle}
+        />
+      ))}
+    </div>
+  );
 };
