@@ -4,6 +4,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { createMap } from "../../../services/createMap";
 import { routePointHighlighter } from "./routePointHighlighter";
 import { getBounds } from "../../../services/getBounds";
+import { padBounds } from "../../../services/padBounds";
 import {
   createRouteMarkersData,
   generateTriangleSVG,
@@ -11,6 +12,11 @@ import {
   generateLoopMarkerSVG,
 } from "../../../services/routeMarkers";
 import { MAP_MARKER_COLOR } from "../../../constants/colors";
+
+// How far past the route's own bounding box the map can still be panned:
+// a fraction of that box's width/height on each side, plus a flat buffer.
+const MAX_BOUNDS_PADDING_RATIO = 0.5;
+const MAX_BOUNDS_EXTRA_KM = 5;
 
 export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -26,20 +32,25 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
       return;
     }
 
-    return createMap(mapRef.current, {}, async (map) => {
-      const coordinates = route.features.reduce(
-        (acc: [number, number][], feature: any) => {
-          if (feature.geometry.type === "LineString") {
-            return acc.concat(feature.geometry.coordinates);
-          }
+    const coordinates = route.features.reduce(
+      (acc: [number, number][], feature: any) => {
+        if (feature.geometry.type === "LineString") {
+          return acc.concat(feature.geometry.coordinates);
+        }
 
-          return acc;
-        },
-        [],
-      );
+        return acc;
+      },
+      [],
+    );
 
-      const bounds = getBounds(coordinates);
+    const bounds = getBounds(coordinates);
 
+    const maxBounds = padBounds(bounds, {
+      paddingRatio: MAX_BOUNDS_PADDING_RATIO,
+      extraKm: MAX_BOUNDS_EXTRA_KM,
+    });
+
+    return createMap(mapRef.current, { maxBounds }, async (map) => {
       map.addSource("lines", {
         type: "geojson",
         data: route,

@@ -4,6 +4,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "./mapStyle";
 import { getBounds } from "../../../services/getBounds";
+import { padBounds } from "../../../services/padBounds";
 import { mToKm } from "../../../services/mToKm";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
 import { Button } from "../Button/Button";
@@ -15,9 +16,10 @@ import { MAP_MARKER_COLOR } from "../../../constants/colors";
 
 const NUMBER_MARKER_SIZE = 24;
 
-// How far past the routes' own bounding box the map can still be panned,
-// expressed as a fraction of that box's width/height on each side.
+// How far past the routes' own bounding box the map can still be panned:
+// a fraction of that box's width/height on each side, plus a flat buffer.
 const MAX_BOUNDS_PADDING_RATIO = 0.5;
+const MAX_BOUNDS_EXTRA_KM = 5;
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
@@ -41,15 +43,10 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
     const bounds = getBounds(coordinates);
 
-    const lngPadding =
-      (bounds.getEast() - bounds.getWest()) * MAX_BOUNDS_PADDING_RATIO;
-    const latPadding =
-      (bounds.getNorth() - bounds.getSouth()) * MAX_BOUNDS_PADDING_RATIO;
-
-    const maxBounds = new maplibregl.LngLatBounds(
-      [bounds.getWest() - lngPadding, bounds.getSouth() - latPadding],
-      [bounds.getEast() + lngPadding, bounds.getNorth() + latPadding],
-    );
+    const maxBounds = padBounds(bounds, {
+      paddingRatio: MAX_BOUNDS_PADDING_RATIO,
+      extraKm: MAX_BOUNDS_EXTRA_KM,
+    });
 
     const map = new maplibregl.Map({
       container: mapRef.current,
