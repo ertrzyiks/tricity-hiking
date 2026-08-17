@@ -111,10 +111,10 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
   const VIEWBOX_HEIGHT = 120;
 
   // A new trail starts every SPAWN_INTERVAL_MIN-MAX ms, on average shorter
-  // than a single trail's own lifetime (draw + hold + fade below), so
-  // multiple trails are visible at once.
-  const SPAWN_INTERVAL_MIN = 1200;
-  const SPAWN_INTERVAL_MAX = 1800;
+  // than a single trail's own lifetime (draw + hold + fade below), so a
+  // couple are visible at once without piling up into a crowd of paths.
+  const SPAWN_INTERVAL_MIN = 2400;
+  const SPAWN_INTERVAL_MAX = 3200;
 
   let stopAnimations: (() => void) | null = null;
 
@@ -231,7 +231,7 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       // 3. Reveal the end point once the line has finished drawing.
       schedule(() => {
         if (cancelled) return;
-        endDot.style.transition = "opacity 400ms ease";
+        endDot.style.transition = "opacity 100ms ease";
         endDot.style.opacity = "1";
       }, drawDelay + drawDuration);
 
