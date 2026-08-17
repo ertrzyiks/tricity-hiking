@@ -15,6 +15,10 @@ import { MAP_MARKER_COLOR } from "../../../constants/colors";
 
 const NUMBER_MARKER_SIZE = 24;
 
+// How far past the routes' own bounding box the map can still be panned,
+// expressed as a fraction of that box's width/height on each side.
+const MAX_BOUNDS_PADDING_RATIO = 0.5;
+
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
     GeoJSON.Feature | undefined
@@ -24,31 +28,42 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   useEffect(() => {
     if (mapRef.current === null) return;
 
+    const coordinates = routes.features.reduce(
+      (acc: [number, number][], feature: any) => {
+        if (feature.geometry.type === "LineString") {
+          return acc.concat(feature.geometry.coordinates);
+        }
+
+        return acc;
+      },
+      [],
+    );
+
+    const bounds = getBounds(coordinates);
+
+    const lngPadding =
+      (bounds.getEast() - bounds.getWest()) * MAX_BOUNDS_PADDING_RATIO;
+    const latPadding =
+      (bounds.getNorth() - bounds.getSouth()) * MAX_BOUNDS_PADDING_RATIO;
+
+    const maxBounds = new maplibregl.LngLatBounds(
+      [bounds.getWest() - lngPadding, bounds.getSouth() - latPadding],
+      [bounds.getEast() + lngPadding, bounds.getNorth() + latPadding],
+    );
+
     const map = new maplibregl.Map({
       container: mapRef.current,
       style,
       zoom: 10,
       minZoom: 9,
       maxZoom: 15,
+      maxBounds,
     });
 
     map.dragRotate.disable();
     map.touchZoomRotate.disableRotation();
 
     map.on("load", async () => {
-      const coordinates = routes.features.reduce(
-        (acc: [number, number][], feature: any) => {
-          if (feature.geometry.type === "LineString") {
-            return acc.concat(feature.geometry.coordinates);
-          }
-
-          return acc;
-        },
-        [],
-      );
-
-      const bounds = getBounds(coordinates);
-
       map.fitBounds(bounds, {
         animate: false,
         padding: 50,
