@@ -263,6 +263,37 @@ export const generateLoopMarkerSVG = (
 };
 
 /**
+ * Generate SVG for a numbered circle marker (filled circle with a 2px white
+ * border and the number centered inside). Used to identify a trail
+ * consistently across the overview map and the trail list.
+ */
+export const generateNumberMarkerSVG = (
+  number: number,
+  size: number = 24,
+  color: string = MAP_MARKER_COLOR,
+): string => {
+  const strokeWidth = 2;
+  const radius = size / 2 - strokeWidth / 2;
+  const fontSize = String(number).length > 1 ? size * 0.42 : size * 0.52;
+
+  const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="${size / 2}" cy="${size / 2}" r="${radius}"
+                fill="${color}"
+                stroke="white"
+                stroke-width="${strokeWidth}"/>
+        <text x="50%" y="50%"
+              text-anchor="middle"
+              dominant-baseline="central"
+              font-family="sans-serif"
+              font-weight="700"
+              font-size="${fontSize}"
+              fill="white">${number}</text>
+    </svg>`;
+
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+};
+
+/**
  * Create GeoJSON data for route markers
  */
 export const createRouteMarkersData = (

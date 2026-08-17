@@ -9,6 +9,7 @@ import {
   generateTriangleSVG,
   generatePerpendicularLineSVG,
   generateLoopMarkerSVG,
+  generateNumberMarkerSVG,
   createRouteMarkersData,
 } from "./routeMarkers";
 
@@ -299,6 +300,26 @@ describe("routeMarkers", () => {
       expect(decodedSvg).toContain("polygon"); // triangle element
       expect(decodedSvg).toContain("line"); // line element
       expect(decodedSvg).toContain("#7c3aed");
+    });
+  });
+
+  describe("generateNumberMarkerSVG", () => {
+    it("should generate a valid SVG data URL with the number, red fill and a 2px white border", () => {
+      const svg = generateNumberMarkerSVG(1, 24, "#b91c1c");
+      expect(svg).toMatch(/^data:image\/svg\+xml;charset=utf-8,/);
+      const decodedSvg = decodeURIComponent(svg);
+      expect(decodedSvg).toContain("<svg");
+      expect(decodedSvg).toContain("<circle");
+      expect(decodedSvg).toContain("#b91c1c");
+      expect(decodedSvg).toContain('stroke="white"');
+      expect(decodedSvg).toContain('stroke-width="2"');
+      expect(decodedSvg).toContain(">1<");
+    });
+
+    it("should embed the given number, including multi-digit numbers", () => {
+      const svg = generateNumberMarkerSVG(12);
+      const decodedSvg = decodeURIComponent(svg);
+      expect(decodedSvg).toContain(">12<");
     });
   });
 

@@ -7,8 +7,17 @@ import { TrailAttributeName } from "../TrailAttributeName/TrailAttributeName";
 import TrailAttribute from "../TrailAttribute.astro";
 import { mToKm } from "../../../services/mToKm";
 import { formatTime } from "../../../services/formatTime";
+import { generateNumberMarkerSVG } from "../../../services/routeMarkers";
+import { MAP_MARKER_COLOR } from "../../../constants/colors";
 
-const { route, properties } = Astro.props;
+const { route, properties, number } = Astro.props;
+
+// Same numbered circle marker rendered on the overview map, so a trail can
+// be matched between the map and this list entry.
+const numberMarkerIcon =
+  number !== undefined
+    ? generateNumberMarkerSVG(number, 24, MAP_MARKER_COLOR)
+    : undefined;
 ---
 
 <ListCardItem link={`/routes/${route.id}/`}>
@@ -24,9 +33,22 @@ const { route, properties } = Astro.props;
       />
     )
   }
-  <span class="flex gap-1 group-hover:text-green-600" slot="title">
-    <Icon name="mdi:location-on" class="text-green-500" />
-    {route.data.title}
+  <span class="flex items-center gap-2 group-hover:text-green-600" slot="title">
+    {
+      numberMarkerIcon && (
+        <img
+          src={numberMarkerIcon}
+          width="24"
+          height="24"
+          class="w-6 h-6 shrink-0"
+          alt={`Trail number ${number}`}
+        />
+      )
+    }
+    <span class="flex items-center gap-1">
+      <Icon name="mdi:location-on" class="text-green-500" />
+      {route.data.title}
+    </span>
   </span>
 
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-lg" slot="attributes">

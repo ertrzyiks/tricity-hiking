@@ -18,15 +18,32 @@ const tricityRoutes = routes.filter((route) => route.data.tricity);
 const geojsonList = [];
 const routeItems = [];
 
-for (const route of tricityRoutes) {
+for (const [index, route] of tricityRoutes.entries()) {
+  const number = index + 1;
   const geojson = await getEntry(route.data.geojson);
   const enhancedGeojson = enhance({
     collection: geojson.data,
     route: route.data,
   });
-  geojsonList.push(enhancedGeojson);
+
+  // Tag each route's line with its trail number so the overview map can
+  // render a matching numbered marker for it.
+  const numberedGeojson = {
+    ...enhancedGeojson,
+    features: enhancedGeojson.features.map((feature) =>
+      feature.geometry.type === "LineString"
+        ? {
+            ...feature,
+            properties: { ...feature.properties, routeNumber: number },
+          }
+        : feature,
+    ),
+  };
+
+  geojsonList.push(numberedGeojson);
   routeItems.push({
     route,
+    number,
     properties:
       getLineStringFeature({ collection: enhancedGeojson })?.properties ?? {},
   });
@@ -50,8 +67,12 @@ const geojson = merge(geojsonList);
   <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0">
     <ul>
       {
-        routeItems.map(({ route, properties }) => (
-          <RouteListItem route={route} properties={properties} />
+        routeItems.map(({ route, number, properties }) => (
+          <RouteListItem
+            route={route}
+            number={number}
+            properties={properties}
+          />
         ))
       }
     </ul>

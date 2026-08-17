@@ -10,6 +10,10 @@ import { Button } from "../Button/Button";
 import { TrailAttributeName } from "../TrailAttributeName/TrailAttributeName";
 import { TrailAttributeValue } from "../TrailAttributeValue/TrailAttributeValue";
 import { trackEvent } from "../../../services/analytics";
+import { generateNumberMarkerSVG } from "../../../services/routeMarkers";
+import { MAP_MARKER_COLOR } from "../../../constants/colors";
+
+const NUMBER_MARKER_SIZE = 24;
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<
@@ -110,6 +114,97 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
             4,
           ],
           "line-color": "#e11d48",
+        },
+      });
+
+      // One numbered marker per trail, placed at its midpoint. Trail 1
+      // renders above trail 2, which renders above trail 3, and so on, via
+      // symbol-sort-key, so a lower number always stays on top when markers
+      // overlap.
+      const numberMarkerFeatures: GeoJSON.Feature[] = [];
+      const routeNumbers = new Set<number>();
+
+      routes.features.forEach((feature: any) => {
+        if (feature.geometry.type !== "LineString") return;
+
+        const routeNumber = feature.properties?.routeNumber;
+        if (typeof routeNumber !== "number") return;
+
+        routeNumbers.add(routeNumber);
+
+        const lineCoordinates = feature.geometry.coordinates as [
+          number,
+          number,
+        ][];
+        const midpoint =
+          lineCoordinates[Math.floor(lineCoordinates.length / 2)];
+
+        numberMarkerFeatures.push({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [midpoint[0], midpoint[1]],
+          },
+          properties: {
+            routeNumber,
+          },
+        });
+      });
+
+      map.addSource("number-markers", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: numberMarkerFeatures,
+        },
+      });
+
+      await Promise.all(
+        Array.from(routeNumbers).map(
+          (routeNumber) =>
+            new Promise<void>((resolve) => {
+              const iconId = `number-marker-${routeNumber}`;
+              if (map.hasImage(iconId)) {
+                resolve();
+                return;
+              }
+
+              const img = new Image();
+              img.onload = () => {
+                if (!map.hasImage(iconId)) map.addImage(iconId, img);
+                resolve();
+              };
+              img.onerror = () => {
+                console.error(
+                  `Failed to load number marker image for ${routeNumber}`,
+                );
+                resolve();
+              };
+              img.src = generateNumberMarkerSVG(
+                routeNumber,
+                NUMBER_MARKER_SIZE,
+                MAP_MARKER_COLOR,
+              );
+            }),
+        ),
+      );
+
+      map.addLayer({
+        id: "number-markers",
+        type: "symbol",
+        source: "number-markers",
+        layout: {
+          "icon-image": [
+            "concat",
+            "number-marker-",
+            ["to-string", ["get", "routeNumber"]],
+          ],
+          "icon-size": 1,
+          "icon-allow-overlap": true,
+          "icon-ignore-placement": true,
+          // Lower trail numbers get a higher sort key, so they paint on
+          // top of higher numbers when markers overlap.
+          "symbol-sort-key": ["*", -1, ["get", "routeNumber"]],
         },
       });
 
