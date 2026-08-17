@@ -173,7 +173,7 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       const endDot = document.getElementById(`hero-trail-end-${index}`);
       if (!path || !reveal || !startDot || !endDot) return;
 
-      const drawDelay = 400;
+      const drawDelay = 100;
       // Only the line itself draws slower here; dot fade in/out (below)
       // keeps its own timing untouched.
       const drawDuration = rand(2800, 4200);
