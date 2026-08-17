@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import Hero from "../components/ui/Hero.astro";
 import { enhance } from "../services/enhance";
 import { getLineStringFeature } from "../services/getLineStringFeature";
+import { sortRoutes } from "../services/sortRoutes";
 import RouteListItem from "../components/ui/ListCardItem/Route.astro";
 import TricityMap from "../assets/tricity.svg";
 import { Icon } from "astro-icon/components";
@@ -12,9 +13,9 @@ const allRoutes = await getCollection("routes");
 const routes = allRoutes.filter((route) => {
   return !route.data.draft;
 });
-const featuredRoutes = routes
-  .filter((route) => route.data.featured === "homepage")
-  .slice(0, 3);
+const featuredRoutes = sortRoutes(
+  routes.filter((route) => route.data.featured === "homepage"),
+).slice(0, 3);
 
 const geojsonList = [];
 
