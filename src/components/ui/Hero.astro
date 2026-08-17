@@ -1,12 +1,70 @@
 ---
 const { title, description } = Astro.props;
 import Deco from "../../assets/deco.svg";
+
+// Pool of reusable DOM slots for trails. Kept larger than the number of
+// trails visible at once (2-3) so a slot is never reused while its
+// previous trail animation is still fading out.
+const TRAIL_SLOT_COUNT = 6;
+const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
 ---
 
 <div class="bg-linear-45 from-green-700 via-green-600 to-green-700">
   <div
     class="max-w-(--breakpoint-xl) mx-auto relative px-4 lg:px-0 py-12 lg:py-24 flex flex-col lg:flex-row items-center gap-12"
   >
+    {/* Decorative trail animation overlaid on top of the title block,
+        rather than taking up its own space and pushing the content down. */}
+    <div
+      id="hero-trail"
+      class="absolute inset-0 overflow-hidden pointer-events-none"
+      aria-hidden="true"
+      data-slot-count={TRAIL_SLOT_COUNT}
+    >
+      <svg viewBox="0 0 1000 120" preserveAspectRatio="none" class="absolute inset-0 w-full h-full">
+        {
+          trailTracks.map((i) => (
+            <>
+              <mask id={`hero-trail-mask-${i}`}>
+                <rect id={`hero-trail-reveal-${i}`} x="0" y="0" width="1000" height="120" fill="white" />
+              </mask>
+              <path
+                id={`hero-trail-path-${i}`}
+                d=""
+                fill="none"
+                stroke="white"
+                stroke-opacity="0.35"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-dasharray="5 16"
+                mask={`url(#hero-trail-mask-${i})`}
+                vector-effect="non-scaling-stroke"
+              />
+            </>
+          ))
+        }
+      </svg>
+      {
+        trailTracks.map((i) => (
+          <>
+            {/* Dots live outside the SVG's stretched viewBox (it uses
+                preserveAspectRatio="none" so the trail fills the strip) so
+                they stay perfectly round instead of scaling into ellipses. */}
+            <div
+              id={`hero-trail-start-${i}`}
+              class="absolute w-2 h-2 lg:w-2.5 lg:h-2.5 rounded-full bg-white/35 opacity-0"
+              style="left: 0; top: 0; transform: translate(-50%, -50%)"
+            />
+            <div
+              id={`hero-trail-end-${i}`}
+              class="absolute w-2 h-2 lg:w-2.5 lg:h-2.5 rounded-full bg-white/35 opacity-0"
+              style="left: 0; top: 0; transform: translate(-50%, -50%)"
+            />
+          </>
+        ))
+      }
+    </div>
+
     <div class="flex-1">
       <h1 class="text-2xl lg:text-4xl text-slate-100 mb-8 max-w-78">{title}</h1>
       <h2 class="text-l lg:text-xl text-slate-100 max-w-120">{description}</h2>
@@ -37,5 +95,184 @@ import Deco from "../../assets/deco.svg";
         trackEvent("clicked homeHeroCTA");
       });
     }
+  });
+</script>
+
+<script>
+  // Decorative "hiking trail" animation drawn across the top of the hero.
+  // A single spawner keeps starting new trails on a short, randomised
+  // interval - independent of how long any previous trail takes to
+  // finish - so 2-3 are always overlapping and new ones keep appearing in
+  // a constant stream rather than in synchronised bursts-then-pause.
+  // Each trail: a start point fades in, a curvy dashed line draws itself
+  // over to an end point, it holds for a beat, then fades out.
+
+  const VIEWBOX_WIDTH = 1000;
+  const VIEWBOX_HEIGHT = 120;
+
+  // A new trail starts every SPAWN_INTERVAL_MIN-MAX ms, on average shorter
+  // than a single trail's own lifetime (draw + hold + fade below), so a
+  // couple are visible at once without piling up into a crowd of paths.
+  const SPAWN_INTERVAL_MIN = 2400;
+  const SPAWN_INTERVAL_MAX = 3200;
+
+  let stopAnimations: (() => void) | null = null;
+
+  const rand = (min: number, max: number) => Math.random() * (max - min) + min;
+  const pickSign = () => (Math.random() < 0.5 ? -1 : 1);
+  const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
+  // A quadratic/cubic bezier curve never leaves the convex hull of its
+  // control points, so keeping every point (endpoints included) within
+  // this margin guarantees the whole curve stays inside the viewBox and
+  // never gets clipped by the strip's overflow-hidden.
+  const CURVE_Y_MARGIN = 10;
+
+  // Builds a wobbly (never straight) path between two points. Half the
+  // time it's a simple bulging curve, half the time a wavier S-curve, so
+  // the trails don't all look the same.
+  function makeTrailPath(x1: number, y1: number, x2: number, y2: number) {
+    const dx = x2 - x1;
+    const clampY = (y: number) => clamp(y, CURVE_Y_MARGIN, VIEWBOX_HEIGHT - CURVE_Y_MARGIN);
+
+    if (Math.random() < 0.5) {
+      const midX = x1 + dx / 2;
+      const midY = clampY(rand(10, VIEWBOX_HEIGHT - 10) + pickSign() * rand(30, 85));
+      return `M ${x1} ${y1} Q ${midX} ${midY} ${x2} ${y2}`;
+    }
+
+    const c1x = x1 + dx * rand(0.2, 0.4);
+    const c1y = clampY(y1 + pickSign() * rand(30, 75));
+    const c2x = x1 + dx * rand(0.6, 0.8);
+    const c2y = clampY(y2 + pickSign() * rand(30, 75));
+    return `M ${x1} ${y1} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x2} ${y2}`;
+  }
+
+  function runHeroTrailAnimations() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return null;
+    }
+
+    const container = document.getElementById("hero-trail");
+    const slotCount = Number(container?.dataset.slotCount) || 0;
+    if (slotCount === 0) return null;
+
+    let cancelled = false;
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+    const schedule = (fn: () => void, delay: number) => {
+      timeouts.push(setTimeout(fn, delay));
+    };
+
+    const toPercent = (value: number, axisSize: number) => `${(value / axisSize) * 100}%`;
+
+    // Plays a single start -> draw -> hold -> fade cycle on one pool slot.
+    function playTrail(index: number) {
+      const path = document.getElementById(`hero-trail-path-${index}`);
+      const reveal = document.getElementById(`hero-trail-reveal-${index}`);
+      const startDot = document.getElementById(`hero-trail-start-${index}`);
+      const endDot = document.getElementById(`hero-trail-end-${index}`);
+      if (!path || !reveal || !startDot || !endDot) return;
+
+      const drawDelay = 100;
+      // Only the line itself draws slower here; dot fade in/out (below)
+      // keeps its own timing untouched.
+      const drawDuration = rand(2800, 4200);
+      const holdDuration = rand(700, 1300);
+      const fadeDuration = 600;
+      const dotFadeOutDuration = 200;
+
+      // Most trails run left-to-right, but sometimes reverse so the walk
+      // isn't always in the same direction.
+      const reversed = Math.random() < 0.3;
+
+      const margin = 80;
+      const leftX = rand(margin, VIEWBOX_WIDTH * 0.35);
+      const rightX = rand(VIEWBOX_WIDTH * 0.65, VIEWBOX_WIDTH - margin);
+      const x1 = reversed ? rightX : leftX;
+      const x2 = reversed ? leftX : rightX;
+      const y1 = rand(5, VIEWBOX_HEIGHT - 5);
+      const y2 = rand(5, VIEWBOX_HEIGHT - 5);
+
+      path.setAttribute("d", makeTrailPath(x1, y1, x2, y2));
+      path.style.transition = "";
+      path.style.opacity = "1";
+
+      // The reveal rect covers the full strip at all times; a scaleX
+      // transform grows it out from the start edge (left for a
+      // left-to-right trail, right for a reversed one) to uncover the
+      // dashed path in the direction it's being "walked".
+      reveal.style.transformOrigin = reversed ? "100% 50%" : "0% 50%";
+      reveal.style.transition = "none";
+      reveal.style.transform = "scaleX(0)";
+
+      startDot.style.left = toPercent(x1, VIEWBOX_WIDTH);
+      startDot.style.top = toPercent(y1, VIEWBOX_HEIGHT);
+      endDot.style.left = toPercent(x2, VIEWBOX_WIDTH);
+      endDot.style.top = toPercent(y2, VIEWBOX_HEIGHT);
+      startDot.style.transition = "none";
+      endDot.style.transition = "none";
+      startDot.style.opacity = "0";
+      endDot.style.opacity = "0";
+
+      // 1. Reveal the start point.
+      requestAnimationFrame(() => {
+        if (cancelled) return;
+        startDot.style.transition = "opacity 400ms ease";
+        startDot.style.opacity = "1";
+      });
+
+      // 2. Draw the curvy dashed line towards the end point.
+      schedule(() => {
+        if (cancelled) return;
+        reveal.style.transition = `transform ${drawDuration}ms ease-in-out`;
+        reveal.style.transform = "scaleX(1)";
+      }, drawDelay);
+
+      // 3. Reveal the end point once the line has finished drawing.
+      schedule(() => {
+        if (cancelled) return;
+        endDot.style.transition = "opacity 100ms ease";
+        endDot.style.opacity = "1";
+      }, drawDelay + drawDuration);
+
+      // 4. Hold, then fade the whole thing out. The dots fade out faster
+      // than the line itself.
+      schedule(() => {
+        if (cancelled) return;
+        path.style.transition = `opacity ${fadeDuration}ms ease`;
+        startDot.style.transition = `opacity ${dotFadeOutDuration}ms ease`;
+        endDot.style.transition = `opacity ${dotFadeOutDuration}ms ease`;
+        path.style.opacity = "0";
+        startDot.style.opacity = "0";
+        endDot.style.opacity = "0";
+      }, drawDelay + drawDuration + holdDuration);
+    }
+
+    // Cycles through the pool round-robin so a slot is only reused once
+    // its previous trail has long since faded out.
+    let nextSlot = 0;
+    function spawnNext() {
+      if (cancelled) return;
+      playTrail(nextSlot);
+      nextSlot = (nextSlot + 1) % slotCount;
+      schedule(spawnNext, rand(SPAWN_INTERVAL_MIN, SPAWN_INTERVAL_MAX));
+    }
+
+    schedule(spawnNext, rand(0, 400));
+
+    return () => {
+      cancelled = true;
+      timeouts.forEach(clearTimeout);
+    };
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    stopAnimations?.();
+    stopAnimations = runHeroTrailAnimations();
+  });
+
+  document.addEventListener("astro:before-swap", () => {
+    stopAnimations?.();
+    stopAnimations = null;
   });
 </script>
