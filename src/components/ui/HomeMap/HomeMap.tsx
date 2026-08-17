@@ -19,7 +19,7 @@ const NUMBER_MARKER_SIZE = 24;
 // How far past the routes' own bounding box the map can still be panned:
 // a fraction of that box's width/height on each side, plus a flat buffer.
 const MAX_BOUNDS_PADDING_RATIO = 0.5;
-const MAX_BOUNDS_EXTRA_KM = 5;
+const MAX_BOUNDS_EXTRA_KM = 30;
 
 export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   const [selectedFeature, setSelectedFeature] = useState<

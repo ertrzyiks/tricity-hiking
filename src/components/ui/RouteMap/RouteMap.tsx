@@ -16,7 +16,7 @@ import { MAP_MARKER_COLOR } from "../../../constants/colors";
 // How far past the route's own bounding box the map can still be panned:
 // a fraction of that box's width/height on each side, plus a flat buffer.
 const MAX_BOUNDS_PADDING_RATIO = 0.5;
-const MAX_BOUNDS_EXTRA_KM = 5;
+const MAX_BOUNDS_EXTRA_KM = 30;
 
 export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
   const mapRef = useRef<HTMLDivElement>(null);
