@@ -11,7 +11,9 @@ const routes = allRoutes.filter((route) => {
   return !route.data.draft;
 });
 
-const dayTripRoutes = sortRoutes(routes.filter((route) => !route.data.tricity));
+const dayTripRoutes = sortRoutes(
+  routes.filter((route) => route.data.group === "day-trips"),
+);
 
 const geojsonList = [];
 
