@@ -16,6 +16,19 @@ export const PreviewRouteMap = ({
   useEffect(() => {
     if (mapRef.current === null) return;
 
+    const coordinates = route.features.reduce(
+      (acc: [number, number][], feature: any) => {
+        if (feature.geometry.type === "LineString") {
+          return acc.concat(feature.geometry.coordinates);
+        }
+
+        return acc;
+      },
+      [],
+    );
+
+    const bounds = getBounds(coordinates);
+
     const map = new maplibregl.Map({
       container: mapRef.current,
       interactive: false,
@@ -23,6 +36,12 @@ export const PreviewRouteMap = ({
         compact: false,
       },
       style,
+      // Frame the route already at construction time so the very first
+      // paint matches the fitBounds() call below, instead of flashing the
+      // default center/zoom first and jumping to the route once "load"
+      // fires.
+      bounds,
+      fitBoundsOptions: { padding: 50 },
       zoom: 10,
       minZoom: 9,
       maxZoom: 15,
@@ -32,19 +51,6 @@ export const PreviewRouteMap = ({
     map.touchZoomRotate.disableRotation();
 
     map.on("load", async () => {
-      const coordinates = route.features.reduce(
-        (acc: [number, number][], feature: any) => {
-          if (feature.geometry.type === "LineString") {
-            return acc.concat(feature.geometry.coordinates);
-          }
-
-          return acc;
-        },
-        [],
-      );
-
-      const bounds = getBounds(coordinates);
-
       map.addSource("lines", {
         type: "geojson",
         data: route,
