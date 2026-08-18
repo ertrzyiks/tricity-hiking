@@ -65,6 +65,18 @@ if (!feature) {
     class="mx-auto relative h-[calc(100vh-190px)] px-2 lg:px-0"
     transition:name="map"
   >
+    {
+      entry.data.preview?.src && (
+        <div class="absolute inset-0 h-full overflow-hidden">
+          <img
+            src={entry.data.preview.src}
+            class="absolute blur-2xl inset-0 h-full"
+            alt=""
+          />
+        </div>
+      )
+    }
+
     <RouteMap client:only="preact" route={geojson.data} />
 
     <a
