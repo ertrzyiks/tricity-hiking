@@ -60,6 +60,14 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
     const map = new maplibregl.Map({
       container: mapRef.current,
       style,
+      // Frame the routes already at construction time so the very first
+      // paint matches the fitBounds() call below. Without this the map
+      // starts at its default center/zoom, gets pulled to the edge of
+      // maxBounds on the first render, and only snaps onto the routes once
+      // the "load" event fires later — a visible jump from a wide overview
+      // down to the routes.
+      bounds,
+      fitBoundsOptions: { padding: 50 },
       zoom: 10,
       minZoom: 9,
       maxZoom: 15,
