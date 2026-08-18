@@ -39,7 +39,7 @@ const sortedActivities = Object.entries(groupedActivities).sort((a, b) => {
     <div class="my-4">
       <GroupHeader property={groupBy} value={type} />
 
-      <ul>
+      <ul class="lg:grid lg:grid-cols-3 lg:gap-x-6">
         {(activities as Activity[]).map((activity) => (
           <ActivityListCardItem
             link={activity.data.link}
