@@ -60,11 +60,23 @@ export const RouteMapPrefetch = ({
     containerRef.current.style.width = `${window.innerWidth}px`;
     containerRef.current.style.height = `${Math.max(window.innerHeight - 190, 200)}px`;
 
+    // MapLibre normally spins up its shared WebWorker pool (used for
+    // parsing tiles) lazily on the first Map, and tears it down again once
+    // the last Map on the page is removed. Since this component always
+    // removes its own map below, that pool would otherwise be discarded
+    // right after we've just paid to create it. prewarm() flags it to
+    // survive that removal instead, so when the visitor opens the real
+    // RouteMap - reached via an Astro view transition, i.e. the same page,
+    // no reload - it reuses the already-warm pool rather than
+    // re-initializing it from scratch.
+    maplibregl.prewarm();
+
     const map = new maplibregl.Map({
       container: containerRef.current,
       interactive: false,
       attributionControl: false,
       style,
+      validateStyle: false,
       bounds,
       fitBoundsOptions: { padding: 50 },
       zoom: 10,

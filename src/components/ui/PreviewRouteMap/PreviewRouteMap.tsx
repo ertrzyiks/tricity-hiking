@@ -36,6 +36,7 @@ export const PreviewRouteMap = ({
         compact: false,
       },
       style,
+      validateStyle: false,
       // Frame the route already at construction time so the very first
       // paint matches the fitBounds() call below, instead of flashing the
       // default center/zoom first and jumping to the route once "load"
