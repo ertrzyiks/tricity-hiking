@@ -64,8 +64,9 @@ jobs:
           git add src/content/routes
           git commit -m "Sync route order with issue #221"
           git push origin "$branch"
-          gh pr create \
+          pr_url=$(gh pr create \
             --title "Sync route order with issue #221" \
             --body "Automated sync of each route's \`order\` frontmatter field with the checklist order in #221." \
             --base main \
-            --head "$branch"
+            --head "$branch")
+          gh pr merge "$pr_url" --auto --squash
