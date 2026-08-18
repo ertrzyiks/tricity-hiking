@@ -22,6 +22,7 @@ const routesCollection = defineCollection({
       featured: z.literal("homepage").optional(),
       draft: z.boolean().optional(),
       preview: image().optional(),
+      order: z.number().optional(),
     }),
 });
 

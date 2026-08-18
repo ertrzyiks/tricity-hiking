@@ -3,6 +3,7 @@ import { getCollection, getEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import { enhance } from "../services/enhance";
 import { getLineStringFeature } from "../services/getLineStringFeature";
+import { sortRoutes } from "../services/sortRoutes";
 import RouteListItem from "../components/ui/ListCardItem/Route.astro";
 
 const allRoutes = await getCollection("routes");
@@ -10,7 +11,7 @@ const routes = allRoutes.filter((route) => {
   return !route.data.draft;
 });
 
-const dayTripRoutes = routes.filter((route) => !route.data.tricity);
+const dayTripRoutes = sortRoutes(routes.filter((route) => !route.data.tricity));
 
 const geojsonList = [];
 

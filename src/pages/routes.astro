@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import { merge } from "../services/merge";
 import { enhance } from "../services/enhance";
 import { getLineStringFeature } from "../services/getLineStringFeature";
+import { sortRoutes } from "../services/sortRoutes";
 import RouteListItem from "../components/ui/ListCardItem/Route.astro";
 
 import mapImage from "../assets/home-map.jpg";
@@ -13,7 +14,7 @@ const allRoutes = await getCollection("routes");
 const routes = allRoutes.filter((route) => {
   return !route.data.draft;
 });
-const tricityRoutes = routes.filter((route) => route.data.tricity);
+const tricityRoutes = sortRoutes(routes.filter((route) => route.data.tricity));
 
 const geojsonList = [];
 const routeItems = [];
