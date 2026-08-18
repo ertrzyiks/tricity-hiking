@@ -1,0 +1,71 @@
+name: Sync route order
+
+on:
+  # Keep the checklist in issue #221 (Routes / Day trips) in sync with the
+  # routes that actually exist, and pick up any reordering done there.
+  schedule:
+    - cron: "0 6 * * *" # daily at 06:00 UTC
+  # React immediately when a route is added, removed, or changes category.
+  push:
+    branches: [main]
+    paths:
+      - "src/content/routes/**/*.mdx"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: sync-route-order
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v7.0.1
+        with:
+          lfs: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 26.5.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6.0.9
+        with:
+          version: latest
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Sync route order issue and checklist
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/sync-route-order.js
+
+      - name: Open a pull request for any order changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain -- src/content/routes)" ]; then
+            echo "No route order changes to commit."
+            exit 0
+          fi
+
+          branch="sync-route-order/$(date +%Y%m%d%H%M%S)"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add src/content/routes
+          git commit -m "Sync route order with issue #221"
+          git push origin "$branch"
+          gh pr create \
+            --title "Sync route order with issue #221" \
+            --body "Automated sync of each route's \`order\` frontmatter field with the checklist order in #221." \
+            --base main \
+            --head "$branch"
