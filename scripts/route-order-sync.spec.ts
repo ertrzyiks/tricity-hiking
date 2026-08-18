@@ -7,6 +7,11 @@ import {
   computeOrderMap,
 } from "./route-order-sync.js";
 
+const GROUPS = [
+  { id: "tricity", header: "## Routes" },
+  { id: "day-trips", header: "## Day trips" },
+];
+
 describe("parseChecklist", () => {
   it("parses checked and unchecked items", () => {
     const text = "- [ ] alpha\n- [x] beta\n- [X] gamma";
@@ -26,7 +31,7 @@ describe("parseChecklist", () => {
 });
 
 describe("parseIssueBody", () => {
-  it("splits routes and day trips into separate lists", () => {
+  it("splits each group into its own list", () => {
     const body = [
       "## Routes",
       "",
@@ -38,19 +43,19 @@ describe("parseIssueBody", () => {
       "- [ ] trip-a",
     ].join("\n");
 
-    expect(parseIssueBody(body)).toEqual({
-      routes: [
+    expect(parseIssueBody(body, GROUPS)).toEqual({
+      tricity: [
         { slug: "route-a", checked: false },
         { slug: "route-b", checked: true },
       ],
-      dayTrips: [{ slug: "trip-a", checked: false }],
+      "day-trips": [{ slug: "trip-a", checked: false }],
     });
   });
 
   it("returns empty lists for a body with no matching sections", () => {
-    expect(parseIssueBody("- [ ] b\n- [ ] a")).toEqual({
-      routes: [],
-      dayTrips: [],
+    expect(parseIssueBody("- [ ] b\n- [ ] a", GROUPS)).toEqual({
+      tricity: [],
+      "day-trips": [],
     });
   });
 
@@ -64,9 +69,31 @@ describe("parseIssueBody", () => {
       "- [ ] trip-a",
     ].join("\n");
 
-    expect(parseIssueBody(body)).toEqual({
-      routes: [{ slug: "route-a", checked: false }],
-      dayTrips: [{ slug: "trip-a", checked: false }],
+    expect(parseIssueBody(body, GROUPS)).toEqual({
+      tricity: [{ slug: "route-a", checked: false }],
+      "day-trips": [{ slug: "trip-a", checked: false }],
+    });
+  });
+
+  it("supports an arbitrary number of configured groups", () => {
+    const groups = [
+      { id: "a", header: "## A" },
+      { id: "b", header: "## B" },
+      { id: "c", header: "## C" },
+    ];
+    const body = [
+      "## A",
+      "- [ ] a-1",
+      "## B",
+      "- [ ] b-1",
+      "## C",
+      "- [ ] c-1",
+    ].join("\n");
+
+    expect(parseIssueBody(body, groups)).toEqual({
+      a: [{ slug: "a-1", checked: false }],
+      b: [{ slug: "b-1", checked: false }],
+      c: [{ slug: "c-1", checked: false }],
     });
   });
 });
@@ -74,21 +101,37 @@ describe("parseIssueBody", () => {
 describe("renderIssueBody", () => {
   it("round-trips through parseIssueBody", () => {
     const sections = {
-      routes: [
+      tricity: [
         { slug: "route-a", checked: false },
         { slug: "route-b", checked: true },
       ],
-      dayTrips: [{ slug: "trip-a", checked: false }],
+      "day-trips": [{ slug: "trip-a", checked: false }],
     };
 
-    expect(parseIssueBody(renderIssueBody(sections))).toEqual(sections);
+    expect(parseIssueBody(renderIssueBody(sections, GROUPS), GROUPS)).toEqual(
+      sections,
+    );
   });
 
   it("renders a placeholder for an empty section", () => {
-    const body = renderIssueBody({ routes: [], dayTrips: [] });
+    const body = renderIssueBody({ tricity: [], "day-trips": [] }, GROUPS);
 
     expect(body).toContain("## Routes\n\n_No routes yet._");
     expect(body).toContain("## Day trips\n\n_No routes yet._");
+  });
+
+  it("renders groups in the configured order", () => {
+    const groups = [
+      { id: "a", header: "## A" },
+      { id: "b", header: "## B" },
+    ];
+
+    const body = renderIssueBody(
+      { b: [{ slug: "b-1", checked: false }], a: [] },
+      groups,
+    );
+
+    expect(body.indexOf("## A")).toBeLessThan(body.indexOf("## B"));
   });
 });
 

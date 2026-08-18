@@ -14,7 +14,9 @@ const allRoutes = await getCollection("routes");
 const routes = allRoutes.filter((route) => {
   return !route.data.draft;
 });
-const tricityRoutes = sortRoutes(routes.filter((route) => route.data.tricity));
+const tricityRoutes = sortRoutes(
+  routes.filter((route) => route.data.group === "tricity"),
+);
 
 const geojsonList = [];
 const routeItems = [];

@@ -18,7 +18,7 @@ const routesCollection = defineCollection({
       geojson: reference("geodata"),
       description: z.string(),
       htmlDescription: z.string().optional(),
-      tricity: z.boolean().optional(),
+      group: z.enum(["tricity", "day-trips"]).default("day-trips"),
       featured: z.literal("homepage").optional(),
       draft: z.boolean().optional(),
       preview: image().optional(),

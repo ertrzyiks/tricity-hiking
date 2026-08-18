@@ -70,7 +70,7 @@ title: ${routeName}
 geojson: ${slug}
 description: TODO
 htmlDescription: TODO
-tricity: true
+group: tricity
 draft: true
 ---
 
