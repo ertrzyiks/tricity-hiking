@@ -80,6 +80,16 @@ const { title, description } = Astro.props;
           <Icon name="mdi:menu" class="text-3xl" />
         </SidebarSwitch>
 
+        <a href="/" class="flex items-center">
+          <Image
+            src={logo}
+            alt="Tricity Hiking"
+            height={96}
+            style="width: auto; height: 32px;"
+            loading="eager"
+          />
+        </a>
+
         <div id="sidebar" class="sidebar bg-slate-50">
           <div
             class="flex gap-2 items-start lg:items-center flex-col lg:flex-row h-full pt-2 lg:pt-0"
@@ -102,16 +112,6 @@ const { title, description } = Astro.props;
             >
           </div>
         </div>
-
-        <a href="/" class="flex items-center">
-          <Image
-            src={logo}
-            alt="Tricity Hiking"
-            height={96}
-            style="width: auto; height: 32px;"
-            loading="eager"
-          />
-        </a>
       </nav>
 
       <div class="">
