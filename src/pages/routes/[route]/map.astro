@@ -4,6 +4,7 @@ import { getCollection, getEntry, render } from "astro:content";
 import Layout from "../../../layouts/Layout.astro";
 import { RouteMap } from "../../../components/ui/RouteMap/RouteMap";
 import { FullElevationChart } from "../../../components/ui/FullElevationChart/FullElevationChart";
+import { Icon } from "astro-icon/components";
 
 export async function getStaticPaths() {
   const allRoutes = await getCollection("routes");
@@ -65,6 +66,17 @@ if (!feature) {
     transition:name="map"
   >
     <RouteMap client:only="preact" route={geojson.data} />
+
+    <a
+      href={`/routes/${route}/`}
+      aria-label="Minimise map"
+      class="absolute top-2 right-2"
+    >
+      <Icon
+        name="mdi:arrow-collapse"
+        class="w-8 h-8 text-white bg-green-500 rounded-full p-1 opacity-75 hover:opacity-100 transition-opacity"
+      />
+    </a>
 
     <div class="absolute bottom-0 left-0 w-96 bg-green-50">
       <FullElevationChart client:load points={attitudes} />
