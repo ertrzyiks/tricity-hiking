@@ -52,7 +52,7 @@ const loadRoutes = () => {
       mdxPath,
       content,
       isDraft: getFrontmatterField(content, "draft") === "true",
-      isTricity: getFrontmatterField(content, "tricity") === "true",
+      isTricity: getFrontmatterField(content, "group") === "tricity",
       order: getFrontmatterField(content, "order"),
     };
   });
