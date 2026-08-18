@@ -1,8 +1,9 @@
 /**
  * Sync route order with a GitHub issue checklist.
  *
- * The issue (see ROUTE_ORDER_ISSUE_NUMBER below) holds two checklists,
- * "## Routes" and "## Day trips", one item per route slug. This script:
+ * The issue (see ROUTE_ORDER_ISSUE_NUMBER below) holds one checklist per
+ * route group (see GROUPS in route-order-sync.js), one item per route
+ * slug. This script:
  *
  *   1. Adds any route slug that isn't listed yet to the bottom of the
  *      right checklist (new routes show up automatically).
@@ -21,6 +22,7 @@ import path from "path";
 import os from "os";
 import { execFileSync } from "child_process";
 import {
+  GROUPS,
   parseIssueBody,
   renderIssueBody,
   reconcileChecklist,
@@ -30,6 +32,10 @@ import { getFrontmatterField, setFrontmatterField } from "./frontmatter.js";
 
 const ROUTES_DIR = "src/content/routes";
 const ISSUE_NUMBER = process.env.ROUTE_ORDER_ISSUE_NUMBER || "221";
+
+// Mirrors the `group` field's default in src/content.config.ts, for routes
+// whose frontmatter omits it.
+const DEFAULT_GROUP = "day-trips";
 
 const listRouteFiles = () => {
   return fs
@@ -52,7 +58,7 @@ const loadRoutes = () => {
       mdxPath,
       content,
       isDraft: getFrontmatterField(content, "draft") === "true",
-      isTricity: getFrontmatterField(content, "group") === "tricity",
+      group: getFrontmatterField(content, "group") ?? DEFAULT_GROUP,
       order: getFrontmatterField(content, "order"),
     };
   });
@@ -79,41 +85,41 @@ const writeIssueBody = (body) => {
 
 const main = () => {
   const routes = loadRoutes().filter((route) => !route.isDraft);
-  const routeSlugs = routes.filter((r) => r.isTricity).map((r) => r.slug);
-  const dayTripSlugs = routes.filter((r) => !r.isTricity).map((r) => r.slug);
 
   const currentBody = readIssueBody();
   const sections = parseIssueBody(currentBody);
 
-  const routesResult = reconcileChecklist(sections.routes, routeSlugs);
-  const dayTripsResult = reconcileChecklist(sections.dayTrips, dayTripSlugs);
+  const results = Object.fromEntries(
+    GROUPS.map(({ id }) => {
+      const slugs = routes
+        .filter((route) => route.group === id)
+        .map((route) => route.slug);
+      return [id, reconcileChecklist(sections[id], slugs)];
+    }),
+  );
 
-  const newBody = renderIssueBody({
-    routes: routesResult.items,
-    dayTrips: dayTripsResult.items,
-  });
+  const newBody = renderIssueBody(
+    Object.fromEntries(GROUPS.map(({ id }) => [id, results[id].items])),
+  );
 
   if (newBody.trim() !== currentBody.trim()) {
     writeIssueBody(newBody);
+
+    const added = GROUPS.flatMap(({ id }) => results[id].added);
+    const removed = GROUPS.flatMap(({ id }) => results[id].removed);
+
     console.log(
-      `Updated issue #${ISSUE_NUMBER}: ` +
-        `+${routesResult.added.length + dayTripsResult.added.length} new, ` +
-        `-${routesResult.removed.length + dayTripsResult.removed.length} removed`,
+      `Updated issue #${ISSUE_NUMBER}: +${added.length} new, -${removed.length} removed`,
     );
-    [...routesResult.added, ...dayTripsResult.added].forEach((slug) =>
-      console.log(`  + ${slug}`),
-    );
-    [...routesResult.removed, ...dayTripsResult.removed].forEach((slug) =>
-      console.log(`  - ${slug}`),
-    );
+    added.forEach((slug) => console.log(`  + ${slug}`));
+    removed.forEach((slug) => console.log(`  - ${slug}`));
   } else {
     console.log(`Issue #${ISSUE_NUMBER} checklist already up to date.`);
   }
 
-  const orderMap = new Map([
-    ...computeOrderMap(routesResult.items),
-    ...computeOrderMap(dayTripsResult.items),
-  ]);
+  const orderMap = new Map(
+    GROUPS.flatMap(({ id }) => [...computeOrderMap(results[id].items)]),
+  );
 
   let changedFiles = 0;
   for (const route of routes) {

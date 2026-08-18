@@ -1,18 +1,25 @@
 /**
- * Logic for keeping a GitHub issue's route checklists (one for `Routes`,
- * one for `Day trips`) in sync with the routes that actually exist in the
- * content collection, and for deriving each route's `order` frontmatter
- * value from its position in the checklist.
+ * Logic for keeping a GitHub issue's route checklists (one per route
+ * `group`) in sync with the routes that actually exist in the content
+ * collection, and for deriving each route's `order` frontmatter value
+ * from its position in the checklist.
  *
  * The issue body is treated as the source of truth for ordering: items can
  * be freely reordered in the GitHub UI (drag & drop), and that order is
  * what gets written back into the route files.
  */
 
-export const SECTION_HEADERS = {
-  routes: "## Routes",
-  dayTrips: "## Day trips",
-};
+/**
+ * Every group the issue checklist tracks, and the markdown heading that
+ * introduces its section in the issue body. Add an entry here (and to the
+ * `group` enum in `src/content.config.ts`) to track another group - no
+ * other change in this file is needed.
+ * @type {{id: string, header: string}[]}
+ */
+export const GROUPS = [
+  { id: "tricity", header: "## Routes" },
+  { id: "day-trips", header: "## Day trips" },
+];
 
 const CHECKLIST_ITEM_RE = /^- \[([ xX])\]\s+(.+?)\s*$/;
 
@@ -33,12 +40,15 @@ export const parseChecklist = (sectionText) => {
 };
 
 /**
- * Parse a full issue body into its `routes` and `dayTrips` checklists.
+ * Parse a full issue body into one checklist per configured group, keyed
+ * by group id.
  * @param {string} body
- * @returns {{routes: {slug: string, checked: boolean}[], dayTrips: {slug: string, checked: boolean}[]}}
+ * @param {{id: string, header: string}[]} groups
+ * @returns {Record<string, {slug: string, checked: boolean}[]>}
  */
-export const parseIssueBody = (body = "") => {
-  const sections = { routes: [], dayTrips: [] };
+export const parseIssueBody = (body = "", groups = GROUPS) => {
+  const sections = Object.fromEntries(groups.map(({ id }) => [id, []]));
+  const idByHeader = new Map(groups.map(({ id, header }) => [header, id]));
   let current = null;
   let buffer = [];
 
@@ -52,15 +62,9 @@ export const parseIssueBody = (body = "") => {
   for (const line of body.split("\n")) {
     const trimmed = line.trim();
 
-    if (trimmed === SECTION_HEADERS.routes) {
+    if (idByHeader.has(trimmed)) {
       flush();
-      current = "routes";
-      continue;
-    }
-
-    if (trimmed === SECTION_HEADERS.dayTrips) {
-      flush();
-      current = "dayTrips";
+      current = idByHeader.get(trimmed);
       continue;
     }
 
@@ -78,12 +82,14 @@ export const parseIssueBody = (body = "") => {
 };
 
 /**
- * Render the two checklists back into an issue body.
- * @param {{routes: {slug: string, checked: boolean}[], dayTrips: {slug: string, checked: boolean}[]}} sections
+ * Render each group's checklist back into an issue body, in the
+ * configured group order.
+ * @param {Record<string, {slug: string, checked: boolean}[]>} sections
+ * @param {{id: string, header: string}[]} groups
  * @returns {string}
  */
-export const renderIssueBody = ({ routes, dayTrips }) => {
-  const renderSection = (header, items) => {
+export const renderIssueBody = (sections, groups = GROUPS) => {
+  const renderSection = (header, items = []) => {
     if (items.length === 0) {
       return `${header}\n\n_No routes yet._`;
     }
@@ -94,10 +100,9 @@ export const renderIssueBody = ({ routes, dayTrips }) => {
     return `${header}\n\n${lines.join("\n")}`;
   };
 
-  return [
-    renderSection(SECTION_HEADERS.routes, routes),
-    renderSection(SECTION_HEADERS.dayTrips, dayTrips),
-  ].join("\n\n");
+  return groups
+    .map(({ id, header }) => renderSection(header, sections[id]))
+    .join("\n\n");
 };
 
 /**
