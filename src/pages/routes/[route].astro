@@ -3,6 +3,7 @@ import type { InferGetStaticParamsType } from "astro";
 import { getCollection, getEntry, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import { RouteMap } from "../../components/ui/RouteMap/RouteMap";
+import { RouteMapPrefetch } from "../../components/ui/RouteMapPrefetch/RouteMapPrefetch";
 import { FullElevationChart } from "../../components/ui/FullElevationChart/FullElevationChart";
 import { config } from "../../components/markdown";
 import { TrailAttributeValue } from "../../components/ui/TrailAttributeValue/TrailAttributeValue";
@@ -91,6 +92,15 @@ if (!feature) {
             </div>
           )
         }
+
+        {
+          /*
+            Warms the browser's tile cache for this route's map while the
+            visitor is reading the page, so the tiles are already available
+            if they open the interactive map above.
+          */
+        }
+        <RouteMapPrefetch client:idle route={geojson.data} />
         <div class="relative px-2 lg:px-0">
           <FullElevationChart client:load points={attitudes} />
         </div>
