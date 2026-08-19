@@ -19,7 +19,12 @@ canonicalURL += canonicalURL.endsWith("/") ? "" : "/";
 
 const mapTiles = await getEntry("map-tiles", "routes");
 
-const urls = mapTiles?.data.urls ?? [];
+// Font glyphs (/fonts/*.pbf) and sprites (sprite.json/sprite.png) are
+// excluded: prefetching them cross-origin triggers CORS issues, and
+// MapLibre fetches them on demand anyway.
+const urls = (mapTiles?.data.urls ?? []).filter(
+  (url) => !url.includes("/fonts/") && !url.includes("/sprite."),
+);
 
 interface Props {
   title: string;
