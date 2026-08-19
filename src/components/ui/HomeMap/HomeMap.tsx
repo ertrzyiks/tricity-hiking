@@ -18,6 +18,7 @@ import {
   type OffscreenIndicator,
 } from "../../../services/offscreenIndicator";
 import { OffscreenArrow } from "../OffscreenArrow/OffscreenArrow";
+import { MapLoadingSpinner } from "../MapLoadingSpinner/MapLoadingSpinner";
 
 const NUMBER_MARKER_SIZE = 24;
 
@@ -370,83 +371,100 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   };
 
   return (
-    // A wrapper owns the fade: MapLibre imperatively adds its own classes
-    // (maplibregl-map and friends) to the container we pass it as `container`,
-    // and Preact re-rendering a `class` prop replaces that attribute wholesale
-    // - so this state-driven class has to live on a div MapLibre never
-    // touches, not on mapRef itself, or it would wipe MapLibre's classes out
-    // the moment isReady flips.
-    <div
-      class={`h-full transition-opacity duration-300 ${
-        isReady ? "opacity-100" : "opacity-0 pointer-events-none"
-      }`}
-    >
-      <div ref={mapRef} class="h-full">
-        {indicators.map((indicator) => (
-          <OffscreenArrow
-            key={indicator.id}
-            x={indicator.x}
-            y={indicator.y}
-            angle={indicator.angle}
-            label={indicator.label}
-          />
-        ))}
+    <>
+      {/* Absolutely positioned over the same box as the map wrapper below
+          (routes.astro's own container is already `relative` and sized), so
+          it sits centered over the blurred placeholder until the map fades
+          in. */}
+      <div
+        aria-hidden="true"
+        class={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
+          isReady ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
+      >
+        <MapLoadingSpinner />
+      </div>
 
-        {selectedFeature && selectedFeature.properties && (
-          <div
-            id="sidebar"
-            className="absolute left-5 w-72 bottom-10 z-10 bg-slate-100 border-t-4 border-green-500"
-          >
-            <div class="flex flex-col px-4 py-3 pr-8">
-              <h3 class="text-2xl">{selectedFeature.properties.name}</h3>
-            </div>
+      {/* A wrapper owns the fade: MapLibre imperatively adds its own classes
+          (maplibregl-map and friends) to the container we pass it as
+          `container`, and Preact re-rendering a `class` prop replaces that
+          attribute wholesale - so this state-driven class has to live on a
+          div MapLibre never touches, not on mapRef itself, or it would wipe
+          MapLibre's classes out the moment isReady flips. */}
+      <div
+        class={`h-full transition-opacity duration-300 ${
+          isReady ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <div ref={mapRef} class="h-full">
+          {indicators.map((indicator) => (
+            <OffscreenArrow
+              key={indicator.id}
+              x={indicator.x}
+              y={indicator.y}
+              angle={indicator.angle}
+              label={indicator.label}
+            />
+          ))}
 
-            <p className="px-4 py-4 pt-0 text-base">
-              {selectedFeature.properties.description}
-            </p>
+          {selectedFeature && selectedFeature.properties && (
+            <div
+              id="sidebar"
+              className="absolute left-5 w-72 bottom-10 z-10 bg-slate-100 border-t-4 border-green-500"
+            >
+              <div class="flex flex-col px-4 py-3 pr-8">
+                <h3 class="text-2xl">{selectedFeature.properties.name}</h3>
+              </div>
 
-            {selectedFeature &&
-              selectedFeature.geometry.type === "LineString" && (
-                <div>
-                  <ElevationChart
-                    points={selectedFeature.geometry.coordinates.map(
-                      (point: number[]) => point[2],
-                    )}
+              <p className="px-4 py-4 pt-0 text-base">
+                {selectedFeature.properties.description}
+              </p>
+
+              {selectedFeature &&
+                selectedFeature.geometry.type === "LineString" && (
+                  <div>
+                    <ElevationChart
+                      points={selectedFeature.geometry.coordinates.map(
+                        (point: number[]) => point[2],
+                      )}
+                    />
+                  </div>
+                )}
+
+              <div class="flex flex-col px-4 py-4">
+                <div className="grid grid-cols-3 gap-2">
+                  <TrailAttributeValue
+                    value={`${mToKm(
+                      selectedFeature.properties.distance,
+                    ).toFixed(2)}km`}
                   />
+                  <TrailAttributeValue
+                    value={`${selectedFeature.properties.totalGain.toFixed(0)}m`}
+                  />
+                  <TrailAttributeValue
+                    value={`${selectedFeature.properties.totalLoss.toFixed(0)}m`}
+                  />
+
+                  <TrailAttributeName value="Distance" />
+                  <TrailAttributeName value="Total Gain" />
+                  <TrailAttributeName value="Total Loss" />
                 </div>
-              )}
+              </div>
 
-            <div class="flex flex-col px-4 py-4">
-              <div className="grid grid-cols-3 gap-2">
-                <TrailAttributeValue
-                  value={`${mToKm(selectedFeature.properties.distance).toFixed(
-                    2,
-                  )}km`}
-                />
-                <TrailAttributeValue
-                  value={`${selectedFeature.properties.totalGain.toFixed(0)}m`}
-                />
-                <TrailAttributeValue
-                  value={`${selectedFeature.properties.totalLoss.toFixed(0)}m`}
-                />
-
-                <TrailAttributeName value="Distance" />
-                <TrailAttributeName value="Total Gain" />
-                <TrailAttributeName value="Total Loss" />
+              <div className="flex items-center justify-center px-4 py-6 gap-2">
+                <Button
+                  href={`/routes/${selectedFeature.properties.routeSlug}/`}
+                >
+                  Learn more
+                </Button>
+                <Button onClick={handleCloseSelection} variant="neutral">
+                  Close
+                </Button>
               </div>
             </div>
-
-            <div className="flex items-center justify-center px-4 py-6 gap-2">
-              <Button href={`/routes/${selectedFeature.properties.routeSlug}/`}>
-                Learn more
-              </Button>
-              <Button onClick={handleCloseSelection} variant="neutral">
-                Close
-              </Button>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };

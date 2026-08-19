@@ -10,6 +10,7 @@ import {
   type OffscreenIndicator,
 } from "../../../services/offscreenIndicator";
 import { OffscreenArrow } from "../OffscreenArrow/OffscreenArrow";
+import { MapLoadingSpinner } from "../MapLoadingSpinner/MapLoadingSpinner";
 import {
   createRouteMarkersData,
   generateTriangleSVG,
@@ -271,27 +272,42 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
   }, []);
 
   return (
-    // A wrapper owns the fade: MapLibre imperatively adds its own classes
-    // (maplibregl-map and friends) to the container we pass it as `container`,
-    // and Preact re-rendering a `class` prop replaces that attribute wholesale
-    // - so this state-driven class has to live on a div MapLibre never
-    // touches, not on mapRef itself, or it would wipe MapLibre's classes out
-    // the moment isReady flips.
-    <div
-      class={`h-full transition-opacity duration-300 ${
-        isReady ? "opacity-100" : "opacity-0 pointer-events-none"
-      }`}
-    >
-      <div ref={mapRef} class="h-full">
-        {indicators.map((indicator) => (
-          <OffscreenArrow
-            key={indicator.id}
-            x={indicator.x}
-            y={indicator.y}
-            angle={indicator.angle}
-          />
-        ))}
+    <>
+      {/* Absolutely positioned over the same box as the map wrapper below
+          (the map.astro page's own container is already `relative` and
+          sized), so it sits centered over the blurred placeholder until the
+          map fades in. */}
+      <div
+        aria-hidden="true"
+        class={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
+          isReady ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
+      >
+        <MapLoadingSpinner />
       </div>
-    </div>
+
+      {/* A wrapper owns the fade: MapLibre imperatively adds its own classes
+          (maplibregl-map and friends) to the container we pass it as
+          `container`, and Preact re-rendering a `class` prop replaces that
+          attribute wholesale - so this state-driven class has to live on a
+          div MapLibre never touches, not on mapRef itself, or it would wipe
+          MapLibre's classes out the moment isReady flips. */}
+      <div
+        class={`h-full transition-opacity duration-300 ${
+          isReady ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <div ref={mapRef} class="h-full">
+          {indicators.map((indicator) => (
+            <OffscreenArrow
+              key={indicator.id}
+              x={indicator.x}
+              y={indicator.y}
+              angle={indicator.angle}
+            />
+          ))}
+        </div>
+      </div>
+    </>
   );
 };

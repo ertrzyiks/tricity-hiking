@@ -58,3 +58,16 @@
   @apply text-green-600;
   @apply hover:text-green-700 hover:underline;
 }
+
+/* Used by MapLoadingSpinner's rings, each spinning a different direction. */
+@keyframes spin-cw {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-ccw {
+  to {
+    transform: rotate(-360deg);
+  }
+}
