@@ -26,6 +26,10 @@ const MAX_BOUNDS_EXTRA_KM = 30;
 export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [indicators, setIndicators] = useState<OffscreenIndicator[]>([]);
+  // Stays false until the map has finished loading everything it needs for
+  // the initial view, so the blurred static preview underneath keeps
+  // showing instead of a half-loaded tile mosaic.
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     if (mapRef.current === null) return;
@@ -241,6 +245,11 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
           padding: 50,
         });
 
+        // "idle" fires once everything needed for the current view has
+        // loaded and been rendered - reveal the map only then, so it never
+        // shows through as a half-loaded tile mosaic over the placeholder.
+        map.once("idle", () => setIsReady(true));
+
         // Track the route with an edge arrow whenever panning takes it fully
         // out of view, until it becomes visible again.
         const target = [{ id: "route", bounds }];
@@ -262,15 +271,27 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
   }, []);
 
   return (
-    <div ref={mapRef}>
-      {indicators.map((indicator) => (
-        <OffscreenArrow
-          key={indicator.id}
-          x={indicator.x}
-          y={indicator.y}
-          angle={indicator.angle}
-        />
-      ))}
+    // A wrapper owns the fade: MapLibre imperatively adds its own classes
+    // (maplibregl-map and friends) to the container we pass it as `container`,
+    // and Preact re-rendering a `class` prop replaces that attribute wholesale
+    // - so this state-driven class has to live on a div MapLibre never
+    // touches, not on mapRef itself, or it would wipe MapLibre's classes out
+    // the moment isReady flips.
+    <div
+      class={`h-full transition-opacity duration-300 ${
+        isReady ? "opacity-100" : "opacity-0 pointer-events-none"
+      }`}
+    >
+      <div ref={mapRef} class="h-full">
+        {indicators.map((indicator) => (
+          <OffscreenArrow
+            key={indicator.id}
+            x={indicator.x}
+            y={indicator.y}
+            angle={indicator.angle}
+          />
+        ))}
+      </div>
     </div>
   );
 };
