@@ -10,7 +10,6 @@ import {
   type OffscreenIndicator,
 } from "../../../services/offscreenIndicator";
 import { OffscreenArrow } from "../OffscreenArrow/OffscreenArrow";
-import { MapLoadingSpinner } from "../MapLoadingSpinner/MapLoadingSpinner";
 import {
   createRouteMarkersData,
   generateTriangleSVG,
@@ -272,55 +271,33 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
   }, []);
 
   return (
-    <>
-      {/* Absolutely positioned over the same box as the map wrapper below
-          (the map.astro page's own container is already `relative` and
-          sized), so it sits centered over the blurred placeholder until the
-          map fades in.
-
-          The 100ms-before-it-shows delay is CSS-only: spinner-appear (see
-          base.css) is base-styled to opacity-0 and only starts fading in
-          once its animation-delay elapses, so a load that finishes sooner
-          never gets it painted - no setTimeout to manage. Once isReady
-          flips, it's just dropped straight to opacity-0 rather than eased
-          out: Chromium doesn't animate a transition picking up from an
-          animation's fill-mode: forwards value (confirmed - it snaps
-          instead of interpolating), and the map wrapper below is already
-          fading in over the same 300ms right as this happens, which masks
-          the instant disappearance anyway. */}
-      <div
-        aria-hidden="true"
-        class={`absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 ${
-          isReady
-            ? ""
-            : "animate-[spinner-appear_200ms_ease-out_100ms_forwards]"
-        }`}
-      >
-        <MapLoadingSpinner />
+    // A wrapper owns the fade: MapLibre imperatively adds its own classes
+    // (maplibregl-map and friends) to the container we pass it as
+    // `container`, and Preact re-rendering a `class` prop replaces that
+    // attribute wholesale - so this state-driven class has to live on a
+    // div MapLibre never touches, not on mapRef itself, or it would wipe
+    // MapLibre's classes out the moment isReady flips.
+    //
+    // The page (map.astro) that renders this component also renders a
+    // statically-generated MapLoadingSpinner ahead of it in the DOM, so
+    // this wrapper fading in over it - and over the blurred placeholder
+    // beneath that - is what makes the spinner disappear too. No isReady
+    // wiring is needed here for the spinner specifically.
+    <div
+      class={`h-full transition-opacity duration-300 ${
+        isReady ? "opacity-100" : "opacity-0 pointer-events-none"
+      }`}
+    >
+      <div ref={mapRef} class="h-full">
+        {indicators.map((indicator) => (
+          <OffscreenArrow
+            key={indicator.id}
+            x={indicator.x}
+            y={indicator.y}
+            angle={indicator.angle}
+          />
+        ))}
       </div>
-
-      {/* A wrapper owns the fade: MapLibre imperatively adds its own classes
-          (maplibregl-map and friends) to the container we pass it as
-          `container`, and Preact re-rendering a `class` prop replaces that
-          attribute wholesale - so this state-driven class has to live on a
-          div MapLibre never touches, not on mapRef itself, or it would wipe
-          MapLibre's classes out the moment isReady flips. */}
-      <div
-        class={`h-full transition-opacity duration-300 ${
-          isReady ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div ref={mapRef} class="h-full">
-          {indicators.map((indicator) => (
-            <OffscreenArrow
-              key={indicator.id}
-              x={indicator.x}
-              y={indicator.y}
-              angle={indicator.angle}
-            />
-          ))}
-        </div>
-      </div>
-    </>
+    </div>
   );
 };

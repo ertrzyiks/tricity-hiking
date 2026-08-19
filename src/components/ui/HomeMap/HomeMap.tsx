@@ -18,7 +18,6 @@ import {
   type OffscreenIndicator,
 } from "../../../services/offscreenIndicator";
 import { OffscreenArrow } from "../OffscreenArrow/OffscreenArrow";
-import { MapLoadingSpinner } from "../MapLoadingSpinner/MapLoadingSpinner";
 
 const NUMBER_MARKER_SIZE = 24;
 
@@ -371,113 +370,89 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   };
 
   return (
-    <>
-      {/* Absolutely positioned over the same box as the map wrapper below
-          (routes.astro's own container is already `relative` and sized), so
-          it sits centered over the blurred placeholder until the map fades
-          in.
+    // A wrapper owns the fade: MapLibre imperatively adds its own classes
+    // (maplibregl-map and friends) to the container we pass it as
+    // `container`, and Preact re-rendering a `class` prop replaces that
+    // attribute wholesale - so this state-driven class has to live on a
+    // div MapLibre never touches, not on mapRef itself, or it would wipe
+    // MapLibre's classes out the moment isReady flips.
+    //
+    // The page (routes.astro) that renders this component also renders a
+    // statically-generated MapLoadingSpinner ahead of it in the DOM, so
+    // this wrapper fading in over it - and over the blurred placeholder
+    // beneath that - is what makes the spinner disappear too. No isReady
+    // wiring is needed here for the spinner specifically.
+    <div
+      class={`h-full transition-opacity duration-300 ${
+        isReady ? "opacity-100" : "opacity-0 pointer-events-none"
+      }`}
+    >
+      <div ref={mapRef} class="h-full">
+        {indicators.map((indicator) => (
+          <OffscreenArrow
+            key={indicator.id}
+            x={indicator.x}
+            y={indicator.y}
+            angle={indicator.angle}
+            label={indicator.label}
+          />
+        ))}
 
-          The 100ms-before-it-shows delay is CSS-only: spinner-appear (see
-          base.css) is base-styled to opacity-0 and only starts fading in
-          once its animation-delay elapses, so a load that finishes sooner
-          never gets it painted - no setTimeout to manage. Once isReady
-          flips, it's just dropped straight to opacity-0 rather than eased
-          out: Chromium doesn't animate a transition picking up from an
-          animation's fill-mode: forwards value (confirmed - it snaps
-          instead of interpolating), and the map wrapper below is already
-          fading in over the same 300ms right as this happens, which masks
-          the instant disappearance anyway. */}
-      <div
-        aria-hidden="true"
-        class={`absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 ${
-          isReady
-            ? ""
-            : "animate-[spinner-appear_200ms_ease-out_100ms_forwards]"
-        }`}
-      >
-        <MapLoadingSpinner />
-      </div>
+        {selectedFeature && selectedFeature.properties && (
+          <div
+            id="sidebar"
+            className="absolute left-5 w-72 bottom-10 z-10 bg-slate-100 border-t-4 border-green-500"
+          >
+            <div class="flex flex-col px-4 py-3 pr-8">
+              <h3 class="text-2xl">{selectedFeature.properties.name}</h3>
+            </div>
 
-      {/* A wrapper owns the fade: MapLibre imperatively adds its own classes
-          (maplibregl-map and friends) to the container we pass it as
-          `container`, and Preact re-rendering a `class` prop replaces that
-          attribute wholesale - so this state-driven class has to live on a
-          div MapLibre never touches, not on mapRef itself, or it would wipe
-          MapLibre's classes out the moment isReady flips. */}
-      <div
-        class={`h-full transition-opacity duration-300 ${
-          isReady ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div ref={mapRef} class="h-full">
-          {indicators.map((indicator) => (
-            <OffscreenArrow
-              key={indicator.id}
-              x={indicator.x}
-              y={indicator.y}
-              angle={indicator.angle}
-              label={indicator.label}
-            />
-          ))}
+            <p className="px-4 py-4 pt-0 text-base">
+              {selectedFeature.properties.description}
+            </p>
 
-          {selectedFeature && selectedFeature.properties && (
-            <div
-              id="sidebar"
-              className="absolute left-5 w-72 bottom-10 z-10 bg-slate-100 border-t-4 border-green-500"
-            >
-              <div class="flex flex-col px-4 py-3 pr-8">
-                <h3 class="text-2xl">{selectedFeature.properties.name}</h3>
-              </div>
-
-              <p className="px-4 py-4 pt-0 text-base">
-                {selectedFeature.properties.description}
-              </p>
-
-              {selectedFeature &&
-                selectedFeature.geometry.type === "LineString" && (
-                  <div>
-                    <ElevationChart
-                      points={selectedFeature.geometry.coordinates.map(
-                        (point: number[]) => point[2],
-                      )}
-                    />
-                  </div>
-                )}
-
-              <div class="flex flex-col px-4 py-4">
-                <div className="grid grid-cols-3 gap-2">
-                  <TrailAttributeValue
-                    value={`${mToKm(
-                      selectedFeature.properties.distance,
-                    ).toFixed(2)}km`}
+            {selectedFeature &&
+              selectedFeature.geometry.type === "LineString" && (
+                <div>
+                  <ElevationChart
+                    points={selectedFeature.geometry.coordinates.map(
+                      (point: number[]) => point[2],
+                    )}
                   />
-                  <TrailAttributeValue
-                    value={`${selectedFeature.properties.totalGain.toFixed(0)}m`}
-                  />
-                  <TrailAttributeValue
-                    value={`${selectedFeature.properties.totalLoss.toFixed(0)}m`}
-                  />
-
-                  <TrailAttributeName value="Distance" />
-                  <TrailAttributeName value="Total Gain" />
-                  <TrailAttributeName value="Total Loss" />
                 </div>
-              </div>
+              )}
 
-              <div className="flex items-center justify-center px-4 py-6 gap-2">
-                <Button
-                  href={`/routes/${selectedFeature.properties.routeSlug}/`}
-                >
-                  Learn more
-                </Button>
-                <Button onClick={handleCloseSelection} variant="neutral">
-                  Close
-                </Button>
+            <div class="flex flex-col px-4 py-4">
+              <div className="grid grid-cols-3 gap-2">
+                <TrailAttributeValue
+                  value={`${mToKm(selectedFeature.properties.distance).toFixed(
+                    2,
+                  )}km`}
+                />
+                <TrailAttributeValue
+                  value={`${selectedFeature.properties.totalGain.toFixed(0)}m`}
+                />
+                <TrailAttributeValue
+                  value={`${selectedFeature.properties.totalLoss.toFixed(0)}m`}
+                />
+
+                <TrailAttributeName value="Distance" />
+                <TrailAttributeName value="Total Gain" />
+                <TrailAttributeName value="Total Loss" />
               </div>
             </div>
-          )}
-        </div>
+
+            <div className="flex items-center justify-center px-4 py-6 gap-2">
+              <Button href={`/routes/${selectedFeature.properties.routeSlug}/`}>
+                Learn more
+              </Button>
+              <Button onClick={handleCloseSelection} variant="neutral">
+                Close
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
