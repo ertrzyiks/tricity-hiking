@@ -21,7 +21,7 @@ export const MapLoadingSpinner = () => {
         r="42"
         pathLength="100"
         stroke={RING_COLOR}
-        stroke-width="6"
+        stroke-width="4"
         stroke-linecap="round"
         stroke-dasharray="70 30"
         class="origin-center animate-[spin-ccw_1.8s_linear_infinite]"
@@ -32,7 +32,7 @@ export const MapLoadingSpinner = () => {
         r="30"
         pathLength="100"
         stroke={RING_COLOR}
-        stroke-width="6"
+        stroke-width="4"
         stroke-linecap="round"
         stroke-dasharray="65 35"
         class="origin-center animate-[spin-cw_1.4s_linear_infinite]"
@@ -43,7 +43,7 @@ export const MapLoadingSpinner = () => {
         r="18"
         pathLength="100"
         stroke={RING_COLOR}
-        stroke-width="6"
+        stroke-width="4"
         stroke-linecap="round"
         stroke-dasharray="60 40"
         class="origin-center animate-[spin-ccw_1s_linear_infinite]"
