@@ -10,73 +10,94 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
 ---
 
 <div class="bg-linear-45 from-green-700 via-green-600 to-green-700">
-  <div
-    class="max-w-(--breakpoint-xl) mx-auto relative px-4 lg:px-0 py-12 lg:py-24 flex flex-col lg:flex-row items-center gap-12"
-  >
-    {/* Decorative trail animation overlaid on top of the title block,
-        rather than taking up its own space and pushing the content down. */}
-    <div
-      id="hero-trail"
-      class="absolute inset-0 overflow-hidden pointer-events-none"
-      aria-hidden="true"
-      data-slot-count={TRAIL_SLOT_COUNT}
-    >
-      <svg viewBox="0 0 1000 120" preserveAspectRatio="none" class="absolute inset-0 w-full h-full">
+  <div class="max-w-(--breakpoint-xl) mx-auto px-4 lg:px-0 py-12 lg:py-24">
+    <div class="relative flex flex-col lg:flex-row items-center gap-12">
+      {
+        /* Decorative trail animation overlaid on top of the title block,
+          rather than taking up its own space and pushing the content down. */
+      }
+      <div
+        id="hero-trail"
+        class="absolute inset-0 overflow-hidden pointer-events-none"
+        aria-hidden="true"
+        data-slot-count={TRAIL_SLOT_COUNT}
+      >
+        <svg
+          viewBox="0 0 1000 120"
+          preserveAspectRatio="none"
+          class="absolute inset-0 w-full h-full"
+        >
+          {
+            trailTracks.map((i) => (
+              <>
+                <mask id={`hero-trail-mask-${i}`}>
+                  <rect
+                    id={`hero-trail-reveal-${i}`}
+                    x="0"
+                    y="0"
+                    width="1000"
+                    height="120"
+                    fill="white"
+                  />
+                </mask>
+                <path
+                  id={`hero-trail-path-${i}`}
+                  d=""
+                  fill="none"
+                  stroke="white"
+                  stroke-opacity="0.35"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-dasharray="5 16"
+                  mask={`url(#hero-trail-mask-${i})`}
+                  vector-effect="non-scaling-stroke"
+                />
+              </>
+            ))
+          }
+        </svg>
         {
           trailTracks.map((i) => (
             <>
-              <mask id={`hero-trail-mask-${i}`}>
-                <rect id={`hero-trail-reveal-${i}`} x="0" y="0" width="1000" height="120" fill="white" />
-              </mask>
-              <path
-                id={`hero-trail-path-${i}`}
-                d=""
-                fill="none"
-                stroke="white"
-                stroke-opacity="0.35"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-dasharray="5 16"
-                mask={`url(#hero-trail-mask-${i})`}
-                vector-effect="non-scaling-stroke"
+              {/* Dots live outside the SVG's stretched viewBox (it uses
+                  preserveAspectRatio="none" so the trail fills the strip) so
+                  they stay perfectly round instead of scaling into ellipses. */}
+              <div
+                id={`hero-trail-start-${i}`}
+                class="absolute w-2 h-2 lg:w-2.5 lg:h-2.5 rounded-full bg-white/35 opacity-0"
+                style="left: 0; top: 0; transform: translate(-50%, -50%)"
+              />
+              <div
+                id={`hero-trail-end-${i}`}
+                class="absolute w-2 h-2 lg:w-2.5 lg:h-2.5 rounded-full bg-white/35 opacity-0"
+                style="left: 0; top: 0; transform: translate(-50%, -50%)"
               />
             </>
           ))
         }
-      </svg>
-      {
-        trailTracks.map((i) => (
-          <>
-            {/* Dots live outside the SVG's stretched viewBox (it uses
-                preserveAspectRatio="none" so the trail fills the strip) so
-                they stay perfectly round instead of scaling into ellipses. */}
-            <div
-              id={`hero-trail-start-${i}`}
-              class="absolute w-2 h-2 lg:w-2.5 lg:h-2.5 rounded-full bg-white/35 opacity-0"
-              style="left: 0; top: 0; transform: translate(-50%, -50%)"
-            />
-            <div
-              id={`hero-trail-end-${i}`}
-              class="absolute w-2 h-2 lg:w-2.5 lg:h-2.5 rounded-full bg-white/35 opacity-0"
-              style="left: 0; top: 0; transform: translate(-50%, -50%)"
-            />
-          </>
-        ))
-      }
+      </div>
+
+      <div class="flex-1">
+        <h1 class="text-2xl lg:text-4xl text-slate-100 mb-8 max-w-78">
+          {title}
+        </h1>
+        <h2 class="text-l lg:text-xl text-slate-100 max-w-120">
+          {description}
+        </h2>
+      </div>
+      <div class="px-5">
+        <a
+          id="hero-get-started-btn"
+          href="/routes"
+          class="bg-slate-100 block text-green-700 py-3 px-8 rounded text-2xl"
+        >
+          Get Started
+        </a>
+      </div>
     </div>
 
-    <div class="flex-1">
-      <h1 class="text-2xl lg:text-4xl text-slate-100 mb-8 max-w-78">{title}</h1>
-      <h2 class="text-l lg:text-xl text-slate-100 max-w-120">{description}</h2>
-    </div>
-    <div class="px-5">
-      <a
-        id="hero-get-started-btn"
-        href="/routes"
-        class="bg-slate-100 block text-green-700 py-3 px-8 rounded text-2xl"
-      >
-        Get Started
-      </a>
+    <div class="mt-8 lg:mt-12 flex flex-col items-center lg:items-start gap-2">
+      <slot name="search" />
     </div>
   </div>
 
@@ -120,7 +141,8 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
 
   const rand = (min: number, max: number) => Math.random() * (max - min) + min;
   const pickSign = () => (Math.random() < 0.5 ? -1 : 1);
-  const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+  const clamp = (value: number, min: number, max: number) =>
+    Math.min(Math.max(value, min), max);
 
   // A quadratic/cubic bezier curve never leaves the convex hull of its
   // control points, so keeping every point (endpoints included) within
@@ -133,11 +155,14 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
   // the trails don't all look the same.
   function makeTrailPath(x1: number, y1: number, x2: number, y2: number) {
     const dx = x2 - x1;
-    const clampY = (y: number) => clamp(y, CURVE_Y_MARGIN, VIEWBOX_HEIGHT - CURVE_Y_MARGIN);
+    const clampY = (y: number) =>
+      clamp(y, CURVE_Y_MARGIN, VIEWBOX_HEIGHT - CURVE_Y_MARGIN);
 
     if (Math.random() < 0.5) {
       const midX = x1 + dx / 2;
-      const midY = clampY(rand(10, VIEWBOX_HEIGHT - 10) + pickSign() * rand(30, 85));
+      const midY = clampY(
+        rand(10, VIEWBOX_HEIGHT - 10) + pickSign() * rand(30, 85),
+      );
       return `M ${x1} ${y1} Q ${midX} ${midY} ${x2} ${y2}`;
     }
 
@@ -163,7 +188,8 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       timeouts.push(setTimeout(fn, delay));
     };
 
-    const toPercent = (value: number, axisSize: number) => `${(value / axisSize) * 100}%`;
+    const toPercent = (value: number, axisSize: number) =>
+      `${(value / axisSize) * 100}%`;
 
     // Plays a single start -> draw -> hold -> fade cycle on one pool slot.
     function playTrail(index: number) {
@@ -237,15 +263,18 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
 
       // 4. Hold, then fade the whole thing out. The dots fade out faster
       // than the line itself.
-      schedule(() => {
-        if (cancelled) return;
-        path.style.transition = `opacity ${fadeDuration}ms ease`;
-        startDot.style.transition = `opacity ${dotFadeOutDuration}ms ease`;
-        endDot.style.transition = `opacity ${dotFadeOutDuration}ms ease`;
-        path.style.opacity = "0";
-        startDot.style.opacity = "0";
-        endDot.style.opacity = "0";
-      }, drawDelay + drawDuration + holdDuration);
+      schedule(
+        () => {
+          if (cancelled) return;
+          path.style.transition = `opacity ${fadeDuration}ms ease`;
+          startDot.style.transition = `opacity ${dotFadeOutDuration}ms ease`;
+          endDot.style.transition = `opacity ${dotFadeOutDuration}ms ease`;
+          path.style.opacity = "0";
+          startDot.style.opacity = "0";
+          endDot.style.opacity = "0";
+        },
+        drawDelay + drawDuration + holdDuration,
+      );
     }
 
     // Cycles through the pool round-robin so a slot is only reused once
