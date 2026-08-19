@@ -9,6 +9,7 @@ import RouteListItem from "../components/ui/ListCardItem/Route.astro";
 
 import mapImage from "../assets/home-map.jpg";
 import { HomeMap } from "../components/ui/HomeMap/HomeMap";
+import { MapLoadingSpinner } from "../components/ui/MapLoadingSpinner/MapLoadingSpinner";
 
 const allRoutes = await getCollection("routes");
 const routes = allRoutes.filter((route) => {
@@ -56,11 +57,29 @@ const geojson = merge(geojsonList);
 ---
 
 <Layout title="Map of the best hiking trails near Gdańsk, Sopot, and Gdynia">
-  <div
-    class="max-w-(--breakpoint-xl) mx-auto relative h-[70vh] px-2 lg:px-0"
-  >
+  <div class="max-w-(--breakpoint-xl) mx-auto relative h-[70vh] px-2 lg:px-0">
     <div class="absolute inset-0 h-full overflow-hidden">
       <img src={mapImage.src} class="absolute blur-2xl inset-0 h-full" />
+    </div>
+
+    {
+      /*
+        Rendered statically (no client: directive - zero JS shipped for it),
+        so it's part of the very first HTML response and animates via CSS
+        alone, unlike HomeMap below which needs JS to mount at all. Sitting
+        earlier in the DOM than HomeMap means the live map's own opaque
+        canvas naturally paints over it once that's ready - no isReady
+        wiring needed here to hide it again. The animation itself (base
+        opacity-0, 100ms delay, 200ms fade in, held via fill-mode: forwards)
+        is what keeps it from flashing on a load fast enough that HomeMap
+        covers it before the delay even elapses.
+      */
+    }
+    <div
+      aria-hidden="true"
+      class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 animate-[spinner-appear_200ms_ease-out_100ms_forwards]"
+    >
+      <MapLoadingSpinner />
     </div>
 
     <HomeMap client:only="preact" routes={geojson} />

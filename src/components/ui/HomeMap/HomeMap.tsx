@@ -371,11 +371,17 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
   return (
     // A wrapper owns the fade: MapLibre imperatively adds its own classes
-    // (maplibregl-map and friends) to the container we pass it as `container`,
-    // and Preact re-rendering a `class` prop replaces that attribute wholesale
-    // - so this state-driven class has to live on a div MapLibre never
-    // touches, not on mapRef itself, or it would wipe MapLibre's classes out
-    // the moment isReady flips.
+    // (maplibregl-map and friends) to the container we pass it as
+    // `container`, and Preact re-rendering a `class` prop replaces that
+    // attribute wholesale - so this state-driven class has to live on a
+    // div MapLibre never touches, not on mapRef itself, or it would wipe
+    // MapLibre's classes out the moment isReady flips.
+    //
+    // The page (routes.astro) that renders this component also renders a
+    // statically-generated MapLoadingSpinner ahead of it in the DOM, so
+    // this wrapper fading in over it - and over the blurred placeholder
+    // beneath that - is what makes the spinner disappear too. No isReady
+    // wiring is needed here for the spinner specifically.
     <div
       class={`h-full transition-opacity duration-300 ${
         isReady ? "opacity-100" : "opacity-0 pointer-events-none"

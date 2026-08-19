@@ -58,3 +58,32 @@
   @apply text-green-600;
   @apply hover:text-green-700 hover:underline;
 }
+
+/* Used by MapLoadingSpinner's rings, each spinning a different direction. */
+@keyframes spin-cw {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-ccw {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/*
+  Used by the loading spinner overlay: an element base-styled to opacity-0
+  plays this once it mounts, held invisible by animation-delay for the
+  first 100ms, then fading in - so a map that finishes loading within that
+  window never gets the spinner painted at all. A CSS-only stand-in for a
+  setTimeout: no JS timer to start/clear/leak.
+*/
+@keyframes spinner-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

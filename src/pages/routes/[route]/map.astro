@@ -3,6 +3,7 @@ import type { InferGetStaticParamsType } from "astro";
 import { getCollection, getEntry, render } from "astro:content";
 import Layout from "../../../layouts/Layout.astro";
 import { RouteMap } from "../../../components/ui/RouteMap/RouteMap";
+import { MapLoadingSpinner } from "../../../components/ui/MapLoadingSpinner/MapLoadingSpinner";
 import { FullElevationChart } from "../../../components/ui/FullElevationChart/FullElevationChart";
 import { Icon } from "astro-icon/components";
 
@@ -76,6 +77,26 @@ if (!feature) {
         </div>
       )
     }
+
+    {
+      /*
+        Rendered statically (no client: directive - zero JS shipped for it),
+        so it's part of the very first HTML response and animates via CSS
+        alone, unlike RouteMap below which needs JS to mount at all. Sitting
+        earlier in the DOM than RouteMap means the live map's own opaque
+        canvas naturally paints over it once that's ready - no isReady
+        wiring needed here to hide it again. The animation itself (base
+        opacity-0, 100ms delay, 200ms fade in, held via fill-mode: forwards)
+        is what keeps it from flashing on a load fast enough that RouteMap
+        covers it before the delay even elapses.
+      */
+    }
+    <div
+      aria-hidden="true"
+      class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 animate-[spinner-appear_200ms_ease-out_100ms_forwards]"
+    >
+      <MapLoadingSpinner />
+    </div>
 
     <RouteMap client:only="preact" route={geojson.data} />
 
