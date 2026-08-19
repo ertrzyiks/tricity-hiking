@@ -31,6 +31,10 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
     GeoJSON.Feature | undefined
   >();
   const [indicators, setIndicators] = useState<OffscreenIndicator[]>([]);
+  // Stays false until the map has finished loading everything it needs for
+  // the initial view, so the blurred static preview underneath keeps
+  // showing instead of a half-loaded tile mosaic.
+  const [isReady, setIsReady] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -82,6 +86,11 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
         animate: false,
         padding: 50,
       });
+
+      // "idle" fires once everything needed for the current view has
+      // loaded and been rendered - reveal the map only then, so it never
+      // shows through as a half-loaded tile mosaic over the placeholder.
+      map.once("idle", () => setIsReady(true));
 
       map.addSource("lines", {
         type: "geojson",
@@ -361,71 +370,83 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   };
 
   return (
-    <div ref={mapRef}>
-      {indicators.map((indicator) => (
-        <OffscreenArrow
-          key={indicator.id}
-          x={indicator.x}
-          y={indicator.y}
-          angle={indicator.angle}
-          label={indicator.label}
-        />
-      ))}
+    // A wrapper owns the fade: MapLibre imperatively adds its own classes
+    // (maplibregl-map and friends) to the container we pass it as `container`,
+    // and Preact re-rendering a `class` prop replaces that attribute wholesale
+    // - so this state-driven class has to live on a div MapLibre never
+    // touches, not on mapRef itself, or it would wipe MapLibre's classes out
+    // the moment isReady flips.
+    <div
+      class={`h-full transition-opacity duration-300 ${
+        isReady ? "opacity-100" : "opacity-0 pointer-events-none"
+      }`}
+    >
+      <div ref={mapRef} class="h-full">
+        {indicators.map((indicator) => (
+          <OffscreenArrow
+            key={indicator.id}
+            x={indicator.x}
+            y={indicator.y}
+            angle={indicator.angle}
+            label={indicator.label}
+          />
+        ))}
 
-      {selectedFeature && selectedFeature.properties && (
-        <div
-          id="sidebar"
-          className="absolute left-5 w-72 bottom-10 z-10 bg-slate-100 border-t-4 border-green-500"
-        >
-          <div class="flex flex-col px-4 py-3 pr-8">
-            <h3 class="text-2xl">{selectedFeature.properties.name}</h3>
-          </div>
+        {selectedFeature && selectedFeature.properties && (
+          <div
+            id="sidebar"
+            className="absolute left-5 w-72 bottom-10 z-10 bg-slate-100 border-t-4 border-green-500"
+          >
+            <div class="flex flex-col px-4 py-3 pr-8">
+              <h3 class="text-2xl">{selectedFeature.properties.name}</h3>
+            </div>
 
-          <p className="px-4 py-4 pt-0 text-base">
-            {selectedFeature.properties.description}
-          </p>
+            <p className="px-4 py-4 pt-0 text-base">
+              {selectedFeature.properties.description}
+            </p>
 
-          {selectedFeature &&
-            selectedFeature.geometry.type === "LineString" && (
-              <div>
-                <ElevationChart
-                  points={selectedFeature.geometry.coordinates.map(
-                    (point: number[]) => point[2],
-                  )}
+            {selectedFeature &&
+              selectedFeature.geometry.type === "LineString" && (
+                <div>
+                  <ElevationChart
+                    points={selectedFeature.geometry.coordinates.map(
+                      (point: number[]) => point[2],
+                    )}
+                  />
+                </div>
+              )}
+
+            <div class="flex flex-col px-4 py-4">
+              <div className="grid grid-cols-3 gap-2">
+                <TrailAttributeValue
+                  value={`${mToKm(selectedFeature.properties.distance).toFixed(
+                    2,
+                  )}km`}
                 />
+                <TrailAttributeValue
+                  value={`${selectedFeature.properties.totalGain.toFixed(0)}m`}
+                />
+                <TrailAttributeValue
+                  value={`${selectedFeature.properties.totalLoss.toFixed(0)}m`}
+                />
+
+                <TrailAttributeName value="Distance" />
+                <TrailAttributeName value="Total Gain" />
+                <TrailAttributeName value="Total Loss" />
               </div>
-            )}
+            </div>
 
-          <div class="flex flex-col px-4 py-4">
-            <div className="grid grid-cols-3 gap-2">
-              <TrailAttributeValue
-                value={`${mToKm(selectedFeature.properties.distance).toFixed(
-                  2,
-                )}km`}
-              />
-              <TrailAttributeValue
-                value={`${selectedFeature.properties.totalGain.toFixed(0)}m`}
-              />
-              <TrailAttributeValue
-                value={`${selectedFeature.properties.totalLoss.toFixed(0)}m`}
-              />
-
-              <TrailAttributeName value="Distance" />
-              <TrailAttributeName value="Total Gain" />
-              <TrailAttributeName value="Total Loss" />
+            <div className="flex items-center justify-center px-4 py-6 gap-2">
+              <Button href={`/routes/${selectedFeature.properties.routeSlug}/`}>
+                Learn more
+              </Button>
+              <Button onClick={handleCloseSelection} variant="neutral">
+                Close
+              </Button>
             </div>
           </div>
-
-          <div className="flex items-center justify-center px-4 py-6 gap-2">
-            <Button href={`/routes/${selectedFeature.properties.routeSlug}/`}>
-              Learn more
-            </Button>
-            <Button onClick={handleCloseSelection} variant="neutral">
-              Close
-            </Button>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
