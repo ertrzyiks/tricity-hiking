@@ -1,0 +1,16 @@
+---
+title: "Top sights"
+description: "Each city in the agglomeration has its own landmarks. These places attract many visitors and can be crowded during the high tourist season, but they offer valuable insight into the region's identity."
+publishDate: 2026-08-20
+draft: false
+---
+
+import ActivityList from "../../components/ui/ActivitiesList/ActivityList.astro";
+import { getCollection } from "astro:content";
+
+export const activities = await getCollection(
+  "activities",
+  ({ data }) => !data.draft && data.category === "top-sights",
+);
+
+<ActivityList activities={activities} groupBy="category" />

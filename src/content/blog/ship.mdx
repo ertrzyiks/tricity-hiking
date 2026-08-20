@@ -1,0 +1,16 @@
+---
+title: "Ship-museums"
+description: "There are three ship-museums in Tricity. Two of them located in Gdynia and one in Gdańsk. They are all different and have long history of active duty. They are open for visitors both on the deck and inside."
+publishDate: 2026-08-20
+draft: false
+---
+
+import ActivityList from "../../components/ui/ActivitiesList/ActivityList.astro";
+import { getCollection } from "astro:content";
+
+export const activities = await getCollection(
+  "activities",
+  ({ data }) => !data.draft && data.category === "ship",
+);
+
+<ActivityList activities={activities} groupBy="category" />
