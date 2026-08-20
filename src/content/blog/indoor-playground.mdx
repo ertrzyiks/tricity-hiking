@@ -1,6 +1,6 @@
 ---
-title: "Fairs"
-description: "Tricity hosts various traditional and seasonal fairs throughout the year. These events offer unique shopping experiences, local crafts, and cultural entertainment that reflect the region's rich heritage."
+title: "Playgrounds - indoor"
+description: "Playgrounds - indoor"
 publishDate: 2026-08-20
 draft: false
 ---
@@ -10,7 +10,7 @@ import { getCollection } from "astro:content";
 
 export const activities = await getCollection(
   "activities",
-  ({ data }) => !data.draft && data.category === "fairs",
+  ({ data }) => !data.draft && data.category === "indoor-playground",
 );
 
 <ActivityList activities={activities} groupBy="category" />
