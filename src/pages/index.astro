@@ -8,6 +8,7 @@ import { sortRoutes } from "../services/sortRoutes";
 import RouteListItem from "../components/ui/ListCardItem/Route.astro";
 import TricityMap from "../assets/tricity.svg";
 import { Icon } from "astro-icon/components";
+import CommandPalette from "../components/ui/CommandPalette/CommandPalette";
 
 const allRoutes = await getCollection("routes");
 const routes = allRoutes.filter((route) => {
@@ -38,7 +39,12 @@ for (const route of featuredRoutes) {
     title="Step into Tricity"
     description="Plan your next adventure in Tricity with our handpicked hiking routes, local tips, and hidden gems. "
     slot="hero"
-  />
+  >
+    <p slot="search" class="text-sm text-slate-200">
+      Looking for something specific?
+    </p>
+    <CommandPalette slot="search" client:load />
+  </Hero>
 
   <div
     class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0 my-6 lg:my-16"
