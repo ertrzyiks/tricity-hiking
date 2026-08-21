@@ -1,4 +1,4 @@
-import { type Map } from "maplibre-gl";
+import { type Map, type GeoJSONSource } from "maplibre-gl";
 import { $routePoints } from "../../../atoms/routePoints";
 import markerImage from "../../../assets/places/marker.png";
 import { loadImageToMap } from "./loadImageToMap";
@@ -57,7 +57,7 @@ export const routePointHighlighter = (
       point.features[0].properties.iconSize = 1;
     }
 
-    const source = map.getSource("point") as maplibregl.GeoJSONSource;
+    const source = map.getSource("point") as GeoJSONSource;
     source.setData(point);
   });
 };

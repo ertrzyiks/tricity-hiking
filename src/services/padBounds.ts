@@ -1,4 +1,4 @@
-import maplibregl, { type LngLatBounds } from "maplibre-gl";
+import { LngLatBounds } from "maplibre-gl";
 
 const KM_PER_DEGREE_LAT = 111.32;
 
@@ -25,7 +25,7 @@ export const padBounds = (
   const extraLatPadding = extraKm / KM_PER_DEGREE_LAT;
   const extraLngPadding = extraKm / kmPerDegreeLng;
 
-  return new maplibregl.LngLatBounds(
+  return new LngLatBounds(
     [
       west - ratioLngPadding - extraLngPadding,
       south - ratioLatPadding - extraLatPadding,

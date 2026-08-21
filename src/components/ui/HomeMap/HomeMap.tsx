@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "preact/hooks";
-import maplibregl, { type LngLatLike } from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
+import { type LngLatLike, type MapLayerMouseEvent } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "./mapStyle";
@@ -273,7 +274,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
       let hoveredStateId: number | undefined | string;
 
-      map.on("mouseenter", "interaction", (e) => {
+      map.on("mouseenter", "interaction", (e: MapLayerMouseEvent) => {
         if (!e.features) return;
 
         map.getCanvas().style.cursor = "pointer";
@@ -307,7 +308,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
         }
       });
 
-      map.on("click", "interaction", (e) => {
+      map.on("click", "interaction", (e: MapLayerMouseEvent) => {
         if (!e.features) return;
 
         const clickedFeature = e.features[0];
