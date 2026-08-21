@@ -116,6 +116,11 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
   const SPAWN_INTERVAL_MIN = 2400;
   const SPAWN_INTERVAL_MAX = 3200;
 
+  // Shared by every trail's fade-out (both drawn and instant seed trails),
+  // so seed timing below can be worked out relative to it.
+  const FADE_DURATION = 600;
+  const DOT_FADE_OUT_DURATION = 200;
+
   let stopAnimations: (() => void) | null = null;
 
   const rand = (min: number, max: number) => Math.random() * (max - min) + min;
@@ -170,7 +175,17 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
     // trail appears already fully drawn, then only holds and fades out like
     // normal. Used to seed the very first trails on page load so the strip
     // isn't empty while it waits for a full draw-in animation to play.
-    function playTrail(index: number, { instant = false }: { instant?: boolean } = {}) {
+    // `holdDuration` overrides the random hold when a caller needs to
+    // sequence a trail's fade relative to another one; `onFadeStart` fires
+    // right as the fade-out transition begins.
+    function playTrail(
+      index: number,
+      {
+        instant = false,
+        holdDuration,
+        onFadeStart,
+      }: { instant?: boolean; holdDuration?: number; onFadeStart?: () => void } = {},
+    ) {
       const path = document.getElementById(`hero-trail-path-${index}`);
       const reveal = document.getElementById(`hero-trail-reveal-${index}`);
       const startDot = document.getElementById(`hero-trail-start-${index}`);
@@ -181,9 +196,7 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       // Only the line itself draws slower here; dot fade in/out (below)
       // keeps its own timing untouched.
       const drawDuration = rand(2800, 4200);
-      const holdDuration = rand(700, 1300);
-      const fadeDuration = 600;
-      const dotFadeOutDuration = 200;
+      const resolvedHoldDuration = holdDuration ?? rand(700, 1300);
 
       // Most trails run left-to-right, but sometimes reverse so the walk
       // isn't always in the same direction.
@@ -247,13 +260,14 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       const holdStart = instant ? 0 : drawDelay + drawDuration;
       schedule(() => {
         if (cancelled) return;
-        path.style.transition = `opacity ${fadeDuration}ms ease`;
-        startDot.style.transition = `opacity ${dotFadeOutDuration}ms ease`;
-        endDot.style.transition = `opacity ${dotFadeOutDuration}ms ease`;
+        onFadeStart?.();
+        path.style.transition = `opacity ${FADE_DURATION}ms ease`;
+        startDot.style.transition = `opacity ${DOT_FADE_OUT_DURATION}ms ease`;
+        endDot.style.transition = `opacity ${DOT_FADE_OUT_DURATION}ms ease`;
         path.style.opacity = "0";
         startDot.style.opacity = "0";
         endDot.style.opacity = "0";
-      }, holdStart + holdDuration);
+      }, holdStart + resolvedHoldDuration);
     }
 
     // Cycles through the pool round-robin so a slot is only reused once
@@ -267,15 +281,28 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
     }
 
     // Seed the strip immediately on first paint instead of leaving it empty
-    // while the very first trail plays out its multi-second draw-in: the
-    // first couple of trails appear already fully drawn, hold, and fade out
-    // like normal. The regular spawn loop takes over from there.
-    const seedCount = Math.min(2, slotCount);
-    for (let i = 0; i < seedCount; i++) {
-      playTrail(nextSlot, { instant: true });
+    // while the very first trail plays out its multi-second draw-in: two
+    // trails appear already fully drawn. They're sequenced rather than
+    // fading independently - the first one fades out on its own, then the
+    // regular spawn loop kicks off right as that happens, and only after
+    // that does the second seed trail fade out. (slotCount is at least 1
+    // here - a slotCount of 0 already returned above.)
+    const firstHoldDuration = rand(700, 1000);
+    playTrail(nextSlot, {
+      instant: true,
+      holdDuration: firstHoldDuration,
+      onFadeStart: spawnNext,
+    });
+    nextSlot = (nextSlot + 1) % slotCount;
+
+    if (slotCount > 1) {
+      // Hold well past the first seed trail's own fade so the two never
+      // fade out together - this one only starts fading once the first is
+      // gone and the regular spawn loop is already running.
+      const secondHoldDuration = firstHoldDuration + FADE_DURATION + rand(400, 800);
+      playTrail(nextSlot, { instant: true, holdDuration: secondHoldDuration });
       nextSlot = (nextSlot + 1) % slotCount;
     }
-    schedule(spawnNext, rand(SPAWN_INTERVAL_MIN, SPAWN_INTERVAL_MAX));
 
     return () => {
       cancelled = true;
