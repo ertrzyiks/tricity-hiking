@@ -308,14 +308,19 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
     // trails appear already fully drawn. They're sequenced rather than
     // fading independently - the first one fades out on its own, which
     // kicks off the regular spawn loop, and only once that first
-    // dynamically-drawn trail has appeared does the second seed trail fade
-    // out too. (slotCount is at least 1 here - a slotCount of 0 already
-    // returned above.)
+    // dynamically-drawn trail has appeared - plus a further pause, so it's
+    // had time to establish itself rather than fading the instant it shows
+    // up - does the second seed trail fade out too. (slotCount is at least
+    // 1 here - a slotCount of 0 already returned above.)
+    const SECOND_SEED_FADE_DELAY_AFTER_APPEAR = 1500;
     let fadeOutSecondSeed: (() => void) | undefined;
     playTrail(nextSlot, {
       instant: true,
       holdDuration: rand(700, 1000),
-      onFadeStart: () => spawnNext({ onAppear: () => fadeOutSecondSeed?.() }),
+      onFadeStart: () =>
+        spawnNext({
+          onAppear: () => schedule(() => fadeOutSecondSeed?.(), SECOND_SEED_FADE_DELAY_AFTER_APPEAR),
+        }),
     });
     nextSlot = (nextSlot + 1) % slotCount;
 
