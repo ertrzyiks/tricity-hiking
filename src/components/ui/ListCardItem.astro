@@ -1,5 +1,5 @@
 ---
-const { link } = Astro.props;
+const { link, outlined = false } = Astro.props;
 
 const securityProps = link.startsWith("http")
   ? { target: "_blank", rel: "noopener" }
@@ -7,9 +7,21 @@ const securityProps = link.startsWith("http")
 ---
 
 <li
-  class="my-4 border-b border-solid border-slate-200 last:border-0 w-full group"
+  class:list={[
+    "w-full group",
+    outlined
+      ? "border border-solid border-slate-200 rounded-lg"
+      : "my-4 border-b border-solid border-slate-200 last:border-0",
+  ]}
 >
-  <a class="grid grid-cols-[80px_1fr] py-4" href={link} {...securityProps}>
+  <a
+    class:list={[
+      "grid grid-cols-[80px_1fr] py-4",
+      outlined && "px-4",
+    ]}
+    href={link}
+    {...securityProps}
+  >
     <div class="row-span-1 sm:row-span-2">
       <slot name="image" />
     </div>
