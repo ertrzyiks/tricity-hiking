@@ -1,0 +1,16 @@
+---
+title: "Explore the most famous fairs in Gdańsk"
+description: "Tricity hosts various traditional and seasonal fairs throughout the year. These events offer unique shopping experiences, local crafts, and cultural entertainment that reflect the region's rich heritage."
+publishDate: 2026-08-20
+draft: false
+---
+
+import ActivityList from "../../components/ui/ActivitiesList/ActivityList.astro";
+import { getCollection } from "astro:content";
+
+export const activities = await getCollection(
+  "activities",
+  ({ data }) => !data.draft && data.category === "fairs",
+);
+
+<ActivityList activities={activities} groupBy="category" />
