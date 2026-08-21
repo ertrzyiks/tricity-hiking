@@ -3,13 +3,6 @@ import fs from "fs";
 
 const BASE_PATH = "src/content";
 
-const list = fs.readdirSync(`${BASE_PATH}/routes`);
-const routes = list
-  .filter((name) => name.endsWith(".mdx"))
-  .map((name) => {
-    return name.slice(0, -4);
-  });
-
 let lastRequestTime = Date.now();
 
 function waitForIdle(timeout = 2000, checkEvery = 500) {

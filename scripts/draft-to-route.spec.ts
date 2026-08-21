@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fs from "fs";
 import path from "path";
 import { nameToSlug, getRouteNameFromGpx } from "./draft-to-route.js";
-import { execSync } from "child_process";
 
 const TEST_DRAFTS_PATH = "/tmp/test-drafts";
 const TEST_ROUTES_PATH = "/tmp/test-routes";
@@ -14,21 +13,6 @@ const SAMPLE_GPX = `<?xml version="1.0" encoding="UTF-8"?>
   </metadata>
   <trk>
     <name>Test Route</name>
-    <trkseg>
-      <trkpt lat="54.404848" lon="18.535729">
-        <ele>62.5</ele>
-      </trkpt>
-    </trkseg>
-  </trk>
-</gpx>`;
-
-const SAMPLE_GPX_POLISH = `<?xml version="1.0" encoding="UTF-8"?>
-<gpx creator="https://gpx.studio" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata>
-    <name>Droga Królewska</name>
-  </metadata>
-  <trk>
-    <name>Droga Królewska</name>
     <trkseg>
       <trkpt lat="54.404848" lon="18.535729">
         <ele>62.5</ele>

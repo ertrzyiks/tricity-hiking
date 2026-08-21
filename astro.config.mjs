@@ -43,5 +43,12 @@ export default defineConfig({
     server: {
       allowedHosts: ["9745f00829df.ngrok-free.app"],
     },
+    build: {
+      // maplibre-gl is already isolated into its own lazily-loaded chunk
+      // (only fetched once a map actually mounts), so its ~1MB minified
+      // size doesn't affect initial page weight. Raise the limit past that
+      // known, unavoidable chunk instead of silencing genuine regressions.
+      chunkSizeWarningLimit: 1100,
+    },
   },
 });
