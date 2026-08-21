@@ -1,0 +1,65 @@
+---
+import TimelineRoot from "../ui/Timeline/Timeline.astro";
+import TimelineItem from "../ui/Timeline/TimelineItem.astro";
+import TimelineOppositeContent from "../ui/Timeline/TimelineOppositeContent.astro";
+import TimelineOppositeContentSecondary from "../ui/Timeline/TimelineOppositeContentSecondary.astro";
+import TimelineSeparator from "../ui/Timeline/TimelineSeparator.astro";
+import TimelineDot from "../ui/Timeline/TimelineDot.astro";
+import TimelineConnector from "../ui/Timeline/TimelineConnector.astro";
+import TimelineContent from "../ui/Timeline/TimelineContent.astro";
+import TimelineContentLabel from "../ui/Timeline/TimelineContentLabel.astro";
+
+export type TimelineEvent = {
+  year: number;
+  event: string;
+  description?: string;
+  label?: string;
+  minor?: boolean;
+};
+
+interface Props {
+  events: TimelineEvent[];
+}
+
+const { events } = Astro.props;
+
+type TimelineEventProcessed = TimelineEvent & { duration: number };
+
+const eventsProcessed: TimelineEventProcessed[] = events.map((item, index) => ({
+  ...item,
+  duration: (events[index + 1]?.year || new Date().getFullYear()) - item.year,
+}));
+---
+
+<TimelineRoot>
+  <TimelineItem>
+    <TimelineSeparator slot="separator">
+      <TimelineConnector />
+    </TimelineSeparator>
+  </TimelineItem>
+  {
+    eventsProcessed.map((item) => (
+      <TimelineItem key={item.year} height={40 + item.duration * 0.4}>
+        <TimelineOppositeContent slot="opposite-content">
+          {item.event}
+
+          {item.description && (
+            <TimelineOppositeContentSecondary>
+              {item.description}
+            </TimelineOppositeContentSecondary>
+          )}
+        </TimelineOppositeContent>
+        <TimelineSeparator slot="separator">
+          <TimelineDot variant={item.minor ? "minor" : "regular"} />
+          <TimelineConnector />
+        </TimelineSeparator>
+        <TimelineContent slot="content">
+          {item.year}
+          {item.label && (
+            <TimelineContentLabel>{item.label}</TimelineContentLabel>
+          )}
+        </TimelineContent>
+      </TimelineItem>
+    ))
+  }
+</TimelineRoot>

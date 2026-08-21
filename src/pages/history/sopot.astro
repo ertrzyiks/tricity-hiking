@@ -1,0 +1,109 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CityTimeline, {
+  type TimelineEvent,
+} from "../../components/history/CityTimeline.astro";
+import HistoryCityTabs from "../../components/history/HistoryCityTabs.astro";
+
+const timelineConfig: TimelineEvent[] = [
+  {
+    year: 1283,
+    event: "First record of Sopot",
+    label: "Pomerelian dukes",
+    description:
+      "The fishing village, granted to the Cistercian abbey in Oliwa, appears in a written document for the first time under the name 'Sopoth'.",
+  },
+  {
+    year: 1466,
+    event: "Second Peace of Thorn",
+    label: "Poland",
+    minor: true,
+    description:
+      "After the Thirteen Years' War, the region returns from Teutonic control to the Kingdom of Poland.",
+  },
+  {
+    year: 1772,
+    event: "First Partition of Poland",
+    label: "Prussia",
+    description:
+      "Sopot, then a village of a few hundred people, is annexed by the Kingdom of Prussia.",
+  },
+  {
+    year: 1823,
+    event: "Haffner opens the first bathing house",
+    label: "Prussia",
+    minor: true,
+    description:
+      "Physician Jean Georg Haffner builds a bathing establishment and promotes sea air and brine baths, laying the foundation of Sopot as a health resort.",
+  },
+  {
+    year: 1901,
+    event: "City rights granted",
+    label: "Prussia",
+    description:
+      "Emperor Wilhelm II grants Zoppot city rights, formalising its status as a fashionable Baltic spa town.",
+  },
+  {
+    year: 1920,
+    event: "Treaty of Versailles",
+    label: "Free City (Versailles)",
+    description: "Sopot becomes part of the Free City of Danzig.",
+  },
+  {
+    year: 1928,
+    event: "Pier extended to 512 metres",
+    label: "Free City (Versailles)",
+    minor: true,
+    description:
+      "The Sopot pier reaches its current length, becoming the longest wooden pier on the Baltic coast.",
+  },
+  {
+    year: 1939,
+    event: "Invasion of Poland",
+    label: "Nazi Germany",
+    description: "The Free City is annexed by Nazi Germany.",
+  },
+  {
+    year: 1945,
+    event: "Liberation of Sopot",
+    label: "Poland",
+    description:
+      "The Red Army enters the city on 23 March; Sopot is restored to Poland.",
+  },
+  {
+    year: 1961,
+    event: "First Sopot International Song Festival",
+    label: "Poland",
+    minor: true,
+    description:
+      "The song contest, later held at the Forest Opera, grows into one of the best-known music festivals in the Eastern Bloc.",
+  },
+  {
+    year: 1999,
+    event: "Visit of Pope John Paul II",
+    label: "Poland",
+    minor: true,
+    description:
+      "Around 800,000 pilgrims gather in Sopot for a papal mass, one of the largest gatherings in the city's history.",
+  },
+];
+---
+
+<Layout title={`Overview of the major events in the history of Sopot`}>
+  <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
+    <h2 class="text-3xl my-4">History</h2>
+
+    <HistoryCityTabs />
+
+    <p class="text-lg my-4">
+      The timeline below presents the key events in the history of Sopot, from a
+      small fishing village to Poland's best-known seaside resort. On the left
+      there is a title and brief summary of the event, while on the right there
+      is the year and the political entity that administered Sopot at that time.
+      The length of the vertical line roughly corresponds to the duration
+      between events.
+    </p>
+
+    <CityTimeline events={timelineConfig} />
+  </div>
+</Layout>

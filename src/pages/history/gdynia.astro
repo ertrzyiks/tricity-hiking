@@ -1,0 +1,97 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CityTimeline, {
+  type TimelineEvent,
+} from "../../components/history/CityTimeline.astro";
+import HistoryCityTabs from "../../components/history/HistoryCityTabs.astro";
+
+const timelineConfig: TimelineEvent[] = [
+  {
+    year: 1253,
+    event: "First record of Gdynia",
+    label: "Pomerelian dukes",
+    minor: true,
+    description:
+      "The settlement first appears in historical records as a small Kashubian fishing village on the Bay of Gdańsk.",
+  },
+  {
+    year: 1920,
+    event: "Treaty of Versailles",
+    label: "Poland",
+    description:
+      "Poland regains independence and access to the Baltic through the narrow Polish Corridor, but without a major seaport of its own. Gdynia, still a village of around 1,000 people, is chosen as the site for a new one.",
+  },
+  {
+    year: 1923,
+    event: "First part of the port opens",
+    label: "Poland",
+    minor: true,
+    description:
+      "President Stanisław Wojciechowski opens the first basin of the new port; the French ship Kentucky becomes the first vessel to dock.",
+  },
+  {
+    year: 1926,
+    event: "City rights granted",
+    label: "Poland",
+    description:
+      "Gdynia is officially granted city status, capping a rapid transformation from fishing village into a booming port town.",
+  },
+  {
+    year: 1938,
+    event: "Busiest port on the Baltic",
+    label: "Poland",
+    minor: true,
+    description:
+      "Barely two decades after construction began, Gdynia overtakes Danzig to become the largest and most modern port on the Baltic Sea, handling nearly half of Poland's foreign trade.",
+  },
+  {
+    year: 1939,
+    event: "Invasion and occupation",
+    label: "Nazi Germany",
+    description:
+      "German forces capture the city after a fierce defense. It is annexed to the Reich, renamed Gotenhafen, and most Polish residents are expelled.",
+  },
+  {
+    year: 1945,
+    event: "Liberation of Gdynia",
+    label: "Poland",
+    description:
+      "The Red Army, fighting alongside Polish troops, liberates the heavily damaged city on 28 March.",
+  },
+  {
+    year: 1970,
+    event: "December 1970 protests",
+    label: "Poland (PRL)",
+    description:
+      "Shipyard workers' demonstrations against sudden price rises are violently suppressed by the army and police, killing dozens. The events become a defining moment on the road to the Solidarity movement.",
+  },
+  {
+    year: 2026,
+    event: "Modernist city centre inscribed by UNESCO",
+    label: "Poland",
+    minor: true,
+    description:
+      "On the centenary of its city rights, Gdynia's interwar modernist centre is added to the UNESCO World Heritage List, recognising the streamlined, ocean-liner-inspired architecture built almost from scratch between the wars.",
+  },
+];
+---
+
+<Layout title={`Overview of the major events in the history of Gdynia`}>
+  <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
+    <h2 class="text-3xl my-4">History</h2>
+
+    <HistoryCityTabs />
+
+    <p class="text-lg my-4">
+      The timeline below presents the key events in the history of Gdynia, a
+      city built almost from nothing in the 20th century. On the left there is a
+      title and brief summary of the event, while on the right there is the year
+      and the political entity that administered Gdynia at that time. The length
+      of the vertical line roughly corresponds to the duration between events —
+      note the centuries Gdynia spent as a quiet fishing village before its
+      explosive growth after 1920.
+    </p>
+
+    <CityTimeline events={timelineConfig} />
+  </div>
+</Layout>
