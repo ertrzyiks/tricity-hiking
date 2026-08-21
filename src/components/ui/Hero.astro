@@ -166,7 +166,11 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
     const toPercent = (value: number, axisSize: number) => `${(value / axisSize) * 100}%`;
 
     // Plays a single start -> draw -> hold -> fade cycle on one pool slot.
-    function playTrail(index: number) {
+    // With `instant: true` the start/draw phases are skipped entirely - the
+    // trail appears already fully drawn, then only holds and fades out like
+    // normal. Used to seed the very first trails on page load so the strip
+    // isn't empty while it waits for a full draw-in animation to play.
+    function playTrail(index: number, { instant = false }: { instant?: boolean } = {}) {
       const path = document.getElementById(`hero-trail-path-${index}`);
       const reveal = document.getElementById(`hero-trail-reveal-${index}`);
       const startDot = document.getElementById(`hero-trail-start-${index}`);
@@ -203,7 +207,7 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       // dashed path in the direction it's being "walked".
       reveal.style.transformOrigin = reversed ? "100% 50%" : "0% 50%";
       reveal.style.transition = "none";
-      reveal.style.transform = "scaleX(0)";
+      reveal.style.transform = instant ? "scaleX(1)" : "scaleX(0)";
 
       startDot.style.left = toPercent(x1, VIEWBOX_WIDTH);
       startDot.style.top = toPercent(y1, VIEWBOX_HEIGHT);
@@ -211,32 +215,36 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       endDot.style.top = toPercent(y2, VIEWBOX_HEIGHT);
       startDot.style.transition = "none";
       endDot.style.transition = "none";
-      startDot.style.opacity = "0";
-      endDot.style.opacity = "0";
+      startDot.style.opacity = instant ? "1" : "0";
+      endDot.style.opacity = instant ? "1" : "0";
 
-      // 1. Reveal the start point.
-      requestAnimationFrame(() => {
-        if (cancelled) return;
-        startDot.style.transition = "opacity 400ms ease";
-        startDot.style.opacity = "1";
-      });
+      if (!instant) {
+        // 1. Reveal the start point.
+        requestAnimationFrame(() => {
+          if (cancelled) return;
+          startDot.style.transition = "opacity 400ms ease";
+          startDot.style.opacity = "1";
+        });
 
-      // 2. Draw the curvy dashed line towards the end point.
-      schedule(() => {
-        if (cancelled) return;
-        reveal.style.transition = `transform ${drawDuration}ms ease-in-out`;
-        reveal.style.transform = "scaleX(1)";
-      }, drawDelay);
+        // 2. Draw the curvy dashed line towards the end point.
+        schedule(() => {
+          if (cancelled) return;
+          reveal.style.transition = `transform ${drawDuration}ms ease-in-out`;
+          reveal.style.transform = "scaleX(1)";
+        }, drawDelay);
 
-      // 3. Reveal the end point once the line has finished drawing.
-      schedule(() => {
-        if (cancelled) return;
-        endDot.style.transition = "opacity 100ms ease";
-        endDot.style.opacity = "1";
-      }, drawDelay + drawDuration);
+        // 3. Reveal the end point once the line has finished drawing.
+        schedule(() => {
+          if (cancelled) return;
+          endDot.style.transition = "opacity 100ms ease";
+          endDot.style.opacity = "1";
+        }, drawDelay + drawDuration);
+      }
 
       // 4. Hold, then fade the whole thing out. The dots fade out faster
-      // than the line itself.
+      // than the line itself. An instant trail skips straight to the hold,
+      // since it never played a draw-in.
+      const holdStart = instant ? 0 : drawDelay + drawDuration;
       schedule(() => {
         if (cancelled) return;
         path.style.transition = `opacity ${fadeDuration}ms ease`;
@@ -245,7 +253,7 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
         path.style.opacity = "0";
         startDot.style.opacity = "0";
         endDot.style.opacity = "0";
-      }, drawDelay + drawDuration + holdDuration);
+      }, holdStart + holdDuration);
     }
 
     // Cycles through the pool round-robin so a slot is only reused once
@@ -258,7 +266,16 @@ const trailTracks = Array.from({ length: TRAIL_SLOT_COUNT }, (_, i) => i);
       schedule(spawnNext, rand(SPAWN_INTERVAL_MIN, SPAWN_INTERVAL_MAX));
     }
 
-    schedule(spawnNext, rand(0, 400));
+    // Seed the strip immediately on first paint instead of leaving it empty
+    // while the very first trail plays out its multi-second draw-in: the
+    // first couple of trails appear already fully drawn, hold, and fade out
+    // like normal. The regular spawn loop takes over from there.
+    const seedCount = Math.min(2, slotCount);
+    for (let i = 0; i < seedCount; i++) {
+      playTrail(nextSlot, { instant: true });
+      nextSlot = (nextSlot + 1) % slotCount;
+    }
+    schedule(spawnNext, rand(SPAWN_INTERVAL_MIN, SPAWN_INTERVAL_MAX));
 
     return () => {
       cancelled = true;
