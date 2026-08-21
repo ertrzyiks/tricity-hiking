@@ -41,7 +41,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
               {post.data.title}
             </span>
             <span class="group-hover:text-green-600" slot="description">
-              {post.data.description}
+              {post.data.listDescription ?? post.data.description}
             </span>
           </ListCardItem>
         ))
