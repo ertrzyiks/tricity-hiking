@@ -4,6 +4,7 @@ import CityTimeline, {
   type TimelineEvent,
 } from "../../components/history/CityTimeline.astro";
 import HistoryCityTabs from "../../components/history/HistoryCityTabs.astro";
+import HistoryTimelineLegend from "../../components/history/HistoryTimelineLegend.astro";
 
 const timelineConfig: TimelineEvent[] = [
   {
@@ -50,13 +51,10 @@ const timelineConfig: TimelineEvent[] = [
 
     <p class="text-lg my-4">
       The timeline below presents the key events in the history of Gdynia, a
-      city built almost from nothing in the 20th century. On the left there is a
-      title and brief summary of the event, while on the right there is the year
-      and the political entity that administered Gdynia at that time. The length
-      of the vertical line roughly corresponds to the duration between events —
-      note the centuries Gdynia spent as a quiet fishing village before its
-      explosive growth after 1920.
+      city built almost from nothing in the 20th century.
     </p>
+
+    <HistoryTimelineLegend />
 
     <CityTimeline events={timelineConfig} />
   </div>

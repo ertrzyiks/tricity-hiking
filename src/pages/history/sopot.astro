@@ -4,6 +4,7 @@ import CityTimeline, {
   type TimelineEvent,
 } from "../../components/history/CityTimeline.astro";
 import HistoryCityTabs from "../../components/history/HistoryCityTabs.astro";
+import HistoryTimelineLegend from "../../components/history/HistoryTimelineLegend.astro";
 
 const timelineConfig: TimelineEvent[] = [
   {
@@ -69,12 +70,10 @@ const timelineConfig: TimelineEvent[] = [
 
     <p class="text-lg my-4">
       The timeline below presents the key events in the history of Sopot, from a
-      small fishing village to Poland's best-known seaside resort. On the left
-      there is a title and brief summary of the event, while on the right there
-      is the year and the political entity that administered Sopot at that time.
-      The length of the vertical line roughly corresponds to the duration
-      between events.
+      small fishing village to Poland's best-known seaside resort.
     </p>
+
+    <HistoryTimelineLegend />
 
     <CityTimeline events={timelineConfig} />
   </div>
