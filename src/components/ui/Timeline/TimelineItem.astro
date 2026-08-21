@@ -1,5 +1,5 @@
 ---
-const { height, transitionName } = Astro.props;
+const { height } = Astro.props;
 ---
 
 <li
@@ -9,7 +9,6 @@ const { height, transitionName } = Astro.props;
     "before-filler": !Astro.slots.has("opposite-content"),
     "after-filler": !Astro.slots.has("content"),
   }}
-  transition:name={transitionName}
 >
   <slot name="opposite-content" />
   <slot name="separator" />

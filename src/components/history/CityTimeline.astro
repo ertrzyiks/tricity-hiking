@@ -15,7 +15,6 @@ export type TimelineEvent = {
   description?: string;
   label?: string;
   minor?: boolean;
-  transitionName?: string;
 };
 
 interface Props {
@@ -40,11 +39,7 @@ const eventsProcessed: TimelineEventProcessed[] = events.map((item, index) => ({
   </TimelineItem>
   {
     eventsProcessed.map((item) => (
-      <TimelineItem
-        key={item.year}
-        height={40 + item.duration * 0.4}
-        transitionName={item.transitionName}
-      >
+      <TimelineItem key={item.year} height={40 + item.duration * 0.4}>
         <TimelineOppositeContent slot="opposite-content">
           {item.event}
 
