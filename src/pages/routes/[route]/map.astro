@@ -1,6 +1,6 @@
 ---
 import type { InferGetStaticParamsType } from "astro";
-import { getCollection, getEntry, render } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import Layout from "../../../layouts/Layout.astro";
 import { RouteMap } from "../../../components/ui/RouteMap/RouteMap";
 import { MapLoadingSpinner } from "../../../components/ui/MapLoadingSpinner/MapLoadingSpinner";
@@ -36,7 +36,6 @@ if (!entry) {
 }
 
 const geojson = await getEntry(entry.data.geojson);
-const { Content } = await render(entry);
 
 const attitudes = geojson.data.features[0].geometry.coordinates
   .map((coord) => {

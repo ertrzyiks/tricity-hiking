@@ -1,5 +1,5 @@
-import { type JSX } from "preact";
-import { useRef, useLayoutEffect, useEffect } from "preact/hooks";
+import type { TargetedMouseEvent, TargetedTouchEvent } from "preact";
+import { useRef, useLayoutEffect } from "preact/hooks";
 import { useStore } from "@nanostores/preact";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
 import { setPoint, resetPoint, $routePoints } from "../../../atoms/routePoints";
@@ -31,7 +31,7 @@ export const FullElevationChart = ({
     resetPoint();
   }, []);
 
-  const handleMouseMove = (e: JSX.TargetedMouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: TargetedMouseEvent<HTMLDivElement>) => {
     if (!chartRef.current) {
       return;
     }
@@ -49,7 +49,7 @@ export const FullElevationChart = ({
     resetPoint();
   };
 
-  const handleTouchMove = (e: JSX.TargetedTouchEvent<HTMLDivElement>) => {
+  const handleTouchMove = (e: TargetedTouchEvent<HTMLDivElement>) => {
     if (!chartRef.current) {
       return;
     }

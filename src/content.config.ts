@@ -1,5 +1,6 @@
-import { z, reference, defineCollection } from "astro:content";
+import { reference, defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 const routesCollection = defineCollection({
   loader: glob({
