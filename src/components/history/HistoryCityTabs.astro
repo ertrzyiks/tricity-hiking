@@ -1,0 +1,13 @@
+---
+import Tab from "../ui/Tab.astro";
+
+const cities = [
+  { href: "/history/", label: "Gdańsk" },
+  { href: "/history/sopot/", label: "Sopot" },
+  { href: "/history/gdynia/", label: "Gdynia" },
+];
+---
+
+<div role="tablist" class="flex border-b border-gray-200 mb-4">
+  {cities.map((city) => <Tab href={city.href}>{city.label}</Tab>)}
+</div>

@@ -1,0 +1,81 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CityTimeline, {
+  type TimelineEvent,
+} from "../../components/history/CityTimeline.astro";
+import HistoryCityTabs from "../../components/history/HistoryCityTabs.astro";
+
+const timelineConfig: TimelineEvent[] = [
+  {
+    year: 1283,
+    event: "First record of Sopoth",
+    label: "Pomerelian dukes",
+    description:
+      "The Pomerelian duke Mściwój II gives the small fishing village to the Cistercian monks of Oliwa.",
+  },
+  {
+    year: 1308,
+    event: "Danzig massacre",
+    label: "Teutonic Order",
+    description:
+      "Teutonic Order takes over Danzig. Sopot comes under Teutonic rule, while remaining the property of the Cistercian monastery of Oliwa.",
+  },
+  {
+    year: 1454,
+    event: "Danzig rebellion",
+    label: "Poland",
+  },
+  {
+    year: 1772,
+    event: "First Partition of Poland",
+    label: "Prussia",
+    description: "Sopot is annexed by the Kingdom of Prussia.",
+  },
+  {
+    year: 1823,
+    event: "Haffner opens the first bathing house",
+    label: "Prussia",
+    minor: true,
+  },
+  {
+    year: 1901,
+    event: "City rights granted",
+    label: "Prussia",
+    minor: true,
+  },
+  {
+    year: 1920,
+    event: "Treaty of Versailles",
+    label: "Free City (Versailles)",
+  },
+  {
+    year: 1939,
+    event: "Invasion of Poland",
+    label: "Nazi Germany",
+  },
+  {
+    year: 1945,
+    event: "Liberation of Sopot",
+    label: "Poland",
+  },
+];
+---
+
+<Layout title={`Overview of the major events in the history of Sopot`}>
+  <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
+    <h2 class="text-3xl my-4">History</h2>
+
+    <HistoryCityTabs />
+
+    <p class="text-lg my-4">
+      The timeline below presents the key events in the history of Sopot, from a
+      small fishing village to Poland's best-known seaside resort. On the left
+      there is a title and brief summary of the event, while on the right there
+      is the year and the political entity that administered Sopot at that time.
+      The length of the vertical line roughly corresponds to the duration
+      between events.
+    </p>
+
+    <CityTimeline events={timelineConfig} />
+  </div>
+</Layout>

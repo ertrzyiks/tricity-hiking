@@ -1,0 +1,63 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CityTimeline, {
+  type TimelineEvent,
+} from "../../components/history/CityTimeline.astro";
+import HistoryCityTabs from "../../components/history/HistoryCityTabs.astro";
+
+const timelineConfig: TimelineEvent[] = [
+  {
+    year: 1920,
+    event: "Treaty of Versailles",
+    label: "Poland",
+  },
+  {
+    year: 1923,
+    event: "First part of the port opens",
+    label: "Poland",
+    minor: true,
+  },
+  {
+    year: 1926,
+    event: "City rights granted",
+    label: "Poland",
+    minor: true,
+  },
+  {
+    year: 1939,
+    event: "Invasion and occupation",
+    label: "Nazi Germany",
+  },
+  {
+    year: 1945,
+    event: "Liberation of Gdynia",
+    label: "Poland",
+  },
+  {
+    year: 2026,
+    event: "Modernist city centre inscribed by UNESCO",
+    label: "Poland",
+    minor: true,
+  },
+];
+---
+
+<Layout title={`Overview of the major events in the history of Gdynia`}>
+  <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
+    <h2 class="text-3xl my-4">History</h2>
+
+    <HistoryCityTabs />
+
+    <p class="text-lg my-4">
+      The timeline below presents the key events in the history of Gdynia, a
+      city built almost from nothing in the 20th century. On the left there is a
+      title and brief summary of the event, while on the right there is the year
+      and the political entity that administered Gdynia at that time. The length
+      of the vertical line roughly corresponds to the duration between events —
+      note the centuries Gdynia spent as a quiet fishing village before its
+      explosive growth after 1920.
+    </p>
+
+    <CityTimeline events={timelineConfig} />
+  </div>
+</Layout>

@@ -1,0 +1,105 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CityTimeline, {
+  type TimelineEvent,
+} from "../../components/history/CityTimeline.astro";
+import HistoryCityTabs from "../../components/history/HistoryCityTabs.astro";
+
+const timelineConfig: TimelineEvent[] = [
+  {
+    year: 997,
+    event: "First record of GYDDANYZC",
+    label: "Mostly Pomerelian dukes",
+  },
+  {
+    year: 1263,
+    event: "City rights granted",
+    label: "Pomerelian dukes",
+    minor: true,
+  },
+  {
+    year: 1308,
+    event: "Danzig massacre",
+    label: "Teutonic Order",
+    description:
+      "Teutonic Order helps to relieve Danzing from a siege, but the ally quickly turns into an enemy and takes over the city.",
+  },
+  {
+    year: 1410,
+    event: "Battle of Grunwald",
+    description:
+      "Danzig pays homage to Polish King, but returns to Teutonic control a couple months after",
+    label: "Teutonic Order",
+    minor: true,
+  },
+  {
+    year: 1454,
+    event: "Danzig rebellion",
+    label: "Poland",
+    description:
+      "Danzig rebels against the Teutonic Order and soon after supports Polish king in the Thirteen Years' War.",
+  },
+  {
+    year: 1793,
+    event: "Second Partition of Poland",
+    label: "Prussia",
+    description:
+      "The annexation of Polish territories by Russia and Prussia occurs as a result of the lost Russo-Polish war a year earlier. The citizens of Gdańsk try to resist the new Prussian authorities, but they are quickly suppressed.",
+  },
+  {
+    year: 1807,
+    event: "Siege of Danzig",
+    label: "Free City (Napoleonic)",
+  },
+  {
+    year: 1814,
+    event: "Siege of Danzig",
+    label: "Prussia",
+  },
+  {
+    year: 1871,
+    event: "Unification of Germany",
+    label: "Germany",
+    minor: true,
+  },
+  {
+    year: 1918,
+    event: "Weimar Republic is established",
+    label: "Weimar Republic",
+    minor: true,
+  },
+  {
+    year: 1920,
+    event: "Treaty of Versailles",
+    label: "Free City (Versailles)",
+  },
+  {
+    year: 1939,
+    event: "Invasion of Poland",
+    label: "Nazi Germany",
+  },
+  {
+    year: 1945,
+    event: "Liberation of Danzig",
+    label: "Poland",
+  },
+];
+---
+
+<Layout title={`Overview of the major events in the history of Gdańsk`}>
+  <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
+    <h2 class="text-3xl my-4">History</h2>
+
+    <HistoryCityTabs />
+
+    <p class="text-lg my-4">
+      The timeline below presents the key events in the history of Gdańsk. On
+      the left there is a title and brief summary of the event, while on the
+      right there is the year and the political entity that ruled Gdańsk at that
+      time. The length of the vertical line roughly corresponds to the duration
+      of the rule.
+    </p>
+
+    <CityTimeline events={timelineConfig} />
+  </div>
+</Layout>
