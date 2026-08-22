@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
+import type { Map as MapLibreMap } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { createMap } from "../../../services/createMap";
@@ -16,7 +17,7 @@ import {
   generatePerpendicularLineSVG,
   generateLoopMarkerSVG,
 } from "../../../services/routeMarkers";
-import { MAP_MARKER_COLOR } from "../../../constants/colors";
+import { MAP_MARKER_COLOR, ROUTE_LINE_COLOR } from "../../../constants/colors";
 
 // How far past the route's own bounding box the map can still be panned:
 // a fraction of that box's width/height on each side, plus a flat buffer.
@@ -25,11 +26,31 @@ const MAX_BOUNDS_EXTRA_KM = 30;
 
 export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<MapLibreMap | null>(null);
   const [indicators, setIndicators] = useState<OffscreenIndicator[]>([]);
   // Stays false until the map has finished loading everything it needs for
   // the initial view, so the blurred static preview underneath keeps
   // showing instead of a half-loaded tile mosaic.
   const [isReady, setIsReady] = useState(false);
+
+  const [lineColor, setLineColor] = useState(ROUTE_LINE_COLOR);
+  // Mirrors `lineColor` so the mount effect below (which only runs once, on
+  // mount) can read whatever color was picked before the map finished
+  // loading, without needing to re-run and rebuild the whole map every time
+  // the color changes.
+  const lineColorRef = useRef(lineColor);
+
+  // Applies color changes to the already-rendered map. The "lines" layer is
+  // added synchronously with the initial color (see below), so this only
+  // needs to guard against a color change firing before that's happened.
+  useEffect(() => {
+    lineColorRef.current = lineColor;
+
+    const map = mapInstanceRef.current;
+    if (map && map.getLayer("lines")) {
+      map.setPaintProperty("lines", "line-color", lineColor);
+    }
+  }, [lineColor]);
 
   useEffect(() => {
     if (mapRef.current === null) return;
@@ -74,6 +95,8 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
         maxBounds,
       },
       async (map) => {
+        mapInstanceRef.current = map;
+
         map.addSource("lines", {
           type: "geojson",
           data: route,
@@ -103,7 +126,7 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
           },
           paint: {
             "line-width": 5,
-            "line-color": "#e11d48",
+            "line-color": lineColorRef.current,
           },
         });
 
@@ -263,6 +286,7 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
         });
 
         return () => {
+          mapInstanceRef.current = null;
           map.off("move", updateIndicators);
           cleanupHighlighter?.();
         };
@@ -284,7 +308,7 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
     // beneath that - is what makes the spinner disappear too. No isReady
     // wiring is needed here for the spinner specifically.
     <div
-      class={`h-full transition-opacity duration-300 ${
+      class={`relative h-full transition-opacity duration-300 ${
         isReady ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >
@@ -298,6 +322,20 @@ export const RouteMap = ({ route }: { route: GeoJSON.FeatureCollection }) => {
           />
         ))}
       </div>
+
+      <label
+        class="absolute top-2 left-2 flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white opacity-75 shadow ring-1 ring-black/10 transition-opacity hover:opacity-100"
+        aria-label="Route line color"
+      >
+        <input
+          type="color"
+          value={lineColor}
+          onInput={(event) =>
+            setLineColor((event.currentTarget as HTMLInputElement).value)
+          }
+          class="h-10 w-10 cursor-pointer border-0 bg-transparent p-0"
+        />
+      </label>
     </div>
   );
 };
