@@ -12,7 +12,7 @@ import { TrailAttributeName } from "../TrailAttributeName/TrailAttributeName";
 import { TrailAttributeValue } from "../TrailAttributeValue/TrailAttributeValue";
 import { trackEvent } from "../../../services/analytics";
 import { generateNumberMarkerSVG } from "../../../services/routeMarkers";
-import { MAP_MARKER_COLOR } from "../../../constants/colors";
+import { MAP_MARKER_COLOR, ROUTE_LINE_COLOR } from "../../../constants/colors";
 import {
   computeOffscreenIndicators,
   type OffscreenIndicator,
@@ -36,6 +36,26 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
   // showing instead of a half-loaded tile mosaic.
   const [isReady, setIsReady] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<maplibregl.Map | null>(null);
+
+  const [lineColor, setLineColor] = useState(ROUTE_LINE_COLOR);
+  // Mirrors `lineColor` so the mount effect below (which only runs once, on
+  // mount) can read whatever color was picked before the map finished
+  // loading, without needing to re-run and rebuild the whole map every time
+  // the color changes.
+  const lineColorRef = useRef(lineColor);
+
+  // Applies color changes to the already-rendered map. The "lines" layer is
+  // added synchronously with the initial color (see below), so this only
+  // needs to guard against a color change firing before that's happened.
+  useEffect(() => {
+    lineColorRef.current = lineColor;
+
+    const map = mapInstanceRef.current;
+    if (map && map.getLayer("lines")) {
+      map.setPaintProperty("lines", "line-color", lineColor);
+    }
+  }, [lineColor]);
 
   useEffect(() => {
     if (mapRef.current === null) return;
@@ -77,6 +97,8 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
       maxZoom: 15,
       maxBounds,
     });
+
+    mapInstanceRef.current = map;
 
     map.dragRotate.disable();
     map.touchZoomRotate.disableRotation();
@@ -157,7 +179,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
             15,
             ["case", ["boolean", ["feature-state", "hover"], false], 6, 4],
           ],
-          "line-color": "#e11d48",
+          "line-color": lineColorRef.current,
         },
       });
 
@@ -361,6 +383,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
     });
 
     return () => {
+      mapInstanceRef.current = null;
       if (updateIndicators) map.off("move", updateIndicators);
     };
   }, []);
@@ -383,7 +406,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
     // beneath that - is what makes the spinner disappear too. No isReady
     // wiring is needed here for the spinner specifically.
     <div
-      class={`h-full transition-opacity duration-300 ${
+      class={`relative h-full transition-opacity duration-300 ${
         isReady ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >
@@ -453,6 +476,20 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
           </div>
         )}
       </div>
+
+      <label
+        class="absolute top-2 left-2 flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white opacity-75 shadow ring-1 ring-black/10 transition-opacity hover:opacity-100"
+        aria-label="Route line color"
+      >
+        <input
+          type="color"
+          value={lineColor}
+          onInput={(event) =>
+            setLineColor((event.currentTarget as HTMLInputElement).value)
+          }
+          class="h-10 w-10 cursor-pointer border-0 bg-transparent p-0"
+        />
+      </label>
     </div>
   );
 };
