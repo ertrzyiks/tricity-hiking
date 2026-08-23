@@ -44,6 +44,12 @@ All commands are run from the root of the project, from a terminal:
 | `pnpm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `pnpm run astro -- --help` | Get help using the Astro CLI                     |
 
+## 🔭 Environment variables
+
+| Variable            | Purpose                                                                                                                                                                                                                                                                                                                                                                     |
+| :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SENTRY_AUTH_TOKEN` | Auth token used to upload source maps to Sentry during `pnpm run build`. Not required for `pnpm run dev`; source maps just won't be uploaded without it. Create one following [Sentry's auth token guide](https://docs.sentry.io/product/accounts/auth-tokens/#organization-auth-tokens) and set it locally in an untracked `.env` file or as a secret on your deploy host. |
+
 ## 📝 Working with Routes
 
 ### Creating a new route from a draft

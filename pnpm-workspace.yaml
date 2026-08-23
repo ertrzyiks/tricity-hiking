@@ -4,6 +4,7 @@ overrides:
 minimumReleaseAge: 43200
 
 allowBuilds:
+  '@sentry/cli': true
   esbuild: true
   puppeteer: true
   sharp: true
