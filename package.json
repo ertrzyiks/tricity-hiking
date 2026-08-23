@@ -28,6 +28,7 @@
     "@iconify-json/mdi": "1.2.3",
     "@nanostores/preact": "1.1.0",
     "@piwikpro/tracking-base-library": "1.7.1",
+    "@sentry/astro": "10.68.0",
     "@statsig/js-client": "3.33.3",
     "@statsig/session-replay": "3.33.3",
     "@statsig/web-analytics": "3.33.3",

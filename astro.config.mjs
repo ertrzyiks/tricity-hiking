@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import sentry from "@sentry/astro";
 import preact from "@astrojs/preact";
 import mdx from "@astrojs/mdx";
 import icon from "astro-icon";
@@ -18,6 +19,16 @@ export default defineConfig({
     host: "0.0.0.0",
   },
   integrations: [
+    // Sentry must be the first integration so it can hook into the others.
+    // Runtime init (DSN) lives in sentry.client.config.mjs; these options are
+    // only for the Sentry Vite plugin's build-time source map upload. The
+    // auth token is a real secret, unlike the DSN, so it comes from the
+    // environment rather than being committed.
+    sentry({
+      org: "ertrzyiks",
+      project: "tricity-hiking",
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+    }),
     mdx(),
     preact(),
     icon(),
