@@ -55,6 +55,7 @@ export const PreviewRouteMap = ({
       map.addSource("lines", {
         type: "geojson",
         data: route,
+        lineMetrics: true,
       });
 
       map.addLayer({
@@ -81,7 +82,15 @@ export const PreviewRouteMap = ({
         },
         paint: {
           "line-width": 5,
-          "line-color": "#e11d48",
+          "line-gradient": [
+            "interpolate",
+            ["linear"],
+            ["line-progress"],
+            0,
+            "#c53c00",
+            1,
+            "#f05100",
+          ],
         },
       });
 

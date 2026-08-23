@@ -96,6 +96,7 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
       map.addSource("lines", {
         type: "geojson",
         data: routes,
+        lineMetrics: true,
       });
 
       map.addLayer({
@@ -158,7 +159,15 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
             15,
             ["case", ["boolean", ["feature-state", "hover"], false], 6, 4],
           ],
-          "line-color": "#e11d48",
+          "line-gradient": [
+            "interpolate",
+            ["linear"],
+            ["line-progress"],
+            0,
+            "#c53c00",
+            1,
+            "#f05100",
+          ],
         },
       });
 
