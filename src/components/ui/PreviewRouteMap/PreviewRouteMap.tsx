@@ -4,6 +4,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "../HomeMap/mapStyle";
 import { getBounds } from "../../../services/getBounds";
+import { orientLineStringsWestToEast } from "../../../services/orientLineStringsWestToEast";
 import pointImage from "../../../assets/places/point.png";
 
 export const PreviewRouteMap = ({
@@ -54,7 +55,9 @@ export const PreviewRouteMap = ({
     map.on("load", async () => {
       map.addSource("lines", {
         type: "geojson",
-        data: route,
+        // Reoriented so the gradient below reads left-to-right on screen
+        // rather than following the trail's recorded start point.
+        data: orientLineStringsWestToEast(route),
         lineMetrics: true,
       });
 

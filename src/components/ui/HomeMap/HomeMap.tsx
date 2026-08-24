@@ -6,6 +6,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { style } from "./mapStyle";
 import { getBounds } from "../../../services/getBounds";
 import { padBounds } from "../../../services/padBounds";
+import { orientLineStringsWestToEast } from "../../../services/orientLineStringsWestToEast";
 import { mToKm } from "../../../services/mToKm";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
 import { Button } from "../Button/Button";
@@ -95,7 +96,11 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
 
       map.addSource("lines", {
         type: "geojson",
-        data: routes,
+        // Reoriented so the gradient below reads left-to-right on screen
+        // rather than following each trail's recorded start point; the
+        // untouched `routes` prop stays the source of truth everywhere
+        // else (feature lookups, elevation chart direction, etc.).
+        data: orientLineStringsWestToEast(routes),
         lineMetrics: true,
       });
 
