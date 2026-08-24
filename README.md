@@ -33,22 +33,26 @@ Any static assets, like images, can be placed in the `public/` directory.
 
 All commands are run from the root of the project, from a terminal:
 
-| Command                    | Action                                           |
-| :------------------------- | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm run dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm run build`           | Build your production site to `./dist/`          |
-| `pnpm run preview`         | Preview your build locally, before deploying     |
-| `pnpm run draft2route`     | Convert draft GPX files to new routes            |
-| `pnpm run gpx2json`        | Generate JSON files from GPX routes              |
-| `pnpm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm run astro -- --help` | Get help using the Astro CLI                     |
+| Command                    | Action                                                                                                        |
+| :------------------------- | :------------------------------------------------------------------------------------------------------------ |
+| `pnpm install`             | Installs dependencies                                                                                         |
+| `pnpm run dev`             | Starts local dev server at `localhost:4321`                                                                   |
+| `pnpm run build`           | Build your production site to `./dist/`                                                                       |
+| `pnpm run preview`         | Preview your build locally, before deploying                                                                  |
+| `pnpm run draft2route`     | Convert draft GPX files to new routes                                                                         |
+| `pnpm run gpx2json`        | Generate JSON files from GPX routes                                                                           |
+| `pnpm run astro ...`       | Run CLI commands like `astro add`, `astro check`                                                              |
+| `pnpm run astro -- --help` | Get help using the Astro CLI                                                                                  |
+| `pnpm run test:checks`     | Run the [Checkly](https://www.checklyhq.com) synthetic checks (`__checks__/`) against Checkly's cloud runners |
+| `pnpm run deploy:checks`   | Deploy the Checkly checks so they start running on their own schedule                                         |
 
 ## 🔭 Environment variables
 
-| Variable            | Purpose                                                                                                                                                                                                                                                                                                                                                                     |
-| :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SENTRY_AUTH_TOKEN` | Auth token used to upload source maps to Sentry during `pnpm run build`. Not required for `pnpm run dev`; source maps just won't be uploaded without it. Create one following [Sentry's auth token guide](https://docs.sentry.io/product/accounts/auth-tokens/#organization-auth-tokens) and set it locally in an untracked `.env` file or as a secret on your deploy host. |
+| Variable             | Purpose                                                                                                                                                                                                                                                                                                                                                                     |
+| :------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SENTRY_AUTH_TOKEN`  | Auth token used to upload source maps to Sentry during `pnpm run build`. Not required for `pnpm run dev`; source maps just won't be uploaded without it. Create one following [Sentry's auth token guide](https://docs.sentry.io/product/accounts/auth-tokens/#organization-auth-tokens) and set it locally in an untracked `.env` file or as a secret on your deploy host. |
+| `CHECKLY_API_KEY`    | Auth for `pnpm run test:checks` / `pnpm run deploy:checks` and the `Deploy Checkly checks` workflow. Create one in your [Checkly account settings](https://app.checklyhq.com/settings/user/api-keys) and set it locally in an untracked `.env` file or as a repo secret.                                                                                                    |
+| `CHECKLY_ACCOUNT_ID` | The Checkly account the checks deploy to. Found in your [Checkly account settings](https://app.checklyhq.com/settings/account/general); same places to set it as `CHECKLY_API_KEY`.                                                                                                                                                                                         |
 
 ## 📝 Working with Routes
 
