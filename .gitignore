@@ -136,6 +136,11 @@ dist
 
 .astro
 
+# Playwright, from local `checkly test` / `playwright test` runs
+test-results
+playwright-report
+blob-report
+
 .DS_Store
 
 # Only the clear-renovate-prs skill is checked in; other local/session skills are ignored
