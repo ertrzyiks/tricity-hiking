@@ -1,4 +1,6 @@
-import { runSyntheticCheck } from "./synthetic-check.js";
+import { initSentry, runSyntheticCheck } from "./synthetic-check.js";
+
+initSentry();
 
 const ok = await runSyntheticCheck();
 if (!ok) {
