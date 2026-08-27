@@ -54,7 +54,7 @@
     "@playwright/test": "1.62.0",
     "@tmcw/togeojson": "7.1.2",
     "@xmldom/xmldom": "0.9.10",
-    "checkly": "8.17.1",
+    "checkly": "8.18.0",
     "concurrently": "10.0.4",
     "husky": "9.1.7",
     "lint-staged": "17.2.0",

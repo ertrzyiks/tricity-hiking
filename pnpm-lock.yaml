@@ -100,8 +100,8 @@ importers:
         specifier: 0.9.10
         version: 0.9.10
       checkly:
-        specifier: 8.17.1
-        version: 8.17.1(supports-color@8.1.1)(typescript@6.0.3)
+        specifier: 8.18.0
+        version: 8.18.0(supports-color@8.1.1)(typescript@6.0.3)
       concurrently:
         specifier: 10.0.4
         version: 10.0.4
@@ -2143,8 +2143,8 @@ packages:
   character-reference-invalid@2.0.1:
     resolution: {integrity: sha512-iBZ4F4wRbyORVsu0jPV7gXkOsGYjGHPmAyv+HiHG8gi5PtC9KI2j1+v8/tlibRvjoWX027ypmG/n0HtO5t7unw==}
 
-  checkly@8.17.1:
-    resolution: {integrity: sha512-rAuSceJ7fO1jK81iVUCPGnuoh/QHSP2blC33WT5lKvtMU8m3b6kVQ1maWybxxYFZvCi+YsXQF2uRK/K+Kl5jUg==}
+  checkly@8.18.0:
+    resolution: {integrity: sha512-kGQPt5247Jhs+7BJR8I1WRMTWVZPQVW87CDl/3XF8q2mIklYBVMweLxK73blMXHRL7K64eXgSgS7JjBoTOGXzw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
@@ -6715,7 +6715,7 @@ snapshots:
 
   character-reference-invalid@2.0.1: {}
 
-  checkly@8.17.1(supports-color@8.1.1)(typescript@6.0.3):
+  checkly@8.18.0(supports-color@8.1.1)(typescript@6.0.3):
     dependencies:
       '@oclif/core': 4.13.0
       '@oclif/plugin-help': 6.2.53
