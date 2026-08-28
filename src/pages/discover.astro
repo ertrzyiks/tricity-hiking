@@ -1,0 +1,63 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import { getImage } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import { enhance } from "../services/enhance";
+import { getLineStringFeature } from "../services/getLineStringFeature";
+import { mToKm } from "../services/mToKm";
+import { formatTime } from "../services/formatTime";
+import { CardDeck } from "../components/ui/CardDeck/CardDeck";
+import type { DeckCard } from "../components/ui/CardDeck/types";
+import type { CollectionEntry } from "astro:content";
+
+async function buildDeck(
+  routes: CollectionEntry<"routes">[],
+): Promise<DeckCard[]> {
+  const cards: DeckCard[] = [];
+
+  for (const route of routes) {
+    const geojson = await getEntry(route.data.geojson);
+    const enhancedGeojson = enhance({
+      collection: geojson.data,
+      route: route.data,
+    });
+    const properties =
+      getLineStringFeature({ collection: enhancedGeojson })?.properties ?? {};
+
+    const previewImage = route.data.preview
+      ? await getImage({
+          src: route.data.preview,
+          width: 1200,
+          height: 1600,
+        })
+      : null;
+
+    cards.push({
+      slug: route.id,
+      title: route.data.title,
+      description: route.data.description,
+      previewSrc: previewImage?.src ?? null,
+      distanceKm: mToKm(properties.distance ?? 0),
+      time: formatTime(properties.estimatedTime ?? 0),
+      totalGain: properties.totalGain ?? 0,
+      totalLoss: properties.totalLoss ?? 0,
+    });
+  }
+
+  return cards;
+}
+
+const allRoutes = await getCollection("routes");
+const routes = allRoutes.filter((route) => !route.data.draft);
+
+const decks = {
+  tricity: await buildDeck(routes.filter((route) => route.data.tricity)),
+  nearby: await buildDeck(routes.filter((route) => !route.data.tricity)),
+};
+---
+
+<Layout title="Discover hiking trails near Gdańsk, Sopot, and Gdynia">
+  <div class="max-w-(--breakpoint-md) mx-auto h-[80vh] min-h-[500px]">
+    <CardDeck client:load decks={decks} />
+  </div>
+</Layout>
