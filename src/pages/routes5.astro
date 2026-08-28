@@ -1,0 +1,309 @@
+---
+/**
+ * Variant 5 — Breadcrumb-led minimal chrome.
+ *
+ * Chrome is stripped to a slim bar (logo, search, hamburger) so the map —
+ * the reason people come to this page — gets the vertical space instead
+ * of a tab row. Wayfinding moves into a path directly under the header:
+ * "Tricity Hiking / Routes / Map", each segment a real link up the
+ * hierarchy (classic breadcrumb, Nielsen #1 visibility of system status).
+ *
+ * The last segment doubles as a switcher: its caret opens a small menu of
+ * sibling views, so choosing "Tricity" or "Nearby" happens *in place* of
+ * the current segment rather than needing a whole separate control row —
+ * a pattern borrowed from Notion/Google Drive's path bar. Opening a route
+ * grows the path by one segment and offers "back to list" from the same
+ * menu, so one mechanism serves both switching sibling subviews and
+ * climbing back out of a route.
+ *
+ * All top-level sections still exist, just moved off the persistent bar
+ * and into a full-screen menu behind the hamburger — appropriate here
+ * because, unlike the other variants, this page is optimized for one
+ * section (Routes) rather than for hopping between all of them.
+ */
+import { Icon } from "astro-icon/components";
+import PrototypeLayout from "../layouts/PrototypeLayout.astro";
+import RoutesPrototypeMapPanel from "../components/prototypes/RoutesPrototypeMapPanel.astro";
+import RoutesPrototypeListPanel from "../components/prototypes/RoutesPrototypeListPanel.astro";
+import RoutesPrototypeDetailPanel from "../components/prototypes/RoutesPrototypeDetailPanel.astro";
+import { getRoutesPrototypeData } from "../services/getRoutesPrototypeData";
+import {
+  getPrimarySections,
+  routesSubsections,
+} from "../config/routesPrototypeNav";
+
+const { tricityItems, nearbyItems, mapGeojson } =
+  await getRoutesPrototypeData();
+const primarySections = getPrimarySections("/routes5/");
+---
+
+<PrototypeLayout
+  title="Routes"
+  variantId="routes5"
+  patternName="Breadcrumb-led minimal chrome"
+>
+  <header
+    class="sticky top-0 z-20 bg-white border-b border-solid border-slate-200"
+  >
+    <div
+      class="max-w-(--breakpoint-xl) mx-auto flex items-center justify-between px-2 lg:px-0 py-2"
+    >
+      <a href="/" class="flex items-center gap-2">
+        <Icon name="mdi:hiking" class="w-5 h-5 text-green-600" />
+        <span class="text-sm font-semibold">Tricity Hiking</span>
+      </a>
+      <div class="flex items-center gap-1">
+        <button
+          type="button"
+          aria-label="Search (not wired up in this prototype)"
+          class="p-2 rounded hover:bg-slate-100"
+        >
+          <Icon name="mdi:magnify" class="w-5 h-5 text-slate-500" />
+        </button>
+        <button
+          type="button"
+          data-menu-trigger
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="site-menu"
+          aria-label="Open menu"
+          class="p-2 rounded hover:bg-slate-100"
+        >
+          <Icon name="mdi:menu" class="w-5 h-5 text-slate-700" />
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div
+    id="site-menu"
+    data-menu-panel
+    hidden
+    class="fixed inset-0 z-40 bg-white overflow-y-auto"
+  >
+    <div
+      class="max-w-(--breakpoint-xl) mx-auto flex items-center justify-between px-2 lg:px-0 py-3"
+    >
+      <span class="text-sm font-semibold">Menu</span>
+      <button
+        type="button"
+        data-menu-close
+        aria-label="Close menu"
+        class="p-2 rounded hover:bg-slate-100"
+      >
+        <Icon name="mdi:close" class="w-5 h-5" />
+      </button>
+    </div>
+    <ul
+      class="max-w-(--breakpoint-xl) mx-auto px-2 lg:px-0 divide-y divide-slate-100"
+    >
+      {
+        primarySections.map((section) => (
+          <li>
+            <a
+              href={section.href}
+              class:list={[
+                "flex items-center gap-3 py-4 text-lg",
+                section.id === "routes"
+                  ? "text-green-700 font-semibold"
+                  : "text-slate-700",
+              ]}
+            >
+              <Icon name={section.icon} class="w-5 h-5" />
+              {section.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="max-w-(--breakpoint-xl) mx-auto px-2 lg:px-0 py-3 relative">
+    <nav
+      aria-label="Breadcrumb"
+      class="flex items-center gap-1.5 text-sm flex-wrap"
+    >
+      <a href="/" class="text-slate-500 hover:underline">Tricity Hiking</a>
+      <Icon name="mdi:chevron-right" class="w-3.5 h-3.5 text-slate-400" />
+      <button
+        type="button"
+        data-panel-target="map"
+        class="text-slate-500 hover:underline"
+      >
+        Routes
+      </button>
+      <Icon name="mdi:chevron-right" class="w-3.5 h-3.5 text-slate-400" />
+      <button
+        type="button"
+        data-breadcrumb-switcher-trigger
+        aria-haspopup="true"
+        aria-expanded="false"
+        aria-controls="breadcrumb-switcher"
+        class="flex items-center gap-1 font-medium text-slate-900 hover:bg-slate-100 rounded px-1.5 py-0.5 -mx-1.5"
+      >
+        <span data-breadcrumb-current>Map</span>
+        <Icon name="mdi:chevron-down" class="w-4 h-4 text-slate-400" />
+      </button>
+    </nav>
+
+    <div
+      id="breadcrumb-switcher"
+      data-breadcrumb-switcher
+      hidden
+      class="absolute z-30 mt-1 bg-white border border-solid border-slate-200 rounded-lg shadow-lg py-1 min-w-56"
+    >
+      <p
+        data-breadcrumb-switcher-detail-only
+        hidden
+        class="px-3 pt-1.5 pb-1 text-xs uppercase tracking-wide text-slate-400"
+      >
+        This route
+      </p>
+      <button
+        type="button"
+        data-panel-back
+        data-breadcrumb-switcher-detail-only
+        hidden
+        class="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+      >
+        <Icon name="mdi:arrow-left" class="w-4 h-4" />
+        Back to list
+      </button>
+      <div
+        data-breadcrumb-switcher-detail-only
+        hidden
+        class="my-1 border-t border-solid border-slate-100"
+      >
+      </div>
+      <p
+        class="px-3 pt-1.5 pb-1 text-xs uppercase tracking-wide text-slate-400"
+      >
+        Sections
+      </p>
+      {
+        routesSubsections.map((section) => (
+          <button
+            type="button"
+            data-panel-target={section.id}
+            class="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+          >
+            <Icon name={section.icon} class="w-4 h-4 text-slate-500" />
+            {section.label}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <main class="pb-10">
+    <RoutesPrototypeMapPanel geojson={mapGeojson} />
+    <RoutesPrototypeListPanel
+      panelId="tricity"
+      heading="Tricity routes"
+      items={tricityItems}
+    />
+    <RoutesPrototypeListPanel
+      panelId="nearby"
+      heading="Nearby routes"
+      items={nearbyItems}
+    />
+
+    <RoutesPrototypeDetailPanel>
+      <button
+        slot="back"
+        type="button"
+        data-panel-back
+        class="flex items-center gap-1 text-sm text-green-700 hover:underline"
+      >
+        <Icon name="mdi:arrow-left" class="w-4 h-4" />
+        Back to list
+      </button>
+    </RoutesPrototypeDetailPanel>
+  </main>
+</PrototypeLayout>
+
+<script>
+  import { initRoutesPrototypeNav } from "../scripts/routesPrototypeNav.client";
+  initRoutesPrototypeNav();
+
+  const menuTrigger = document.querySelector<HTMLButtonElement>(
+    "[data-menu-trigger]",
+  );
+  const menuPanel = document.querySelector<HTMLElement>("[data-menu-panel]");
+  const menuClose =
+    document.querySelector<HTMLButtonElement>("[data-menu-close]");
+
+  const openMenu = () => {
+    if (!menuPanel || !menuTrigger) return;
+    menuPanel.hidden = false;
+    menuTrigger.setAttribute("aria-expanded", "true");
+  };
+  const closeMenu = () => {
+    if (!menuPanel || !menuTrigger) return;
+    menuPanel.hidden = true;
+    menuTrigger.setAttribute("aria-expanded", "false");
+  };
+  menuTrigger?.addEventListener("click", openMenu);
+  menuClose?.addEventListener("click", closeMenu);
+
+  const switcherTrigger = document.querySelector<HTMLButtonElement>(
+    "[data-breadcrumb-switcher-trigger]",
+  );
+  const switcherPanel = document.querySelector<HTMLElement>(
+    "[data-breadcrumb-switcher]",
+  );
+  const detailOnlyEls = Array.from(
+    document.querySelectorAll<HTMLElement>(
+      "[data-breadcrumb-switcher-detail-only]",
+    ),
+  );
+
+  const openSwitcher = () => {
+    if (!switcherPanel || !switcherTrigger) return;
+    const isDetail = document.body.dataset.prototypeActivePanel === "detail";
+    detailOnlyEls.forEach((el) => {
+      el.hidden = !isDetail;
+    });
+    switcherPanel.hidden = false;
+    switcherTrigger.setAttribute("aria-expanded", "true");
+  };
+  const closeSwitcher = () => {
+    if (!switcherPanel || !switcherTrigger) return;
+    switcherPanel.hidden = true;
+    switcherTrigger.setAttribute("aria-expanded", "false");
+  };
+  switcherTrigger?.addEventListener("click", () => {
+    if (switcherPanel?.hidden) openSwitcher();
+    else closeSwitcher();
+  });
+  switcherPanel?.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    if (target.closest("[data-panel-target], [data-panel-back]")) {
+      closeSwitcher();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    if (
+      switcherPanel &&
+      !switcherPanel.hidden &&
+      !switcherPanel.contains(target) &&
+      !switcherTrigger?.contains(target)
+    ) {
+      closeSwitcher();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    if (menuPanel && !menuPanel.hidden) {
+      closeMenu();
+      menuTrigger?.focus();
+    }
+    if (switcherPanel && !switcherPanel.hidden) {
+      closeSwitcher();
+      switcherTrigger?.focus();
+    }
+  });
+</script>

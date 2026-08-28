@@ -1,0 +1,87 @@
+---
+import { Icon } from "astro-icon/components";
+import TrailAttribute from "../ui/TrailAttribute.astro";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div
+  data-panel="detail"
+  hidden
+  class:list={["max-w-(--breakpoint-xl) mx-auto px-2 lg:px-0 py-4", className]}
+>
+  <div class="mb-4">
+    <slot name="back" />
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6">
+    <img
+      data-detail-field="image"
+      hidden
+      class="w-full h-48 md:h-60 object-cover rounded-lg bg-slate-200"
+      alt="Preview of the selected route"
+    />
+
+    <div>
+      <h2
+        data-panel-heading
+        data-detail-field="title"
+        tabindex="-1"
+        class="text-3xl mb-3 outline-none"
+      >
+      </h2>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-lg mb-4">
+        <TrailAttribute>
+          <Icon name="mdi:hiking" class="w-5 h-5 text-slate-500" slot="icon" />
+          <span
+            data-detail-field="distance"
+            class="text-lg lg:text-xl text-slate-500"></span>
+          <span class="text-xs lg:text-sm text-slate-500">Distance</span>
+        </TrailAttribute>
+
+        <TrailAttribute>
+          <Icon
+            name="mdi:clock-fast"
+            class="w-5 h-5 text-slate-500"
+            slot="icon"
+          />
+          <span
+            data-detail-field="time"
+            class="text-lg lg:text-xl text-slate-500"></span>
+          <span class="text-xs lg:text-sm text-slate-500">Time</span>
+        </TrailAttribute>
+
+        <TrailAttribute>
+          <Icon
+            name="mdi:arrow-top-right-thin"
+            class="w-5 h-5 text-slate-500"
+            slot="icon"
+          />
+          <span
+            data-detail-field="gain"
+            class="text-lg lg:text-xl text-slate-500"></span>
+          <span class="text-xs lg:text-sm text-slate-500">Total Gain</span>
+        </TrailAttribute>
+
+        <TrailAttribute>
+          <Icon
+            name="mdi:arrow-bottom-right-thin"
+            class="w-5 h-5 text-slate-500"
+            slot="icon"
+          />
+          <span
+            data-detail-field="loss"
+            class="text-lg lg:text-xl text-slate-500"></span>
+          <span class="text-xs lg:text-sm text-slate-500">Total Loss</span>
+        </TrailAttribute>
+      </div>
+
+      <p data-detail-field="description" class="text-slate-600 max-w-2xl"></p>
+    </div>
+  </div>
+</div>

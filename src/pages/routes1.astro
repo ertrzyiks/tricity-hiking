@@ -1,0 +1,151 @@
+---
+/**
+ * Variant 1 — Sticky tabs + breadcrumb trail.
+ *
+ * A refined version of the site's current pattern:
+ * - top-level nav stays a plain sticky horizontal bar (Jakob's Law: this is
+ *   what visitors already expect from tricity-hiking.pl, so we don't
+ *   reinvent it, only harden it — proper `aria-current`, focus rings).
+ * - the Map/Tricity/Nearby subnav becomes a real ARIA `tablist`
+ *   (role=tab/tabpanel, roving tabindex, arrow-key navigation) instead of
+ *   plain links, so assistive tech announces it as a set of views rather
+ *   than three unrelated links.
+ * - a breadcrumb trail ("Routes / Map") sits under the tabs and grows to a
+ *   third segment when a route is opened, giving explicit "visibility of
+ *   system status" (Nielsen #1) and a one-click way back up the hierarchy
+ *   (Nielsen #3, user control & freedom) that doesn't depend on the
+ *   browser's own back button.
+ */
+import { Icon } from "astro-icon/components";
+import PrototypeLayout from "../layouts/PrototypeLayout.astro";
+import RoutesPrototypeMapPanel from "../components/prototypes/RoutesPrototypeMapPanel.astro";
+import RoutesPrototypeListPanel from "../components/prototypes/RoutesPrototypeListPanel.astro";
+import RoutesPrototypeDetailPanel from "../components/prototypes/RoutesPrototypeDetailPanel.astro";
+import { getRoutesPrototypeData } from "../services/getRoutesPrototypeData";
+import {
+  getPrimarySections,
+  routesSubsections,
+} from "../config/routesPrototypeNav";
+
+const { tricityItems, nearbyItems, mapGeojson } =
+  await getRoutesPrototypeData();
+const primarySections = getPrimarySections("/routes1/");
+---
+
+<PrototypeLayout
+  title="Routes"
+  variantId="routes1"
+  patternName="Sticky tabs + breadcrumb trail"
+>
+  <header
+    class="sticky top-0 z-20 bg-white border-b border-solid border-slate-200"
+  >
+    <nav
+      aria-label="Primary"
+      class="max-w-(--breakpoint-xl) mx-auto flex items-center gap-1 px-2 lg:px-0 py-2 overflow-x-auto"
+    >
+      {
+        primarySections.map((section) => (
+          <a
+            href={section.href}
+            aria-current={section.id === "routes" ? "page" : undefined}
+            class:list={[
+              "px-3 py-2 rounded-lg text-sm whitespace-nowrap",
+              section.id === "routes"
+                ? "text-green-700 font-semibold underline decoration-green-400"
+                : "text-slate-600 hover:bg-slate-100",
+            ]}
+          >
+            {section.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="max-w-(--breakpoint-xl) mx-auto px-2 lg:px-0">
+      <div role="tablist" aria-label="Routes views" class="flex gap-1 -mb-px">
+        {
+          routesSubsections.map((section, index) => (
+            <button
+              type="button"
+              role="tab"
+              id={`tab-${section.id}`}
+              aria-controls={`panel-${section.id}`}
+              aria-selected={index === 0 ? "true" : "false"}
+              tabindex={index === 0 ? 0 : -1}
+              data-panel-target={section.id}
+              data-state={index === 0 ? "active" : "inactive"}
+              class="flex items-center gap-1.5 px-4 py-2.5 text-sm border-b-2 border-transparent text-slate-600 data-[state=active]:border-green-600 data-[state=active]:text-green-700 data-[state=active]:font-medium hover:text-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-500 rounded-t-md"
+            >
+              <Icon name={section.icon} class="w-4 h-4" />
+              {section.label}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-(--breakpoint-xl) mx-auto px-2 lg:px-0 py-3">
+    <nav
+      aria-label="Breadcrumb"
+      class="flex items-center gap-1.5 text-sm text-slate-500"
+    >
+      <Icon name="mdi:home-outline" class="w-4 h-4" />
+      <a href="/" class="hover:underline">Home</a>
+      <Icon name="mdi:chevron-right" class="w-3.5 h-3.5" />
+      <button
+        type="button"
+        data-panel-target="map"
+        class="hover:underline hover:text-green-700"
+      >
+        Routes
+      </button>
+      <Icon name="mdi:chevron-right" class="w-3.5 h-3.5" />
+      <span data-breadcrumb-current class="text-slate-900 font-medium">Map</span
+      >
+    </nav>
+  </div>
+
+  <main class="pb-10">
+    <RoutesPrototypeMapPanel
+      geojson={mapGeojson}
+      id="panel-map"
+      role="tabpanel"
+      aria-labelledby="tab-map"
+    />
+    <RoutesPrototypeListPanel
+      panelId="tricity"
+      heading="Tricity routes"
+      items={tricityItems}
+      id="panel-tricity"
+      role="tabpanel"
+      aria-labelledby="tab-tricity"
+    />
+    <RoutesPrototypeListPanel
+      panelId="nearby"
+      heading="Nearby routes"
+      items={nearbyItems}
+      id="panel-nearby"
+      role="tabpanel"
+      aria-labelledby="tab-nearby"
+    />
+
+    <RoutesPrototypeDetailPanel>
+      <button
+        slot="back"
+        type="button"
+        data-panel-back
+        class="flex items-center gap-1 text-sm text-green-700 hover:underline"
+      >
+        <Icon name="mdi:arrow-left" class="w-4 h-4" />
+        Back to list
+      </button>
+    </RoutesPrototypeDetailPanel>
+  </main>
+</PrototypeLayout>
+
+<script>
+  import { initRoutesPrototypeNav } from "../scripts/routesPrototypeNav.client";
+  initRoutesPrototypeNav();
+</script>
