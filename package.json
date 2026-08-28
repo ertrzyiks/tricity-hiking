@@ -41,7 +41,7 @@
     "debounce": "3.0.0",
     "gantt-schedule-timeline-calendar": "3.43.14",
     "maplibre-gl": "6.0.0",
-    "nanostores": "1.4.1",
+    "nanostores": "1.4.2",
     "playwright": "1.62.0",
     "preact": "10.29.7",
     "recharts": "3.10.1",
