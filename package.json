@@ -42,7 +42,7 @@
     "gantt-schedule-timeline-calendar": "3.43.14",
     "maplibre-gl": "6.0.0",
     "nanostores": "1.4.2",
-    "playwright": "1.62.0",
+    "playwright": "1.62.1",
     "preact": "10.29.7",
     "recharts": "3.10.1",
     "sharp": "0.35.3",
@@ -51,7 +51,7 @@
     "vanilla-cookieconsent": "3.1.0"
   },
   "devDependencies": {
-    "@playwright/test": "1.62.0",
+    "@playwright/test": "1.62.1",
     "@tmcw/togeojson": "7.1.2",
     "@xmldom/xmldom": "0.9.10",
     "checkly": "8.18.0",
