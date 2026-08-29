@@ -40,7 +40,7 @@
     "astro-icon": "1.1.5",
     "debounce": "3.0.0",
     "gantt-schedule-timeline-calendar": "3.43.14",
-    "maplibre-gl": "6.0.0",
+    "maplibre-gl": "6.1.0",
     "nanostores": "1.4.2",
     "playwright": "1.62.1",
     "preact": "10.29.7",
