@@ -3,6 +3,8 @@ import type { InferGetStaticParamsType } from "astro";
 import { getCollection, getEntry, render } from "astro:content";
 import { config } from "../../components/markdown";
 import Layout from "../../layouts/Layout.astro";
+import RelatedArticles from "../../components/RelatedArticles.astro";
+import { getRelatedArticles } from "../../services/getRelatedArticles";
 
 export async function getStaticPaths() {
   const allBlogPosts = await getCollection("blog");
@@ -38,6 +40,10 @@ const publishedDate = entry.data.publishDate.toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",
 });
+
+const allBlogPosts = await getCollection("blog");
+const publishedPosts = allBlogPosts.filter((post) => !post.data.draft);
+const relatedArticles = getRelatedArticles(publishedPosts, entry.id, 3);
 ---
 
 <Layout
@@ -104,7 +110,13 @@ const publishedDate = entry.data.publishDate.toLocaleDateString("en-US", {
       </div>
     </article>
 
-    <nav class="mt-12 pt-8 border-t border-slate-200">
+    <RelatedArticles articles={relatedArticles} />
+
+    <nav
+      class={relatedArticles.length > 0
+        ? "mt-8"
+        : "mt-12 pt-8 border-t border-slate-200"}
+    >
       <a
         href="/"
         class="inline-flex items-center gap-2 text-green-600 hover:text-green-800 font-medium"
