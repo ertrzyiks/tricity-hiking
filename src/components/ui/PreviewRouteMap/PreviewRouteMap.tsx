@@ -4,8 +4,13 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "../HomeMap/mapStyle";
 import { getBounds } from "../../../services/getBounds";
-import { orientLineStringsWestToEast } from "../../../services/orientLineStringsWestToEast";
+import { buildWidthGradientBands } from "../../../services/lineWidthGradientBands";
+import { TRAIL_LINE_GRADIENT } from "../../../constants/colors";
 import pointImage from "../../../assets/places/point.png";
+
+// How many flat-coloured bands approximate the gradient across the trail
+// line's width - see lineWidthGradientBands.ts.
+const TRAIL_LINE_BAND_COUNT = 5;
 
 export const PreviewRouteMap = ({
   route,
@@ -55,10 +60,7 @@ export const PreviewRouteMap = ({
     map.on("load", async () => {
       map.addSource("lines", {
         type: "geojson",
-        // Reoriented so the gradient below reads left-to-right on screen
-        // rather than following the trail's recorded start point.
-        data: orientLineStringsWestToEast(route),
-        lineMetrics: true,
+        data: route,
       });
 
       map.addLayer({
@@ -75,26 +77,29 @@ export const PreviewRouteMap = ({
         },
       });
 
-      map.addLayer({
-        id: "lines",
-        type: "line",
-        source: "lines",
-        layout: {
-          "line-cap": "round",
-          "line-join": "round",
-        },
-        paint: {
-          "line-width": 5,
-          "line-gradient": [
-            "interpolate",
-            ["linear"],
-            ["line-progress"],
-            0,
-            "#c53c00",
-            1,
-            "#f05100",
-          ],
-        },
+      // The visible trail line is several thinner bands stacked side by
+      // side (via line-offset) rather than a single layer, so the colour
+      // can grade across the stroke's *width* - MapLibre's line-gradient
+      // only grades along a line's length. See lineWidthGradientBands.ts.
+      buildWidthGradientBands(
+        5,
+        TRAIL_LINE_GRADIENT,
+        TRAIL_LINE_BAND_COUNT,
+      ).forEach((band, index) => {
+        map.addLayer({
+          id: `lines-band-${index}`,
+          type: "line",
+          source: "lines",
+          layout: {
+            "line-cap": "butt",
+            "line-join": "round",
+          },
+          paint: {
+            "line-width": band.width,
+            "line-offset": band.offset,
+            "line-color": band.color,
+          },
+        });
       });
 
       const image = await map.loadImage(pointImage.src);
