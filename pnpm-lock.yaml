@@ -100,8 +100,8 @@ importers:
         specifier: 0.9.10
         version: 0.9.10
       checkly:
-        specifier: 8.18.0
-        version: 8.18.0(supports-color@8.1.1)(typescript@6.0.3)
+        specifier: 8.19.0
+        version: 8.19.0(supports-color@8.1.1)(typescript@6.0.3)
       concurrently:
         specifier: 10.0.4
         version: 10.0.4
@@ -2157,8 +2157,8 @@ packages:
   character-reference-invalid@2.0.1:
     resolution: {integrity: sha512-iBZ4F4wRbyORVsu0jPV7gXkOsGYjGHPmAyv+HiHG8gi5PtC9KI2j1+v8/tlibRvjoWX027ypmG/n0HtO5t7unw==}
 
-  checkly@8.18.0:
-    resolution: {integrity: sha512-kGQPt5247Jhs+7BJR8I1WRMTWVZPQVW87CDl/3XF8q2mIklYBVMweLxK73blMXHRL7K64eXgSgS7JjBoTOGXzw==}
+  checkly@8.19.0:
+    resolution: {integrity: sha512-NsuHdLA2ov6tuG3YrUs8eCy6EviKqE7KLAn/fhn/7dBjLRCRlNw9ZOvBu191K3PwgDAYC7BSWDIG5xDOCL/9bw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
@@ -4596,18 +4596,6 @@ packages:
     resolution: {integrity: sha512-42AtmgqjV+X1VpdOfyTGOYRi0/zsoLqtXQckTmqTeybT+BDIbM/Guxo7x3pE2vtpr1ok6xRqM9OpBe+Jyoqyww==}
     engines: {node: '>=18'}
 
-  ws@8.21.0:
-    resolution: {integrity: sha512-Vsp28b7DRcimFQvrqu2Wek3z1iYxDCWqHYB8Qsnk/S4RfaCQzPGPyBNuVjJV3cd6UiKtUtp6sNM77gWvzcCH+g==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-
   ws@8.21.1:
     resolution: {integrity: sha512-+0NTnW77fFN/DjQi6k/Sq/Yvk4Sgajw7urW8V+asjXnRgDs9gyGkdb7EzgfhA4goXsRIZKE28fzIXBHEzhuiWw==}
     engines: {node: '>=10.0.0'}
@@ -6764,7 +6752,7 @@ snapshots:
 
   character-reference-invalid@2.0.1: {}
 
-  checkly@8.18.0(supports-color@8.1.1)(typescript@6.0.3):
+  checkly@8.19.0(supports-color@8.1.1)(typescript@6.0.3):
     dependencies:
       '@oclif/core': 4.13.0
       '@oclif/plugin-help': 6.2.53
@@ -8375,7 +8363,7 @@ snapshots:
       socks: 2.8.9
       split2: 4.2.0
       worker-timers: 8.0.34
-      ws: 8.21.0
+      ws: 8.21.1
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -9674,8 +9662,6 @@ snapshots:
       ansi-styles: 6.2.3
       string-width: 7.2.0
       strip-ansi: 7.2.0
-
-  ws@8.21.0: {}
 
   ws@8.21.1: {}
 
