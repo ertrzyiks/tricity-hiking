@@ -17,6 +17,7 @@ import { generateNumberMarkerSVG } from "../../../services/routeMarkers";
 import {
   MAP_MARKER_COLOR,
   TRAIL_LINE_GRADIENT,
+  TRAIL_LINE_BAND_COUNT,
 } from "../../../constants/colors";
 import {
   computeOffscreenIndicators,
@@ -25,10 +26,6 @@ import {
 import { OffscreenArrow } from "../OffscreenArrow/OffscreenArrow";
 
 const NUMBER_MARKER_SIZE = 24;
-
-// How many flat-coloured bands approximate the gradient across the trail
-// line's width - see lineWidthGradientBands.ts.
-const TRAIL_LINE_BAND_COUNT = 5;
 
 // How far past the routes' own bounding box the map can still be panned:
 // a fraction of that box's width/height on each side, plus a flat buffer.

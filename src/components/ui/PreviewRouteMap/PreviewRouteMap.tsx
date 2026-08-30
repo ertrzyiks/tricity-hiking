@@ -5,12 +5,11 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { style } from "../HomeMap/mapStyle";
 import { getBounds } from "../../../services/getBounds";
 import { buildWidthGradientBands } from "../../../services/lineWidthGradientBands";
-import { TRAIL_LINE_GRADIENT } from "../../../constants/colors";
+import {
+  TRAIL_LINE_GRADIENT,
+  TRAIL_LINE_BAND_COUNT,
+} from "../../../constants/colors";
 import pointImage from "../../../assets/places/point.png";
-
-// How many flat-coloured bands approximate the gradient across the trail
-// line's width - see lineWidthGradientBands.ts.
-const TRAIL_LINE_BAND_COUNT = 5;
 
 export const PreviewRouteMap = ({
   route,
