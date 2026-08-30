@@ -4,6 +4,11 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import { style } from "../HomeMap/mapStyle";
 import { getBounds } from "../../../services/getBounds";
+import { buildWidthGradientBands } from "../../../services/lineWidthGradientBands";
+import {
+  TRAIL_LINE_GRADIENT,
+  TRAIL_LINE_BAND_COUNT,
+} from "../../../constants/colors";
 import pointImage from "../../../assets/places/point.png";
 
 export const PreviewRouteMap = ({
@@ -71,18 +76,29 @@ export const PreviewRouteMap = ({
         },
       });
 
-      map.addLayer({
-        id: "lines",
-        type: "line",
-        source: "lines",
-        layout: {
-          "line-cap": "round",
-          "line-join": "round",
-        },
-        paint: {
-          "line-width": 5,
-          "line-color": "#e11d48",
-        },
+      // The visible trail line is several thinner bands stacked side by
+      // side (via line-offset) rather than a single layer, so the colour
+      // can grade across the stroke's *width* - MapLibre's line-gradient
+      // only grades along a line's length. See lineWidthGradientBands.ts.
+      buildWidthGradientBands(
+        5,
+        TRAIL_LINE_GRADIENT,
+        TRAIL_LINE_BAND_COUNT,
+      ).forEach((band, index) => {
+        map.addLayer({
+          id: `lines-band-${index}`,
+          type: "line",
+          source: "lines",
+          layout: {
+            "line-cap": "butt",
+            "line-join": "round",
+          },
+          paint: {
+            "line-width": band.width,
+            "line-offset": band.offset,
+            "line-color": band.color,
+          },
+        });
       });
 
       const image = await map.loadImage(pointImage.src);

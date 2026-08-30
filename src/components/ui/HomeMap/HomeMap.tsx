@@ -6,6 +6,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { style } from "./mapStyle";
 import { getBounds } from "../../../services/getBounds";
 import { padBounds } from "../../../services/padBounds";
+import { buildWidthGradientBands } from "../../../services/lineWidthGradientBands";
 import { mToKm } from "../../../services/mToKm";
 import { ElevationChart } from "../ElevationChart/ElevationChart";
 import { Button } from "../Button/Button";
@@ -13,7 +14,11 @@ import { TrailAttributeName } from "../TrailAttributeName/TrailAttributeName";
 import { TrailAttributeValue } from "../TrailAttributeValue/TrailAttributeValue";
 import { trackEvent } from "../../../services/analytics";
 import { generateNumberMarkerSVG } from "../../../services/routeMarkers";
-import { MAP_MARKER_COLOR } from "../../../constants/colors";
+import {
+  MAP_MARKER_COLOR,
+  TRAIL_LINE_GRADIENT,
+  TRAIL_LINE_BAND_COUNT,
+} from "../../../constants/colors";
 import {
   computeOffscreenIndicators,
   type OffscreenIndicator,
@@ -140,26 +145,39 @@ export const HomeMap = ({ routes }: { routes: GeoJSON.FeatureCollection }) => {
         },
       });
 
-      map.addLayer({
-        id: "lines",
-        type: "line",
-        source: "lines",
-        layout: {
-          "line-cap": "round",
-          "line-join": "round",
-        },
-        paint: {
-          "line-width": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            9,
-            ["case", ["boolean", ["feature-state", "hover"], false], 3, 2],
-            15,
-            ["case", ["boolean", ["feature-state", "hover"], false], 6, 4],
-          ],
-          "line-color": "#e11d48",
-        },
+      // The visible trail line is several thinner bands stacked side by
+      // side (via line-offset) rather than a single layer, so the colour
+      // can grade across the stroke's *width* - MapLibre's line-gradient
+      // only grades along a line's length. See lineWidthGradientBands.ts.
+      const trailLineWidth = [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        9,
+        ["case", ["boolean", ["feature-state", "hover"], false], 3, 2],
+        15,
+        ["case", ["boolean", ["feature-state", "hover"], false], 6, 4],
+      ];
+
+      buildWidthGradientBands(
+        trailLineWidth,
+        TRAIL_LINE_GRADIENT,
+        TRAIL_LINE_BAND_COUNT,
+      ).forEach((band, index) => {
+        map.addLayer({
+          id: `lines-band-${index}`,
+          type: "line",
+          source: "lines",
+          layout: {
+            "line-cap": "butt",
+            "line-join": "round",
+          },
+          paint: {
+            "line-width": band.width,
+            "line-offset": band.offset,
+            "line-color": band.color,
+          },
+        });
       });
 
       // One numbered marker per trail, placed at its midpoint. Trail 1
