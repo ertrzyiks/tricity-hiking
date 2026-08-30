@@ -1,0 +1,62 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  articles: CollectionEntry<"blog">[];
+}
+
+const { articles } = Astro.props;
+---
+
+{
+  articles.length > 0 && (
+    <section class="mt-12 pt-8 border-t border-slate-200">
+      <h2 class="text-2xl font-bold mb-6">Continue Reading</h2>
+
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {articles.map((article) => {
+          const publishedDate = article.data.publishDate.toLocaleDateString(
+            "en-US",
+            { year: "numeric", month: "long" },
+          );
+
+          return (
+            <a
+              href={`/blog/${article.id}/`}
+              class="group flex flex-col rounded-lg shadow-lg overflow-hidden bg-white"
+            >
+              {article.data.coverImage ? (
+                <Image
+                  src={article.data.coverImage}
+                  width="400"
+                  height="225"
+                  class="w-full h-40 object-cover grayscale-50 group-hover:grayscale-0"
+                  alt={article.data.title}
+                />
+              ) : (
+                <div class="w-full h-40 bg-green-200 flex items-center justify-center group-hover:bg-black group-hover:text-green-200">
+                  <Icon
+                    name="mdi:newspaper-variant-outline"
+                    class="w-12 h-12"
+                  />
+                </div>
+              )}
+
+              <div class="p-4 flex flex-col grow">
+                <span class="text-lg font-bold group-hover:text-green-600">
+                  {article.data.title}
+                </span>
+                <span class="text-sm text-slate-500 mt-1">{publishedDate}</span>
+                <span class="text-sm text-slate-600 mt-2 line-clamp-3">
+                  {article.data.description}
+                </span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  )
+}
