@@ -55,6 +55,15 @@ export default defineConfig({
     plugins: [tailwindcss(), copyMaplibreGlWorker()],
     server: {
       allowedHosts: ["9745f00829df.ngrok-free.app"],
+      // The capture:* scripts write screenshots straight into
+      // src/content/routes/**/*.jpg while this dev server is running.
+      // Vite's file watcher picks those writes up as content changes and
+      // reloads the route/content collection mid-capture, which can corrupt
+      // or hang an in-flight puppeteer screenshot. Setting watch to null is
+      // Vite's documented way to disable the watcher outright (as recommended
+      // for CI environments), so we do it only when DISABLE_WATCH is set by
+      // those scripts - `astro dev`/`start` keep normal HMR.
+      watch: process.env.DISABLE_WATCH === "true" ? null : undefined,
     },
     optimizeDeps: {
       // maplibre-gl v6 spins up its worker as a real ES module, resolved at
