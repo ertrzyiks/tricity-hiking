@@ -15,7 +15,12 @@ jobs:
       - name: Checkout your repository using git
         uses: actions/checkout@v7.0.1
         with:
-          lfs: true
+          # Pulling real LFS photos on every PR push burns LFS
+          # bandwidth/quota for a build that mostly doesn't care what the
+          # pixels are. Only fetch the real files when the branch is
+          # explicitly testing photo output; every other PR gets pointer
+          # files, which we then swap for lightweight placeholders below.
+          lfs: ${{ startsWith(github.head_ref, 'lfs-') }}
       - name: Setup Node.js
         uses: actions/setup-node@v7.0.0
         with:
@@ -26,5 +31,8 @@ jobs:
           version: latest
       - name: Install dependencies
         run: pnpm install
+      - name: Replace LFS photos with placeholders
+        if: ${{ !startsWith(github.head_ref, 'lfs-') }}
+        run: node scripts/replace-lfs-photo-placeholders.js
       - name: Build the site
         run: pnpm run build
