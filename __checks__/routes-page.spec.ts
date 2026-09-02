@@ -4,8 +4,9 @@ import { test, expect } from "@playwright/test";
  * Synthetic check for the routes list page, which renders a maplibre-gl map
  * (HomeMap) - the component most likely to silently break (see the "Fix map
  * not loading after maplibre-gl v6 upgrade" commit). Run by Checkly on its
- * own schedule (see checkly.config.ts) as a Browser Check, picked up via
- * the `browserChecks.testMatch` glob.
+ * own schedule (see checkly.config.ts) as a Browser Check, declared in
+ * browser-checks.check.ts so it can be assigned to the "Tricity Hiking"
+ * group.
  *
  * The actual homepage (`/`) doesn't render a maplibre-gl map - just a
  * static SVG - so it can't be used to catch this failure mode.
