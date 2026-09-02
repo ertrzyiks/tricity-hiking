@@ -1,8 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import ListCardItem from "../../components/ui/ListCardItem.astro";
-import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
+import wielkaGwiazda from "../../assets/photos/wielka-gwiazda.jpg";
+import lysaGora from "../../assets/photos/lysa-gora.jpg";
 
 const order = [
   "the-best-hiking-trails-near-gdansk",
@@ -28,15 +30,18 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
       {
         posts.map((post) => (
           <ListCardItem link={`/blog/${post.id}/`} outlined>
-            <div
+            <Image
+              src={
+                post.id === "the-best-hiking-trails-near-gdansk"
+                  ? wielkaGwiazda
+                  : lysaGora
+              }
+              width="160"
+              height="160"
+              class="w-16 h-16 object-cover"
+              alt={`Photo for ${post.data.title}`}
               slot="image"
-              class="bg-green-200 w-16 h-16 flex items-center justify-center group-hover:bg-black group-hover:text-green-200"
-            >
-              <Icon
-                name="mdi:newspaper-variant-outline"
-                class="w-12 h-12"
-              />
-            </div>
+            />
             <span class="group-hover:text-green-600" slot="title">
               {post.data.title}
             </span>
