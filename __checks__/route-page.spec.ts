@@ -4,8 +4,9 @@ import { test, expect } from "@playwright/test";
  * Synthetic check for a route detail page, which renders a maplibre-gl map -
  * the component most likely to silently break (see the "Fix map not loading
  * after maplibre-gl v6 upgrade" commit). Run by Checkly on its own schedule
- * (see checkly.config.ts) as a Browser Check, picked up via the
- * `browserChecks.testMatch` glob.
+ * (see checkly.config.ts) as a Browser Check, declared in
+ * browser-checks.check.ts so it can be assigned to the "Tricity Hiking"
+ * group.
  */
 test("route page renders the map", async ({ page }) => {
   const response = await page.goto(
