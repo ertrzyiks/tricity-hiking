@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
 import ListCardItem from "../../components/ui/ListCardItem.astro";
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
@@ -24,6 +25,8 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 ---
 
 <Layout title="Articles - Tricity Hiking">
+  <PageTitle title="Articles" slot="hero" />
+
   <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0">
     <ul class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-x-12">
       {
