@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
+import PageTitle from "../components/ui/PageTitle.astro";
 import { enhance } from "../services/enhance";
 import { getLineStringFeature } from "../services/getLineStringFeature";
 import { sortRoutes } from "../services/sortRoutes";
@@ -34,6 +35,8 @@ for (const route of dayTripRoutes) {
 <Layout
   title="Day trips: the best hiking trails beyond Gdańsk, Sopot and Gdynia"
 >
+  <PageTitle title="Day trips" slot="hero" />
+
   <div class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0">
     <ul>
       {

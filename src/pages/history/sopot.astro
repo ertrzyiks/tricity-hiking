@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
 import CityTimeline, {
   type TimelineEvent,
 } from "../../components/history/CityTimeline.astro";
@@ -63,9 +64,9 @@ const timelineConfig: TimelineEvent[] = [
 ---
 
 <Layout title={`Overview of the major events in the history of Sopot`}>
-  <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
-    <h2 class="text-3xl my-4">History</h2>
+  <PageTitle title="History of Sopot" slot="hero" />
 
+  <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
     <HistoryCityTabs />
 
     <p class="text-lg my-4">
