@@ -8,3 +8,6 @@ allowBuilds:
   esbuild: true
   puppeteer: true
   sharp: true
+minimumReleaseAgeExclude:
+  # Renovate security update: @xmldom/xmldom@0.9.12
+  - "@xmldom/xmldom@0.9.12"
