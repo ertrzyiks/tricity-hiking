@@ -1,0 +1,47 @@
+---
+import mapImage from "../../assets/home-map.jpg";
+import { HomeMap } from "../ui/HomeMap/HomeMap";
+import RouteMapLegend from "../ui/RouteMapLegend.astro";
+
+interface Props {
+  geojson: GeoJSON.FeatureCollection;
+  class?: string;
+  id?: string;
+  role?: "tabpanel";
+  "aria-labelledby"?: string;
+}
+
+const {
+  geojson,
+  class: className = "",
+  id,
+  role,
+  "aria-labelledby": ariaLabelledby,
+} = Astro.props;
+---
+
+<div
+  data-panel="map"
+  id={id}
+  role={role}
+  aria-labelledby={ariaLabelledby}
+  class:list={[className]}
+>
+  <h2 data-panel-heading tabindex="-1" class="sr-only">Map</h2>
+  <div class="max-w-(--breakpoint-xl) mx-auto relative h-[70vh] px-2 lg:px-0">
+    <div class="absolute inset-0 h-full overflow-hidden">
+      <img src={mapImage.src} class="absolute blur-2xl inset-0 h-full" />
+    </div>
+
+    <HomeMap client:only="preact" routes={geojson} />
+  </div>
+
+  <RouteMapLegend />
+</div>
+
+<style is:global>
+  .maplibregl-map {
+    height: 100%;
+    width: 100%;
+  }
+</style>

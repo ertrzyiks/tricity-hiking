@@ -1,0 +1,210 @@
+---
+/**
+ * Variant 2 — Mega menu.
+ *
+ * The top nav is trimmed to single-word labels; "Routes" becomes a
+ * disclosure button (WAI-ARIA APG "disclosure navigation menu" pattern —
+ * deliberately *not* menu/menuitem roles, which the APG reserves for
+ * action menus, not site navigation) that opens a panel of cards
+ * combining the section's identity with its subviews in one place, so
+ * users pick a subview *while* choosing the section (reduces the number
+ * of decisions per Hick's Law instead of landing on a default view first).
+ *
+ * Once a subview is chosen the menu closes, but a "Viewing: X" chip stays
+ * next to the button as a permanent way back into the switcher — without
+ * it, closing the menu would strand the user with no visible way to
+ * change sections again (Nielsen #3, user control & freedom).
+ *
+ * On narrow screens the same panel reflows from a floating dropdown into
+ * a full-width, in-flow disclosure — the standard responsive mega-menu
+ * collapse, so no separate mobile drawer component is needed.
+ *
+ * The route detail view is framed as an overlay with a close (×) button
+ * rather than a breadcrumb, echoing how the mega menu itself behaves
+ * (open a layer, close the layer) instead of mixing in a different
+ * "drill down" idiom.
+ */
+import { Icon } from "astro-icon/components";
+import PrototypeLayout from "../layouts/PrototypeLayout.astro";
+import RoutesPrototypeMapPanel from "../components/prototypes/RoutesPrototypeMapPanel.astro";
+import RoutesPrototypeListPanel from "../components/prototypes/RoutesPrototypeListPanel.astro";
+import RoutesPrototypeDetailPanel from "../components/prototypes/RoutesPrototypeDetailPanel.astro";
+import { getRoutesPrototypeData } from "../services/getRoutesPrototypeData";
+import {
+  getPrimarySections,
+  routesSubsections,
+} from "../config/routesPrototypeNav";
+
+const { tricityItems, nearbyItems, mapGeojson } =
+  await getRoutesPrototypeData();
+const primarySections = getPrimarySections("/routes2/");
+---
+
+<PrototypeLayout title="Routes" variantId="routes2" patternName="Mega menu">
+  <header class="relative z-20 bg-slate-900 text-white">
+    <div
+      class="max-w-(--breakpoint-xl) mx-auto flex items-center gap-1 px-2 lg:px-0 py-2"
+    >
+      {
+        primarySections.map((section) =>
+          section.id === "routes" ? (
+            <button
+              type="button"
+              data-mega-menu-trigger
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="mega-menu-panel"
+              class="px-3 py-2 rounded-lg text-sm font-semibold bg-white/10 flex items-center gap-1"
+            >
+              {section.label}
+              <Icon name="mdi:chevron-down" class="w-4 h-4" />
+            </button>
+          ) : (
+            <a
+              href={section.href}
+              class="px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white whitespace-nowrap"
+            >
+              {section.label}
+            </a>
+          ),
+        )
+      }
+    </div>
+
+    <div
+      id="mega-menu-panel"
+      data-mega-menu-panel
+      hidden
+      class="border-t border-white/10 bg-slate-900 md:absolute md:inset-x-0 md:shadow-xl md:border-b"
+    >
+      <nav
+        aria-label="Routes sections"
+        class="max-w-(--breakpoint-xl) mx-auto grid grid-cols-1 sm:grid-cols-3 gap-3 px-2 lg:px-0 py-4"
+      >
+        {
+          routesSubsections.map((section) => (
+            <button
+              type="button"
+              data-panel-target={section.id}
+              class="text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-400"
+            >
+              <span class="flex items-center gap-2 text-base font-medium mb-1">
+                <Icon name={section.icon} class="w-5 h-5 text-green-400" />
+                {section.label}
+              </span>
+              <span class="text-sm text-slate-400">{section.description}</span>
+            </button>
+          ))
+        }
+      </nav>
+    </div>
+  </header>
+
+  <div
+    class="max-w-(--breakpoint-xl) mx-auto px-2 lg:px-0 py-4 flex items-center justify-between flex-wrap gap-2"
+  >
+    <h1 class="text-2xl">Best hiking trails near Gdańsk, Sopot, and Gdynia</h1>
+
+    <button
+      type="button"
+      data-mega-menu-chip
+      class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 border border-solid border-green-300 text-sm text-slate-700 hover:bg-green-100"
+    >
+      Viewing:
+      <span data-breadcrumb-current class="font-semibold text-green-700"
+        >Map</span
+      >
+      <Icon name="mdi:chevron-down" class="w-3.5 h-3.5" />
+    </button>
+  </div>
+
+  <main class="pb-10">
+    <RoutesPrototypeMapPanel geojson={mapGeojson} />
+    <RoutesPrototypeListPanel
+      panelId="tricity"
+      heading="Tricity routes"
+      items={tricityItems}
+    />
+    <RoutesPrototypeListPanel
+      panelId="nearby"
+      heading="Nearby routes"
+      items={nearbyItems}
+    />
+
+    <RoutesPrototypeDetailPanel>
+      <button
+        slot="back"
+        type="button"
+        data-panel-back
+        aria-label="Close route details"
+        class="ml-auto flex items-center gap-1 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-sm text-slate-700"
+      >
+        <Icon name="mdi:close" class="w-4 h-4" />
+        Close
+      </button>
+    </RoutesPrototypeDetailPanel>
+  </main>
+</PrototypeLayout>
+
+<script>
+  import { initRoutesPrototypeNav } from "../scripts/routesPrototypeNav.client";
+  initRoutesPrototypeNav();
+
+  const menuButton = document.querySelector<HTMLButtonElement>(
+    "[data-mega-menu-trigger]",
+  );
+  const menuPanel = document.querySelector<HTMLElement>(
+    "[data-mega-menu-panel]",
+  );
+  const chipButton = document.querySelector<HTMLButtonElement>(
+    "[data-mega-menu-chip]",
+  );
+
+  const openMenu = () => {
+    if (!menuPanel || !menuButton) return;
+    menuPanel.hidden = false;
+    menuButton.setAttribute("aria-expanded", "true");
+  };
+
+  const closeMenu = () => {
+    if (!menuPanel || !menuButton) return;
+    menuPanel.hidden = true;
+    menuButton.setAttribute("aria-expanded", "false");
+  };
+
+  const toggleMenu = () => {
+    if (!menuPanel) return;
+    if (menuPanel.hidden) openMenu();
+    else closeMenu();
+  };
+
+  menuButton?.addEventListener("click", toggleMenu);
+  chipButton?.addEventListener("click", toggleMenu);
+
+  menuPanel?.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    if (target.closest("[data-panel-target]")) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!menuPanel || menuPanel.hidden) return;
+    const target = event.target as HTMLElement;
+    if (
+      menuPanel.contains(target) ||
+      menuButton?.contains(target) ||
+      chipButton?.contains(target)
+    ) {
+      return;
+    }
+    closeMenu();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menuPanel && !menuPanel.hidden) {
+      closeMenu();
+      menuButton?.focus();
+    }
+  });
+</script>
