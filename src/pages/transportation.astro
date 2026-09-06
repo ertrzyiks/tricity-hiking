@@ -1,6 +1,7 @@
 ---
 import { getEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
+import PageTitle from "../components/ui/PageTitle.astro";
 import Admonition from "../components/ui/Admonition.astro";
 import Link from "../components/ui/Link.astro";
 import { TransportationMap } from "../components/ui/TransportationMap/TransportationMap";
@@ -27,6 +28,8 @@ const pkm = merge([pkmStops.data, pkmLine.data]);
 ---
 
 <Layout title="Best way to get around Tricity using public transport">
+  <PageTitle title="Transportation" slot="hero" />
+
   <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
     <Admonition type="info" title="Info">
       Plan you route and buy tickets for all public transport in Tricity using

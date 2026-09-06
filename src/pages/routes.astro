@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
+import PageTitle from "../components/ui/PageTitle.astro";
 import { merge } from "../services/merge";
 import { enhance } from "../services/enhance";
 import { getLineStringFeature } from "../services/getLineStringFeature";
@@ -57,6 +58,8 @@ const geojson = merge(geojsonList);
 ---
 
 <Layout title="Map of the best hiking trails near Gdańsk, Sopot, and Gdynia">
+  <PageTitle title="Routes" slot="hero" />
+
   <div class="max-w-(--breakpoint-xl) mx-auto relative h-[70vh] px-2 lg:px-0">
     <div class="absolute inset-0 h-full overflow-hidden">
       <img src={mapImage.src} class="absolute blur-2xl inset-0 h-full" />

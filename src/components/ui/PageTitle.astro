@@ -1,0 +1,13 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="bg-linear-45 from-green-700 via-green-600 to-green-700">
+  <div class="max-w-(--breakpoint-xl) mx-auto px-4 lg:px-0 py-4 lg:py-6">
+    <h1 class="text-2xl lg:text-4xl text-slate-100">{title}</h1>
+  </div>
+</div>

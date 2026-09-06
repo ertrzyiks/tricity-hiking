@@ -3,6 +3,7 @@ import type { InferGetStaticParamsType } from "astro";
 import { getCollection, getEntry, render } from "astro:content";
 import { config } from "../../components/markdown";
 import Layout from "../../layouts/Layout.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
 import RelatedArticles from "../../components/RelatedArticles.astro";
 import { getRelatedArticles } from "../../services/getRelatedArticles";
 
@@ -50,10 +51,11 @@ const relatedArticles = getRelatedArticles(publishedPosts, entry.id, 3);
   title={`${entry.data.title} - Tricity Hiking Blog`}
   description={entry.data.description}
 >
+  <PageTitle title={entry.data.title} slot="hero" />
+
   <div class="max-w-(--breakpoint-lg) mx-auto px-4 py-8">
     <article>
       <header class="mb-8">
-        <h1 class="text-4xl font-bold mb-4">{entry.data.title}</h1>
         <div class="flex flex-wrap gap-4 text-sm text-slate-600 mb-4">
           <time class="flex items-center gap-1">
             <svg
