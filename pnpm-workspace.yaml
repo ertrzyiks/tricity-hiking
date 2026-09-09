@@ -11,3 +11,5 @@ allowBuilds:
 minimumReleaseAgeExclude:
   # Renovate security update: @xmldom/xmldom@0.9.12
   - "@xmldom/xmldom@0.9.12"
+  # Renovate security update: maplibre-gl@6.4.1
+  - maplibre-gl@6.4.1
