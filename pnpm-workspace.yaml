@@ -13,3 +13,5 @@ minimumReleaseAgeExclude:
   - "@xmldom/xmldom@0.9.12"
   # Renovate security update: maplibre-gl@6.4.1
   - maplibre-gl@6.4.1
+  # Renovate security update: astro@7.2.8
+  - astro@7.2.8
