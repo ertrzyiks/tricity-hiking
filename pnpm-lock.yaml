@@ -28,7 +28,7 @@ importers:
         version: 1.2.3
       '@nanostores/preact':
         specifier: 1.1.0
-        version: 1.1.0(nanostores@1.5.1)(preact@10.29.8)
+        version: 1.1.0(nanostores@1.5.2)(preact@10.29.8)
       '@piwikpro/tracking-base-library':
         specifier: 1.7.1
         version: 1.7.1
@@ -66,8 +66,8 @@ importers:
         specifier: 6.4.1
         version: 6.4.1
       nanostores:
-        specifier: 1.5.1
-        version: 1.5.1
+        specifier: 1.5.2
+        version: 1.5.2
       playwright:
         specifier: 1.62.1
         version: 1.62.1
@@ -3446,8 +3446,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanostores@1.5.1:
-    resolution: {integrity: sha512-DNIX+HyFpo14fKGe0NsX9/aPzdKGiSZwX5xEMpDwQrDdo2iTiUYunOCCQLYwJrziKVe8ZOtVvcv0dEVI8lMx2g==}
+  nanostores@1.5.2:
+    resolution: {integrity: sha512-B0UbxzK1s0CN8Xht6r+7iT5+xV8PTaRERR1nATeplRv1Rw5YLWfVAid0hkqY3EceqpG4RjTk8GAwIxQY39Rnwg==}
     engines: {node: ^20.0.0 || >=22.0.0}
 
   neotraverse@1.0.1:
@@ -5581,9 +5581,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nanostores/preact@1.1.0(nanostores@1.5.1)(preact@10.29.8)':
+  '@nanostores/preact@1.1.0(nanostores@1.5.2)(preact@10.29.8)':
     dependencies:
-      nanostores: 1.5.1
+      nanostores: 1.5.2
       preact: 10.29.8(preact-render-to-string@6.6.6)
 
   '@napi-rs/wasm-runtime@1.2.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
@@ -8421,7 +8421,7 @@ snapshots:
 
   nanoid@3.3.16: {}
 
-  nanostores@1.5.1: {}
+  nanostores@1.5.2: {}
 
   neotraverse@1.0.1: {}
 
