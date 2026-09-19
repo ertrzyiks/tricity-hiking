@@ -35,7 +35,7 @@
     "@statsig/session-replay": "3.33.4",
     "@statsig/web-analytics": "3.33.4",
     "@tailwindcss/vite": "4.3.3",
-    "astro": "7.2.0",
+    "astro": "7.2.8",
     "astro-favicons": "3.1.6",
     "astro-icon": "1.1.5",
     "debounce": "3.0.0",
