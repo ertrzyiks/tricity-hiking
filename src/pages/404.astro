@@ -1,11 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import PageTitle from "../components/ui/PageTitle.astro";
 ---
 
 <Layout title="Nothing was found">
-  <div
-    class="max-w-(--breakpoint-xl) mx-auto relative px-2 lg:px-0 my-6 lg:my-16"
-  >
-    <h2 class="text-2xl mb-8">Page not found</h2>
-  </div>
+  <PageTitle title="Page not found" slot="hero" />
 </Layout>

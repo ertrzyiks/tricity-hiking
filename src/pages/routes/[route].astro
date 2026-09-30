@@ -2,6 +2,7 @@
 import type { InferGetStaticParamsType } from "astro";
 import { getCollection, getEntry, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
 import { RouteMapPrefetch } from "../../components/ui/RouteMapPrefetch/RouteMapPrefetch";
 import { FullElevationChart } from "../../components/ui/FullElevationChart/FullElevationChart";
 import { config } from "../../components/markdown";
@@ -68,6 +69,8 @@ if (!feature) {
   title={`${entry.data.title}`}
   description={entry.data.htmlDescription ?? entry.data.description}
 >
+  <PageTitle title={entry.data.title} slot="hero" />
+
   <div class="max-w-(--breakpoint-xl) mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 px-4 xl:px-0">
       <div>
@@ -151,8 +154,6 @@ if (!feature) {
         </div>
       </div>
       <div>
-        <h1 class="py-4 text-4xl">{entry.data.title}</h1>
-
         <Content components={config} />
       </div>
     </div>
