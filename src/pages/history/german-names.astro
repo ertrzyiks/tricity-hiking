@@ -31,19 +31,16 @@ const unmapped = entry.data.features.filter(
     <h2 class="text-3xl my-4">Old German names</h2>
 
     <p class="text-lg my-2">
-      Until 1945, Gdańsk (Danzig), Sopot, and the surrounding villages used
-      German street, district, and locality names. This overlay places{" "}
-      {mappable.features.length} of them on today's map, geocoded from an index of
-      the pre-war names and their Polish replacements. Toggle the layers below, or
-      click a line, shape, or dot to see the old name next to the current one.
+      For many years until 1945, Gdańsk, Sopot, and significant part of that
+      today is northern part of Poland used German names for streets, districts
+      and geographic features. This overlay places{" "}
+      {mappable.features.length} of them on today's map. Toggle the layers below,
+      or click a line, shape, or dot to see the old name next to the current one.
     </p>
 
     <Admonition type="info" title="About the data">
-      Streets are shown as lines (or shaded squares, for the old market places).
-      Districts and some localities are shown as shaded areas where a
-      present-day boundary exists, otherwise as a dot. A few dozen names from
-      the source couldn't be matched to a current OpenStreetMap feature, usually
-      because the Polish name on record was itself replaced again after 1989.
+      Streets are shown as lines. Districts and some localities are shown as
+      shaded areas where a present-day boundary exists, otherwise as a dot.
       {
         import.meta.env.DEV && (
           <>
@@ -67,7 +64,7 @@ const unmapped = entry.data.features.filter(
       <GermanNamesMap client:only="preact" data={mappable} />
 
       <figcaption class="text-base text-slate-500 text-center my-2">
-        Old German names overlaid on the current map of Gdańsk and Sopot
+        Old German names overlaid on the current map
       </figcaption>
     </figure>
 
@@ -75,7 +72,7 @@ const unmapped = entry.data.features.filter(
       unmapped.length > 0 && (
         <details class="my-6 text-sm text-slate-600">
           <summary class="cursor-pointer font-bold text-slate-700">
-            {unmapped.length} names we couldn't place on the map
+            {unmapped.length} names couldn't placed on the map for some reason
           </summary>
           <ul class="list-disc list-inside mt-2 columns-1 sm:columns-2 lg:columns-3 gap-4">
             {unmapped.map((feature) => (
