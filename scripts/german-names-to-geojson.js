@@ -215,18 +215,41 @@ function pickStreetGeometry(results) {
   return null;
 }
 
+// Nominatim's "addresstype" for a result that *contains* the place we
+// searched for, rather than being the place itself - a village sharing its
+// name with the gmina/powiat around it is the common case (e.g. "Pszczółki"
+// matches both the village and "gmina Pszczółki", several times its size).
+// Blacklisted rather than whitelisting the good types, since legitimate
+// specific types vary a lot (village, town, city, hamlet, suburb, quarter,
+// waterway, water, ...) and a blacklist degrades safely to "unrecognised
+// type, keep it" instead of silently dropping a valid but unlisted one.
+const CONTAINER_ADDRESSTYPES = new Set([
+  "municipality",
+  "county",
+  "state_district",
+  "state",
+  "country",
+  "region",
+]);
+
 // Districts/localities: a polygon boundary is the correct shape, falling
 // back to a point. LineString matches are deliberately never used here -
 // free-text name search frequently turns up an unrelated river, stream, or
 // boundary way that happens to share the name (e.g. "Kłodawa" is both a
 // village and a stream near Gdańsk), which would otherwise outrank the
 // right village/district match. Results are also restricted to plausible
-// area categories, and same-named candidates at wildly different scales
-// (a village and the gmina/powiat containing it) are pruned down to the
-// smallest/most specific one instead of being merged together - see
+// area categories; container-level matches (the gmina/powiat around the
+// named place) are preferred away in favour of the place itself, and
+// same-named candidates still at wildly different scales after that are
+// pruned down to the smallest/most specific one instead of merging - see
 // dropOversizedOutliers.
 function pickAreaGeometry(results) {
-  const candidates = results.filter((r) => hasCategory(r, AREA_CATEGORIES));
+  let candidates = results.filter((r) => hasCategory(r, AREA_CATEGORIES));
+
+  const nonContainers = candidates.filter(
+    (r) => !CONTAINER_ADDRESSTYPES.has(r.addresstype),
+  );
+  if (nonContainers.length) candidates = nonContainers;
 
   const polys = candidates.filter((r) =>
     ["Polygon", "MultiPolygon"].includes(r.geojson?.type),
@@ -265,15 +288,22 @@ async function run() {
     german: r[0],
     polish: r[1],
     category: r[2],
+    // Only meaningful for category "street name" - which city to geocode
+    // the street against (Gdańsk or Sopot's section of the book).
+    city: r[3] || undefined,
   }));
 
   const localities = records.filter((r) => r.category === "locality name");
   const districts = records.filter((r) => r.category === "district name");
   const streets = records.filter((r) => r.category === "street name");
-  // The CSV lists Gdańsk streets first, then Sopot streets last - see
-  // names/german-polish-names.csv for the book's own section order.
-  const sopotStreets = streets.slice(-9);
-  const gdanskStreets = streets.slice(0, -9);
+
+  for (const record of streets) {
+    if (record.city !== "Gdańsk" && record.city !== "Sopot") {
+      throw new Error(
+        `Street "${record.german}" has no (or an unrecognised) city column value: ${JSON.stringify(record.city)}`,
+      );
+    }
+  }
 
   const features = [];
   let processed = 0;
@@ -310,28 +340,16 @@ async function run() {
     features.push(toFeature(record, exists, geometry));
   }
 
-  for (const record of gdanskStreets) {
+  for (const record of streets) {
     processed++;
     const exists = !record.polish.toLowerCase().startsWith("nie istnieje");
     let geometry = null;
 
     if (exists) {
-      console.log(`[${processed}/${total}] street (Gdańsk): ${record.german}`);
-      geometry = await geocodeStreet(queryName(record.polish), "Gdańsk");
-      await delay(1100);
-    }
-
-    features.push(toFeature(record, exists, geometry));
-  }
-
-  for (const record of sopotStreets) {
-    processed++;
-    const exists = !record.polish.toLowerCase().startsWith("nie istnieje");
-    let geometry = null;
-
-    if (exists) {
-      console.log(`[${processed}/${total}] street (Sopot): ${record.german}`);
-      geometry = await geocodeStreet(queryName(record.polish), "Sopot");
+      console.log(
+        `[${processed}/${total}] street (${record.city}): ${record.german}`,
+      );
+      geometry = await geocodeStreet(queryName(record.polish), record.city);
       await delay(1100);
     }
 
@@ -357,6 +375,7 @@ function toFeature(record, exists, geometry) {
       german: record.german,
       polish: record.polish,
       category: record.category,
+      ...(record.city ? { city: record.city } : {}),
       exists,
     },
     geometry,

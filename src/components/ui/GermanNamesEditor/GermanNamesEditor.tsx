@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "preact/hooks";
 
 type Category = "street name" | "district name" | "locality name";
+type City = "Gdańsk" | "Sopot";
 
 type Feature = {
   type: "Feature";
@@ -8,6 +9,7 @@ type Feature = {
     german: string;
     polish: string;
     category: Category;
+    city?: City;
     exists: boolean;
   };
   geometry: unknown;
@@ -20,6 +22,7 @@ const CATEGORIES: Category[] = [
   "district name",
   "locality name",
 ];
+const CITIES: City[] = ["Gdańsk", "Sopot"];
 
 export const GermanNamesEditor = () => {
   const [features, setFeatures] = useState<Feature[] | null>(null);
@@ -55,7 +58,7 @@ export const GermanNamesEditor = () => {
 
   const updateField = (
     index: number,
-    field: "german" | "polish" | "category" | "exists",
+    field: "german" | "polish" | "category" | "city" | "exists",
     value: string | boolean,
   ) => {
     setFeatures((prev) => {
@@ -170,6 +173,7 @@ export const GermanNamesEditor = () => {
             <th className="py-1 pr-2">German</th>
             <th className="py-1 pr-2">Polish</th>
             <th className="py-1 pr-2">Category</th>
+            <th className="py-1 pr-2">City</th>
             <th className="py-1 pr-2 text-center">Exists</th>
             <th className="py-1 pr-2 text-center">On map</th>
           </tr>
@@ -223,6 +227,29 @@ export const GermanNamesEditor = () => {
                     </option>
                   ))}
                 </select>
+              </td>
+              <td className="py-1 pr-2">
+                {feature.properties.category === "street name" ? (
+                  <select
+                    value={feature.properties.city ?? ""}
+                    onChange={(e) =>
+                      updateField(
+                        index,
+                        "city",
+                        (e.target as HTMLSelectElement).value,
+                      )
+                    }
+                    className="border border-slate-200 rounded px-2 py-1"
+                  >
+                    {CITIES.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <span className="text-slate-300">—</span>
+                )}
               </td>
               <td className="py-1 pr-2 text-center">
                 <input

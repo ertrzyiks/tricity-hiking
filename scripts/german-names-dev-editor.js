@@ -2,6 +2,7 @@ import fs from "node:fs";
 
 const DATA_PATH = "./src/content/german_names/names.json";
 const CATEGORIES = ["street name", "district name", "locality name"];
+const CITIES = ["Gdańsk", "Sopot"];
 const ROUTE = "/api/german-names";
 
 function readBody(req) {
@@ -68,6 +69,15 @@ export function germanNamesEditorMiddleware() {
               sendJson(res, 400, {
                 error:
                   "Every feature needs string german/polish, a boolean exists, and a valid category",
+              });
+              return;
+            }
+            if (
+              properties.category === "street name" &&
+              !CITIES.includes(properties.city)
+            ) {
+              sendJson(res, 400, {
+                error: `"${properties.german}" is a street but has no valid city (Gdańsk/Sopot)`,
               });
               return;
             }
