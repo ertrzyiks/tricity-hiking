@@ -1,0 +1,246 @@
+german_name,polish_name,category
+Altenau,Starzanie,locality name
+Brunau,Bronowo,locality name
+Dirschau,Tczew,locality name
+Espenkrug,Osowa,district name
+Furstenwerder,Książęce Żuławki,locality name
+Gdingen-Gotenhafen,Gdynia,locality name
+Gnojau,Gnojewo,locality name
+Grenzdorf,Wieś Graniczna,locality name
+Gross Lesewitz,Lasowice Wielkie,locality name
+Guettland,Koźliny,locality name
+Herrengrebin,Grabina,locality name
+Herzberg,Miłocin,locality name
+Hohenstein,Pszczółki,locality name
+Jankendorf,Janikowo,locality name
+Kalthof,Każdowo,locality name
+Kaesemark,Kiezmark,locality name
+Kladau,Kłodawa,locality name
+Klein Lichtenau,Lichnówko,locality name
+Konitz,Chojnice,locality name
+Konradstein,Kocborowo,locality name
+Kriefkohl,Krzywe Koło,locality name
+Kunzendorf,Kończewice,locality name
+Lamenstein,Elganowo,locality name
+Liessau,Lisewo,locality name
+Marienau,Marynowy,locality name
+Marienburg,Malbork,locality name
+Matzkau,Maćki,locality name
+Meisterswalde,Mierzeszyn,locality name
+Mielenz,Miłoradz,locality name
+Moenchengrebin,Grabińskie Pole,locality name
+Neuteich,Nowy Staw,locality name
+Pieckel,Piekło,locality name
+Proebbernau,Przebrno,locality name
+Renneberg,Renuszewo,locality name
+Schoenwarling,Skowarcz,locality name
+Simonsdorf,Szymankowo,locality name
+Steegen,Stegna,locality name
+Stutthoefer Kampe,Sztutowska Kępa,locality name
+Tiegenhof,Nowy Dwór,locality name
+Warnkau,Kościeleczki,locality name
+Wotzlaff,Wodzisław,locality name
+Altschottland,Stare Szkoty,district name
+Bischofsberg,Biskupia Górka,district name
+Broesen,Brzeźno,district name
+Glettkau,Jelitkowo,district name
+Guteherberge,Lipce,district name
+Holm,Ostrów,district name
+Kaiserhafen,Kanał Kaszubski,district name
+Langfuhr,Wrzeszcz,district name
+Matzkau,Maćki,district name
+Neufahrwasser,Nowy Port,district name
+Neuschottland,Nowe Szkoty,district name
+Ohra,Orunia,district name
+Ohra-Altdorf,Orunia-Stara Wieś,district name
+Oliva,Oliwa,district name
+Petershagen,stacja kolejowa "Pietraszek",district name
+Reichskolonie,stacja kolejowa Gdańsk-Kolonia,district name
+Stolzenberg,Chełm,district name
+Troyl,Przeróbka,district name
+"Walddorf-Gross, Klein",Olszynka,district name
+Weichselmuende,Wisłoujście,district name
+Adebargasse,Pszenna,street name
+Adolf-Hitler-Strasse,Grunwaldzka,street name
+Althof,Stary Dwór,street name
+Altstaedtischer Graben,Podwale Staromiejskie,street name
+Ankerschmiedegasse,Kotwiczników,street name
+Am brausenden Wasser,Wartka,street name
+Am Berge,"nie istnieje, była przy Biskupiej",street name
+Am Heiligenbrunn,Traugutta,street name
+Am Johannisberg,Sobótki,street name
+Am Karlsberg,Tatrzańska,street name
+Am Markt,Pierwszej Armii (obecnie: Stary Rynek Oliwski),street name
+Am Spendhaus,Sieroca,street name
+Am Steffenspark,Kolejowa,street name
+An der Grossen Muehle,Wielkie Młyny,street name
+An der Neuen Mottlau,Motławska,street name
+An der Ostbahn,Zaułek,street name
+An der Schneidemuehle,Tartaczna,street name
+Bahnhofstrasse,Marchlewskiego (obecnie: Romana Dmowskiego),street name
+Bastion Roggen,Redutowa,street name
+Bartholomaei-Kirchengasse,Św. Bartłomieja,street name
+Baumbachallee,Konopnickiej,street name
+Baumgartschegasse,Heweliusza,street name
+Bergstrasse,Władysława IV,street name
+Bischofsberg,Biskupia,street name
+Bischofstal,Stoczniowców,street name
+Bluecherstrasse,Beniowskiego,street name
+Blumenweg,Żarnowiecka,street name
+Boettchergasse,Bednarska,street name
+Boltengasse,Sandomierska,street name
+Brandgasse,"nie istnieje, była to poprzeczna Chmielnej",street name
+Breitgasse,Szeroka,street name
+Brunshoeferweg,Waryńskiego,street name
+Burggrafenstrasse,"nie istnieje, była to poprzeczna Stolarskiej",street name
+Burgstrasse,Grodzka,street name
+Colbatzerstrasse,Czerwonego Sztandaru (obecnie: aleja Generała Tadeusza Bora-Komorowskiego),street name
+"Damm I, II, III, IV","Grobla I, II, III, IV",street name
+Dellbrueckallee,Curie Skłodowskiej,street name
+Dultzstrasse,dr. Majkowskiego,street name
+Eichenallee,Dębinki,street name
+Elisabethkirchengasse,Elżbietańska,street name
+Elisabethwall,Wały Jagiellońskie (odcinek),street name
+Elsenstrasse,Grażyny,street name
+Englischer Damm,Grobla Angielska,street name
+Eschenweg,Jesionowa,street name
+Faulgraben,Gnilna,street name
+Ferberweg,Ks. Miszewskiego,street name
+Fischmarkt,Targ Rybny,street name
+Fleischergasse,Rzeźnicka,street name
+Friedenssteg,Sienkiewicza,street name
+Fuchswall,Lisia Grobla,street name
+Gneisenaustrasse,Kaprów,street name
+Grabengasse,Przyokopowa,street name
+Gralathstrasse,Hoene Wrońskiego,street name
+Grenadiergasse,Na Stoku,street name
+Grosse Gerbergasse,Garbary,street name
+Grosse Muehlengasse,Młyńska,street name
+Grosse Schwalbengasse,Jaskółcza,street name
+Grosse Wollwebergasse,Tkacka,street name
+Gruener Weg,Zielona,street name
+Guenter-Deskowski-Strasse,Malczewskiego,street name
+Haekergasse,Straganiarska,street name
+Hansaplatz,"nie istnieje, był koło wałów Piastowskich",street name
+Hedwigs-Kirchstrasse,Parafialna,street name
+Heeresanger,Dzierżyńskiego (obecnie: aleja Legionów),street name
+Heidsee,Pusty Staw,locality name
+Heiligenbrunnerweg,Hibnera (obecnie: Do Studzienki),street name
+Heinrich-Scholz-Weg,Powstańców Warszawskich,street name
+Hennersdorferweg,Małachowskiego,street name
+Herbert-Norkus-Strasse,Kraszewskiego,street name
+Heumarkt,Plac 1-Maja (obecnie: Targ Sienny),street name
+Heveliusplatz,Plac Obrońców Poczty Polskiej,street name
+Hindenburg-Allee,Al. Zwycięstwa,street name
+Hindersinstrasse,Kasztanowa,street name
+Hinter der Salvatorkirche,Zakątna,street name
+Hirschgasse,Sempołowskiej,street name
+Holzgasse,Kładki,street name
+Holzmarkt,Targ Drzewny,street name
+Holzraum,Jaracza,street name
+Hopfengasse,Chmielna,street name
+Horst-Hoffmann-Wall,3 Maja,street name
+Hundegasse,Ogarna,street name
+Jaeschkentalerweg,Jaśkowa Dolina,street name
+Jahnstrasse,Alfa Liczmańskiego,street name
+Johannisgasse,Świętojańska,street name
+John-Gibsone-Strasse,Krzemienieckiej,street name
+Jopengasse,Piwna,street name
+Jungferngasse,Panieńska,street name
+Kalkgasse,"nie istnieje, była to poprzeczna Gnilnej",street name
+Kaninchenberg,Górka,street name
+Karrenwall,Okopowa,street name
+Karthaeuserstrasse,Kartuska,street name
+Kassubischer Markt,"nie istnieje, była w okolicy Pl. Górkiego",street name
+Kastanienweg,Lendziona,street name
+Kesselsdorferweg,Żeleńskiego (Boya),street name
+Ketterhagergasse,Zbytki,street name
+Kneipab,Elbląska,street name
+Koellner Chaussee,Spacerowa,street name
+Kohlenmarkt,Targ Węglowy,street name
+Kolkowgasse,Królikarnia,street name
+Krebsmarkt,Kalinowskiego,street name
+Kriegerzeile,Kunickiego,street name
+Langer Markt,Długi Targ,street name
+Langgarten,Elbląska,street name
+Langgasse,Długa,street name
+Lauentalerweg,Starowiejska,street name
+Lindenstrasse,Tuwima,street name
+Linzstrasse,Pola,street name
+Magdeburgerstrasse,Kościuszki,street name
+Marineweg,Klonowicza,street name
+Mattenbuden,Szopy,street name
+Mausegasse,Owsiana,street name
+Melzergasse,Słodowników,street name
+Michaels-Weg St.,Traugutta,street name
+Milchkannengasse,Stągiewna,street name
+Mirchauerweg,Partyzantów,street name
+Muenchengasse,Żytnia,street name
+Neugarten,Świerczewskiego (obecnie: Nowe Ogrody),street name
+Neue Welt,Nowiny,street name
+Oberstrasse,Malczewskiego,street name
+Olivaerstrasse,Oliwska,street name
+Olivaer Tor,Brama Oliwska,street name
+Opitzstrasse,Orzeszkowej,street name
+Paradiesgasse,Rajska,street name
+Parkweg,Zielna,street name
+Paul-Beneke-Weg,Marynarki Polskiej,street name
+Pelonkerstrasse,Polanki,street name
+Petershagen,Zaroślak,street name
+Pfefferstadt,Korzenna,street name
+Pferdetraenke,Wodopój,street name
+Plankengasse,Dziewanowskiego,street name
+Poggenpfuhl,Żabi Kruk,street name
+Portchaisengasse,Lektykarska,street name
+Posadowsky-Weg,Kochanowskiego,street name
+Raehm,Sukiennicza,street name
+Redefka-Weg,Uczniowska,street name
+Reitbahn,Bogusławskiego,street name
+Reitergasse,Ułańska,street name
+Rektorweg,"nie istnieje, była to poprzeczna Kartuskiej",street name
+Richard-Wagner-Weg,Ryszarda Wagnera,street name
+Rothaenchengang,Goszczyńskiego,street name
+Samtgasse,Aksamitna,street name
+Sandgrube,Ks. Rogaczewskiego,street name
+Saspersstrasse,Na Zaspę,street name
+Schanzbergweg,Na Zboczu,street name
+Scharmerstrasse,Prusa,street name
+Schellmuehlerweg,Kliniczna,street name
+Schichaugasse,Jana z Kolna,street name
+Schiesstange,Kurkowa,street name
+Schild,"nie istnieje, była to poprzeczna Wałowej",street name
+Schlageterstrasse,Marchlewskiego (obecnie: Romana Dmowskiego),street name
+Schmiedegasse,Kowalska,street name
+Schoenfelderweg,Małomiejska,street name
+Schoenstrasse,Dr. Fr. Kręckiego,street name
+Schuesseldamm,Łagiewniki,street name
+Schuetzengang,Strzelecka,street name
+Schwarzes Meer,"nie istnieje, była przy Biskupiej",street name
+Stadtgebiet,Jedności Robotniczej (obecnie: Trakt Świętego Wojciecha),street name
+Stadtgraben,Podwale Grodzkie,street name
+Stahlweg,Stalowa,street name
+Steindamm,Kamienna Grobla,street name
+Stiftswinkel,Robotnicza,street name
+Strohdeich,Sienna Grobla,street name
+Thornscherweg,Toruńska,street name
+Tischlergasse,Stolarska,street name
+Tobiasgasse,Tobiasza,street name
+Toepfergasse,Garncarska,street name
+Trojangasse,Seredyńskiego,street name
+Troyl,Przetoczna,street name
+Vorstaedtischer Graben,"nie istnieje, była równoległa do Ogarnej",street name
+Wallgasse,Wałowa,street name
+Weikhmanngasse,Polna,street name
+Weidengasse,Łąkowa,street name
+Wellengang,"nie istnieje, była to poprzeczna Ks. Rogaczewskiego",street name
+Wiesengasse,Wierzbowa,street name
+Wilhelmstrasse,Wolności,street name
+Adolf-Hitler-Strasse,Aleja Niepodległości,street name
+Cecilienstrasse,Czyżewskiego,street name
+Eisenhardtstrasse,Chopina,street name
+Haffnerstrasse,Sobieskiego,street name
+Heidebergstrasse,Długosza,street name
+Mackensenallee,Kościuszki,street name
+Schulstrasse,Kościuszki,street name
+Taubenwasserweg,23 Marca,street name
+Wilhelmstrasse,Bieruta (obecnie: Haffnera),street name

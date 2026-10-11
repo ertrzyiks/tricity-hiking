@@ -11,6 +11,7 @@ import sitemap from "@astrojs/sitemap";
 import favicons from "astro-favicons";
 
 import { copyMaplibreGlWorker } from "./scripts/copy-maplibre-gl-worker.js";
+import { germanNamesEditorMiddleware } from "./scripts/german-names-dev-editor.js";
 
 // https://astro.build/config
 export default defineConfig({
@@ -52,7 +53,11 @@ export default defineConfig({
   ],
 
   vite: {
-    plugins: [tailwindcss(), copyMaplibreGlWorker()],
+    plugins: [
+      tailwindcss(),
+      copyMaplibreGlWorker(),
+      germanNamesEditorMiddleware(),
+    ],
     server: {
       allowedHosts: ["9745f00829df.ngrok-free.app"],
       // The capture and capture:map-tiles scripts write screenshots

@@ -15,3 +15,9 @@ export const TRAIL_LINE_GRADIENT: readonly [string, string] = [
 // How many flat-coloured bands approximate that gradient - shared so every
 // trail line layer (HomeMap, PreviewRouteMap, RouteMap) looks consistent.
 export const TRAIL_LINE_BAND_COUNT = 5;
+
+// German historical place-name overlay (GermanNamesMap): one colour per
+// category, kept clear of the red family already used for hiking trails.
+export const GERMAN_NAMES_STREET_COLOR = "#d97706"; // amber-600
+export const GERMAN_NAMES_DISTRICT_COLOR = "#7c3aed"; // violet-600
+export const GERMAN_NAMES_LOCALITY_COLOR = "#0d9488"; // teal-600
