@@ -120,10 +120,62 @@ const blogCollection = defineCollection({
     }),
 });
 
+const germanNamesCollection = defineCollection({
+  loader: glob({
+    pattern: "**/*.json",
+    base: "./src/content/german_names",
+  }),
+  schema: z.object({
+    type: z.literal("FeatureCollection"),
+    features: z.array(
+      z.object({
+        type: z.literal("Feature"),
+        properties: z.object({
+          german: z.string(),
+          polish: z.string(),
+          category: z.enum(["street name", "district name", "locality name"]),
+          // Only meaningful (and set) for category "street name" - streets
+          // are drawn from either Gdańsk's or Sopot's section of the book,
+          // which the geocoder needs to know to query the right city.
+          city: z.enum(["Gdańsk", "Sopot"]).optional(),
+          exists: z.boolean(),
+        }),
+        geometry: z
+          .union([
+            z.object({
+              type: z.literal("Point"),
+              coordinates: z.tuple([z.number(), z.number()]),
+            }),
+            z.object({
+              type: z.literal("LineString"),
+              coordinates: z.array(z.tuple([z.number(), z.number()])),
+            }),
+            z.object({
+              type: z.literal("MultiLineString"),
+              coordinates: z.array(z.array(z.tuple([z.number(), z.number()]))),
+            }),
+            z.object({
+              type: z.literal("Polygon"),
+              coordinates: z.array(z.array(z.tuple([z.number(), z.number()]))),
+            }),
+            z.object({
+              type: z.literal("MultiPolygon"),
+              coordinates: z.array(
+                z.array(z.array(z.tuple([z.number(), z.number()]))),
+              ),
+            }),
+          ])
+          .nullable(),
+      }),
+    ),
+  }),
+});
+
 export const collections = {
   routes: routesCollection,
   geodata: geodataCollection,
   activities: activitiesCollection,
   "map-tiles": mapTilesCollection,
   blog: blogCollection,
+  german_names: germanNamesCollection,
 };

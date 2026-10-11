@@ -1,0 +1,95 @@
+---
+import { getEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Admonition from "../../components/ui/Admonition.astro";
+import { GermanNamesMap } from "../../components/ui/GermanNamesMap/GermanNamesMap";
+import { MapLoadingSpinner } from "../../components/ui/MapLoadingSpinner/MapLoadingSpinner";
+
+const entry = await getEntry("german_names", "names");
+
+if (!entry) {
+  throw new Error("Missing german_names geodata");
+}
+
+// Only features we could actually place on the map - a handful of names
+// from the book (mostly streets renamed again after 1989, past what the
+// source records) couldn't be matched to a present-day OSM feature.
+const mappable = {
+  type: "FeatureCollection" as const,
+  features: entry.data.features.filter((feature) => feature.geometry !== null),
+} as GeoJSON.FeatureCollection;
+
+const unmapped = entry.data.features.filter(
+  (feature) => feature.geometry === null && feature.properties.exists,
+);
+---
+
+<Layout
+  title="Old German street, district, and locality names of Gdańsk and Sopot"
+>
+  <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
+    <h2 class="text-3xl my-4">Old German names</h2>
+
+    <p class="text-lg my-2">
+      For many years until 1945, Gdańsk, Sopot, and significant part of that
+      today is northern part of Poland used German names for streets, districts
+      and geographic features. This overlay places{" "}
+      {mappable.features.length} of them on today's map. Toggle the layers below,
+      or click a line, shape, or dot to see the old name next to the current one.
+    </p>
+
+    <Admonition type="info" title="About the data">
+      Streets are shown as lines. Districts and some localities are shown as
+      shaded areas where a present-day boundary exists, otherwise as a dot.
+      {
+        import.meta.env.DEV && (
+          <>
+            {" "}
+            <a class="hover:underline text-blue-600" href="/dev/german-names/">
+              Edit this data &rarr;
+            </a>
+          </>
+        )
+      }
+    </Admonition>
+
+    <figure class="my-4 relative h-[70vh]">
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 flex items-center justify-center pointer-events-none bg-slate-100"
+      >
+        <MapLoadingSpinner />
+      </div>
+
+      <GermanNamesMap client:only="preact" data={mappable} />
+
+      <figcaption class="text-base text-slate-500 text-center my-2">
+        Old German names overlaid on the current map
+      </figcaption>
+    </figure>
+
+    {
+      unmapped.length > 0 && (
+        <details class="my-6 text-sm text-slate-600">
+          <summary class="cursor-pointer font-bold text-slate-700">
+            {unmapped.length} names couldn't placed on the map for some reason
+          </summary>
+          <ul class="list-disc list-inside mt-2 columns-1 sm:columns-2 lg:columns-3 gap-4">
+            {unmapped.map((feature) => (
+              <li>
+                {feature.properties.german} &rarr; {feature.properties.polish}
+              </li>
+            ))}
+          </ul>
+        </details>
+      )
+    }
+  </div>
+</Layout>
+
+<style is:global>
+  .maplibregl-map {
+    height: 100%;
+    width: 100%;
+  }
+</style>

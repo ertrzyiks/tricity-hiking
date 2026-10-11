@@ -1,0 +1,246 @@
+german_name,polish_name,category,city
+Altenau,Staranie,locality name,
+Brunau,Bronowo,locality name,
+Dirschau,Tczew,locality name,
+Furstenwerder,Książęce Żuławki,locality name,
+Gdingen-Gotenhafen,Gdynia,locality name,
+Gnojau,Gnojewo,locality name,
+Grenzdorf,Wieś Graniczna,locality name,
+Gross Lesewitz,Lasowice Wielkie,locality name,
+Guettland,Koźliny,locality name,
+Herrengrebin,Grabina,locality name,
+Herzberg,Miłocin,locality name,
+Hohenstein,Pszczółki,locality name,
+Jankendorf,Jankowo,locality name,
+Kalthof,Każdowo,locality name,
+Kaesemark,Kiezmark,locality name,
+Kladau,Kłodawa,locality name,
+Klein Lichtenau,Lichnówko,locality name,
+Konitz,Chojnice,locality name,
+Konradstein,Kocborowo,locality name,
+Kriefkohl,Krzywe Koło,locality name,
+Kunzendorf,Kończewice,locality name,
+Lamenstein,Ełganowo,locality name,
+Liessau,Lisewo,locality name,
+Marienau,Marynowy,locality name,
+Marienburg,Malbork,locality name,
+Matzkau,Maćki,locality name,
+Meisterswalde,Mierzeszyn,locality name,
+Mielenz,Miłoradz,locality name,
+Moenchengrebin,Grabińskie Pole,locality name,
+Neuteich,Nowy Staw,locality name,
+Pieckel,Piekło,locality name,
+Proebbernau,Przebrno,locality name,
+Renneberg,Renuszewo,locality name,
+Schoenwarling,Skowarcz,locality name,
+Simonsdorf,Szymankowo,locality name,
+Steegen,Stegna,locality name,
+Stutthoefer Kampe,Sztutowska Kępa,locality name,
+Tiegenhof,Nowy Dwór,locality name,
+Warnkau,Kościeleczki,locality name,
+Wotzlaff,Wodzisław,locality name,
+Heidsee,Pusty Staw,locality name,
+Espenkrug,Osowa,district name,
+Altschottland,Stare Szkoty,district name,
+Bischofsberg,Biskupia Górka,district name,
+Broesen,Brzeźno,district name,
+Glettkau,Jelitkowo,district name,
+Guteherberge,Lipce,district name,
+Holm,Ostrów,district name,
+Kaiserhafen,Kanał Kaszubski,district name,
+Langfuhr,Wrzeszcz,district name,
+Matzkau,Maćki,district name,
+Neufahrwasser,Nowy Port,district name,
+Neuschottland,Nowe Szkoty,district name,
+Ohra,Orunia,district name,
+Ohra-Altdorf,Orunia-Stara Wieś,district name,
+Oliva,Oliwa,district name,
+Petershagen,stacja kolejowa Pietraszek,district name,
+Reichskolonie,stacja kolejowa Gdańsk-Kolonia,district name,
+Stolzenberg,Chełm,district name,
+Troyl,Przeróbka,district name,
+"Walddorf-Gross, Klein",Olszynka,district name,
+Weichselmuende,Wisłoujście,district name,
+Adebargasse,Pszenna,street name,Gdańsk
+Adolf-Hitler-Strasse,Grunwaldzka,street name,Gdańsk
+Althof,Stary Dwór,street name,Gdańsk
+Altstaedtischer Graben,Podwale Staromiejskie,street name,Gdańsk
+Ankerschmiedegasse,Kotwiczników,street name,Gdańsk
+Am brausenden Wasser,Wartka,street name,Gdańsk
+Am Berge,"nie istnieje, była przy Biskupiej",street name,Gdańsk
+Am Heiligenbrunn,Traugutta,street name,Gdańsk
+Am Johannisberg,Sobótki,street name,Gdańsk
+Am Karlsberg,Tatrzańska,street name,Gdańsk
+Am Markt,Stary Rynek Oliwski,street name,Gdańsk
+Am Spendhaus,Sieroca,street name,Gdańsk
+Am Steffenspark,Kolejowa,street name,Gdańsk
+An der Grossen Muehle,Wielkie Młyny,street name,Gdańsk
+An der Neuen Mottlau,Motławska,street name,Gdańsk
+An der Ostbahn,Zaułek,street name,Gdańsk
+An der Schneidemuehle,Tartaczna,street name,Gdańsk
+Bahnhofstrasse,Romana Dmowskiego,street name,Gdańsk
+Bastion Roggen,Redutowa,street name,Gdańsk
+Bartholomaei-Kirchengasse,Św. Bartłomieja,street name,Gdańsk
+Baumbachallee,Konopnickiej,street name,Gdańsk
+Baumgartschegasse,Heweliusza,street name,Gdańsk
+Bergstrasse,Władysława IV,street name,Gdańsk
+Bischofsberg,Biskupia,street name,Gdańsk
+Bischofstal,Stoczniowców,street name,Gdańsk
+Bluecherstrasse,Beniowskiego,street name,Gdańsk
+Blumenweg,Żarnowiecka,street name,Gdańsk
+Boettchergasse,Bednarska,street name,Gdańsk
+Boltengasse,Sandomierska,street name,Gdańsk
+Brandgasse,"nie istnieje, była to poprzeczna Chmielnej",street name,Gdańsk
+Breitgasse,Szeroka,street name,Gdańsk
+Brunshoeferweg,Waryńskiego,street name,Gdańsk
+Burggrafenstrasse,"nie istnieje, była to poprzeczna Stolarskiej",street name,Gdańsk
+Burgstrasse,Grodzka,street name,Gdańsk
+Colbatzerstrasse,Generała Tadeusza Bora-Komorowskiego,street name,Gdańsk
+"Damm I, II, III, IV","Grobla I, II, III, IV",street name,Gdańsk
+Dellbrueckallee,Curie Skłodowskiej,street name,Gdańsk
+Dultzstrasse,dr. Majkowskiego,street name,Gdańsk
+Eichenallee,Dębinki,street name,Gdańsk
+Elisabethkirchengasse,Elżbietańska,street name,Gdańsk
+Elisabethwall,Wały Jagiellońskie (odcinek),street name,Gdańsk
+Elsenstrasse,Grażyny,street name,Gdańsk
+Englischer Damm,Grobla Angielska,street name,Gdańsk
+Eschenweg,Jesionowa,street name,Gdańsk
+Faulgraben,Gnilna,street name,Gdańsk
+Ferberweg,Ks. Miszewskiego,street name,Gdańsk
+Fischmarkt,Targ Rybny,street name,Gdańsk
+Fleischergasse,Rzeźnicka,street name,Gdańsk
+Friedenssteg,Sienkiewicza,street name,Gdańsk
+Fuchswall,Lisia Grobla,street name,Gdańsk
+Gneisenaustrasse,Kaprów,street name,Gdańsk
+Grabengasse,Przyokopowa,street name,Gdańsk
+Gralathstrasse,Hoene Wrońskiego,street name,Gdańsk
+Grenadiergasse,Na Stoku,street name,Gdańsk
+Grosse Gerbergasse,Garbary,street name,Gdańsk
+Grosse Muehlengasse,Młyńska,street name,Gdańsk
+Grosse Schwalbengasse,Jaskółcza,street name,Gdańsk
+Grosse Wollwebergasse,Tkacka,street name,Gdańsk
+Gruener Weg,Zielona,street name,Gdańsk
+Guenter-Deskowski-Strasse,Malczewskiego,street name,Gdańsk
+Haekergasse,Straganiarska,street name,Gdańsk
+Hansaplatz,"nie istnieje, był koło wałów Piastowskich",street name,Gdańsk
+Hedwigs-Kirchstrasse,Parafialna,street name,Gdańsk
+Heeresanger,aleja Legionów,street name,Gdańsk
+Heiligenbrunnerweg,Do Studzienki,street name,Gdańsk
+Heinrich-Scholz-Weg,Powstańców Warszawskich,street name,Gdańsk
+Hennersdorferweg,Małachowskiego,street name,Gdańsk
+Herbert-Norkus-Strasse,Kraszewskiego,street name,Gdańsk
+Heumarkt,Targ Sienny,street name,Gdańsk
+Heveliusplatz,Plac Obrońców Poczty Polskiej,street name,Gdańsk
+Hindenburg-Allee,Al. Zwycięstwa,street name,Gdańsk
+Hindersinstrasse,Kasztanowa,street name,Gdańsk
+Hinter der Salvatorkirche,Zakątna,street name,Gdańsk
+Hirschgasse,Sempołowskiej,street name,Gdańsk
+Holzgasse,Kładki,street name,Gdańsk
+Holzmarkt,Targ Drzewny,street name,Gdańsk
+Holzraum,Jaracza,street name,Gdańsk
+Hopfengasse,Chmielna,street name,Gdańsk
+Horst-Hoffmann-Wall,3 Maja,street name,Gdańsk
+Hundegasse,Ogarna,street name,Gdańsk
+Jaeschkentalerweg,Jaśkowa Dolina,street name,Gdańsk
+Jahnstrasse,Alfa Liczmańskiego,street name,Gdańsk
+Johannisgasse,Świętojańska,street name,Gdańsk
+John-Gibsone-Strasse,Krzemienieckiej,street name,Gdańsk
+Jopengasse,Piwna,street name,Gdańsk
+Jungferngasse,Panieńska,street name,Gdańsk
+Kalkgasse,"nie istnieje, była to poprzeczna Gnilnej",street name,Gdańsk
+Kaninchenberg,Górka,street name,Gdańsk
+Karrenwall,Okopowa,street name,Gdańsk
+Karthaeuserstrasse,Kartuska,street name,Gdańsk
+Kassubischer Markt,"nie istnieje, była w okolicy Pl. Górkiego",street name,Gdańsk
+Kastanienweg,Lendziona,street name,Gdańsk
+Kesselsdorferweg,Żeleńskiego (Boya),street name,Gdańsk
+Ketterhagergasse,Zbytki,street name,Gdańsk
+Kneipab,Elbląska,street name,Gdańsk
+Koellner Chaussee,Spacerowa,street name,Gdańsk
+Kohlenmarkt,Targ Węglowy,street name,Gdańsk
+Kolkowgasse,Królikarnia,street name,Gdańsk
+Krebsmarkt,Kalinowskiego,street name,Gdańsk
+Kriegerzeile,Kunickiego,street name,Gdańsk
+Langer Markt,Długi Targ,street name,Gdańsk
+Langgarten,Elbląska,street name,Gdańsk
+Langgasse,Długa,street name,Gdańsk
+Lauentalerweg,Starowiejska,street name,Gdańsk
+Lindenstrasse,Tuwima,street name,Gdańsk
+Linzstrasse,Pola,street name,Gdańsk
+Magdeburgerstrasse,Kościuszki,street name,Gdańsk
+Marineweg,Klonowicza,street name,Gdańsk
+Mattenbuden,Szopy,street name,Gdańsk
+Mausegasse,Owsiana,street name,Gdańsk
+Melzergasse,Słodowników,street name,Gdańsk
+Michaels-Weg St.,Traugutta,street name,Gdańsk
+Milchkannengasse,Stągiewna,street name,Gdańsk
+Mirchauerweg,Partyzantów,street name,Gdańsk
+Muenchengasse,Żytnia,street name,Gdańsk
+Neugarten,Nowe Ogrody,street name,Gdańsk
+Neue Welt,Nowiny,street name,Gdańsk
+Oberstrasse,Malczewskiego,street name,Gdańsk
+Olivaerstrasse,Oliwska,street name,Gdańsk
+Olivaer Tor,Brama Oliwska,street name,Gdańsk
+Opitzstrasse,Orzeszkowej,street name,Gdańsk
+Paradiesgasse,Rajska,street name,Gdańsk
+Parkweg,Zielna,street name,Gdańsk
+Paul-Beneke-Weg,Marynarki Polskiej,street name,Gdańsk
+Pelonkerstrasse,Polanki,street name,Gdańsk
+Petershagen,Zaroślak,street name,Gdańsk
+Pfefferstadt,Korzenna,street name,Gdańsk
+Pferdetraenke,Wodopój,street name,Gdańsk
+Plankengasse,Dziewanowskiego,street name,Gdańsk
+Poggenpfuhl,Żabi Kruk,street name,Gdańsk
+Portchaisengasse,Lektykarska,street name,Gdańsk
+Posadowsky-Weg,Kochanowskiego,street name,Gdańsk
+Raehm,Sukiennicza,street name,Gdańsk
+Redefka-Weg,Uczniowska,street name,Gdańsk
+Reitbahn,Bogusławskiego,street name,Gdańsk
+Reitergasse,Ułańska,street name,Gdańsk
+Rektorweg,"nie istnieje, była to poprzeczna Kartuskiej",street name,Gdańsk
+Richard-Wagner-Weg,Ryszarda Wagnera,street name,Gdańsk
+Rothaenchengang,Goszczyńskiego,street name,Gdańsk
+Samtgasse,Aksamitna,street name,Gdańsk
+Sandgrube,Ks. Rogaczewskiego,street name,Gdańsk
+Saspersstrasse,Na Zaspę,street name,Gdańsk
+Schanzbergweg,Na Zboczu,street name,Gdańsk
+Scharmerstrasse,Prusa,street name,Gdańsk
+Schellmuehlerweg,Kliniczna,street name,Gdańsk
+Schichaugasse,Jana z Kolna,street name,Gdańsk
+Schiesstange,Kurkowa,street name,Gdańsk
+Schild,"nie istnieje, była to poprzeczna Wałowej",street name,Gdańsk
+Schlageterstrasse,Dmowskiego,street name,Gdańsk
+Schmiedegasse,Kowalska,street name,Gdańsk
+Schoenfelderweg,Małomiejska,street name,Gdańsk
+Schoenstrasse,Dr. Fr. Kręckiego,street name,Gdańsk
+Schuesseldamm,Łagiewniki,street name,Gdańsk
+Schuetzengang,Strzelecka,street name,Gdańsk
+Schwarzes Meer,"nie istnieje, była przy Biskupiej",street name,Gdańsk
+Stadtgebiet,Trakt Świętego Wojciecha,street name,Gdańsk
+Stadtgraben,Podwale Grodzkie,street name,Gdańsk
+Stahlweg,Stalowa,street name,Gdańsk
+Steindamm,Kamienna Grobla,street name,Gdańsk
+Stiftswinkel,Robotnicza,street name,Gdańsk
+Strohdeich,Sienna Grobla,street name,Gdańsk
+Thornscherweg,Toruńska,street name,Gdańsk
+Tischlergasse,Stolarska,street name,Gdańsk
+Tobiasgasse,Tobiasza,street name,Gdańsk
+Toepfergasse,Garncarska,street name,Gdańsk
+Trojangasse,Seredyńskiego,street name,Gdańsk
+Troyl,Przetoczna,street name,Gdańsk
+Vorstaedtischer Graben,"nie istnieje, była równoległa do Ogarnej",street name,Gdańsk
+Wallgasse,Wałowa,street name,Gdańsk
+Weikhmanngasse,Polna,street name,Gdańsk
+Weidengasse,Łąkowa,street name,Gdańsk
+Wellengang,"nie istnieje, była to poprzeczna Ks. Rogaczewskiego",street name,Gdańsk
+Wiesengasse,Wierzbowa,street name,Gdańsk
+Wilhelmstrasse,Wolności,street name,Gdańsk
+Adolf-Hitler-Strasse,Aleja Niepodległości,street name,Sopot
+Cecilienstrasse,Czyżewskiego,street name,Sopot
+Eisenhardtstrasse,Chopina,street name,Sopot
+Haffnerstrasse,Sobieskiego,street name,Sopot
+Heidebergstrasse,Długosza,street name,Sopot
+Mackensenallee,Kościuszki,street name,Sopot
+Schulstrasse,Kościuszki,street name,Sopot
+Taubenwasserweg,23 Marca,street name,Sopot
+Wilhelmstrasse,Haffnera,street name,Sopot

@@ -51,13 +51,15 @@ const timelineConfig: TimelineEvent[] = [
     year: 1807,
     event: "Siege of Danzig",
     label: "Free City (Napoleonic)",
-    description: "Napoleon's Grande Armee captures Danzig and establishes the Free City of Danzig as a semi-autonomous state under French protection.",
+    description:
+      "Napoleon's Grande Armee captures Danzig and establishes the Free City of Danzig as a semi-autonomous state under French protection.",
   },
   {
     year: 1814,
     event: "Siege of Danzig",
     label: "Prussia",
-    description: "The Siege of Danzig (1813-1814) ends with the surrender of the French garrison, and the city returns to Prussian rule.",
+    description:
+      "The Siege of Danzig (1813-1814) ends with the surrender of the French garrison, and the city returns to Prussian rule.",
   },
   {
     year: 1871,
@@ -106,5 +108,13 @@ const timelineConfig: TimelineEvent[] = [
     <HistoryTimelineLegend />
 
     <CityTimeline events={timelineConfig} />
+
+    <p class="text-lg my-4">
+      Curious what today's streets and districts used to be called before 1945?
+      See the <a
+        class="hover:underline text-green-500"
+        href="/history/german-names/">map of old German names</a
+      >.
+    </p>
   </div>
 </Layout>
