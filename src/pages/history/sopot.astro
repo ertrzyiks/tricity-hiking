@@ -1,10 +1,35 @@
 ---
+import { getEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import CityTimeline, {
   type TimelineEvent,
 } from "../../components/history/CityTimeline.astro";
 import HistoryCityTabs from "../../components/history/HistoryCityTabs.astro";
 import HistoryTimelineLegend from "../../components/history/HistoryTimelineLegend.astro";
+import Admonition from "../../components/ui/Admonition.astro";
+import { GermanNamesMap } from "../../components/ui/GermanNamesMap/GermanNamesMap";
+import { MapLoadingSpinner } from "../../components/ui/MapLoadingSpinner/MapLoadingSpinner";
+
+const germanNamesEntry = await getEntry("german_names", "names");
+
+if (!germanNamesEntry) {
+  throw new Error("Missing german_names geodata");
+}
+
+const sopotFeatures = germanNamesEntry.data.features.filter(
+  (feature) =>
+    feature.properties.category === "street name" &&
+    feature.properties.city === "Sopot",
+);
+
+const sopotMappable = {
+  type: "FeatureCollection" as const,
+  features: sopotFeatures.filter((feature) => feature.geometry !== null),
+} as GeoJSON.FeatureCollection;
+
+const sopotUnmapped = sopotFeatures.filter(
+  (feature) => feature.geometry === null && feature.properties.exists,
+);
 
 const timelineConfig: TimelineEvent[] = [
   {
@@ -76,5 +101,72 @@ const timelineConfig: TimelineEvent[] = [
     <HistoryTimelineLegend />
 
     <CityTimeline events={timelineConfig} />
+
+    <h3 class="text-2xl my-4">Old German street names</h3>
+
+    <p class="text-lg my-2">
+      Curious what today's streets used to be called before 1945? This overlay
+      places {sopotMappable.features.length} old German street names on today's map.
+      Click a line to see the old name next to the current one.
+    </p>
+
+    <Admonition type="info" title="About the data">
+      Streets are shown as lines. Looking for Gdańsk's old street and district
+      names, or the wider region's old town names? See the <a
+        class="hover:underline text-blue-600"
+        href="/history/">Gdańsk</a
+      > history page or the <a
+        class="hover:underline text-blue-600"
+        href="/history/german-names/">Old German names</a
+      > tab.
+    </Admonition>
+
+    <figure class="my-4 relative h-[50vh]">
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 flex items-center justify-center pointer-events-none bg-slate-100"
+      >
+        <MapLoadingSpinner />
+      </div>
+
+      <GermanNamesMap
+        client:only="preact"
+        data={sopotMappable}
+        categories={["street name"]}
+        center={[18.549, 54.4404]}
+        zoom={14}
+        minZoom={12}
+        maxZoom={18}
+      />
+
+      <figcaption class="text-base text-slate-500 text-center my-2">
+        Old German street names overlaid on today's Sopot
+      </figcaption>
+    </figure>
+
+    {
+      sopotUnmapped.length > 0 && (
+        <details class="my-6 text-sm text-slate-600">
+          <summary class="cursor-pointer font-bold text-slate-700">
+            {sopotUnmapped.length} names couldn't be placed on the map for some
+            reason
+          </summary>
+          <ul class="list-disc list-inside mt-2 columns-1 sm:columns-2 lg:columns-3 gap-4">
+            {sopotUnmapped.map((feature) => (
+              <li>
+                {feature.properties.german} &rarr; {feature.properties.polish}
+              </li>
+            ))}
+          </ul>
+        </details>
+      )
+    }
   </div>
 </Layout>
+
+<style is:global>
+  .maplibregl-map {
+    height: 100%;
+    width: 100%;
+  }
+</style>

@@ -2,6 +2,7 @@
 import { getEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import Admonition from "../../components/ui/Admonition.astro";
+import HistoryCityTabs from "../../components/history/HistoryCityTabs.astro";
 import { GermanNamesMap } from "../../components/ui/GermanNamesMap/GermanNamesMap";
 import { MapLoadingSpinner } from "../../components/ui/MapLoadingSpinner/MapLoadingSpinner";
 
@@ -11,36 +12,47 @@ if (!entry) {
   throw new Error("Missing german_names geodata");
 }
 
+// This page covers only town/village names across the wider region - the
+// street and district overlays for Gdańsk and Sopot live inline on their
+// own history pages instead.
+const localities = entry.data.features.filter(
+  (feature) => feature.properties.category === "locality name",
+);
+
 // Only features we could actually place on the map - a handful of names
-// from the book (mostly streets renamed again after 1989, past what the
-// source records) couldn't be matched to a present-day OSM feature.
+// from the book couldn't be matched to a present-day OSM feature.
 const mappable = {
   type: "FeatureCollection" as const,
-  features: entry.data.features.filter((feature) => feature.geometry !== null),
+  features: localities.filter((feature) => feature.geometry !== null),
 } as GeoJSON.FeatureCollection;
 
-const unmapped = entry.data.features.filter(
+const unmapped = localities.filter(
   (feature) => feature.geometry === null && feature.properties.exists,
 );
 ---
 
-<Layout
-  title="Old German street, district, and locality names of Gdańsk and Sopot"
->
+<Layout title="Old German names of towns and villages across the region">
   <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
-    <h2 class="text-3xl my-4">Old German names</h2>
+    <h2 class="text-3xl my-4">History</h2>
+
+    <HistoryCityTabs />
 
     <p class="text-lg my-2">
-      For many years until 1945, Gdańsk, Sopot, and significant part of that
-      today is northern part of Poland used German names for streets, districts
-      and geographic features. This overlay places{" "}
-      {mappable.features.length} of them on today's map. Toggle the layers below,
-      or click a line, shape, or dot to see the old name next to the current one.
+      For many years until 1945, significant part of today's northern Poland
+      used German names for its towns and villages. This overlay places{" "}
+      {mappable.features.length} of them on today's map. Click a shape or dot to see
+      the old name next to the current one.
     </p>
 
     <Admonition type="info" title="About the data">
-      Streets are shown as lines. Districts and some localities are shown as
-      shaded areas where a present-day boundary exists, otherwise as a dot.
+      Towns and villages are shown as shaded areas where a present-day boundary
+      exists, otherwise as a dot. Looking for old street or district names
+      instead? Those are shown inline on the <a
+        class="hover:underline text-blue-600"
+        href="/history/">Gdańsk</a
+      > and <a class="hover:underline text-blue-600" href="/history/sopot/"
+        >Sopot</a
+      > history pages.
       {
         import.meta.env.DEV && (
           <>
@@ -61,7 +73,15 @@ const unmapped = entry.data.features.filter(
         <MapLoadingSpinner />
       </div>
 
-      <GermanNamesMap client:only="preact" data={mappable} />
+      <GermanNamesMap
+        client:only="preact"
+        data={mappable}
+        categories={["locality name"]}
+        center={[17.99, 53.8]}
+        zoom={6.8}
+        minZoom={6}
+        maxZoom={14}
+      />
 
       <figcaption class="text-base text-slate-500 text-center my-2">
         Old German names overlaid on the current map
@@ -72,7 +92,8 @@ const unmapped = entry.data.features.filter(
       unmapped.length > 0 && (
         <details class="my-6 text-sm text-slate-600">
           <summary class="cursor-pointer font-bold text-slate-700">
-            {unmapped.length} names couldn't placed on the map for some reason
+            {unmapped.length} names couldn't be placed on the map for some
+            reason
           </summary>
           <ul class="list-disc list-inside mt-2 columns-1 sm:columns-2 lg:columns-3 gap-4">
             {unmapped.map((feature) => (
