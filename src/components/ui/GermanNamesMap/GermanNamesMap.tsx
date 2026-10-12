@@ -112,14 +112,25 @@ export const GermanNamesMap = ({
             group.category,
           ];
 
-          // Fill only ever applies to Polygon/MultiPolygon features in the
-          // source (squares, district boundaries, a village outline here
-          // and there) - maplibre ignores it for lines and points.
+          // Fill is meant for Polygon/MultiPolygon features only (squares,
+          // district boundaries, a village outline here and there) - but
+          // maplibre's fill renderer doesn't ignore a LineString that
+          // passes the filter, it closes the path and fills the chord
+          // between its start and end, so without the geometry-type guard
+          // every street gets a faint "shadow" triangle under it.
           map.addLayer({
             id: ids.fill,
             type: "fill",
             source: SOURCE_ID,
-            filter,
+            filter: [
+              "all",
+              filter,
+              [
+                "any",
+                ["==", ["geometry-type"], "Polygon"],
+                ["==", ["geometry-type"], "MultiPolygon"],
+              ],
+            ] as maplibregl.ExpressionSpecification,
             paint: {
               "fill-color": group.color,
               "fill-opacity": 0.2,
