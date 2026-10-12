@@ -49,35 +49,53 @@ const layerIds = (category: Category) => {
   };
 };
 
-const ALL_LAYER_IDS = LAYER_GROUPS.flatMap((group) => {
-  const ids = layerIds(group.category);
-  return [ids.fill, ids.line, ids.circle, ids.label];
-});
+const DEFAULT_CATEGORIES: Category[] = [
+  "street name",
+  "district name",
+  "locality name",
+];
 
 export const GermanNamesMap = ({
   data,
+  categories = DEFAULT_CATEGORIES,
+  center = [18.653, 54.3498],
+  zoom = 12,
+  minZoom = 9,
+  maxZoom = 18,
 }: {
   data: GeoJSON.FeatureCollection;
+  // Which category layers (and legend toggles) this map instance shows -
+  // lets the same component serve the region-wide locality map and the
+  // per-city street/district overlays without rendering empty toggles for
+  // categories that aren't in `data` anyway.
+  categories?: Category[];
+  center?: [number, number];
+  zoom?: number;
+  minZoom?: number;
+  maxZoom?: number;
 }) => {
+  const activeGroups = LAYER_GROUPS.filter((group) =>
+    categories.includes(group.category),
+  );
+  const activeLayerIds = activeGroups.flatMap((group) => {
+    const ids = layerIds(group.category);
+    return [ids.fill, ids.line, ids.circle, ids.label];
+  });
+
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<maplibregl.Map | null>(null);
-  const [visibility, setVisibility] = useState<Record<Category, boolean>>({
-    "street name": true,
-    "district name": true,
-    "locality name": true,
-  });
+  const [visibility, setVisibility] = useState<Record<Category, boolean>>(
+    Object.fromEntries(
+      categories.map((category) => [category, true]),
+    ) as Record<Category, boolean>,
+  );
 
   useEffect(() => {
     if (mapRef.current === null) return;
 
     return createMap(
       mapRef.current,
-      {
-        center: [18.653, 54.3498] as [number, number],
-        zoom: 12,
-        minZoom: 9,
-        maxZoom: 18,
-      },
+      { center, zoom, minZoom, maxZoom },
       async (map) => {
         mapInstanceRef.current = map;
 
@@ -86,7 +104,7 @@ export const GermanNamesMap = ({
           data,
         });
 
-        for (const group of LAYER_GROUPS) {
+        for (const group of activeGroups) {
           const ids = layerIds(group.category);
           const filter: maplibregl.ExpressionSpecification = [
             "==",
@@ -94,14 +112,25 @@ export const GermanNamesMap = ({
             group.category,
           ];
 
-          // Fill only ever applies to Polygon/MultiPolygon features in the
-          // source (squares, district boundaries, a village outline here
-          // and there) - maplibre ignores it for lines and points.
+          // Fill is meant for Polygon/MultiPolygon features only (squares,
+          // district boundaries, a village outline here and there) - but
+          // maplibre's fill renderer doesn't ignore a LineString that
+          // passes the filter, it closes the path and fills the chord
+          // between its start and end, so without the geometry-type guard
+          // every street gets a faint "shadow" triangle under it.
           map.addLayer({
             id: ids.fill,
             type: "fill",
             source: SOURCE_ID,
-            filter,
+            filter: [
+              "all",
+              filter,
+              [
+                "any",
+                ["==", ["geometry-type"], "Polygon"],
+                ["==", ["geometry-type"], "MultiPolygon"],
+              ],
+            ] as maplibregl.ExpressionSpecification,
             paint: {
               "fill-color": group.color,
               "fill-opacity": 0.2,
@@ -166,7 +195,7 @@ export const GermanNamesMap = ({
           });
         }
 
-        for (const id of ALL_LAYER_IDS) {
+        for (const id of activeLayerIds) {
           map.on("mouseenter", id, () => {
             map.getCanvas().style.cursor = "pointer";
           });
@@ -177,7 +206,7 @@ export const GermanNamesMap = ({
 
         map.on("click", (e: maplibregl.MapMouseEvent) => {
           const features = map.queryRenderedFeatures(e.point, {
-            layers: ALL_LAYER_IDS,
+            layers: activeLayerIds,
           });
 
           if (!features.length) return;
@@ -233,7 +262,7 @@ export const GermanNamesMap = ({
 
       <div className="absolute top-2 right-2 z-10 bg-white/95 rounded-lg shadow-md p-3 flex flex-col gap-2 text-sm max-w-[180px]">
         <span className="font-bold text-slate-700">Old German names</span>
-        {LAYER_GROUPS.map((group) => (
+        {activeGroups.map((group) => (
           <label
             key={group.category}
             className="flex items-center gap-2 cursor-pointer select-none"

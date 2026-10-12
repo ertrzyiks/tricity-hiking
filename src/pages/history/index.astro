@@ -1,10 +1,39 @@
 ---
+import { getEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import CityTimeline, {
   type TimelineEvent,
 } from "../../components/history/CityTimeline.astro";
 import HistoryCityTabs from "../../components/history/HistoryCityTabs.astro";
 import HistoryTimelineLegend from "../../components/history/HistoryTimelineLegend.astro";
+import Admonition from "../../components/ui/Admonition.astro";
+import { GermanNamesMap } from "../../components/ui/GermanNamesMap/GermanNamesMap";
+import { MapLoadingSpinner } from "../../components/ui/MapLoadingSpinner/MapLoadingSpinner";
+
+const germanNamesEntry = await getEntry("german_names", "names");
+
+if (!germanNamesEntry) {
+  throw new Error("Missing german_names geodata");
+}
+
+// Gdańsk's slice of the old-names overlay: its streets/squares plus every
+// district (districts in the source are Gdańsk-only, so no city filter is
+// needed for those).
+const gdanskFeatures = germanNamesEntry.data.features.filter(
+  (feature) =>
+    feature.properties.category === "district name" ||
+    (feature.properties.category === "street name" &&
+      feature.properties.city === "Gdańsk"),
+);
+
+const gdanskMappable = {
+  type: "FeatureCollection" as const,
+  features: gdanskFeatures.filter((feature) => feature.geometry !== null),
+} as GeoJSON.FeatureCollection;
+
+const gdanskUnmapped = gdanskFeatures.filter(
+  (feature) => feature.geometry === null && feature.properties.exists,
+);
 
 const timelineConfig: TimelineEvent[] = [
   {
@@ -109,12 +138,72 @@ const timelineConfig: TimelineEvent[] = [
 
     <CityTimeline events={timelineConfig} />
 
-    <p class="text-lg my-4">
+    <h3 class="text-2xl my-4">Old German street and district names</h3>
+
+    <p class="text-lg my-2">
       Curious what today's streets and districts used to be called before 1945?
-      See the <a
-        class="hover:underline text-green-500"
-        href="/history/german-names/">map of old German names</a
-      >.
+      This overlay places {gdanskMappable.features.length} old German names on today's
+      map. Click a line, shape, or dot to see the old name next to the current one.
     </p>
+
+    <Admonition type="info" title="About the data">
+      Streets are shown as lines. Districts are shown as shaded areas where a
+      present-day boundary exists, otherwise as a dot. Looking for Sopot's old
+      street names, or the wider region's old town names? See the <a
+        class="hover:underline text-blue-600"
+        href="/history/sopot/">Sopot</a
+      > history page or the <a
+        class="hover:underline text-blue-600"
+        href="/history/german-names/">City names</a
+      > tab.
+    </Admonition>
+
+    <figure class="my-4 relative h-[50vh]">
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 flex items-center justify-center pointer-events-none bg-slate-100"
+      >
+        <MapLoadingSpinner />
+      </div>
+
+      <GermanNamesMap
+        client:only="preact"
+        data={gdanskMappable}
+        categories={["district name", "street name"]}
+        center={[18.63, 54.365]}
+        zoom={12}
+        minZoom={10}
+        maxZoom={18}
+      />
+
+      <figcaption class="text-base text-slate-500 text-center my-2">
+        Old German street and district names overlaid on today's Gdańsk
+      </figcaption>
+    </figure>
+
+    {
+      gdanskUnmapped.length > 0 && (
+        <details class="my-6 text-sm text-slate-600">
+          <summary class="cursor-pointer font-bold text-slate-700">
+            {gdanskUnmapped.length} names couldn't be placed on the map for some
+            reason
+          </summary>
+          <ul class="list-disc list-inside mt-2 columns-1 sm:columns-2 lg:columns-3 gap-4">
+            {gdanskUnmapped.map((feature) => (
+              <li>
+                {feature.properties.german} &rarr; {feature.properties.polish}
+              </li>
+            ))}
+          </ul>
+        </details>
+      )
+    }
   </div>
 </Layout>
+
+<style is:global>
+  .maplibregl-map {
+    height: 100%;
+    width: 100%;
+  }
+</style>
