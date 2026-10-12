@@ -266,10 +266,16 @@ function pickAreaGeometry(results) {
 }
 
 async function geocodeStreet(name, city) {
+  // A long street is frequently split into many separate OSM ways (at
+  // intersections, administrative boundaries, ...) that all share its
+  // name - the default limit of 10 silently drops the rest, rendering
+  // only a handful of disconnected fragments instead of the whole
+  // street. 40 is Nominatim's own documented maximum per query.
   const results = await nominatimSearch({
     street: name,
     city,
     country: "Polska",
+    limit: "40",
   });
   return pickStreetGeometry(results);
 }
