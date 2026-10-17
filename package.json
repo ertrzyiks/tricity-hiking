@@ -29,7 +29,6 @@
     "@astrojs/sitemap": "3.7.4",
     "@iconify-json/mdi": "1.2.3",
     "@nanostores/preact": "1.1.0",
-    "@piwikpro/tracking-base-library": "1.7.1",
     "@sentry/astro": "10.75.0",
     "@statsig/js-client": "3.33.5",
     "@statsig/session-replay": "3.33.5",

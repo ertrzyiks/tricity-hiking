@@ -69,7 +69,7 @@ const { title, description } = Astro.props;
     <Fragment set:html={favicons(Astro.currentLocale)} />
   </head>
   <body>
-    {import.meta.env.PIWIK_TRACKING_ENABLED !== "false" && <Analytics />}
+    <Analytics />
     <CookieConsent />
 
     <main>
