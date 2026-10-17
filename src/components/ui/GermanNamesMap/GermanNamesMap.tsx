@@ -105,7 +105,16 @@ export const GermanNamesMap = ({
   );
   const activeLayerIds = activeGroups.flatMap((group) => {
     const ids = layerIds(group.category);
-    return [ids.fill, ids.casing, ids.line, ids.circle, ids.label];
+    // Only streets get a casing layer - and queryRenderedFeatures returns
+    // nothing at all (not just skips it) if asked for a layer that doesn't
+    // exist, which would silently break the click popup for the whole map.
+    return [
+      ids.fill,
+      ...(group.casing ? [ids.casing] : []),
+      ids.line,
+      ids.circle,
+      ids.label,
+    ];
   });
 
   const mapRef = useRef<HTMLDivElement>(null);
