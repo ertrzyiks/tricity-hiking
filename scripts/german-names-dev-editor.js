@@ -1,8 +1,14 @@
 import fs from "node:fs";
 
 const DATA_PATH = "./src/content/german_names/names.json";
-const CATEGORIES = ["street name", "district name", "locality name"];
+const CATEGORIES = [
+  "street name",
+  "district name",
+  "locality name",
+  "valley name",
+];
 const CITIES = ["Gdańsk", "Sopot"];
+const CATEGORIES_WITH_CITY = ["street name", "valley name"];
 const API_ROUTE = "/api/german-names";
 const PAGE_ROUTE = "/dev/german-names";
 
@@ -114,11 +120,11 @@ export function germanNamesEditorMiddleware() {
               return;
             }
             if (
-              properties.category === "street name" &&
+              CATEGORIES_WITH_CITY.includes(properties.category) &&
               !CITIES.includes(properties.city)
             ) {
               sendJson(res, 400, {
-                error: `"${properties.german}" is a street but has no valid city (Gdańsk/Sopot)`,
+                error: `"${properties.german}" is a ${properties.category} but has no valid city (Gdańsk/Sopot)`,
               });
               return;
             }

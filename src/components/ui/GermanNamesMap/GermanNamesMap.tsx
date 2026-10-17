@@ -9,14 +9,17 @@ import {
   OLD_MAP_GRAY_COLOR,
 } from "../../../constants/colors";
 
-type Category = "street name" | "district name" | "locality name";
+type Category =
+  "street name" | "district name" | "locality name" | "valley name";
 
 const SOURCE_ID = "german-names";
 
 // Everything is drawn in ink-on-paper greys so the overlay reads like an old
 // printed map: streets as white roads with black edges (a wide black casing
 // under a narrower white line), districts as dashed grey boundaries with
-// spaced-out capitals, localities as white dots ringed in black.
+// spaced-out capitals, localities as white dots ringed in black, valleys
+// as small solid ink dots (or a dotted line along the valley floor) so they
+// don't read as yet another district or village.
 type LayerGroup = {
   category: Category;
   label: string;
@@ -26,6 +29,8 @@ type LayerGroup = {
   // Optional wide line drawn underneath `line` to give it dark edges.
   casing?: { color: string; width: number };
   line: { color: string; width: number; dasharray?: number[] };
+  // Point features; defaults to a white dot ringed in black.
+  circle?: { color: string; strokeColor: string; radius: number };
   text: {
     size: number;
     letterSpacing: number;
@@ -62,6 +67,20 @@ const LAYER_GROUPS: LayerGroup[] = [
     line: { color: OLD_MAP_INK_COLOR, width: 1.5 },
     text: { size: 13, letterSpacing: 0.1, uppercase: false },
   },
+  {
+    category: "valley name",
+    label: "Valleys",
+    labelMinZoom: 12,
+    fillColor: OLD_MAP_GRAY_COLOR,
+    fillOpacity: 0.1,
+    line: { color: OLD_MAP_INK_COLOR, width: 1.5, dasharray: [1, 2] },
+    circle: {
+      color: OLD_MAP_INK_COLOR,
+      strokeColor: OLD_MAP_PAPER_COLOR,
+      radius: 3.5,
+    },
+    text: { size: 12, letterSpacing: 0.15, uppercase: false },
+  },
 ];
 
 const layerIds = (category: Category) => {
@@ -79,6 +98,7 @@ const DEFAULT_CATEGORIES: Category[] = [
   "street name",
   "district name",
   "locality name",
+  "valley name",
 ];
 
 export const GermanNamesMap = ({
@@ -211,10 +231,11 @@ export const GermanNamesMap = ({
               ["==", ["geometry-type"], "Point"],
             ] as maplibregl.ExpressionSpecification,
             paint: {
-              "circle-color": OLD_MAP_PAPER_COLOR,
-              "circle-radius": 5,
+              "circle-color": group.circle?.color ?? OLD_MAP_PAPER_COLOR,
+              "circle-radius": group.circle?.radius ?? 5,
               "circle-stroke-width": 2,
-              "circle-stroke-color": OLD_MAP_INK_COLOR,
+              "circle-stroke-color":
+                group.circle?.strokeColor ?? OLD_MAP_INK_COLOR,
             },
           });
 

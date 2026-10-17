@@ -133,10 +133,17 @@ const germanNamesCollection = defineCollection({
         properties: z.object({
           german: z.string(),
           polish: z.string(),
-          category: z.enum(["street name", "district name", "locality name"]),
-          // Only meaningful (and set) for category "street name" - streets
-          // are drawn from either Gdańsk's or Sopot's section of the book,
-          // which the geocoder needs to know to query the right city.
+          category: z.enum([
+            "street name",
+            "district name",
+            "locality name",
+            "valley name",
+          ]),
+          // Only meaningful (and set) for categories "street name" and
+          // "valley name" - streets are drawn from either Gdańsk's or
+          // Sopot's section of the book, and valleys lie in one city's
+          // forests or the other's, which the geocoder needs to know to
+          // query the right city.
           city: z.enum(["Gdańsk", "Sopot"]).optional(),
           exists: z.boolean(),
         }),

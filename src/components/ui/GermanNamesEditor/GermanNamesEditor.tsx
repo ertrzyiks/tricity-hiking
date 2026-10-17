@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "preact/hooks";
 
-type Category = "street name" | "district name" | "locality name";
+type Category =
+  "street name" | "district name" | "locality name" | "valley name";
 type City = "Gdańsk" | "Sopot";
 
 type Feature = {
@@ -21,8 +22,12 @@ const CATEGORIES: Category[] = [
   "street name",
   "district name",
   "locality name",
+  "valley name",
 ];
 const CITIES: City[] = ["Gdańsk", "Sopot"];
+// Categories whose rows belong to one city's map (and are geocoded
+// against that city) rather than to the region-wide one.
+const CATEGORIES_WITH_CITY: Category[] = ["street name", "valley name"];
 
 export const GermanNamesEditor = () => {
   const [features, setFeatures] = useState<Feature[] | null>(null);
@@ -229,7 +234,7 @@ export const GermanNamesEditor = () => {
                 </select>
               </td>
               <td className="py-1 pr-2">
-                {feature.properties.category === "street name" ? (
+                {CATEGORIES_WITH_CITY.includes(feature.properties.category) ? (
                   <select
                     value={feature.properties.city ?? ""}
                     onChange={(e) =>
