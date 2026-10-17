@@ -1,6 +1,7 @@
 ---
 import { getEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
 import Admonition from "../../components/ui/Admonition.astro";
 import HistoryCityTabs from "../../components/history/HistoryCityTabs.astro";
 import { GermanNamesMap } from "../../components/ui/GermanNamesMap/GermanNamesMap";
@@ -32,9 +33,9 @@ const unmapped = localities.filter(
 ---
 
 <Layout title="Old German names of towns and villages across the region">
-  <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
-    <h2 class="text-3xl my-4">History</h2>
+  <PageTitle title="Old German city names" slot="hero" />
 
+  <div class="max-w-(--breakpoint-xl) mx-auto py-4 px-2 lg:px-0">
     <HistoryCityTabs />
 
     <p class="text-lg my-2">
