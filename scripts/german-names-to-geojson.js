@@ -149,6 +149,17 @@ const AREA_CATEGORIES = new Set([
   "waterway",
   "water",
 ]);
+// Valleys and ravines are mapped as natural=valley/gully/cliff ways or as
+// place=locality/neighbourhood labels - "landuse" is left out on purpose,
+// since several valleys share their name with a housing estate built on
+// their slopes (e.g. "Zielona Dolina" is also a residential landuse area).
+const VALLEY_CATEGORIES = new Set(["place", "natural"]);
+
+// Valleys whose present-day Polish name isn't the one OSM tags them with
+// yet - geocoded under the OSM name instead.
+const VALLEY_QUERY_ALIASES = {
+  "Dolina Samborowo": "Dolina Henrietty",
+};
 
 // When an area name matches both the place itself and a much larger
 // containing unit (a village and the gmina/powiat that contains it, which
@@ -287,6 +298,40 @@ async function geocodeArea(name, context) {
   return pickAreaGeometry(results);
 }
 
+// Valleys: OSM draws a few as a line along the valley floor (or along the
+// ravine's edges), a few as a meadow polygon, and most only as a labelled
+// point - any of those is a fine shape, preferred in that order since a
+// line or area says more about where the valley actually runs.
+function pickValleyGeometry(results) {
+  const candidates = results.filter(
+    (r) =>
+      hasCategory(r, VALLEY_CATEGORIES) &&
+      !CONTAINER_ADDRESSTYPES.has(r.addresstype),
+  );
+
+  const lines = candidates.filter((r) =>
+    ["LineString", "MultiLineString"].includes(r.geojson?.type),
+  );
+  if (lines.length) return mergeLines(lines.map((r) => r.geojson));
+
+  const polys = candidates.filter((r) =>
+    ["Polygon", "MultiPolygon"].includes(r.geojson?.type),
+  );
+  if (polys.length) return mergePolygons(polys.map((r) => r.geojson));
+
+  const points = candidates.filter((r) => r.geojson?.type === "Point");
+  if (points.length) return points[0].geojson;
+
+  return null;
+}
+
+async function geocodeValley(name, city) {
+  const results = await nominatimSearch({
+    q: `${VALLEY_QUERY_ALIASES[name] ?? name}, ${city}, Polska`,
+  });
+  return pickValleyGeometry(results);
+}
+
 async function run() {
   const csvText = fs.readFileSync(CSV_PATH, "utf8");
   const [, ...rows] = parseCSV(csvText);
@@ -294,73 +339,92 @@ async function run() {
     german: r[0],
     polish: r[1],
     category: r[2],
-    // Only meaningful for category "street name" - which city to geocode
-    // the street against (Gdańsk or Sopot's section of the book).
+    // Only meaningful for categories "street name" and "valley name" -
+    // which city to geocode the street/valley against.
     city: r[3] || undefined,
   }));
+
+  // `--only <category>` re-geocodes just that category and copies every
+  // other feature over from the existing output unchanged - so adding a
+  // handful of new rows doesn't mean re-querying (and possibly reshaping)
+  // the hundreds already there. The kept features stay in the order they
+  // already have in the file (it isn't necessarily grouped by category -
+  // rows synced from Notion were appended at the end), with the
+  // re-geocoded category appended after them.
+  const onlyFlagIndex = process.argv.indexOf("--only");
+  const onlyCategory =
+    onlyFlagIndex === -1 ? null : process.argv[onlyFlagIndex + 1];
+  const shouldGeocode = (category) =>
+    onlyCategory === null || onlyCategory === category;
 
   const localities = records.filter((r) => r.category === "locality name");
   const districts = records.filter((r) => r.category === "district name");
   const streets = records.filter((r) => r.category === "street name");
+  const valleys = records.filter((r) => r.category === "valley name");
 
-  for (const record of streets) {
+  for (const record of [...streets, ...valleys]) {
     if (record.city !== "Gdańsk" && record.city !== "Sopot") {
       throw new Error(
-        `Street "${record.german}" has no (or an unrecognised) city column value: ${JSON.stringify(record.city)}`,
+        `"${record.german}" (${record.category}) has no (or an unrecognised) city column value: ${JSON.stringify(record.city)}`,
       );
     }
   }
 
-  const features = [];
+  const features = onlyCategory
+    ? JSON.parse(fs.readFileSync(OUTPUT_PATH, "utf8")).features.filter(
+        (f) => f.properties.category !== onlyCategory,
+      )
+    : [];
   let processed = 0;
   const total = records.length;
 
-  for (const record of localities) {
-    processed++;
-    const exists = !record.polish.toLowerCase().startsWith("nie istnieje");
-    let geometry = null;
-
-    if (exists) {
-      console.log(`[${processed}/${total}] locality: ${record.german}`);
-      geometry = await geocodeArea(
-        queryName(record.polish),
-        "województwo pomorskie",
-      );
-      await delay(1100);
+  const geocodeAll = async (category, categoryRecords, label, geocode) => {
+    if (!shouldGeocode(category)) {
+      processed += categoryRecords.length;
+      return;
     }
 
-    features.push(toFeature(record, exists, geometry));
-  }
+    for (const record of categoryRecords) {
+      processed++;
+      const exists = !record.polish.toLowerCase().startsWith("nie istnieje");
+      let geometry = null;
 
-  for (const record of districts) {
-    processed++;
-    const exists = !record.polish.toLowerCase().startsWith("nie istnieje");
-    let geometry = null;
+      if (exists) {
+        console.log(
+          `[${processed}/${total}] ${label(record)}: ${record.german}`,
+        );
+        geometry = await geocode(record);
+        await delay(1100);
+      }
 
-    if (exists) {
-      console.log(`[${processed}/${total}] district: ${record.german}`);
-      geometry = await geocodeArea(queryName(record.polish), "Gdańsk");
-      await delay(1100);
+      features.push(toFeature(record, exists, geometry));
     }
+  };
 
-    features.push(toFeature(record, exists, geometry));
-  }
-
-  for (const record of streets) {
-    processed++;
-    const exists = !record.polish.toLowerCase().startsWith("nie istnieje");
-    let geometry = null;
-
-    if (exists) {
-      console.log(
-        `[${processed}/${total}] street (${record.city}): ${record.german}`,
-      );
-      geometry = await geocodeStreet(queryName(record.polish), record.city);
-      await delay(1100);
-    }
-
-    features.push(toFeature(record, exists, geometry));
-  }
+  await geocodeAll(
+    "locality name",
+    localities,
+    () => "locality",
+    (record) => geocodeArea(queryName(record.polish), "województwo pomorskie"),
+  );
+  await geocodeAll(
+    "district name",
+    districts,
+    () => "district",
+    (record) => geocodeArea(queryName(record.polish), "Gdańsk"),
+  );
+  await geocodeAll(
+    "street name",
+    streets,
+    (record) => `street (${record.city})`,
+    (record) => geocodeStreet(queryName(record.polish), record.city),
+  );
+  await geocodeAll(
+    "valley name",
+    valleys,
+    (record) => `valley (${record.city})`,
+    (record) => geocodeValley(queryName(record.polish), record.city),
+  );
 
   const featureCollection = { type: "FeatureCollection", features };
   fs.writeFileSync(
