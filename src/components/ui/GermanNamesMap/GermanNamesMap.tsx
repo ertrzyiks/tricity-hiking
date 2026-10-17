@@ -4,38 +4,63 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import { createMap } from "../../../services/createMap";
 import {
-  GERMAN_NAMES_STREET_COLOR,
-  GERMAN_NAMES_DISTRICT_COLOR,
-  GERMAN_NAMES_LOCALITY_COLOR,
+  OLD_MAP_INK_COLOR,
+  OLD_MAP_PAPER_COLOR,
+  OLD_MAP_GRAY_COLOR,
 } from "../../../constants/colors";
 
 type Category = "street name" | "district name" | "locality name";
 
 const SOURCE_ID = "german-names";
 
-const LAYER_GROUPS: {
+// Everything is drawn in ink-on-paper greys so the overlay reads like an old
+// printed map: streets as white roads with black edges (a wide black casing
+// under a narrower white line), districts as dashed grey boundaries with
+// spaced-out capitals, localities as white dots ringed in black.
+type LayerGroup = {
   category: Category;
   label: string;
-  color: string;
   labelMinZoom: number;
-}[] = [
+  fillColor: string;
+  fillOpacity: number;
+  // Optional wide line drawn underneath `line` to give it dark edges.
+  casing?: { color: string; width: number };
+  line: { color: string; width: number; dasharray?: number[] };
+  text: {
+    size: number;
+    letterSpacing: number;
+    uppercase: boolean;
+  };
+};
+
+const LAYER_GROUPS: LayerGroup[] = [
   {
     category: "district name",
     label: "Districts",
-    color: GERMAN_NAMES_DISTRICT_COLOR,
     labelMinZoom: 10,
+    fillColor: OLD_MAP_GRAY_COLOR,
+    fillOpacity: 0.08,
+    line: { color: OLD_MAP_GRAY_COLOR, width: 2, dasharray: [3, 2] },
+    text: { size: 13, letterSpacing: 0.2, uppercase: true },
   },
   {
     category: "street name",
     label: "Streets & squares",
-    color: GERMAN_NAMES_STREET_COLOR,
     labelMinZoom: 13,
+    fillColor: OLD_MAP_PAPER_COLOR,
+    fillOpacity: 0.6,
+    casing: { color: OLD_MAP_INK_COLOR, width: 6 },
+    line: { color: OLD_MAP_PAPER_COLOR, width: 3.5 },
+    text: { size: 12, letterSpacing: 0.05, uppercase: false },
   },
   {
     category: "locality name",
     label: "Localities",
-    color: GERMAN_NAMES_LOCALITY_COLOR,
     labelMinZoom: 10,
+    fillColor: OLD_MAP_GRAY_COLOR,
+    fillOpacity: 0.12,
+    line: { color: OLD_MAP_INK_COLOR, width: 1.5 },
+    text: { size: 13, letterSpacing: 0.1, uppercase: false },
   },
 ];
 
@@ -43,6 +68,7 @@ const layerIds = (category: Category) => {
   const slug = category.replace(/\s+/g, "-");
   return {
     fill: `german-names-${slug}-fill`,
+    casing: `german-names-${slug}-casing`,
     line: `german-names-${slug}-line`,
     circle: `german-names-${slug}-circle`,
     label: `german-names-${slug}-label`,
@@ -79,7 +105,7 @@ export const GermanNamesMap = ({
   );
   const activeLayerIds = activeGroups.flatMap((group) => {
     const ids = layerIds(group.category);
-    return [ids.fill, ids.line, ids.circle, ids.label];
+    return [ids.fill, ids.casing, ids.line, ids.circle, ids.label];
   });
 
   const mapRef = useRef<HTMLDivElement>(null);
@@ -132,22 +158,41 @@ export const GermanNamesMap = ({
               ],
             ] as maplibregl.ExpressionSpecification,
             paint: {
-              "fill-color": group.color,
-              "fill-opacity": 0.2,
+              "fill-color": group.fillColor,
+              "fill-opacity": group.fillOpacity,
             },
           });
 
           // Line renders both actual street LineStrings and the outline of
           // any polygon in this category (squares, district boundaries).
+          // Streets get a wider dark casing underneath so they read as a
+          // white road with black edges.
+          if (group.casing) {
+            map.addLayer({
+              id: ids.casing,
+              type: "line",
+              source: SOURCE_ID,
+              filter,
+              layout: { "line-cap": "round", "line-join": "round" },
+              paint: {
+                "line-color": group.casing.color,
+                "line-width": group.casing.width,
+              },
+            });
+          }
+
           map.addLayer({
             id: ids.line,
             type: "line",
             source: SOURCE_ID,
             filter,
+            layout: { "line-cap": "round", "line-join": "round" },
             paint: {
-              "line-color": group.color,
-              "line-width": group.category === "street name" ? 4 : 2.5,
-              "line-opacity": 0.9,
+              "line-color": group.line.color,
+              "line-width": group.line.width,
+              ...(group.line.dasharray && {
+                "line-dasharray": group.line.dasharray,
+              }),
             },
           });
 
@@ -166,10 +211,10 @@ export const GermanNamesMap = ({
               ["==", ["geometry-type"], "Point"],
             ] as maplibregl.ExpressionSpecification,
             paint: {
-              "circle-color": group.color,
-              "circle-radius": 6,
+              "circle-color": OLD_MAP_PAPER_COLOR,
+              "circle-radius": 5,
               "circle-stroke-width": 2,
-              "circle-stroke-color": "#fff",
+              "circle-stroke-color": OLD_MAP_INK_COLOR,
             },
           });
 
@@ -182,14 +227,16 @@ export const GermanNamesMap = ({
             layout: {
               "text-field": ["get", "german"],
               "text-font": ["Roboto Regular", "Noto Sans Regular"],
-              "text-size": 12,
+              "text-size": group.text.size,
+              "text-letter-spacing": group.text.letterSpacing,
+              "text-transform": group.text.uppercase ? "uppercase" : "none",
               "text-variable-anchor": ["top", "bottom", "left", "right"],
               "text-radial-offset": 0.6,
               "text-justify": "auto",
             },
             paint: {
-              "text-color": group.color,
-              "text-halo-color": "#fff",
+              "text-color": OLD_MAP_INK_COLOR,
+              "text-halo-color": OLD_MAP_PAPER_COLOR,
               "text-halo-width": 1.5,
             },
           });
@@ -245,7 +292,13 @@ export const GermanNamesMap = ({
       if (map) {
         const ids = layerIds(category);
         const cssVisibility = next[category] ? "visible" : "none";
-        for (const id of [ids.fill, ids.line, ids.circle, ids.label]) {
+        for (const id of [
+          ids.fill,
+          ids.casing,
+          ids.line,
+          ids.circle,
+          ids.label,
+        ]) {
           if (map.getLayer(id)) {
             map.setLayoutProperty(id, "visibility", cssVisibility);
           }
@@ -272,10 +325,7 @@ export const GermanNamesMap = ({
               checked={visibility[group.category]}
               onChange={() => toggle(group.category)}
             />
-            <span
-              className="inline-block w-3 h-3 rounded-sm shrink-0"
-              style={{ backgroundColor: group.color }}
-            ></span>
+            <LegendSwatch group={group} />
             {group.label}
           </label>
         ))}
@@ -283,3 +333,29 @@ export const GermanNamesMap = ({
     </div>
   );
 };
+
+const LegendSwatch = ({ group }: { group: LayerGroup }) => (
+  <svg width="16" height="12" viewBox="0 0 16 12" className="shrink-0">
+    {group.casing && (
+      <line
+        x1="2"
+        y1="6"
+        x2="14"
+        y2="6"
+        stroke={group.casing.color}
+        stroke-width={group.casing.width}
+        stroke-linecap="round"
+      />
+    )}
+    <line
+      x1="2"
+      y1="6"
+      x2="14"
+      y2="6"
+      stroke={group.line.color}
+      stroke-width={group.casing ? group.line.width : 2}
+      stroke-linecap="round"
+      stroke-dasharray={group.line.dasharray?.map((n) => n * 2).join(" ")}
+    />
+  </svg>
+);
