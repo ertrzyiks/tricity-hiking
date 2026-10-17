@@ -29,9 +29,6 @@ importers:
       '@nanostores/preact':
         specifier: 1.1.0
         version: 1.1.0(nanostores@1.5.3)(preact@10.29.8)
-      '@piwikpro/tracking-base-library':
-        specifier: 1.7.1
-        version: 1.7.1
       '@sentry/astro':
         specifier: 10.75.0
         version: 10.75.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(astro@7.3.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@25.3.3)(jiti@2.7.0)(yaml@2.9.0))(rollup@4.59.0)(supports-color@8.1.1)
@@ -1080,10 +1077,6 @@ packages:
 
   '@oxc-project/types@0.139.0':
     resolution: {integrity: sha512-r9gHphtCs+1M7J0pw6Sn/hh/Wpa/iQrOOkrNAlVLF/gHq+/CJmHIWKKUUhdWjcD6CIa8idarspCsASiXCXvFUw==}
-
-  '@piwikpro/tracking-base-library@1.7.1':
-    resolution: {integrity: sha512-vDV8NZ7rYTlhKBHMHL880QqPOPzrXSurZn0sfhodqwGa9v7tmqLJe0IaG2Su1fOtlQm5pb2zobm8ngar45AKmQ==}
-    engines: {node: '>=18.0.0'}
 
   '@playwright/test@1.63.0':
     resolution: {integrity: sha512-oxMK4vllB9RK5NQ2l1pq1IfOf2AvnEuj/vYGDj0H2nMtmtZpKtCwt/l00GEO6xjGfpBNAvjovvYdCm50dRQkpQ==}
@@ -5656,8 +5649,6 @@ snapshots:
   '@oslojs/encoding@1.1.0': {}
 
   '@oxc-project/types@0.139.0': {}
-
-  '@piwikpro/tracking-base-library@1.7.1': {}
 
   '@playwright/test@1.63.0':
     dependencies:
