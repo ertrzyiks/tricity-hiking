@@ -39,20 +39,14 @@ const unmapped = localities.filter(
 
     <p class="text-lg my-2">
       For many years until 1945, significant part of today's northern Poland
-      used German names for its towns and villages. This overlay places{" "}
-      {mappable.features.length} of them on today's map. Click a shape or dot to see
-      the old name next to the current one.
+      used German names for its towns and villages. This overlay places them on
+      today's map. Click a shape or dot to see the old name next to the current
+      one.
     </p>
 
     <Admonition type="info" title="About the data">
       Towns and villages are shown as shaded areas where a present-day boundary
-      exists, otherwise as a dot. Looking for old street or district names
-      instead? Those are shown inline on the <a
-        class="hover:underline text-blue-600"
-        href="/history/">Gdańsk</a
-      > and <a class="hover:underline text-blue-600" href="/history/sopot/"
-        >Sopot</a
-      > history pages.
+      exists, otherwise as a dot.
       {
         import.meta.env.DEV && (
           <>
