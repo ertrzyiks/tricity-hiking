@@ -35,6 +35,16 @@ type LayerGroup = {
     size: number;
     letterSpacing: number;
     uppercase: boolean;
+    // Default ("point") anchors one label per feature, offset to whichever
+    // side has room. "line" instead repeats the label along the geometry
+    // every `spacing` pixels, each copy rotated to follow the line's local
+    // bearing - the right fit for streets, whose MultiLineString is really
+    // many short OSM way fragments end-to-end: point placement would put
+    // one anchor per fragment (the same name stamped over and over a few
+    // metres apart), while line placement spaces repeats out and lets
+    // MapLibre's own collision detection drop the ones too close together.
+    placement?: "line";
+    spacing?: number;
   };
 };
 
@@ -56,7 +66,13 @@ const LAYER_GROUPS: LayerGroup[] = [
     fillOpacity: 0.6,
     casing: { color: OLD_MAP_INK_COLOR, width: 6 },
     line: { color: OLD_MAP_PAPER_COLOR, width: 3.5 },
-    text: { size: 12, letterSpacing: 0.05, uppercase: false },
+    text: {
+      size: 12,
+      letterSpacing: 0.05,
+      uppercase: false,
+      placement: "line",
+      spacing: 320,
+    },
   },
   {
     category: "locality name",
@@ -248,6 +264,8 @@ export const GermanNamesMap = ({
             },
           });
 
+          const isLinePlacement = group.text.placement === "line";
+
           map.addLayer({
             id: ids.label,
             type: "symbol",
@@ -260,9 +278,23 @@ export const GermanNamesMap = ({
               "text-size": group.text.size,
               "text-letter-spacing": group.text.letterSpacing,
               "text-transform": group.text.uppercase ? "uppercase" : "none",
-              "text-variable-anchor": ["top", "bottom", "left", "right"],
-              "text-radial-offset": 0.6,
-              "text-justify": "auto",
+              ...(isLinePlacement
+                ? {
+                    "symbol-placement": "line",
+                    "symbol-spacing": group.text.spacing ?? 250,
+                    "text-rotation-alignment": "map",
+                    "text-pitch-alignment": "viewport",
+                  }
+                : {
+                    "text-variable-anchor": [
+                      "top",
+                      "bottom",
+                      "left",
+                      "right",
+                    ] as const,
+                    "text-radial-offset": 0.6,
+                    "text-justify": "auto",
+                  }),
             },
             paint: {
               "text-color": OLD_MAP_INK_COLOR,
