@@ -19,6 +19,15 @@ const USER_AGENT =
 // matching villages with the same name elsewhere in Poland.
 const VIEWBOX = "17.5,54.95,19.6,53.7";
 
+const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
+
+// Degrees of padding added around Nominatim's own matched geometry before
+// asking Overpass for every way with that name inside it - roughly 1.5km,
+// generous enough to pick up the far end of a long avenue Nominatim's
+// limited result set didn't quite reach, but nowhere near big enough to
+// cross into a different part of the city.
+const OVERPASS_BBOX_PADDING = 0.015;
+
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function parseCSV(text) {
@@ -110,6 +119,81 @@ async function nominatimSearch(params) {
     return [];
   }
   return res.json();
+}
+
+// Nominatim is a geocoder, not a database dump tool: its own index of a
+// long street rarely covers every way that carries its name, and a result
+// limit (even the documented max of 40) caps whatever it does know about.
+// A street split into dozens of OSM ways at intersections (Marynarki
+// Polskiej in Gdańsk has 83) ends up rendered as an arbitrary handful of
+// disconnected fragments instead of the whole thing.
+//
+// Overpass is the right tool for "every way named X in this area" - no
+// artificial cap - but it needs the *exact* OSM name tag, while the CSV
+// often has a shortened colloquial form (e.g. "Kościuszki" for the
+// actually-tagged "Tadeusza Kościuszki") that only Nominatim's fuzzy
+// street-name matching resolves. So: ask Nominatim first to resolve the
+// canonical name, then ask Overpass for every way with that exact name.
+//
+// The public instance is shared and occasionally returns a 504 under
+// load; retried a few times with backoff before giving up.
+async function overpassWaysByName(name, bbox, attempt = 1) {
+  const query = `[out:json][timeout:60];way["name"="${name.replace(/"/g, '\\"')}"](${bbox});out geom;`;
+
+  const res = await fetch(OVERPASS_URL, {
+    method: "POST",
+    headers: {
+      "User-Agent": USER_AGENT,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `data=${encodeURIComponent(query)}`,
+  });
+
+  if (!res.ok) {
+    if (attempt < 4) {
+      await delay(attempt * 5000);
+      return overpassWaysByName(name, bbox, attempt + 1);
+    }
+    console.warn(
+      `  ! Overpass ${res.status} for "${name}" after ${attempt} attempts`,
+    );
+    return [];
+  }
+
+  const data = await res.json();
+  return data.elements.filter((e) => e.type === "way" && e.geometry?.length);
+}
+
+// Builds a LineString/MultiLineString from Overpass ways, or a
+// Polygon/MultiPolygon if every way turned out to be a closed loop (the
+// odd historical market square tagged as a single looping way rather
+// than an area relation).
+function geometryFromOverpassWays(ways) {
+  const rings = [];
+  const lines = [];
+
+  for (const way of ways) {
+    const coords = way.geometry.map((pt) => [pt.lon, pt.lat]);
+    const isClosed =
+      coords.length >= 4 &&
+      coords[0][0] === coords[coords.length - 1][0] &&
+      coords[0][1] === coords[coords.length - 1][1];
+    (isClosed ? rings : lines).push(coords);
+  }
+
+  if (lines.length) {
+    return lines.length === 1
+      ? { type: "LineString", coordinates: lines[0] }
+      : { type: "MultiLineString", coordinates: lines };
+  }
+
+  if (rings.length) {
+    return rings.length === 1
+      ? { type: "Polygon", coordinates: [rings[0]] }
+      : { type: "MultiPolygon", coordinates: rings.map((ring) => [ring]) };
+  }
+
+  return null;
 }
 
 // Rough shoelace area of a polygon's outer ring, in degree^2 - only ever
@@ -266,18 +350,161 @@ function pickAreaGeometry(results) {
 }
 
 async function geocodeStreet(name, city) {
-  // A long street is frequently split into many separate OSM ways (at
-  // intersections, administrative boundaries, ...) that all share its
-  // name - the default limit of 10 silently drops the rest, rendering
-  // only a handful of disconnected fragments instead of the whole
-  // street. 40 is Nominatim's own documented maximum per query.
   const results = await nominatimSearch({
     street: name,
     city,
     country: "Polska",
     limit: "40",
   });
+
+  // Even Nominatim's own result set occasionally mixes in one stray match
+  // from a same-named but entirely different street elsewhere in the city
+  // (common Polish street names like Oliwska/Kasztanowa/Starowiejska each
+  // independently recur a few km apart) - keep only the largest spatially
+  // coherent cluster before trusting it for the canonical name or bbox,
+  // so that one outlier doesn't drag in an unrelated street via Overpass.
+  const highwayResults = largestCluster(
+    results.filter((r) => hasCategory(r, STREET_CATEGORIES)),
+    3,
+  );
+  const canonicalName = mostCommonName(highwayResults);
+  const bbox = boundingBoxOf(highwayResults);
+
+  if (canonicalName && bbox) {
+    await delay(500);
+    const ways = await overpassWaysByName(canonicalName, bbox);
+    const geometry = geometryFromOverpassWays(ways);
+    if (geometry) return geometry;
+  }
+
+  // Overpass found nothing (transient failure, or a name Nominatim
+  // resolved but Overpass's exact match didn't turn up) - fall back to
+  // whatever Nominatim itself returned rather than losing the street
+  // entirely.
   return pickStreetGeometry(results);
+}
+
+// Groups results into clusters of mutually-nearby centroids (union-find
+// over pairs within thresholdKm of each other - a long street's own
+// segments chain together transitively even if the whole avenue spans
+// many km, while a genuinely separate street elsewhere never links up)
+// and returns only the largest cluster's members.
+function largestCluster(results, thresholdKm) {
+  if (results.length <= 1) return results;
+
+  const centroids = results.map((r) => {
+    const coords =
+      r.geojson?.type === "LineString"
+        ? r.geojson.coordinates
+        : r.geojson?.type === "MultiLineString"
+          ? r.geojson.coordinates.flat()
+          : [];
+    if (!coords.length) return null;
+    const lats = coords.map((c) => c[1]);
+    const lons = coords.map((c) => c[0]);
+    return [
+      lons.reduce((a, b) => a + b, 0) / lons.length,
+      lats.reduce((a, b) => a + b, 0) / lats.length,
+    ];
+  });
+
+  const distKm = (a, b) => {
+    const dlat = (a[1] - b[1]) * 111;
+    const dlon = (a[0] - b[0]) * 111 * Math.cos((a[1] * Math.PI) / 180);
+    return Math.sqrt(dlat * dlat + dlon * dlon);
+  };
+
+  const parent = results.map((_, i) => i);
+  const find = (x) => {
+    while (parent[x] !== x) {
+      parent[x] = parent[parent[x]];
+      x = parent[x];
+    }
+    return x;
+  };
+  const union = (a, b) => {
+    const ra = find(a);
+    const rb = find(b);
+    if (ra !== rb) parent[ra] = rb;
+  };
+
+  for (let i = 0; i < centroids.length; i++) {
+    if (!centroids[i]) continue;
+    for (let j = i + 1; j < centroids.length; j++) {
+      if (!centroids[j]) continue;
+      if (distKm(centroids[i], centroids[j]) <= thresholdKm) union(i, j);
+    }
+  }
+
+  const groups = new Map();
+  for (let i = 0; i < results.length; i++) {
+    const root = centroids[i] ? find(i) : `ungrouped-${i}`;
+    if (!groups.has(root)) groups.set(root, []);
+    groups.get(root).push(results[i]);
+  }
+
+  let best = [];
+  for (const group of groups.values()) {
+    if (group.length > best.length) best = group;
+  }
+  return best;
+}
+
+// The exact OSM name tag, read off whichever Nominatim result it shares
+// across the most candidates - guards against an occasional mismatched
+// result (a differently-tagged nearby way) outvoting the real name.
+function mostCommonName(results) {
+  const counts = new Map();
+  for (const r of results) {
+    if (!r.name) continue;
+    counts.set(r.name, (counts.get(r.name) || 0) + 1);
+  }
+  let best = null;
+  let bestCount = 0;
+  for (const [name, count] of counts) {
+    if (count > bestCount) {
+      best = name;
+      bestCount = count;
+    }
+  }
+  return best;
+}
+
+// A padded bounding box around Nominatim's own matched geometry, used to
+// scope the Overpass "every way named X" query to where this specific
+// street actually is - deliberately *not* the whole city. Many short,
+// everyday street names (Długa/"Long street", Polna/"Field street", ...)
+// independently recur in several unrelated parts of a sprawling city's
+// administrative area; an unscoped citywide query would merge all of
+// them into one nonsensical shape spanning the entire city instead of
+// the one street actually being geocoded.
+function boundingBoxOf(results) {
+  let minLat = Infinity;
+  let maxLat = -Infinity;
+  let minLon = Infinity;
+  let maxLon = -Infinity;
+
+  for (const r of results) {
+    const coords =
+      r.geojson?.type === "LineString"
+        ? r.geojson.coordinates
+        : r.geojson?.type === "MultiLineString"
+          ? r.geojson.coordinates.flat()
+          : null;
+    if (!coords) continue;
+
+    for (const [lon, lat] of coords) {
+      if (lat < minLat) minLat = lat;
+      if (lat > maxLat) maxLat = lat;
+      if (lon < minLon) minLon = lon;
+      if (lon > maxLon) maxLon = lon;
+    }
+  }
+
+  if (minLat === Infinity) return null;
+
+  const p = OVERPASS_BBOX_PADDING;
+  return `${minLat - p},${minLon - p},${maxLat + p},${maxLon + p}`;
 }
 
 async function geocodeArea(name, context) {
@@ -315,58 +542,62 @@ async function run() {
   let processed = 0;
   const total = records.length;
 
-  for (const record of localities) {
+  // A transient network blip partway through (ECONNRESET, a timeout, a
+  // flaky public Overpass instance, ...) shouldn't take down a run that's
+  // many minutes into geocoding hundreds of records and lose everything -
+  // catch per-record, keep going with no geometry for that one, and flush
+  // to disk periodically so a crash doesn't throw away prior progress.
+  const flush = () => {
+    fs.writeFileSync(
+      OUTPUT_PATH,
+      JSON.stringify({ type: "FeatureCollection", features }, null, 2) + "\n",
+    );
+  };
+
+  const geocodeRecord = async (record, exists, geocode) => {
     processed++;
-    const exists = !record.polish.toLowerCase().startsWith("nie istnieje");
     let geometry = null;
 
     if (exists) {
-      console.log(`[${processed}/${total}] locality: ${record.german}`);
-      geometry = await geocodeArea(
-        queryName(record.polish),
-        "województwo pomorskie",
-      );
+      try {
+        geometry = await geocode();
+      } catch (err) {
+        console.warn(`  ! ${record.german}: ${err.message}`);
+      }
       await delay(1100);
     }
 
     features.push(toFeature(record, exists, geometry));
+    if (processed % 20 === 0) flush();
+  };
+
+  for (const record of localities) {
+    const exists = !record.polish.toLowerCase().startsWith("nie istnieje");
+    console.log(`[${processed + 1}/${total}] locality: ${record.german}`);
+    await geocodeRecord(record, exists, () =>
+      geocodeArea(queryName(record.polish), "województwo pomorskie"),
+    );
   }
 
   for (const record of districts) {
-    processed++;
     const exists = !record.polish.toLowerCase().startsWith("nie istnieje");
-    let geometry = null;
-
-    if (exists) {
-      console.log(`[${processed}/${total}] district: ${record.german}`);
-      geometry = await geocodeArea(queryName(record.polish), "Gdańsk");
-      await delay(1100);
-    }
-
-    features.push(toFeature(record, exists, geometry));
+    console.log(`[${processed + 1}/${total}] district: ${record.german}`);
+    await geocodeRecord(record, exists, () =>
+      geocodeArea(queryName(record.polish), "Gdańsk"),
+    );
   }
 
   for (const record of streets) {
-    processed++;
     const exists = !record.polish.toLowerCase().startsWith("nie istnieje");
-    let geometry = null;
-
-    if (exists) {
-      console.log(
-        `[${processed}/${total}] street (${record.city}): ${record.german}`,
-      );
-      geometry = await geocodeStreet(queryName(record.polish), record.city);
-      await delay(1100);
-    }
-
-    features.push(toFeature(record, exists, geometry));
+    console.log(
+      `[${processed + 1}/${total}] street (${record.city}): ${record.german}`,
+    );
+    await geocodeRecord(record, exists, () =>
+      geocodeStreet(queryName(record.polish), record.city),
+    );
   }
 
-  const featureCollection = { type: "FeatureCollection", features };
-  fs.writeFileSync(
-    OUTPUT_PATH,
-    JSON.stringify(featureCollection, null, 2) + "\n",
-  );
+  flush();
 
   const withGeometry = features.filter((f) => f.geometry !== null).length;
   console.log(
