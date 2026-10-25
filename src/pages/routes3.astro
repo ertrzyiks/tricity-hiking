@@ -1,0 +1,248 @@
+---
+/**
+ * Variant 3 — Docked sidebar / nav rail.
+ *
+ * Top-level sections and the Routes subviews live in one persistent
+ * structure instead of two separate bars — a pattern users already know
+ * from docs sites and SaaS dashboards (Jakob's Law), which scales better
+ * than a horizontal bar once a section has its own sub-navigation: the
+ * active section (Routes) auto-expands into a tree of Map/Tricity/Nearby,
+ * so the whole hierarchy — where am I, what else is in this section, what
+ * are the other sections — is visible at a glance without extra clicks.
+ *
+ * The rail collapses to icons-only on desktop (a `data-sidebar-label`
+ * contract lets one toggle hide every label at once) to reclaim width for
+ * the map, and becomes an off-canvas drawer with a backdrop on mobile —
+ * both standard treatments for this pattern (Gmail's nav rail; any
+ * mobile app's slide-in drawer).
+ */
+import { Icon } from "astro-icon/components";
+import PrototypeLayout from "../layouts/PrototypeLayout.astro";
+import RoutesPrototypeMapPanel from "../components/prototypes/RoutesPrototypeMapPanel.astro";
+import RoutesPrototypeListPanel from "../components/prototypes/RoutesPrototypeListPanel.astro";
+import RoutesPrototypeDetailPanel from "../components/prototypes/RoutesPrototypeDetailPanel.astro";
+import { getRoutesPrototypeData } from "../services/getRoutesPrototypeData";
+import {
+  getPrimarySections,
+  routesSubsections,
+} from "../config/routesPrototypeNav";
+
+const { tricityItems, nearbyItems, mapGeojson } =
+  await getRoutesPrototypeData();
+const primarySections = getPrimarySections("/routes3/");
+---
+
+<PrototypeLayout
+  title="Routes"
+  variantId="routes3"
+  patternName="Docked sidebar / nav rail"
+>
+  <div class="lg:flex lg:min-h-[calc(100vh-32px)]">
+    <div
+      data-sidebar-backdrop
+      hidden
+      class="fixed inset-0 bg-black/40 z-30 lg:hidden"
+    >
+    </div>
+
+    <aside
+      data-sidebar
+      class="fixed lg:static inset-y-0 left-0 z-40 w-72 lg:w-64 bg-slate-900 text-white flex flex-col shrink-0 -translate-x-full lg:translate-x-0 transition-[transform,width] duration-200"
+    >
+      <div
+        class="flex items-center justify-between px-3 py-3 border-b border-white/10"
+      >
+        <a href="/" class="text-sm font-semibold" data-sidebar-label>
+          Tricity Hiking
+        </a>
+        <button
+          type="button"
+          data-sidebar-collapse-toggle
+          aria-expanded="true"
+          aria-label="Collapse sidebar"
+          class="hidden lg:flex p-1.5 rounded hover:bg-white/10"
+        >
+          <Icon
+            data-sidebar-collapse-icon
+            name="mdi:arrow-collapse-left"
+            class="w-4 h-4"
+          />
+        </button>
+        <button
+          type="button"
+          data-sidebar-close
+          aria-label="Close menu"
+          class="lg:hidden p-1.5 rounded hover:bg-white/10"
+        >
+          <Icon name="mdi:close" class="w-5 h-5" />
+        </button>
+      </div>
+
+      <nav aria-label="Primary" class="flex-1 overflow-y-auto py-2">
+        <ul class="flex flex-col gap-0.5 px-2">
+          {
+            primarySections.map((section) => (
+              <li>
+                {section.id === "routes" ? (
+                  <div>
+                    <button
+                      type="button"
+                      data-panel-target="map"
+                      class="w-full flex items-center gap-3 px-3 py-2 rounded-lg bg-white/10 text-green-400 text-sm font-medium"
+                    >
+                      <Icon name={section.icon} class="w-5 h-5 shrink-0" />
+                      <span data-sidebar-label>{section.label}</span>
+                    </button>
+                    <ul
+                      data-sidebar-label
+                      class="mt-1 ml-4 pl-4 border-l border-white/10 flex flex-col gap-0.5"
+                    >
+                      {routesSubsections.map((sub, index) => (
+                        <li>
+                          <button
+                            type="button"
+                            data-panel-target={sub.id}
+                            data-state={index === 0 ? "active" : "inactive"}
+                            class="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white data-[state=active]:bg-white/10 data-[state=active]:text-white data-[state=active]:font-medium"
+                          >
+                            <Icon name={sub.icon} class="w-4 h-4 shrink-0" />
+                            {sub.label}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <a
+                    href={section.href}
+                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white"
+                  >
+                    <Icon name={section.icon} class="w-5 h-5 shrink-0" />
+                    <span data-sidebar-label>{section.label}</span>
+                  </a>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="flex-1 min-w-0">
+      <header
+        class="lg:hidden sticky top-0 z-20 bg-white border-b border-solid border-slate-200 flex items-center gap-2 px-2 py-2"
+      >
+        <button
+          type="button"
+          data-sidebar-open
+          aria-label="Open menu"
+          class="p-2 rounded hover:bg-slate-100"
+        >
+          <Icon name="mdi:menu" class="w-6 h-6" />
+        </button>
+        <span class="text-sm font-medium">Routes</span>
+      </header>
+
+      <div class="px-2 lg:px-4 py-3">
+        <nav
+          aria-label="Breadcrumb"
+          class="flex items-center gap-1.5 text-sm text-slate-500"
+        >
+          <span>Routes</span>
+          <Icon name="mdi:chevron-right" class="w-3.5 h-3.5" />
+          <span data-breadcrumb-current class="text-slate-900 font-medium"
+            >Map</span
+          >
+        </nav>
+      </div>
+
+      <main class="pb-10">
+        <RoutesPrototypeMapPanel geojson={mapGeojson} />
+        <RoutesPrototypeListPanel
+          panelId="tricity"
+          heading="Tricity routes"
+          items={tricityItems}
+        />
+        <RoutesPrototypeListPanel
+          panelId="nearby"
+          heading="Nearby routes"
+          items={nearbyItems}
+        />
+
+        <RoutesPrototypeDetailPanel>
+          <button
+            slot="back"
+            type="button"
+            data-panel-back
+            class="flex items-center gap-1 text-sm text-green-700 hover:underline"
+          >
+            <Icon name="mdi:arrow-left" class="w-4 h-4" />
+            Back to list
+          </button>
+        </RoutesPrototypeDetailPanel>
+      </main>
+    </div>
+  </div>
+</PrototypeLayout>
+
+<script>
+  import { initRoutesPrototypeNav } from "../scripts/routesPrototypeNav.client";
+  initRoutesPrototypeNav();
+
+  const sidebar = document.querySelector<HTMLElement>("[data-sidebar]");
+  const backdrop = document.querySelector<HTMLElement>(
+    "[data-sidebar-backdrop]",
+  );
+  const openButton = document.querySelector<HTMLButtonElement>(
+    "[data-sidebar-open]",
+  );
+  const closeButton = document.querySelector<HTMLButtonElement>(
+    "[data-sidebar-close]",
+  );
+  const collapseToggle = document.querySelector<HTMLButtonElement>(
+    "[data-sidebar-collapse-toggle]",
+  );
+  const collapseIcon = document.querySelector<HTMLElement>(
+    "[data-sidebar-collapse-icon]",
+  );
+  const labels = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-sidebar-label]"),
+  );
+
+  const openDrawer = () => {
+    sidebar?.classList.remove("-translate-x-full");
+    sidebar?.classList.add("translate-x-0");
+    if (backdrop) backdrop.hidden = false;
+  };
+
+  const closeDrawer = () => {
+    sidebar?.classList.add("-translate-x-full");
+    sidebar?.classList.remove("translate-x-0");
+    if (backdrop) backdrop.hidden = true;
+  };
+
+  openButton?.addEventListener("click", openDrawer);
+  closeButton?.addEventListener("click", closeDrawer);
+  backdrop?.addEventListener("click", closeDrawer);
+
+  sidebar?.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    if (window.innerWidth < 1024 && target.closest("[data-panel-target]")) {
+      closeDrawer();
+    }
+  });
+
+  collapseToggle?.addEventListener("click", () => {
+    const collapsed = !sidebar?.classList.contains("lg:w-16");
+    sidebar?.classList.toggle("lg:w-16", collapsed);
+    sidebar?.classList.toggle("lg:w-64", !collapsed);
+    labels.forEach((label) => label.classList.toggle("lg:hidden", collapsed));
+    collapseToggle.setAttribute("aria-expanded", String(!collapsed));
+    collapseToggle.setAttribute(
+      "aria-label",
+      collapsed ? "Expand sidebar" : "Collapse sidebar",
+    );
+    collapseIcon?.classList.toggle("rotate-180", collapsed);
+    window.dispatchEvent(new Event("resize"));
+  });
+</script>
