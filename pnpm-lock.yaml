@@ -28,7 +28,7 @@ importers:
         version: 1.2.3
       '@nanostores/preact':
         specifier: 1.1.0
-        version: 1.1.0(nanostores@1.5.3)(preact@10.29.8)
+        version: 1.1.0(nanostores@1.5.4)(preact@10.29.8)
       '@sentry/astro':
         specifier: 10.75.0
         version: 10.75.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(astro@7.3.5(@types/node@25.3.3)(jiti@2.7.0)(yaml@2.9.0))(rollup@4.59.0)(supports-color@8.1.1)
@@ -63,8 +63,8 @@ importers:
         specifier: 6.11.0
         version: 6.11.0
       nanostores:
-        specifier: 1.5.3
-        version: 1.5.3
+        specifier: 1.5.4
+        version: 1.5.4
       playwright:
         specifier: 1.63.0
         version: 1.63.0
@@ -3436,8 +3436,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanostores@1.5.3:
-    resolution: {integrity: sha512-rQLB6eV4f2AW/n3L0JmwCROpaisYy9EDEADvEFSd1C/qG8hB6O5TPlh9A791JRbJr4CnMQBzptDcvD9OR1+6WA==}
+  nanostores@1.5.4:
+    resolution: {integrity: sha512-4UXY7OAJEK0Y6V3SudBU7cXjAzTDc189R78dDOh0Xbm19gpKYto6WizSg58LJf12lTsRxKSLGyE117OiLpM4DQ==}
     engines: {node: ^20.0.0 || >=22.0.0}
 
   neotraverse@1.0.1:
@@ -5125,7 +5125,7 @@ snapshots:
     dependencies:
       '@emnapi/core': 1.11.1
       '@emnapi/runtime': 1.11.1
-      '@napi-rs/wasm-runtime': 1.2.3(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      '@napi-rs/wasm-runtime': 1.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
     optional: true
 
   '@bruits/satteri-win32-arm64-msvc@0.10.5':
@@ -5587,12 +5587,19 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nanostores/preact@1.1.0(nanostores@1.5.3)(preact@10.29.8)':
+  '@nanostores/preact@1.1.0(nanostores@1.5.4)(preact@10.29.8)':
     dependencies:
-      nanostores: 1.5.3
+      nanostores: 1.5.4
       preact: 10.29.8(preact-render-to-string@6.6.6)
 
   '@napi-rs/wasm-runtime@1.2.3(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
+    dependencies:
+      '@emnapi/core': 1.11.1
+      '@emnapi/runtime': 1.11.1
+      '@tybys/wasm-util': 0.10.3
+    optional: true
+
+  '@napi-rs/wasm-runtime@1.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
     dependencies:
       '@emnapi/core': 1.11.1
       '@emnapi/runtime': 1.11.1
@@ -8377,7 +8384,7 @@ snapshots:
 
   nanoid@3.3.16: {}
 
-  nanostores@1.5.3: {}
+  nanostores@1.5.4: {}
 
   neotraverse@1.0.1: {}
 
