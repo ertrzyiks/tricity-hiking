@@ -48,8 +48,8 @@ importers:
         specifier: 7.3.5
         version: 7.3.5(@types/node@25.3.3)(jiti@2.7.0)(yaml@2.9.0)
       astro-favicons:
-        specifier: 3.1.6
-        version: 3.1.6(astro@7.3.5(@types/node@25.3.3)(jiti@2.7.0)(yaml@2.9.0))
+        specifier: 3.1.8
+        version: 3.1.8(astro@7.3.5(@types/node@25.3.3)(jiti@2.7.0)(yaml@2.9.0))
       astro-icon:
         specifier: 1.2.0
         version: 1.2.0
@@ -508,9 +508,6 @@ packages:
 
   '@emnapi/runtime@1.11.3':
     resolution: {integrity: sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA==}
-
-  '@emnapi/runtime@1.8.1':
-    resolution: {integrity: sha512-mehfKSMWjjNol8659Z8KxEMrdSJDDot5SXMq00dM8BN4o+CLNXQ0xH2V7EchNHV4RmbZLmmPdEaXZc5H2FXmDg==}
 
   '@emnapi/wasi-threads@1.2.2':
     resolution: {integrity: sha512-c95qOXkHdydNKhscBTebqEC1CVAZpyqOfVfBzQ1qgzyl3gfeldUjIggDbIZgDKsHLgnsM+igH7TJ/eAasaVuMA==}
@@ -2033,8 +2030,8 @@ packages:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
 
-  astro-favicons@3.1.6:
-    resolution: {integrity: sha512-9YfNWaBEFz1nCHy4P1l4wfPRvuLe4qHuHovIcqD5HYfZeW82wyVG1+CZUVGhcjwbRCVkGRJ3G+CKTyX9BcoI5w==}
+  astro-favicons@3.1.8:
+    resolution: {integrity: sha512-1d4ARIb7ZcHUoFAH7HabR9vnWOvU2wLJYb1mUBWXsH3ZeNSn0vrlC4iULWQu6Xkyi1AmwE7F6O3fAQ5B52IThA==}
     peerDependencies:
       astro: '>= 4.0.0'
 
@@ -3912,10 +3909,6 @@ packages:
   satteri@0.9.5:
     resolution: {integrity: sha512-ZuWVl+vnM64y+/TtX8Kosv2c00W+hLQiiwnEL6H0UKVVrxFqMw4D2CJHHQaouVd89OAhtBBfjWLqhKi3TVUV4w==}
 
-  sax@1.6.0:
-    resolution: {integrity: sha512-6R3J5M4AcbtLUdZmRv2SygeVaM7IhrLXu9BmnOGmmACak8fiUtOsYNWUS4uK7upbmHIBbLBeFeI//477BKLBzA==}
-    engines: {node: '>=11.0.0'}
-
   sax@1.6.1:
     resolution: {integrity: sha512-42tBVwLWnaQvW5zc4HbZrTuWccECCZfBi92FDuwtqxasH+JbPB3/FOKb1m222K42R4WxuxzzMsTswfzgtSu64Q==}
     engines: {node: '>=11.0.0'}
@@ -5211,11 +5204,6 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@emnapi/runtime@1.8.1':
-    dependencies:
-      tslib: 2.8.1
-    optional: true
-
   '@emnapi/wasi-threads@1.2.2':
     dependencies:
       tslib: 2.8.1
@@ -5479,7 +5467,7 @@ snapshots:
 
   '@img/sharp-wasm32@0.33.5':
     dependencies:
-      '@emnapi/runtime': 1.8.1
+      '@emnapi/runtime': 1.11.3
     optional: true
 
   '@img/sharp-wasm32@0.35.4':
@@ -6564,7 +6552,7 @@ snapshots:
 
   astring@1.9.0: {}
 
-  astro-favicons@3.1.6(astro@7.3.5(@types/node@25.3.3)(jiti@2.7.0)(yaml@2.9.0)):
+  astro-favicons@3.1.8(astro@7.3.5(@types/node@25.3.3)(jiti@2.7.0)(yaml@2.9.0)):
     dependencies:
       astro: 7.3.5(@types/node@25.3.3)(jiti@2.7.0)(yaml@2.9.0)
       favilib: 1.0.5
@@ -9005,8 +8993,6 @@ snapshots:
       '@bruits/satteri-win32-x64-msvc': 0.9.5
     optional: true
 
-  sax@1.6.0: {}
-
   sax@1.6.1: {}
 
   scheduler@0.26.0: {}
@@ -9700,7 +9686,7 @@ snapshots:
 
   xml2js@0.6.2:
     dependencies:
-      sax: 1.6.0
+      sax: 1.6.1
       xmlbuilder: 11.0.1
 
   xmlbuilder@11.0.1: {}
