@@ -28,7 +28,7 @@ importers:
         version: 1.2.3
       '@nanostores/preact':
         specifier: 1.1.0
-        version: 1.1.0(nanostores@1.5.4)(preact@10.29.8)
+        version: 1.1.0(nanostores@1.5.5)(preact@10.29.8)
       '@sentry/astro':
         specifier: 10.76.0
         version: 10.76.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(astro@7.3.6(@types/node@25.3.3)(jiti@2.7.0)(yaml@2.9.0))(rollup@4.59.0)(supports-color@8.1.1)
@@ -63,8 +63,8 @@ importers:
         specifier: 6.12.0
         version: 6.12.0
       nanostores:
-        specifier: 1.5.4
-        version: 1.5.4
+        specifier: 1.5.5
+        version: 1.5.5
       playwright:
         specifier: 1.63.0
         version: 1.63.0
@@ -3559,8 +3559,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanostores@1.5.4:
-    resolution: {integrity: sha512-4UXY7OAJEK0Y6V3SudBU7cXjAzTDc189R78dDOh0Xbm19gpKYto6WizSg58LJf12lTsRxKSLGyE117OiLpM4DQ==}
+  nanostores@1.5.5:
+    resolution: {integrity: sha512-FixtE239Gl6Gz0ZGCK0WzvNwObNCIwVT+L7zQcf1QgcA6AzBxblzqe9OT88qiucNkhsjSOqiogSaF5jVbJiqSA==}
     engines: {node: ^20.0.0 || >=22.0.0}
 
   neotraverse@1.0.1:
@@ -4930,7 +4930,7 @@ snapshots:
       js-yaml: 4.3.2
       picomatch: 4.0.7
       retext-smartypants: 6.2.0
-      shiki: 4.3.1
+      shiki: 4.5.0
       smol-toml: 1.9.0
       unified: 11.0.5
     optional: true
@@ -5739,9 +5739,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nanostores/preact@1.1.0(nanostores@1.5.4)(preact@10.29.8)':
+  '@nanostores/preact@1.1.0(nanostores@1.5.5)(preact@10.29.8)':
     dependencies:
-      nanostores: 1.5.4
+      nanostores: 1.5.5
       preact: 10.29.8(preact-render-to-string@6.8.0)
 
   '@napi-rs/wasm-runtime@1.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
@@ -8617,7 +8617,7 @@ snapshots:
 
   nanoid@3.3.20: {}
 
-  nanostores@1.5.4: {}
+  nanostores@1.5.5: {}
 
   neotraverse@1.0.1: {}
 
