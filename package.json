@@ -54,7 +54,7 @@
     "@tmcw/togeojson": "7.1.2",
     "@xmldom/xmldom": "0.9.12",
     "checkly": "8.23.2",
-    "concurrently": "10.0.5",
+    "concurrently": "10.0.6",
     "husky": "9.1.7",
     "lint-staged": "17.6.0",
     "prettier": "3.9.9",
