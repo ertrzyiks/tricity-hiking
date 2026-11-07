@@ -29,7 +29,7 @@
     "@astrojs/sitemap": "3.7.4",
     "@iconify-json/mdi": "1.2.3",
     "@nanostores/preact": "1.1.1",
-    "@sentry/astro": "10.76.1",
+    "@sentry/astro": "10.76.2",
     "@statsig/js-client": "3.33.5",
     "@statsig/session-replay": "3.33.5",
     "@statsig/web-analytics": "3.33.5",
