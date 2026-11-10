@@ -22,7 +22,7 @@ jobs:
           # files, which we then swap for lightweight placeholders below.
           lfs: ${{ startsWith(github.head_ref, 'lfs-') }}
       - name: Setup Node.js
-        uses: actions/setup-node@v7.0.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: 26.11.1
       - name: Setup pnpm
