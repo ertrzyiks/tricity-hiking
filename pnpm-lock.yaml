@@ -91,8 +91,8 @@ importers:
         specifier: 1.64.0
         version: 1.64.0
       '@tmcw/togeojson':
-        specifier: 7.1.2
-        version: 7.1.2
+        specifier: 7.1.3
+        version: 7.1.3
       '@xmldom/xmldom':
         specifier: 0.9.12
         version: 0.9.12
@@ -1756,8 +1756,8 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7 || ^8
 
-  '@tmcw/togeojson@7.1.2':
-    resolution: {integrity: sha512-QKnFs9DAuqqBVj4d6c69tV1Dj2TspSBTqffivoN0YoBCVdP/JY1+WaYCJbzU49RkoU5NOSOJ3jtFHCdEUVh21A==}
+  '@tmcw/togeojson@7.1.3':
+    resolution: {integrity: sha512-26QL68Q2Zzkmj0J6uZm5FbZPQ9V/qOC3x6/FR7BMnulPVMK3hRu+MZXJHYYJMi8ygcPfOKjhK0UGf3qdTswLLA==}
 
   '@tybys/wasm-util@0.10.3':
     resolution: {integrity: sha512-F3fo1MYrRJYL3zER0OUOmkutjr1Vp23m7OsSgp7nq4SP6OqX6C/56XFIPAl5bt3zaBRjmW7SGz3u/6LwFpYcOg==}
@@ -6398,7 +6398,7 @@ snapshots:
       tailwindcss: 4.3.3
       vite: 8.3.3(@types/node@25.3.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0)
 
-  '@tmcw/togeojson@7.1.2': {}
+  '@tmcw/togeojson@7.1.3': {}
 
   '@tybys/wasm-util@0.10.3':
     dependencies:

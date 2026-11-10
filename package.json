@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@playwright/test": "1.64.0",
-    "@tmcw/togeojson": "7.1.2",
+    "@tmcw/togeojson": "7.1.3",
     "@xmldom/xmldom": "0.9.12",
     "checkly": "8.23.2",
     "concurrently": "10.0.6",
