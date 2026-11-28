@@ -60,6 +60,6 @@
     "prettier": "3.9.10",
     "prettier-plugin-astro": "0.14.1",
     "puppeteer": "25.16.0",
-    "vitest": "4.1.11"
+    "vitest": "4.1.12"
   }
 }
