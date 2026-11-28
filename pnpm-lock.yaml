@@ -57,8 +57,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       gantt-schedule-timeline-calendar:
-        specifier: 3.43.14
-        version: 3.43.14
+        specifier: 3.43.16
+        version: 3.43.16
       maplibre-gl:
         specifier: 6.16.0
         version: 6.16.0
@@ -2783,8 +2783,8 @@ packages:
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
 
-  gantt-schedule-timeline-calendar@3.43.14:
-    resolution: {integrity: sha512-jvAIAtcZkmk3ys1Kx8una2xOVurSef/AUkSqhNaZcrmCXT5hzi+kttj7NuDOmGGxeWSxLiW3mOXp+IWpZy88bA==}
+  gantt-schedule-timeline-calendar@3.43.16:
+    resolution: {integrity: sha512-IISai3vvVYZ7kGAFPZlqT0NmrKZY5HrzmuqYoyiADAgpwaRMg+V5pVcpweYVPMwLl2kjXVK/kOIrJt0R9zi7Ag==}
 
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
@@ -7578,7 +7578,7 @@ snapshots:
 
   function-bind@1.1.2: {}
 
-  gantt-schedule-timeline-calendar@3.43.14:
+  gantt-schedule-timeline-calendar@3.43.16:
     dependencies:
       '@neuronet.io/vido': 4.4.8
       dayjs: 1.11.21
